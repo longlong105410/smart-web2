@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap SYSTEM "mapsql.dtd">
+<sqlMap>
+	<!-- 流程用到的sql语句 -->
+	
+	<!-- 获取表单字段-->
+	<sqlUnit name="get_name_fields">
+		<sql>select name from t_form_field where table_name=:tableName</sql>
+	</sqlUnit>
+	<!-- 表单管理 -->
+	<sqlUnit name="form_mgr_list">
+	     <sql>select t.id,t.name,
+	     (select tmp.busi_name from t_n_dict tmp where tmp.busi_value=t.type and tmp.parent_id=(select id from t_n_dict where busi_value='FORM_TYPE')) as type,
+	     t.field_num,u.full_name,t.create_time from t_form t,t_n_user u where t.creator=u.id [ and t.name like '%:name%'] [ and t.type=:type] order by t.create_time asc</sql>
+	</sqlUnit>
+	
+	<!-- 删除表单 -->
+	<sqlUnit name="del_form">
+	     <sql>
+	        delete from t_form where id in(:id);
+	        delete from t_form_field where form_id in(:id)
+	     </sql>
+	</sqlUnit>
+	
+	<!-- 获取表单对应数据表 -->
+	<sqlUnit name="form_table_mgr_list">
+	    <sql>select t.id,t.table_name,t.remark,u.full_name,t.create_time,(select count(*) from t_create_table_field t2 where t2.table_id=t.id) as num 
+	    from t_create_table t,t_n_user u where t.user_id = u.id [ and (t.table_name like '%:name%' or t.remark like '%:name%')] [ and u.org_id in(:orgIds)]</sql>
+	</sqlUnit>
+	
+	<!-- 获取表选项(用于表单设计) -->
+	<sqlUnit name="table_item">
+	    <sql>select t.id,t.table_name,t.remark from t_create_table t order by t.create_time asc </sql>
+	</sqlUnit>
+	
+	<!-- 获取表字段信息(用于表单设计) -->
+	<sqlUnit name="table_fields">
+	    <sql>select t.id,t.field_name,t.field_remark from t_create_table_field t where t.table_id=:id order by t.sort_order asc </sql>
+	</sqlUnit>
+	
+	<!-- 获取表及字段信息 -->
+	 <sqlUnit name="get_table_fields_value_map">
+	    <sql>
+	       select t.id,t.`plugins`,t.table_id,ft.table_name,t.table_field_id,ftf.field_name from t_form_field t,t_create_table ft,t_create_table_field ftf where t.form_id=:formId and t.table_id=ft.id and t.table_field_id=ftf.id order by t.`plugins` desc 
+	    </sql>
+	 </sqlUnit>
+	 
+	 <!-- 表单帮助信息管理列表 -->
+	 <sqlUnit name="form_helper_mgr_list">
+	 	<sql>
+	 		select fh.id,fh.title,
+	 		(select tmp.busi_name from t_n_dict tmp where 
+		    tmp.busi_value=fh.state and tmp.parent_id=(select id from t_n_dict where busi_value='DATA_STATE')) as state 
+	 		,u.full_name,fh.create_time from t_form_helper fh,t_n_user u 
+	 		where fh.user_id=u.id [ and fh.title like '%:title%'] [ and fh.state=:state ] 
+	 		order by fh.create_time asc
+	 	</sql>
+	 </sqlUnit>
+	 
+	 <!-- 获取表单帮助选项 -->
+	 <sqlUnit name="get_form_helper_items">
+	 	<sql>
+	 		SELECT fh.id,fh.title FROM t_form_helper fh where fh.state=1 order by fh.create_time asc 
+	 	</sql>
+	 </sqlUnit>
+</sqlMap>

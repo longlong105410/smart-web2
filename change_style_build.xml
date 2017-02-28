@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SmartWeb" default="release.smart.web" basedir=".">
+	<!-- 基本信息 -->
+	<property name="version" value="2.0.20" />
+	<property name="base" value="." />
+	 
+	 <!--  
+	<property name="build.path" value="/home/lmq/Datas/build" />
+	-->
+	<property name="build.path" value="D:\\build" />
+	<property name="source.src.dir" value="${base}/src" />
+	<property name="source.res.sql.dir" value="${base}/src/resources/sql" />
+	<property name="source.meta.dir" value="${base}/src/web/META-INF" />
+		
+	<property name="source.lib.dir" value="${base}/WebRoot/WEB-INF/lib" />
+	<property name="source.webRoot.dir" value="${base}/WebRoot" />
+	<!--WEB 资源目录(css,js,images等)-->
+	<property name="source.webRoot.css.dir" value="${base}/WebRoot/css" />
+	<property name="source.webRoot.images.dir" value="${base}/WebRoot/images" />
+	<property name="source.webRoot.js.dir" value="${base}/WebRoot/js" />
+	<property name="source.webRoot.plugins.dir" value="${base}/WebRoot/plugins" />
+	<!--web页面目录-->
+	<property name="source.webRoot.webInfo.dir" value="${base}/WebRoot/WEB-INF" />
+	<property name="source.webInfo.contents.dir" value="${base}/WebRoot/WEB-INF/contents" />
+	<property name="source.webInfo.base.dir" value="${base}/WebRoot/WEB-INF/contents/base" />
+	<property name="source.webInfo.devTool.dir" value="${base}/WebRoot/WEB-INF/contents/devTool" />
+	<property name="source.webInfo.flow.dir" value="${base}/WebRoot/WEB-INF/contents/flow" />
+	<property name="source.webInfo.form.dir" value="${base}/WebRoot/WEB-INF/contents/form" />
+	<property name="source.webInfo.test2.dir" value="${base}/WebRoot/WEB-INF/contents/test2" />
+	
+	<property name="source.web.lib.dir" value="${source.webRoot.dir}/WEB-INF/lib" />
+	
+	<!--tomcat服务器配置-->
+	
+	<property name="tomcat.path.dir" value="D:\tomcat\apache-tomcat-7.0.75"></property>
+	
+	<!--  
+	<property name="tomcat.path.dir" value="/home/lmq/Datas/tomcat/apache-tomcat-7.0.75"></property>
+	-->
+	<property name="tomcat.path.lib.dir" value="${tomcat.path.dir}/lib"/>
+
+	<property name="tomcat.path.lib.dir" value="${tomcat.path.dir}/lib"/>
+
+	<!-- 目的配置 -->
+	<property name="build.dir" value="${build.path}/SmartWeb/${version}" />
+	<property name="build.classes.dir" value="${build.dir}/classes" />
+	<property name="build.jar.filename" value="smart-web-${version}.jar" />
+		
+	<property name="build.javadoc.dir" value="${build.dir}/javadoc" />
+	<property name="build.javadoc.filename" value="smart-web-javadoc-${version}.jar" />
+	
+	<property name="build.source.filename" value="smart-web-source-${version}.jar" />
+	
+	<property name="build.meta.dir" value="${build.classes.dir}/META-INF" />
+	<property name="build.meta.resources.dir" value="${build.classes.dir}/META-INF/resources" />
+	<!---->
+	<property name="build.webRoot.css.dir" value="${build.meta.resources.dir}/css" />
+	<property name="build.webRoot.images.dir" value="${build.meta.resources.dir}/images" />
+	<property name="build.webRoot.js.dir" value="${build.meta.resources.dir}/js" />
+	<property name="build.webRoot.plugins.dir" value="${build.meta.resources.dir}/plugins" />
+	<!---->
+	<property name="build.meta.webInfo.dir" value="${build.classes.dir}/META-INF/resources/WEB-INF" />
+	<property name="build.webInfo.contents.dir" value="${build.meta.webInfo.dir}/contents" />
+	<property name="build.webInfo.base.dir" value="${build.webInfo.contents.dir}/base" />
+	<property name="build.webInfo.devTool.dir" value="${build.webInfo.contents.dir}/devTool" />
+	<property name="build.webInfo.flow.dir" value="${build.webInfo.contents.dir}/flow" />
+	<property name="build.webInfo.form.dir" value="${build.webInfo.contents.dir}/form" />
+	<property name="build.webInfo.test2.dir" value="${build.webInfo.contents.dir}/test2" />
+
+	<path id="compile.classpath">
+		<fileset dir="${source.web.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${source.web.lib.dir}" />
+		<fileset dir="${tomcat.path.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<deltree dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${build.meta.dir}"/>
+		<mkdir dir="${build.meta.resources.dir}"/>
+		<mkdir dir="${build.webRoot.css.dir}"/>
+		<!--
+		<mkdir dir="${build.webRoot.images.dir}"/>
+		-->
+		<mkdir dir="${build.webRoot.js.dir}"/>
+		<mkdir dir="${build.webRoot.plugins.dir}"/>
+						
+		<mkdir dir="${build.meta.webInfo.dir}"/>
+		<mkdir dir="${build.webInfo.contents.dir}"/>
+		<mkdir dir="${build.webInfo.base.dir}"/>
+		<mkdir dir="${build.webInfo.devTool.dir}"/>
+		<mkdir dir="${build.webInfo.flow.dir}"/>
+		<mkdir dir="${build.webInfo.form.dir}"/>
+		<mkdir dir="${build.webInfo.test2.dir}"/>
+	</target>
+	
+	<target name="build.core" depends="init">
+		<javac source="1.6" target="1.6" debug="on" 
+			deprecation="false" optimize="false" failonerror="true" 
+			srcdir="${source.src.dir}" destdir="${build.classes.dir}" encoding="utf-8">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+	
+	<target name="build.core.doc" depends="init">
+		<javadoc destdir="${build.javadoc.dir}" encoding="utf-8" docencoding="utf-8">
+			<packageset dir="${source.src.dir}">
+				<include name="**"/>
+		   </packageset>
+		    <packageset dir="${source.src.dir}/web">
+				<include name="**"/>
+			</packageset>
+			<classpath refid="compile.classpath" />
+		</javadoc>
+	</target>
+	
+	<!--打源代码包-->
+		<target name="build.source" depends="init">
+			<jar destfile="${build.dir}/${build.source.filename}">
+			  <fileset dir="${source.src.dir}/base">
+			     <include name="**/*.java" />
+			  </fileset> 
+			  <fileset dir="${source.src.dir}/web">
+			  	<include name="**/*.java" />
+			  </fileset>
+				<fileset dir="${source.src.dir}/form">
+					<include name="**/*.java" />
+				</fileset>
+				<fileset dir="${source.src.dir}/flow">
+					<include name="**/*.java" />
+				</fileset>
+			</jar>
+		</target>
+		
+	<target name="copy.file">
+		<copyfile dest="${build.meta.dir}/cnoj-tags.tld" src="${source.webRoot.dir}/WEB-INF/cnoj-tags.tld" />
+		<copyfile dest="${build.classes.dir}/base_sql_res.xml" src="${source.res.sql.dir}/base_sql_res.xml" />
+		<copyfile dest="${build.classes.dir}/op_sql_res.xml" src="${source.res.sql.dir}/op_sql_res.xml" />
+		<copyfile dest="${build.classes.dir}/web_sql_res.xml" src="${source.res.sql.dir}/web_sql_res.xml" />
+			
+		<copyfile dest="${build.classes.dir}/form_sql_res.xml" src="${source.res.sql.dir}/form_sql_res.xml" />
+		<copyfile dest="${build.classes.dir}/flow_sql_res.xml" src="${source.res.sql.dir}/flow_sql_res.xml" />
+		
+		<copydir dest="${build.webRoot.css.dir}" src="${source.webRoot.css.dir}">
+		    <!--  
+			<exclude name="login.css" />
+			<exclude name="menu.css" />
+			<exclude name="styles.css" />
+			<exclude name="layout.css" />
+			-->
+		</copydir>
+		<copydir dest="${build.webRoot.js.dir}" src="${source.webRoot.js.dir}" >
+			<exclude name="flow.form.js" />
+			<!--  
+			<exclude name="left-menu.js" />
+			-->
+		</copydir>
+		<!--
+		<copydir dest="${build.webRoot.images.dir}" src="${source.webRoot.images.dir}" />
+		-->
+		<copydir dest="${build.webRoot.plugins.dir}" src="${source.webRoot.plugins.dir}" />
+		
+		<copydir dest="${build.webInfo.base.dir}" src="${source.webInfo.base.dir}">
+		    <!--  
+			<exclude name="include/header.jsp" />
+			<exclude name="include/menu.jsp" />
+			-->
+		</copydir>
+		<!--  
+		<copydir dest="${build.webInfo.base.dir}" src="${source.webInfo.base.dir}" />
+		-->
+		<copydir dest="${build.webInfo.devTool.dir}" src="${source.webInfo.devTool.dir}" />
+		<copydir dest="${build.webInfo.flow.dir}" src="${source.webInfo.flow.dir}">
+			<exclude name="process/todo.jsp"></exclude>
+		</copydir>
+		<copydir dest="${build.webInfo.form.dir}" src="${source.webInfo.form.dir}" />
+		<copydir dest="${build.webInfo.test2.dir}" src="${source.webInfo.test2.dir}" />
+	</target>
+	
+	<target name="build.jar" depends="build.core,copy.file,build.core.doc,build.source">
+		<jar destfile="${build.dir}/${build.jar.filename}" basedir="${build.classes.dir}" />
+		<jar destfile="${build.dir}/${build.javadoc.filename}" basedir="${build.javadoc.dir}" />
+		<deltree dir="${build.classes.dir}" />
+		<deltree dir="${build.javadoc.dir}" />
+	</target>
+
+	<target name="release.smart.web" depends="build.jar">
+	</target>
+</project>

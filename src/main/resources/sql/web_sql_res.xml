@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap SYSTEM "mapsql.dtd">
+<sqlMap>
+	<sqlUnit name="test2_mgr_list_24197">
+		<sql>select t.id,t.name,t.age from t_test t</sql>
+	</sqlUnit>
+	
+	<sqlUnit name="input_select_page_test">
+		<sql>select t.id,t.name from t_n_menu t [ where t.name like ':name%']</sql>
+	</sqlUnit>
+	
+	<!-- 子系统信息列表 -->
+	<sqlUnit name="sub_system_list">
+		<sql>select t.id,t.name,t.url,t.icon,
+		(select tmp.busi_name from t_n_dict tmp where 
+		    tmp.busi_value=t.state and tmp.parent_id=(select id from t_n_dict where busi_value='DATA_STATE')) as state,
+		t.sort_order,t.create_time from t_n_sub_system t order by t.sort_order asc</sql>
+	</sqlUnit>
+	
+	<!-- 获取子系统信息 -->
+	<sqlUnit name="get_sub_system"> 
+		<sql>
+			select * from t_n_sub_system t where t.state='1' order by t.sort_order asc
+		</sql>
+	</sqlUnit>
+</sqlMap>

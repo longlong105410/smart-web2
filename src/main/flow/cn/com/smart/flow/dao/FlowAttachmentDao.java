@@ -1,0 +1,64 @@
+package cn.com.smart.flow.dao;
+
+import java.io.Serializable;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.com.smart.dao.impl.BaseDaoImpl;
+import cn.com.smart.exception.DaoException;
+import cn.com.smart.flow.bean.entity.TFlowAttachment;
+import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.dao.impl.AttachmentDao;
+
+/**
+ * @author lmq
+ * @create 2015年6月22日
+ * @version 1.0 
+ * @since 
+ *
+ */
+@Repository("flowAttDao")
+public class FlowAttachmentDao extends BaseDaoImpl<TFlowAttachment>{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2108237713875783512L;
+	
+	@Autowired
+	private AttachmentDao attDao;
+
+	@Override
+	public boolean delete(Serializable id) throws DaoException {
+		boolean is = false;
+		if(null != id && !StringUtil.isEmpty(id.toString())) {
+			String[] ids = id.toString().split(",");
+			List<TFlowAttachment> lists = find(ids);
+			if(null != lists && lists.size()>0) {
+				if(delete(lists)) {
+					log.info("流程附件信息删除[成功]");
+					String idStr = "";
+					for (TFlowAttachment flowAtt : lists) {
+						idStr += flowAtt.getAttachmentId()+",";
+					}
+					idStr = idStr.substring(0,idStr.length()-1);
+					//删除附件
+					if(attDao.delete(idStr)) {
+						is = true;
+						log.info("流程附件删除[成功]");
+					} else {
+						log.error("流程附件删除[失败]");
+					}
+				} else {
+					log.error("流程附件信息删除[失败]");
+				}
+			}
+		}
+		return is;
+	}
+
+	
+	
+}

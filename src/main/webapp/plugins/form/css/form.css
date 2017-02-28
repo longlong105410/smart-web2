@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+.form-prop {background: white;}
+.form-prop.view-form-prop {overflow: auto;}
+.form-prop .form-control {height: 28px;padding: 4px;}
+.form-prop .checkbox, .form-prop .radio {
+	margin-bottom: 1px;
+	margin-top: 1px;
+}
+.form-prop .checkbox-inline,.form-prop .radio-inline,
+.form-prop .checkbox label, .form-prop .radio label {
+	padding-left: 5px;
+}
