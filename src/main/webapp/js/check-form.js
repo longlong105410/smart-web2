@@ -22,8 +22,9 @@
 		var popoverTmp = null;
 		var checkboxRadioName = null;
 		var self = this;
+		var $currentNode = null;
 		$this.find("input,select,textarea").each(function(){
-			var $currentNode = $(this);
+			$currentNode = $(this);
 			if(result) {
 				var isRequire = $currentNode.hasClass("require");
 				var tagName = $currentNode.prop("tagName").toLowerCase();
@@ -63,7 +64,7 @@
 									placement:setting.placement,
 									content:labelName+"不能为空!",
 									trigger:"manual"});
-								$parent.popover('show');
+								//$parent.popover('show');
 								popoverTmp = $parent;
 								result = false;
 							}
@@ -95,7 +96,7 @@
 								placement:setting.placement,
 								content: labelName+"不能为空!",
 								trigger: "manual"});
-							$tag.popover('show');
+							//$tag.popover('show');
 							popoverTmp = $tag;
 							result = false;
 						}
@@ -145,7 +146,7 @@
 									//title:' 格式错误提醒',
 									content:labelName+"输入错误!",
 									trigger:"manual"});
-								$tag.popover('show');
+								//$tag.popover('show');
 								popoverTmp = $tag;
 							}
 						}
@@ -156,7 +157,18 @@
 			}
 		});
 		if(!result) {
-			$("html,body").animate({scrollTop: $(".popover").offset().top}, 1000);
+			var top = $currentNode.offset().top;
+			var $panel = $(this).parents(".panel-tab-content:eq(0)");
+			var panelTop = 0;
+			if(!utils.isExist($panel)) {
+				$panel = $("body");
+			} else {
+				top = top - $panel.offset().top;
+			}
+			$panel.animate({scrollTop: top}, 500);
+			setTimeout(function() {
+				popoverTmp.popover('show');
+			}, 500);
 		}
 		//$this.find("input").focus(function(){
 		//	removePopover();

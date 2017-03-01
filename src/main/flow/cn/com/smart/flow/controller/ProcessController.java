@@ -515,6 +515,7 @@ public class ProcessController extends BaseFlowControler {
 			Map<String, Object> datas = getRequestParamMap(request);
 			boolean is = flowFormServ.updateForm(datas, formId, formDataId, userInfo.getId(), YesNoType.NO.getIndex());
 			if(is) {
+				flowFormServ.updateInsTitle(datas, formDataId);
 				smartResp.setResult(OP_SUCCESS);
 				smartResp.setMsg("表单数据更新成功");
 			} 

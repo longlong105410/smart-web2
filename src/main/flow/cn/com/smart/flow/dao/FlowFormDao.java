@@ -13,9 +13,10 @@ import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.entity.TFlowForm;
 import cn.com.smart.form.dao.FormDao;
 import cn.com.smart.res.SQLResUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNUser;
 import cn.com.smart.web.dao.impl.UserDao;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程表单数据关联表
@@ -33,14 +34,9 @@ public class FlowFormDao extends BaseDaoImpl<TFlowForm> {
 	@Autowired
 	private UserDao userDao;
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1355269054175669610L;
-	
 	public String[] getFlowFormInfo(String orderId) {
 		String[] infos = null;
-		if(!StringUtil.isEmpty(orderId)) {
+		if(StringUtils.isNotEmpty(orderId)) {
 			String sql = SQLResUtil.getOpSqlMap().getSQL("query_flow_form_info");
 			Map<String,Object> param = new HashMap<String,Object>();
 			param.put("orderId", orderId);
@@ -106,7 +102,7 @@ public class FlowFormDao extends BaseDaoImpl<TFlowForm> {
 					List<Object> objs = formDao.queryObjSql(sql, param);
 					if(null != objs && objs.size()>0) {
 						for (Object obj : objs) {
-							if(!StringUtil.isEmpty(delSql)) {
+							if(StringUtils.isNotEmpty(delSql)) {
 								param.clear();
 							    param.put("formDataId", flowForm.getFormDataId());
 							    executeSql(delSql.replace("${table}",obj.toString()), param);
@@ -138,7 +134,7 @@ public class FlowFormDao extends BaseDaoImpl<TFlowForm> {
 	 */
 	public List<TNUser> getNextNodeAssigners(String configAssignees,String orderId,String userId,boolean isDepartFilter) throws DaoException {
 		List<TNUser> users = null;
-		if(!StringUtil.isEmpty(configAssignees)) {
+		if(StringUtils.isNotEmpty(configAssignees)) {
 			StringBuilder sqlBuilder = new StringBuilder();
 			sqlBuilder.append("select distinct * from t_n_user u where (");
 			ArrayList<String> userIds = new ArrayList<String>();
@@ -172,7 +168,7 @@ public class FlowFormDao extends BaseDaoImpl<TFlowForm> {
 			}
 			sqlBuilder.append(")");
 			if(isDepartFilter) {
-				if(!StringUtil.isEmpty(orderId)) {
+				if(StringUtils.isNotEmpty(orderId)) {
 					Map<String,Object> orderParam = new HashMap<String, Object>();
 					orderParam.put("orderId", orderId);
 					List<TFlowForm> flowForms = queryByField(orderParam);
@@ -184,5 +180,19 @@ public class FlowFormDao extends BaseDaoImpl<TFlowForm> {
 			users = userDao.querySql(sqlBuilder.toString(), param);
 		}
 		return users;
+	}
+	
+	/**
+	 * 更新流程实力标题
+	 * @param orderId
+	 * @param title
+	 */
+	public void updateTitle(String orderId, String title) {
+		String sql = "update t_flow_form set title=:title where order_id=:orderId";
+		Map<String, Object> param = new HashMap<String, Object>(2);
+		param.put("title", title);
+		param.put("orderId", orderId);
+		super.executeSql(sql, param);
+		param.clear();
 	}
 }

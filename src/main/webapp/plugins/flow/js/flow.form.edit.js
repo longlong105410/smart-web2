@@ -30,10 +30,10 @@ var END_NODE_KEY = "end";
 		 * 监听流程处理表单按钮
 		 */
 		function listenerProcessBtns() {
-			$(".edit-update-form").unbind("click");
-			$(".edit-update-form").click(function() {  //保存表单
+			$this.find(".edit-update-form").unbind("click");
+			$this.find(".edit-update-form").click(function() {  //保存表单
 				//if($this.validateForm()) {
-					var formPorcessInnfo = $("#edit-flow-process-form").serialize();//流程信息
+					var formPorcessInnfo = $this.find("#edit-flow-process-form").serialize();//流程信息
 					formPorcessInnfo += "&"+$this.serialize();//流程表单信息
 					var uri = $this.attr("action");
 					if(!utils.isEmpty(uri)) {
@@ -63,7 +63,7 @@ var END_NODE_KEY = "end";
 				   for(var i=0;i<datas.length;i++) {
 					   if(null != datas[i].nameMoreValues && datas[i].nameMoreValues.length>0) {
 						   var tableTag = datas[i].name+"_table";
-						   var $tableTag = $("#"+tableTag);
+						   var $tableTag = $this.find("#"+tableTag);
 						   $tableTag.find(".listctrl-add-row").hide();
 						   var datas2 = datas[i].nameMoreValues;
 						   var rows = datas2[0].valueSize;
@@ -88,11 +88,16 @@ var END_NODE_KEY = "end";
 						  $tableTag.find(".delrow").removeClass("hide");
 					   } else {
 						   var index = 0;
-						   $this.find("input[name='"+datas[i].name+"'],select[name='"+datas[i].name+"'],textarea[name='"+datas[i].name+"'],#"+datas[i].name).each(function(){
+						   var name = datas[i].name;
+						   $this.find("input[name='"+name+"'],select[name='"+name+"'],textarea[name='"+name+"'],#"+name+",span[data-name='"+name+"']").each(function(){
 							   var value = datas[i].value;
-							   if(utils.isNotEmpty(value) && value != 'null') {
-									setFormValue($(this),value);
-								}
+							   var $findElement = $(this);
+							   var tagName = $findElement.prop("tagName").toLowerCase();
+							   if(tagName == 'span') {
+								   $findElement.attr("data-default-value", value);
+							   } else if(utils.isNotEmpty(value) && value != 'null') {
+									setFormValue($findElement,value);
+							   }
 								index++;
 						   });
 					   }

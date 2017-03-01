@@ -40,7 +40,7 @@ var END_NODE_KEY = "end";
 				$(this).attr("title","");
 			});
 			//所有list-ctrl属性改为只读
-			$(".list-ctrl").find("input,select,textarea").each(function(){
+			$this.find(".list-ctrl").find("input,select,textarea").each(function(){
 				$(this).prop("disabled",false);
 				$(this).prop("readonly",true);
 			});
@@ -53,7 +53,7 @@ var END_NODE_KEY = "end";
 					});
 				}
 			}
-			$(".list-ctrl").find("input,select,textarea").each(function(){
+			$this.find(".list-ctrl").find("input,select,textarea").each(function(){
 				if($(this).prop("readonly")) {
 					$(this).removeClass("cnoj-input-select");
 					$(this).removeClass("cnoj-input-select-relate");
@@ -187,8 +187,7 @@ var END_NODE_KEY = "end";
 				   for(var i=0;i<datas.length;i++) {
 					   if(null != datas[i].nameMoreValues && datas[i].nameMoreValues.length>0) {
 						   var tableTag = datas[i].name+"_table";
-						   var $tableTag = $("#"+tableTag);
-						  // $tableTag.find(".delrow").removeClass("hide");
+						   var $tableTag = $this.find("#"+tableTag);
 						   $tableTag.find(".listctrl-add-row").hide();
 						   var datas2 = datas[i].nameMoreValues;
 						   var rows = datas2[0].valueSize;
@@ -234,10 +233,14 @@ var END_NODE_KEY = "end";
 						   var index = 0;
 						   $this.find("input[name='"+datas[i].name+"'],select[name='"+datas[i].name+"'],textarea[name='"+datas[i].name+"'],#"+datas[i].name).each(function(){
 							   var value = datas[i].value;
-							   if(utils.isNotEmpty(value) && value != 'null') {
-									setFormValue($(this),value);
-								}
-								index++;
+							   var $findElement = $(this);
+							   var tagName = $findElement.prop("tagName").toLowerCase();
+							   if(tagName == 'span') {
+								   $findElement.attr("data-default-value", value);
+							   } else if(utils.isNotEmpty(value) && value != 'null') {
+									setFormValue($findElement,value);
+							   }
+							   index++;
 						   });
 					   }
 				   }//for

@@ -42,16 +42,12 @@ import com.mixsmart.utils.StringUtils;
 @Service
 public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 
-	
 	@Autowired
 	private FormFieldDao formFieldDao;
-	@Autowired
-	private FlowFormDao flowFormDao;
 	@Autowired
 	private FormDataBusi formDataBusi;
 	@Autowired
 	private UserService userServ;
-	
 	
 	/**
 	 * 获取表单数据
@@ -94,7 +90,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("orderId", orderId);
 		try {
-			List<TFlowForm> flowForms = flowFormDao.queryByField(params);
+			List<TFlowForm> flowForms = getDao().queryByField(params);
 			if(null != flowForms && flowForms.size()>0) {
 				smartResp = formDataBusi.getFormData(orderId, flowForms.get(0).getFormId(), null);
 				QueryFormData formData = new QueryFormData();
@@ -168,7 +164,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		try {
 			String sql = SQLResUtil.getOpSqlMap().getSQL("get_userfull_flowname");
 			if(StringUtils.isNotEmpty(sql)) {
-				List<Object> lists = flowFormDao.queryObjSql(sql, params);
+				List<Object> lists = getDao().queryObjSql(sql, params);
 				if(null != lists && lists.size()>0) {
 					String processName = lists.get(0).toString();
 					String fullName = lists.get(1).toString();
@@ -195,29 +191,40 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	public String getInsTitle(SubmitFormData submitFormData,String userId, String processName) {
 		String insTitle = null;
 		if(null == submitFormData || StringUtils.isEmpty(userId)) return insTitle;
-		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("formId", submitFormData.getFormId());
-		//获取流程实例标题对应的字段ID
-		String sql = SQLResUtil.getOpSqlMap().getSQL("get_institle_fieldid_by_form");
-		if(StringUtils.isNotEmpty(sql)) {
-			List<Object> lists = null;
-			try {
-				lists = flowFormDao.queryObjSql(sql, params);
-				if(null != lists && lists.size()>0) {
-					String insTitleFieldId = lists.get(0).toString();
-					insTitle = StringUtils.handNull(submitFormData.getParams().get(insTitleFieldId));
-					insTitle = processName + "-" +insTitle;
-				}
-				if(StringUtils.isEmpty(insTitle)) {
-					insTitle = createTitle(submitFormData.getProcessId(), userId);
-				}
-			} catch (DaoException ex) {
-				ex.printStackTrace();
-			} finally {
-				lists = null;
-			}
+		insTitle = getTitleFormParams(submitFormData.getParams(), submitFormData.getFormId(), processName);
+		if(StringUtils.isEmpty(insTitle)) {
+			insTitle = createTitle(submitFormData.getProcessId(), userId);
 		}
 		return insTitle;
+	}
+	
+	/**
+	 * 从参数中获取标题
+	 * @param datas
+	 * @param formId
+	 * @param processName
+	 * @return
+	 */
+	private String getTitleFormParams(Map<String, Object> datas, String formId, String processName) {
+		String title = null;
+		if(null == datas || datas.size() == 0 || StringUtils.isEmpty(formId)) {
+			return title;
+		}
+		//获取流程实例标题对应的字段ID
+		String sql = SQLResUtil.getOpSqlMap().getSQL("get_institle_fieldid_by_form");
+		if(StringUtils.isEmpty(sql)) {
+			return title;
+		}
+		Map<String,Object> params = new HashMap<String, Object>(1);
+		params.put("formId", formId);
+		processName = StringUtils.isEmpty(processName)?"":(processName+"-");
+		List<Object> lists = getDao().queryObjSql(sql, params);
+		if(null != lists && lists.size()>0) {
+			String insTitleFieldId = StringUtils.handNull(lists.get(0));
+			title = StringUtils.handNull(datas.get(insTitleFieldId));
+			title = processName + title;
+		}
+		return title;
 	}
 	
 	
@@ -304,7 +311,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	public List<String> getNextNodeAssigners(String configAssignees,String orderId,String userId,boolean isDepartFilter) {
 		List<String> userIds = null;
 		try {
-			List<TNUser> users = flowFormDao.getNextNodeAssigners(configAssignees, orderId, userId, isDepartFilter);
+			List<TNUser> users = getDao().getNextNodeAssigners(configAssignees, orderId, userId, isDepartFilter);
 			if(CollectionUtils.isNotEmpty(users)) {
 				userIds = new ArrayList<String>();
 				for (TNUser user : users) {
@@ -331,7 +338,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	public SmartResponse<OrgUserZTreeData> getNextNodeAssigner(String configAssignees,String orderId,String userId,boolean isDepartFilter) {
 		SmartResponse<OrgUserZTreeData> smartResp = new SmartResponse<OrgUserZTreeData>();
 		try {
-			List<TNUser> users = flowFormDao.getNextNodeAssigners(configAssignees, orderId, userId, isDepartFilter);
+			List<TNUser> users = getDao().getNextNodeAssigners(configAssignees, orderId, userId, isDepartFilter);
 			if(null != users && users.size()>0) {
 				smartResp = userServ.getOrgUserZTreeByUser(users);
 			}
@@ -362,7 +369,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 			List<Object> lists = null;
 			try {
 				//获取
-				lists = flowFormDao.queryObjSql(sql, params);
+				lists = getDao().queryObjSql(sql, params);
 				if(CollectionUtils.isNotEmpty(lists)) {
 					String insTitleFieldId = lists.get(0).toString();
 					String insTitle = StringUtils.handNull(submitFormData.getParams().get(insTitleFieldId));
@@ -371,7 +378,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 						sql = SQLResUtil.getOpSqlMap().getSQL("check_instance_title");
 						if(StringUtils.isNotEmpty(sql)) {
 							params.put("title", insTitle);
-							if(flowFormDao.exeCountSql(sql, params)>0) {
+							if(getDao().exeCountSql(sql, params)>0) {
 								smartResp.setResult(OP_SUCCESS);
 								smartResp.setMsg("标题已经存在");
 							} else {
@@ -390,4 +397,54 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		return smartResp;
 	}
 	
+	
+	/**
+	 * 更新标题
+	 * @param orderId
+	 * @param title
+	 * @return
+	 */
+	public boolean updateInsTitle(String orderId, String title) {
+		if(StringUtils.isEmpty(orderId) || StringUtils.isEmpty(title)) {
+			return false;
+		}
+		getDao().updateTitle(orderId, title);
+		return true;
+	}
+	
+	/**
+	 * 更新标题
+	 * @param datas
+	 * @param title
+	 * @return
+	 */
+	public boolean updateInsTitle(Map<String, Object> datas, String formDataId) {
+		boolean is = false;
+		if(null == datas || datas.size()==0 || StringUtils.isEmpty(formDataId)) {
+			return is;
+		}
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("formDataId", formDataId);
+		List<TFlowForm> flowForms = super.findByParam(param).getDatas();
+		String title = null;
+		if(null == flowForms || flowForms.size() == 0) {
+			return is;
+		}
+		TFlowForm flowForm = flowForms.get(0);
+		title = getTitleFormParams(datas, flowForm.getFormId(), null);
+		if(StringUtils.isNotEmpty(title)) {
+			String oldTitle = flowForm.getTitle();
+			if(StringUtils.isNotEmpty(oldTitle) && oldTitle.contains("-")) {
+				String[] titleArray = oldTitle.split("-");
+				title = titleArray[0]+"-"+title;
+			}
+			is = this.updateInsTitle(flowForm.getOrderId(), title);
+		}
+		return is;
+	}
+
+	@Override
+	public FlowFormDao getDao() {
+		return (FlowFormDao)super.getDao();
+	}
 }

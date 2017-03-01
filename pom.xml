@@ -4,7 +4,7 @@
   <artifactId>smart-web2</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>SmartWeb2</name>
+  <name>smart-web2</name>
   <description/>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

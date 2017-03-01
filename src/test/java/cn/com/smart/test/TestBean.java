@@ -1,4 +1,4 @@
-package yn.cn.com.smart.test;
+package cn.com.smart.test;
 
 public class TestBean {
 

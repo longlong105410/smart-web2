@@ -681,8 +681,14 @@ utils.selectItem = function(id,uri,defaultValue,callback) {
  */
 utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 	if(!this.isEmpty(uri)) {
+		var defaultValueArray = new Array();
 		if(typeof(defaultValue) === 'undefined') {
 			defaultValue = '';
+		}
+		if(defaultValue.indexOf(",")) {
+			defaultValueArray = defaultValue.split(",");
+		} else {
+			defaultValueArray.push(defaultValue);
 		}
 		if(typeof(isH) == 'undefined' || utils.isEmpty(isH)) {
 			isH = true;
@@ -694,7 +700,7 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 				var datas = output.datas; 
 				if(datas.length>0) {
 					var options = '';
-					var checkedValue = '';
+					var checkedValue = defaultValueArray;
 					var labelCss = "";
 					if(isH) {
 						labelCss = "checkbox-inline";
@@ -702,15 +708,23 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 					var startWrap = '';
 					var endWrap = '';
 					if(!isH) {
-						startWrap = '<div class="radio">';
+						startWrap = '<div class="checkbox">';
 						endWrap = '</div>';
 					}
 					var requireStr = utils.handleNull(require);
+					var isDefault = false;
 					for(var i=0;i<datas.length;i++) {
-						if(datas[i][0] == defaultValue) {
+						isDefault = false;
+						isDefault = false;
+						for(var j=0,len=defaultValueArray.length;j<len;j++) {
+							if(datas[i][0] == defaultValueArray[j]) {
+								isDefault = true;
+								break;
+							}
+						}//for
+						if(isDefault) {
 							options += startWrap+'<label class="text-normal '+labelCss+'"><input class="'+requireStr+'" type="checkbox" id="'+name+'_'+datas[i][0]+'" value="'+datas[i][0]+'" name="'+name+'" class="cnoj-dyn-checkbox" checked="checked" /> '+datas[i][1]+'</label>'+
 							'&nbsp;&nbsp;'+endWrap;
-							checkedValue = datas[i][0];
 						} else {
 							options += startWrap+'<label class="text-normal '+labelCss+'"><input class="'+requireStr+'" type="checkbox" id="'+name+'_'+datas[i][0]+'" value="'+datas[i][0]+'" name="'+name+'" class="cnoj-dyn-checkbox" /> '+datas[i][1]+'</label>';
 							if(i<datas.length-1) {
@@ -719,8 +733,8 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 							options += endWrap;
 						}
 					}//for
-					if(utils.isEmpty(checkedValue)) {
-						checkedValue = $wrap.children().eq(0).val();
+					if(checkedValue.length == 0) {
+						checkedValue.push($wrap.children().eq(0).val());
 					}
 					$wrap.find(".cnoj-dyn-checkbox").remove();
 					$wrap.append(options);
@@ -744,8 +758,14 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
  */
 utils.radioItem = function(id,uri,defaultValue,name,isH,require,callback) {
 	if(!this.isEmpty(uri)) {
+		var defaultValueArray = new Array();
 		if(typeof(defaultValue) === 'undefined') {
 			defaultValue = '';
+		}
+		if(defaultValue.indexOf(",")) {
+			defaultValueArray = defaultValue.split(",");
+		} else {
+			defaultValueArray.push(defaultValue);
 		}
 		var $wrap = $(id);
 		$.get(uri,function(data){
@@ -754,29 +774,37 @@ utils.radioItem = function(id,uri,defaultValue,name,isH,require,callback) {
 				var datas = output.datas; 
 				if(datas.length>0) {
 					var options = '';
-					var checkedValue = '';
+					var checkedValue = defaultValueArray;
 					var labelCss = "";
 					if(isH) {
-						labelCss = "checkbox-inline";
+						labelCss = "radio-inline";
 					}
 					var startWrap = '';
 					var endWrap = '';
 					if(!isH) {
-						startWrap = '<div class="checkbox">';
+						startWrap = '<div class="radio">';
 						endWrap = '</div>';
 					}
 					var requireStr = utils.handleNull(require);
+					var isDefault = false;
 					for(var i=0;i<datas.length;i++) {
-						if(datas[i][0] == defaultValue) {
+						isDefault = false;
+						for(var j=0,len=defaultValueArray.length;j<len;j++) {
+							if(datas[i][0] == defaultValueArray[j]) {
+								isDefault = true;
+								break;
+							}
+						}//for
+						if(isDefault) {
 							options += startWrap+'<label class="text-normal '+labelCss+'"><input type="radio" class="'+requireStr+'" value="'+datas[i][0]+'" name="'+name+'" id="'+name+'_'+datas[i][0]+'" class="cnoj-dyn-radio" checked="checked" /> '+datas[i][1]+'</label>'+endWrap;
-							checkedValue = datas[i][0];
+							break;
 						} else {
 							options += startWrap+'<label class="text-normal '+labelCss+'"><input type="radio" class="'+requireStr+'" value="'+datas[i][0]+'" name="'+name+'" id="'+name+'_'+datas[i][0]+'" class="cnoj-dyn-radio" /> '+datas[i][1]+'</label>';
 							options += endWrap;
 						}
 					}
-					if(utils.isEmpty(checkedValue)) {
-						checkedValue = $wrap.children().eq(0).val();
+					if(checkedValue.length == 0) {
+						checkedValue[0] = $wrap.children().eq(0).val();
 					}
 					$wrap.find(".cnoj-dyn-radio").remove();
 					$wrap.append(options);

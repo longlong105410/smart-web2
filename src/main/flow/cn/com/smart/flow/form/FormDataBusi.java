@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -469,10 +469,11 @@ public class FormDataBusi {
 		StringBuilder fieldBuild = new StringBuilder();
 		StringBuilder valueBuild = new StringBuilder();
 		StringBuilder sqlBuild = new StringBuilder();
-		Map<String, Object> params = new HashMap<String, Object>();
-		Map<String,List<Object>> valueMaps = new HashMap<String, List<Object>>();
+		
+		Map<String,List<Object>> valueMaps = new HashMap<String, List<Object>>(tfList.size());
 		sqlBuild.append("insert into "+tableName);
 		int valueSize = 0;
+		boolean isValueEmpty = true;
 		for (TableFieldMap tf : tfList) {
 			if(null != tf.getValue() || (null != tf.getValues() && tf.getValues().size()>0)) {
 				fieldBuild.append(tf.getTableFieldName()+",");
@@ -482,21 +483,46 @@ public class FormDataBusi {
 			if(null != tf.getValues() && tf.getValues().size()>0) {
 				valueMaps.put(tf.getTableFieldName(), tf.getValues());
 				valueSize = tf.getValues().size();
+				if(!isEmptyListValue(tf.getValues())) {
+					isValueEmpty = isValueEmpty && false;
+				}
 			} else if(null != tf.getValue()) {
 				valueMaps.put(tf.getTableFieldName(),Arrays.asList(new Object[]{tf.getValue()}));
 				valueSize = 1;
+				if(StringUtils.isNotEmpty(tf.getValue().toString())) {
+					isValueEmpty = isValueEmpty && false;
+				}
 			}
+		}
+		//当要插入的值都为空时，退出该方法（即:不插入数据）
+		if(isValueEmpty) {
+			return false;
 		}
 		sqlBuild.append("(id,form_data_id,"+fieldBuild.toString()+"state,creator,create_time) ");
 		sqlBuild.append("values(:id,:formDataId,"+valueBuild.toString()+" :state,:creator,:createTime)");
+		Map<String, Object> params = new HashMap<String, Object>(valueMaps.size()+5);
 		for (int i = 0; i < valueSize; i++) {
 			params.put("id", StringUtils.createSerialNum());
 			params.put("formDataId", formDataId);
 			params.put("state", formState);
 			params.put("createTime", DateUtil.dateToStr(new Date(), null));
 			params.put("creator", userId);
-			for (String fieldNameKey : valueMaps.keySet()) {
+			Set<Map.Entry<String, List<Object>>> items = valueMaps.entrySet();
+			/*for (String fieldNameKey : valueMaps.keySet()) {
 				params.put(fieldNameKey, valueMaps.get(fieldNameKey).get(i));
+			}*/
+			isValueEmpty = true;
+			for (Map.Entry<String, List<Object>> item : items) {
+				String value = StringUtils.handNull(item.getValue().get(i));
+				if(StringUtils.isNotEmpty(value)) {
+					isValueEmpty = isValueEmpty && false;
+				}
+				params.put(item.getKey(), value);
+			}
+			//当要插入的值都为空时，跳出本次循环（即：不插入本次数据）
+			if(isValueEmpty) {
+				//params.clear();
+				continue;
 			}
 			is = is && opDao.executeSql(sqlBuild.toString(), params)>0?true:false;
 			params.clear();
@@ -522,6 +548,26 @@ public class FormDataBusi {
 				is = true;
 			}
 		} 
+		return is;
+	}
+	
+	/**
+	 * 判断列表中的值是否都为空；如果都为空；则返回：true；否则返回：false
+	 * @param objs
+	 * @return
+	 */
+	private boolean isEmptyListValue(List<Object> objs) {
+		boolean is = true;
+		if(null == objs || objs.size() == 0) {
+			return is;
+		}
+		for(Object obj : objs) {
+			if(null == obj || StringUtils.isEmpty(obj.toString())) {
+				is = is && true;
+			} else {
+				is = is && false;
+			}
+		}
 		return is;
 	}
 }

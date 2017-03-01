@@ -41,3 +41,10 @@ table>tbody>tr.tr-asyn-loading>td {padding-left: 35px;}
 .normal-fieldset fieldset {padding:5px 0 15px 10px;border: 1px solid #aaa;border-radius:5px;font-size: 12px;}
 .normal-fieldset legend {font-weight: 700;font-size: 12px;}
 .logo-img {display: inline-block;max-width: 40px;max-height: 40px;}
+
+.cnoj-checkbox .radio, 
+.cnoj-checkbox .radio-inline, 
+.cnoj-checkbox .checkbox, 
+.cnoj-checkbox .checkbox-inline {
+	margin-left: 15px;
+}

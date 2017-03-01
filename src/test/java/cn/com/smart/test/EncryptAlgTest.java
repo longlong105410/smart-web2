@@ -1,7 +1,7 @@
 /**
  * 
  */
-package yn.cn.com.smart.test;
+package cn.com.smart.test;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Assert;
