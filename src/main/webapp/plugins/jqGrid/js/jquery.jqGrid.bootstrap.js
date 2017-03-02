@@ -12,7 +12,7 @@
 				editTitle:null,
 				editUri:null,
 				editWidth:600,
-				eidtBtnStyle: btnStyleClass,
+				editBtnStyle: btnStyleClass,
 				editSelectedType:'one-selected', //选择数据的方式：none-selected表示不用选择数据，one-selected表示只能选中一条数据,mutil-selected表示可以选中多条数据
 				
 				add: true,
