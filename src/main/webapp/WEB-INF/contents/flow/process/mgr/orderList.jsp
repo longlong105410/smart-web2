@@ -1,6 +1,6 @@
-<%@page import="yn.cn.com.smart.web.tag.bean.CustomBtn"%>
+<%@page import="cn.com.smart.web.tag.bean.CustomBtn"%>
 <%@page import="cn.com.smart.web.bean.UserInfo"%>
-<%@page import="yn.cn.com.smart.web.tag.bean.DelBtn"%>
+<%@page import="cn.com.smart.web.tag.bean.DelBtn"%>
 <%@page import="cn.com.smart.web.service.OPAuthService"%>
 <%@page import="cn.com.smart.web.helper.HttpRequestHelper"%>
 <%@page import="cn.com.smart.web.spring.util.SpringBeanFactoryUtil"%>
