@@ -136,10 +136,7 @@ public class LoadingSQLMapFile {
 								pathList.add(fileStr);
 							subIs.close();
 						}
-						//urlFile = null;
-						//includeFile = null;
 					}
-					
 				} else {
 					String key = element.attributeValue("name");
 					String value = element.elementText("sql");

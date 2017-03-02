@@ -20,15 +20,6 @@
 
 	<!-- ViewResolver -->
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="ignoreAcceptHeader" value="true" />
-		<property name="defaultContentType" value="text/html" />
-		<property name="mediaTypes">
-			<map>
-				<entry key="json" value="application/json" />
-				<entry key="xml" value="application/xml" />
-			</map>
-		</property>
-		<property name="favorParameter" value="false" />
 		<property name="viewResolvers">
 			<list>
 				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />

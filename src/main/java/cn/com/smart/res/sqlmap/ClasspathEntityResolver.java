@@ -17,18 +17,16 @@ import org.xml.sax.SAXException;
  * 
  */
 public class ClasspathEntityResolver implements EntityResolver {
-
-	
+ 
 	@Override
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-		
 		if(null != systemId) {
 			int index = systemId.lastIndexOf("/");
 			String path = systemId;
 			if(index>-1) {
 				path = systemId.substring(systemId.lastIndexOf("/")+1);
 			}
-			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+			InputStream is = this.getClass().getResourceAsStream("/sql/"+path);
 			if(null != is) {
 				return new InputSource(is);
 			}

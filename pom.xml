@@ -9,9 +9,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.version>4.1.6.RELEASE</spring.version>
-    <hibernate.version>4.3.11.Final</hibernate.version>
+    <hibernate.version>4.2.19.Final</hibernate.version>
     <slf4j.version>1.7.7</slf4j.version>
-    <mysql.version>5.1.38</mysql.version>
+    <mysql.version>5.1.35</mysql.version>
     <mixsmart.utils.version>1.0.0</mixsmart.utils.version>
     <jackson.version>2.5.0</jackson.version>
   </properties>
@@ -159,8 +159,7 @@
 		<artifactId>jackson-annotations</artifactId>
 		<version>${jackson.version}</version>
 	</dependency>
-	
-	<!--  
+	    
 	<dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
@@ -171,7 +170,7 @@
          <artifactId>aspectjweaver</artifactId>
          <version>1.6.9</version>
     </dependency>
-    -->
+    
 	<dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>

@@ -8,7 +8,7 @@
    <!-- 菜单列表标签 -->
    <tag>
 		<name>menu</name>
-		<tag-class>yn.cn.com.smart.web.tag.MenuTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.MenuTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 		    <name>isCollapsed</name>
@@ -25,7 +25,7 @@
 	<!-- 水平菜单列表标签 -->
 	<tag>
 		<name>horizontalMenu</name>
-		<tag-class>yn.cn.com.smart.web.tag.HorizontalMenuTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.HorizontalMenuTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>smartResp</name>
@@ -37,7 +37,7 @@
 	<!-- 表格列表标签 -->
    <tag>
 		<name>table</name>
-		<tag-class>yn.cn.com.smart.web.tag.TableTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.TableTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>tableId</name>
@@ -152,7 +152,7 @@
 	<!-- 表格项标签 -->
 	 <tag>
 		<name>tableItem</name>
-		<tag-class>yn.cn.com.smart.web.tag.TableItemTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.TableItemTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>tableId</name>
@@ -244,7 +244,7 @@
 	<!-- 表格树型标签 -->
 	<tag>
 		<name>tableTree</name>
-		<tag-class>yn.cn.com.smart.web.tag.TableTreeTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.TableTreeTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>tableId</name>
@@ -348,7 +348,7 @@
 	<!-- 表格异步树标签 -->
 	<tag>
 		<name>tableAsyncTree</name>
-		<tag-class>yn.cn.com.smart.web.tag.TableAsyncTreeTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.TableAsyncTreeTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>tableId</name>
@@ -457,7 +457,7 @@
 	<!-- 添加按钮标签 -->
 	<tag>
 	   <name>addBtn</name>
-		<tag-class>yn.cn.com.smart.web.tag.AddBtnTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.AddBtnTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 		    <name>currentUri</name>
@@ -509,7 +509,7 @@
 	<!-- 编辑按钮标签 -->
 	<tag>
 	   <name>editBtn</name>
-		<tag-class>yn.cn.com.smart.web.tag.EditBtnTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.EditBtnTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 		    <name>currentUri</name>
@@ -561,7 +561,7 @@
 	<!-- 删除按钮标签 -->
 	<tag>
 	   <name>delBtn</name>
-		<tag-class>yn.cn.com.smart.web.tag.DelBtnTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.DelBtnTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 		    <name>currentUri</name>
@@ -618,7 +618,7 @@
 	<!-- 刷新按钮标签 -->
 	<tag>
 	   <name>refreshBtn</name>
-		<tag-class>yn.cn.com.smart.web.tag.RefreshBtnTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.RefreshBtnTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 		    <name>currentUri</name>
@@ -655,7 +655,7 @@
 	<!-- 自定义按钮标签 -->
 	<tag>
 	   <name>cusBtn</name>
-		<tag-class>yn.cn.com.smart.web.tag.CustomBtnTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.CustomBtnTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 		    <name>currentUri</name>
@@ -722,7 +722,7 @@
 	<!-- 面板底部标签 -->
 	<tag>
 		<name>panelFooter</name>
-		<tag-class>yn.cn.com.smart.web.tag.PanelFooterTag</tag-class>
+		<tag-class>cn.com.smart.web.tag.PanelFooterTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>smartResp</name>

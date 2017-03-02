@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap SYSTEM "mapsql.dtd">
+<!DOCTYPE sqlMap SYSTEM "./mapsql.dtd">
 <sqlMap>
 	<sqlUnit name="test2_mgr_list_24197">
 		<sql>select t.id,t.name,t.age from t_test t</sql>

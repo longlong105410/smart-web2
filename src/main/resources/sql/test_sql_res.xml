@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap SYSTEM "mapsql.dtd">
+<!DOCTYPE sqlMap SYSTEM "./mapsql.dtd">
 <sqlMap>
 	
 	 <!-- 用户管理列表 -->
