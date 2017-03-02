@@ -23,6 +23,7 @@
 		var checkboxRadioName = null;
 		var self = this;
 		var $currentNode = null;
+		var $availableElement = null;
 		$this.find("input,select,textarea").each(function(){
 			$currentNode = $(this);
 			if(result) {
@@ -58,14 +59,14 @@
 								var resultObj = setting.radioCheckboxPopoverCallback(this,labelName, setting, self);
 								result = resultObj.result;
 								popoverTmp = resultObj.popoverObj;
+								$availableElement = resultObj.element;
 							} else {
 								$parent.popover({
-									//title:'必填提醒',
 									placement:setting.placement,
 									content:labelName+"不能为空!",
 									trigger:"manual"});
-								//$parent.popover('show');
 								popoverTmp = $parent;
+								$availableElement = $parent;
 								result = false;
 							}
 						}
@@ -86,18 +87,18 @@
 							var resultObj = setting.emptyPopoverCallback(this,labelName, setting, self);
 							result = resultObj.result;
 							popoverTmp = resultObj.popoverObj;
+							$availableElement = resultObj.element;
 						} else {
 							var $tag = $(this);
 							if(tagName == 'textarea' && $tag.hasClass("cnoj-richtext")) {
 								$tag = $tag.prev();
 							}
 							$tag.popover({
-								//title:'必填提醒',
 								placement:setting.placement,
 								content: labelName+"不能为空!",
 								trigger: "manual"});
-							//$tag.popover('show');
 							popoverTmp = $tag;
+							$availableElement = $tag;
 							result = false;
 						}
 						return result;
@@ -107,7 +108,6 @@
 				if(value != '') {
 					var lenStr = $(this).data("length");
 					var dataFormat = $(this).data("format");
-					
 					var regexp = $(this).data("regexp");
 					if(typeof(lenStr) !== 'undefined' || typeof(dataFormat) !== 'undefined' || typeof(regexp) !== 'undefined') {
 						if(typeof(lenStr) === 'undefined')
@@ -137,16 +137,16 @@
 								var resultObj = setting.errorPopoverCallback(this,labelName, setting, self);
 								result = resultObj.result;
 								popoverTmp = resultObj.popoverObj;
+								$availableElement = resultObj.element;
 							} else {
 								var $tag = $(this);
 								if(tagName == 'textarea' && $tag.hasClass("cnoj-richtext")) {
 									$tag = $tag.prev();
 								}
 								$tag.popover({placement:setting.placement,
-									//title:' 格式错误提醒',
 									content:labelName+"输入错误!",
 									trigger:"manual"});
-								//$tag.popover('show');
+								$availableElement = $tag;
 								popoverTmp = $tag;
 							}
 						}
@@ -157,30 +157,29 @@
 			}
 		});
 		if(!result) {
-			var top = $currentNode.offset().top;
+			var top = $availableElement.offset().top;
+			//console.log($availableElement.prop("tagName")+","+top+","+$availableElement.attr("name"));
 			var $panel = $(this).parents(".panel-tab-content:eq(0)");
-			var panelTop = 0;
 			if(!utils.isExist($panel)) {
 				$panel = $("body");
 			} else {
 				top = top - $panel.offset().top;
 			}
-			$panel.animate({scrollTop: top}, 500);
-			setTimeout(function() {
+			top = (top>40)?(top-50):top;
+			if(top != 0) {
+				$panel.animate({scrollTop: top}, 300);
+				setTimeout(function() {
+					popoverTmp.popover('show');
+				}, 310);
+			} else {
 				popoverTmp.popover('show');
-			}, 500);
+			}
 		}
-		//$this.find("input").focus(function(){
-		//	removePopover();
-		//});
 		$(document).click(function(event){
 			if(!utils.isEmpty(setting.callback) && typeof(setting.callback) === 'function') {
 				setting.callback(event,popoverTmp);
 			} else {
 				removePopover();
-				//$this.find("input").focus(function(){
-				//		removePopover();
-				//});
 			}
 		});
 		return result;
