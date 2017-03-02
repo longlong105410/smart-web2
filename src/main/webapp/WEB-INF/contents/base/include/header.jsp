@@ -85,7 +85,7 @@
              	<c:choose>
              		<c:when test="${fn:length(subSysList) == 1}">
              		   <c:forEach var="subSys" items="${subSysList }">
-             		   	   <li><a href="${subSys.url }" target="__blank">
+             		   	   <li><a href="${subSys.url }" target="_blank">
              		   	   <c:if test="${ not empty subSys.icon }">
              		   	   <i class="${subSys.icon }" aria-hidden="true"></i>
              		   	   </c:if>
@@ -103,7 +103,7 @@
 							        <c:if test="${st.index > 0 }">
 							        	<li role="presentation" class="divider"></li>
 							        </c:if>
-							    	<li><a href="${subSys.url }" target="__blank">
+							    	<li><a href="${subSys.url }" target="_blank">
 							    	<c:if test="${ not empty subSys.icon }">
 			             		   	   <i class="${subSys.icon }" aria-hidden="true"></i>
 			             		   	   </c:if>
