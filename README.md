@@ -16,6 +16,6 @@ SmartWeb2是一套相对简单的OA系统；包含了流程设计器，表单设
 ---数据库MySQL5.6以上
 ---下载后把data目录下的smart_web2.zip解压；然后解压出来的脚本文件（“smart_web2.sql”）导入到mysql数据库中；注：建库时，字符集编码为：utf8（utf8_general_ci）
 ---修改配置文件“jdbc.properties”，改成对应数据库的用户名和密码
----“sysconfig.properties”系统配置文件，需要“root.dir”属性，指定系统上传文件时存放的根目录
+---“sysconfig.properties”系统配置文件；需要修改“root.dir”属性，设置为系统上传文件时用来存放的根目录
 
 ----系统管理员用户名为：admin；密码为：123456
