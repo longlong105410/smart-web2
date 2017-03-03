@@ -1,4 +1,4 @@
-SmartWeb2是一套相对简单的OA系统；包含了流程设计器，表单设计器，权限管理等功能；
+smart-web2是一套相对简单的OA系统；包含了流程设计器，表单设计器，权限管理等功能；
 系统后端基于SpringMVC+Spring+Hibernate框架，前端页面采用JQuery+Bootstrap等主流技术；
 流程引擎基于Snaker工作流；表单设计器基于雷劈网WEB表单设计器。
 系统主要功能有：
