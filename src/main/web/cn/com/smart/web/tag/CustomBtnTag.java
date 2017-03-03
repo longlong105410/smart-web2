@@ -3,11 +3,12 @@ package cn.com.smart.web.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.CustomBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 自定义按钮标签
@@ -41,25 +42,28 @@ public class CustomBtnTag extends BtnTag {
    				customBtn.setOpenStyle(openStyle);
    				customBtn.setBeforeCheck(beforeCheck);
    			} else {
-   				if(StringUtil.isEmpty(customBtn.getBtnStyle()))
+   				if(StringUtils.isEmpty(customBtn.getBtnStyle()))
    					customBtn.setBtnStyle(btnStyle);
-   				if(StringUtil.isEmpty(customBtn.getName()))
+   				if(StringUtils.isEmpty(customBtn.getName()))
    					customBtn.setName(name);
-   				if(StringUtil.isEmpty(customBtn.getWidth()))
+   				if(StringUtils.isEmpty(customBtn.getWidth()))
    					customBtn.setWidth("600");
-   				if(StringUtil.isEmpty(customBtn.getBtnIcon()))
+   				if(StringUtils.isEmpty(customBtn.getBtnIcon()))
    					customBtn.setBtnIcon(btnIcon);
-   				if(StringUtil.isEmpty(customBtn.getParamName()))
+   				if(StringUtils.isEmpty(customBtn.getParamName()))
    					customBtn.setParamName(paramName);
-   				if(StringUtil.isEmpty(customBtn.getSelectedType()))
+   				if(StringUtils.isEmpty(customBtn.getSelectedType()))
    					customBtn.setSelectedType(selectedType);
-   				if(StringUtil.isEmpty(customBtn.getOpenStyle()))
+   				if(StringUtils.isEmpty(customBtn.getOpenStyle()))
    					customBtn.setOpenStyle(openStyle);
    			}
    			UserInfo userInfo = getUserInfo();
    			OPAuthService opAuthServ = (OPAuthService)getService("opAuthServ");
-   			if(opAuthServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
-   			   out.println("<button type='button' id='"+customBtn.getId()+"' class='btn "+customBtn.getBtnStyle()+" "+customBtn.getOpenStyle()+" param' data-selected-type='"+StringUtil.handNull(customBtn.getSelectedType())+"' data-uri='"+StringUtil.handNull(customBtn.getUri())+"' data-title='"+StringUtil.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtil.handNull(customBtn.getParamName())+"' data-width='"+customBtn.getWidth()+"' ><i class='glyphicon "+customBtn.getBtnIcon()+"'></i> "+customBtn.getName()+"</button>");
+   			if(!customBtn.getIsAuth() || opAuthServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
+   			   out.println("<button type='button' id='"+customBtn.getId()+"' class='btn "+customBtn.getBtnStyle()+" "+customBtn.getOpenStyle()+" param' "+
+   			           "data-selected-type='"+StringUtils.handNull(customBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(customBtn.getUri())+"' "+
+   					   "data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' "+
+   			           "data-width='"+customBtn.getWidth()+"' ><i class='glyphicon "+customBtn.getBtnIcon()+"'></i> "+customBtn.getName()+"</button>");
    			}
    			userInfo = null;
    		} catch (Exception e) {

@@ -3,11 +3,12 @@ package cn.com.smart.web.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.DelBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 删除按钮标签
@@ -33,26 +34,30 @@ public class DelBtnTag extends BtnTag {
    	public int doStartTag() throws JspException {
    		try {
    			id = "del";
-   			name = StringUtil.isEmpty(name)?"删除":name;
-   			if(!StringUtil.isEmpty(selectedType) && 
+   			name = StringUtils.isEmpty(name)?"删除":name;
+   			if(StringUtils.isNotEmpty(selectedType) && 
    					BtnPropType.SelectType.NONE.getValue().equals(selectedType))
    				selectedType = BtnPropType.SelectType.MULTI.getValue();
    			JspWriter out = this.pageContext.getOut();
    			if(null == delBtn)
    				delBtn = new DelBtn(uri, busi, msg, refreshUri, target, delAfter, btnStyle, name);
    			else {
-   				if(StringUtil.isEmpty(delBtn.getBtnStyle()))
+   				if(StringUtils.isEmpty(delBtn.getBtnStyle()))
    					delBtn.setBtnStyle(btnStyle);
-   				if(StringUtil.isEmpty(delBtn.getName()))
+   				if(StringUtils.isEmpty(delBtn.getName()))
    					delBtn.setName(name);
-   				if(StringUtil.isEmpty(delBtn.getSelectedType())) {
+   				if(StringUtils.isEmpty(delBtn.getSelectedType())) {
    					delBtn.setSelectedType(selectedType);
    				}
    			}
    			UserInfo userInfo = getUserInfo();
    			OPAuthService authServ = (OPAuthService)getService("opAuthServ");
-   			if(authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds())) {
-   				out.println("<button type='button' class='btn "+delBtn.getBtnStyle()+" del param' data-selected-type='"+StringUtil.handNull(delBtn.getSelectedType())+"' data-uri='"+StringUtil.handNull(delBtn.getUri())+"' data-busi='"+StringUtil.handNull(delBtn.getBusi())+"' data-msg='"+StringUtil.handNull(delBtn.getMsg())+"' data-value='' data-refresh-uri='"+StringUtil.handNull(delBtn.getRefreshUri())+"' data-target='"+StringUtil.handNull(delBtn.getTarget())+"' data-delAfter='"+StringUtil.handNull(delBtn.getCallback())+"' ><i class='glyphicon glyphicon-trash'></i> "+delBtn.getName()+"</button>");
+   			if(!delBtn.getIsAuth() || authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds())) {
+   				out.println("<button type='button' class='btn "+delBtn.getBtnStyle()+" del param' "+
+   			            "data-selected-type='"+StringUtils.handNull(delBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(delBtn.getUri())+"' "+
+   						"data-busi='"+StringUtils.handNull(delBtn.getBusi())+"' data-msg='"+StringUtils.handNull(delBtn.getMsg())+"' "+
+   			            "data-value='' data-refresh-uri='"+StringUtils.handNull(delBtn.getRefreshUri())+"' data-target='"+StringUtils.handNull(delBtn.getTarget())+"' "+
+   						"data-delAfter='"+StringUtils.handNull(delBtn.getCallback())+"' ><i class='glyphicon glyphicon-trash'></i> "+delBtn.getName()+"</button>");
    			}
    			userInfo = null;
    		} catch (Exception e) {

@@ -3,11 +3,12 @@ package cn.com.smart.web.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.EditBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 编辑按钮标签
@@ -36,8 +37,8 @@ public class EditBtnTag extends BtnTag {
    	public int doStartTag() throws JspException {
    		try {
    			id = "edit";
-   			name = StringUtil.isEmpty(name)?"编辑":name;
-   			if(!StringUtil.isEmpty(selectedType) && 
+   			name = StringUtils.isEmpty(name)?"编辑":name;
+   			if(StringUtils.isNotEmpty(selectedType) && 
    					BtnPropType.SelectType.NONE.getValue().equals(selectedType))
    				selectedType = BtnPropType.SelectType.MULTI.getValue();
    			JspWriter out = this.pageContext.getOut();
@@ -45,20 +46,23 @@ public class EditBtnTag extends BtnTag {
    				editBtn = new EditBtn(id, uri, busi, title, width,btnStyle,name);
    				editBtn.setBeforeCheck(beforeCheck);
    			} else {
-   				if(StringUtil.isEmpty(editBtn.getBtnStyle()))
+   				if(StringUtils.isEmpty(editBtn.getBtnStyle()))
    					editBtn.setBtnStyle(btnStyle);
-   				if(StringUtil.isEmpty(editBtn.getName()))
+   				if(StringUtils.isEmpty(editBtn.getName()))
    					editBtn.setName(name);
-   				if(StringUtil.isEmpty(editBtn.getWidth()))
+   				if(StringUtils.isEmpty(editBtn.getWidth()))
    					editBtn.setWidth("600");
-   				if(StringUtil.isEmpty(editBtn.getSelectedType())) {
+   				if(StringUtils.isEmpty(editBtn.getSelectedType())) {
    					editBtn.setSelectedType(selectedType);
    				}
    			}
    			UserInfo userInfo = getUserInfo();
    			OPAuthService authServ = (OPAuthService)getService("opAuthServ");
-   			if(authServ.isAuth(currentUri, editBtn, userInfo.getRoleIds())) {
-   				out.println("<button type='button' class='btn "+editBtn.getBtnStyle()+" add param' data-selected-type='"+StringUtil.handNull(editBtn.getSelectedType())+"' data-uri='"+StringUtil.handNull(editBtn.getUri())+"' data-title='"+StringUtil.handNull(editBtn.getTitle())+"' data-busi='"+StringUtil.handNull(editBtn.getBusi())+"' data-value='' dialog-width='"+editBtn.getWidth()+"' ><i class='glyphicon glyphicon-pencil'></i> "+editBtn.getName()+"</button>");
+   			if(!editBtn.getIsAuth() || authServ.isAuth(currentUri, editBtn, userInfo.getRoleIds())) {
+   				out.println("<button type='button' class='btn "+editBtn.getBtnStyle()+" add param' "+
+   						"data-selected-type='"+StringUtils.handNull(editBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(editBtn.getUri())+"' "+
+   						"data-title='"+StringUtils.handNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handNull(editBtn.getBusi())+"' "+
+   						"data-value='' dialog-width='"+editBtn.getWidth()+"' ><i class='glyphicon glyphicon-pencil'></i> "+editBtn.getName()+"</button>");
    			}
    			userInfo = null;
    			authServ = null;

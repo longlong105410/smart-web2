@@ -3,11 +3,12 @@ package cn.com.smart.web.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.EditBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 添加按钮标签
@@ -34,27 +35,30 @@ public class AddBtnTag extends BtnTag {
    	public int doStartTag() throws JspException {
    		try {
    			id="add";
-   			name = StringUtil.isEmpty(name)?"添加":name;
-   			if(StringUtil.isEmpty(selectedType)) 
+   			name = StringUtils.isEmpty(name)?"添加":name;
+   			if(StringUtils.isEmpty(selectedType)) 
    				selectedType = BtnPropType.SelectType.NONE.getValue();
    			JspWriter out = this.pageContext.getOut();
    			if(null == addBtn)
    				addBtn = new EditBtn(id, uri, busi, title, width,btnStyle,name);
    			else {
-   				if(StringUtil.isEmpty(addBtn.getBtnStyle()))
+   				if(StringUtils.isEmpty(addBtn.getBtnStyle()))
    					addBtn.setBtnStyle(btnStyle);
-   				if(StringUtil.isEmpty(addBtn.getName()))
+   				if(StringUtils.isEmpty(addBtn.getName()))
    					addBtn.setName(name);
-   				if(StringUtil.isEmpty(addBtn.getWidth()))
+   				if(StringUtils.isEmpty(addBtn.getWidth()))
    					addBtn.setWidth("600");
-   				if(StringUtil.isEmpty(addBtn.getSelectedType()))
+   				if(StringUtils.isEmpty(addBtn.getSelectedType()))
    					addBtn.setSelectedType(selectedType);
    			}
    			
    			UserInfo userInfo = getUserInfo();
    			OPAuthService opAuthServ = (OPAuthService)getService("opAuthServ");
-   			if(opAuthServ.isAuth(currentUri, addBtn, userInfo.getRoleIds())) {
-   			   out.println("<button type='button' class='btn "+addBtn.getBtnStyle()+" add param' data-selected-type='"+StringUtil.handNull(addBtn.getSelectedType())+"' data-uri='"+StringUtil.handNull(addBtn.getUri())+"' data-title='"+StringUtil.handNull(addBtn.getTitle())+"' data-busi='"+StringUtil.handNull(addBtn.getBusi())+"' data-value='' dialog-width='"+addBtn.getWidth()+"' ><i class='glyphicon glyphicon-plus'></i> "+addBtn.getName()+"</button>");
+   			if(!addBtn.getIsAuth() || opAuthServ.isAuth(currentUri, addBtn, userInfo.getRoleIds())) {
+   			   out.println("<button type='button' class='btn "+addBtn.getBtnStyle()+" add param' "+
+   			           "data-selected-type='"+StringUtils.handNull(addBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(addBtn.getUri())+"' "+
+   					   "data-title='"+StringUtils.handNull(addBtn.getTitle())+"' data-busi='"+StringUtils.handNull(addBtn.getBusi())+"' data-value='' "+
+   			           "dialog-width='"+addBtn.getWidth()+"' ><i class='glyphicon glyphicon-plus'></i> "+addBtn.getName()+"</button>");
    			}
    			userInfo = null;
    		} catch (Exception e) {

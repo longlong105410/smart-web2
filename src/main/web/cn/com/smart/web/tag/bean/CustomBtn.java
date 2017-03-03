@@ -1,9 +1,8 @@
 package cn.com.smart.web.tag.bean;
 
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 
-import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.StringUtils;
 
 
 /**
@@ -21,10 +20,6 @@ public class CustomBtn extends BaseBtn {
 	
 	protected String paramName = "id";
 	
-	/**
-	 * 是否控制权限
-	 */
-	protected Boolean isAuth = YesNoType.YES.getValue();
 	
 	/**
 	 * 选择类型
@@ -40,14 +35,14 @@ public class CustomBtn extends BaseBtn {
 	
 	public CustomBtn(String id,String title,String name,String uri) {
 		this.id = id;
-		this.title = StringUtil.isEmpty(title)?name:title;
+		this.title = StringUtils.isEmpty(title)?name:title;
 		this.name = name;
 		this.uri = uri;
 	}
 	
 	public CustomBtn(String id,String title,String name,String uri,String btnIcon) {
 		this.id = id;
-		this.title = StringUtil.isEmpty(title)?name:title;
+		this.title = StringUtils.isEmpty(title)?name:title;
 		this.name = name;
 		this.uri = uri;
 		this.btnIcon = btnIcon;
@@ -55,7 +50,7 @@ public class CustomBtn extends BaseBtn {
 	
 	public CustomBtn(String id,String title,String name,String uri,String btnIcon,String selectedType) {
 		this.id = id;
-		this.title = StringUtil.isEmpty(title)?name:title;
+		this.title = StringUtils.isEmpty(title)?name:title;
 		this.name = name;
 		this.uri = uri;
 		this.btnIcon = btnIcon;
@@ -64,7 +59,7 @@ public class CustomBtn extends BaseBtn {
 	
 	public CustomBtn(String id,String title,String name,String uri,String btnIcon,String selectedType,String paramName) {
 		this.id = id;
-		this.title = StringUtil.isEmpty(title)?name:title;
+		this.title = StringUtils.isEmpty(title)?name:title;
 		this.name = name;
 		this.uri = uri;
 		this.btnIcon = btnIcon;
@@ -74,7 +69,7 @@ public class CustomBtn extends BaseBtn {
 	
 	public CustomBtn(String id,String title,String name,String uri,String width,String btnIcon,String selectedType,String btnStyle,String paramName) {
 		this.id = id;
-		this.title = StringUtil.isEmpty(title)?name:title;
+		this.title = StringUtils.isEmpty(title)?name:title;
 		this.name = name;
 		this.uri = uri;
 		this.width = width;
@@ -138,14 +133,6 @@ public class CustomBtn extends BaseBtn {
 
 	public void setBeforeCheck(String beforeCheck) {
 		this.beforeCheck = beforeCheck;
-	}
-
-	public Boolean getIsAuth() {
-		return isAuth;
-	}
-
-	public void setIsAuth(Boolean isAuth) {
-		this.isAuth = isAuth;
 	}
 
 }

@@ -1,5 +1,8 @@
 package cn.com.smart.web.tag.bean;
 
+import com.mixsmart.enums.YesNoType;
+
+
 /**
  * 操作按钮基类
  * @author lmq
@@ -23,6 +26,11 @@ public class BaseBtn {
 	protected String name;
 	
 	protected String selectedType;
+	
+	/**
+	 * 是否控制权限
+	 */
+	protected Boolean isAuth = YesNoType.YES.getValue();
 	
 	public BaseBtn() {
 		
@@ -86,6 +94,14 @@ public class BaseBtn {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public Boolean getIsAuth() {
+		return isAuth;
+	}
+
+	public void setIsAuth(Boolean isAuth) {
+		this.isAuth = isAuth;
 	}
 	
 }

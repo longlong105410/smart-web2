@@ -71,7 +71,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     			btnStyleFlag = "${btnListStyle}";
     			htmlContent.append("<div class='btn-list' "+StringUtils.handNull(btnStyleFlag)+"><div class='btn-group btn-group-sm cnoj-op-btn-list'>");
     			String btnHtml = null;
-    			if(null != addBtn && authServ.isAuth(currentUri, addBtn, userInfo.getRoleIds())) {
+    			if(null != addBtn && (!addBtn.getIsAuth() || authServ.isAuth(currentUri, addBtn, userInfo.getRoleIds()))) {
     				if(StringUtils.isEmpty(addBtn.getSelectedType()))
     					addBtn.setSelectedType(BtnPropType.SelectType.NONE.getValue());
     				btnHtml = "<button type='button' id='"+addBtn.getId()+"' class='btn "+(StringUtils.isEmpty(addBtn.getBtnStyle())?BTN_DEFAULT_THEME:addBtn.getBtnStyle())+" add param' data-selected-type='"+
@@ -80,7 +80,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     		    			+(StringUtils.isEmpty(addBtn.getName())?"添加":addBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, addBtn, btnHtml);
     			}
-    			if(null != editBtn && authServ.isAuth(currentUri, editBtn, userInfo.getRoleIds())) {
+    			if(null != editBtn && (!editBtn.getIsAuth() || authServ.isAuth(currentUri, editBtn, userInfo.getRoleIds()))) {
     				if(StringUtils.isEmpty(editBtn.getSelectedType()))
     					editBtn.setSelectedType(BtnPropType.SelectType.MULTI.getValue());
     				btnHtml = "<button type='button' id='"+editBtn.getId()+"' class='btn "+(StringUtils.isEmpty(editBtn.getBtnStyle())?BTN_DEFAULT_THEME:editBtn.getBtnStyle())+" edit param' data-selected-type='"+StringUtils.handNull(editBtn.getSelectedType())+"' data-uri='"+
@@ -88,7 +88,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     						StringUtils.handNull(editBtn.getBeforeCheck())+"'><i class='glyphicon glyphicon-pencil'></i> "+(StringUtils.isEmpty(editBtn.getName())?"编辑":editBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, editBtn, btnHtml);
     			}
-    			if(null != delBtn && authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds())) {
+    			if(null != delBtn && (!delBtn.getIsAuth() || authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds()))) {
     				if(StringUtils.isEmpty(delBtn.getSelectedType()))
     					delBtn.setSelectedType(BtnPropType.SelectType.MULTI.getValue());
     				btnHtml = "<button type='button' id='"+delBtn.getId()+"' class='btn "+(StringUtils.isEmpty(delBtn.getBtnStyle())?BTN_DEFAULT_THEME:delBtn.getBtnStyle())+" del param' data-selected-type='"+StringUtils.handNull(delBtn.getSelectedType())+"' data-uri='"+
@@ -96,7 +96,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     						StringUtils.handNull(delBtn.getTarget())+"' data-delAfter='"+StringUtils.handNull(delBtn.getCallback())+"' ><i class='glyphicon glyphicon-trash'></i> "+(StringUtils.isEmpty(delBtn.getName())?"删除":delBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, delBtn, btnHtml);
     			}
-    			if(null != refreshBtn && authServ.isAuth(currentUri, refreshBtn, userInfo.getRoleIds())) {
+    			if(null != refreshBtn && (!refreshBtn.getIsAuth() || authServ.isAuth(currentUri, refreshBtn, userInfo.getRoleIds()))) {
     				btnHtml = "<button type='button' id='"+refreshBtn.getId()+"' class='btn "+(StringUtils.isEmpty(refreshBtn.getBtnStyle())?BTN_DEFAULT_THEME:refreshBtn.getBtnStyle())+" refresh' data-uri='"+StringUtils.handNull(refreshBtn.getUri())+"' data-busi='"+
     			              StringUtils.handNull(refreshBtn.getBusi())+"' data-target='"+StringUtils.handNull(refreshBtn.getTarget())+"' ><i class='glyphicon glyphicon-refresh'></i> "+(StringUtils.isEmpty(refreshBtn.getName())?"刷新":refreshBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, refreshBtn, btnHtml);
@@ -104,8 +104,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     			if(null != customBtns && customBtns.size()>0) {
     				for (CustomBtn customBtn : customBtns) {
     					btnHtml = "";
-    					if(!customBtn.getIsAuth() || 
-    							(customBtn.getIsAuth() && authServ.isAuth(currentUri, customBtn, userInfo.getRoleIds()))) {
+    					if(!customBtn.getIsAuth() || authServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
     						String icon = "";
 	    					if(!StringUtils.isEmpty(customBtn.getBtnIcon())) {
 	    						icon = "<i class='glyphicon "+StringUtils.handNull(customBtn.getBtnIcon())+"'></i>";
