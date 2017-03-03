@@ -41,7 +41,6 @@ $(document).ready(function(){
 	});
 	menuTreeListener();
 	tabListner();
-	//2.0.15 版本中添加该方法；去除了cnoj.event.listener.js中的方法
 	setTimeout('initEvent()', 300);
 });
 
@@ -181,7 +180,7 @@ function menuTreeListener() {
 					if(!utils.isEmpty(menuType) && menuType=='flow_resource') 
 						openFlowTab(title,uri);
 					 else 
-						addTab(title,uri,true);
+						addTab(title,uri,false);
 				}
 				selectedMenuIndex = $this.data("index");
 			}
@@ -259,9 +258,9 @@ function addTab(title,url,isReLoad) {
 		isReLoad = (utils.isEmpty(isReLoad) || !isReLoad)?false:true;
 		if($('#main-tab').tabs('exists',title)) {
 			$('#main-tab').tabs('select',title);
-			/*if(isReLoad) {
+			if(isReLoad) {
 				reloadTab(url);
-			}*/
+			}
 		} else {
 			$('#main-tab').tabs('add',{
 				title: title,

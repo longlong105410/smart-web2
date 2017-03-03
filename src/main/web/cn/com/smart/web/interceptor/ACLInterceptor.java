@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,19 +60,17 @@ public class ACLInterceptor implements HandlerInterceptor {
 				//请求参数添加到map里面
 				Map<String,String[]> curParamMaps = request.getParameterMap();
 				if(null != curParamMaps && curParamMaps.size()>0) {
-					for (String key : curParamMaps.keySet()) {
-						String[] values = curParamMaps.get(key);
-						if(values.length<2) {
-							if(values[0].length()<100 && !modelMap.containsKey(key)) {
-								if(StringUtils.isNotEmpty(values[0]) && values[0].startsWith("%")) {
-									modelMap.put(key, URLDecoder.decode(values[0], "UTF-8"));
-								} else {
-									modelMap.put(key, values[0]);
-								}
+					Set<Map.Entry<String, String[]>> items = curParamMaps.entrySet();
+					for (Map.Entry<String, String[]> item : items) {
+						if(item.getValue().length<2) {
+							String value = item.getValue()[0];
+							if(StringUtils.isNotEmpty(value) && value.startsWith("%")) {
+								value = URLDecoder.decode(value, "UTF-8");
 							}
-						} //else {
-							//modelMap.put(key, values);
-						//}
+							if(value.length()<100 && !modelMap.containsKey(item.getKey())) {
+								modelMap.put(item.getKey(), value);
+							}
+						}
 					}
 				} //if;
 				RedirectView redirectView = ((RedirectView)modelAndView.getView());
