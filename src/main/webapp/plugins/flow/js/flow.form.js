@@ -15,7 +15,7 @@ var END_NODE_KEY = "end";
 		var $parent = $this.parent();
 		if(!$this.hasClass("v-hidden")) {
 			$this.addClass("v-hidden");
-			$parent.prepend('<div class="loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
+			$parent.prepend('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
 		}
 		setTimeout(function() {
 			controlFormField();
@@ -27,9 +27,10 @@ var END_NODE_KEY = "end";
 			if(typeof(handleForm) === 'function') {
 				handleForm();
 			}
+			$parent.find(".cnoj-loading").remove();
+			$this.removeClass("v-hidden");
 		}, 500);
-		$parent.find(".loading").remove();
-		$this.removeClass("v-hidden");
+		
 		
 		/**
 		 * 控制表单字段

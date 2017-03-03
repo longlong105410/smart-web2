@@ -165,8 +165,7 @@
 				<div id="flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white">
 					<div role="tabpanel" class="tab-pane active" id="process-form-tab">
 						<div class="form-prop">
-						   <div class="loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>
-					       <form id="process-handle-form" class="v-hidden" method="post">
+						   <form id="process-handle-form" class="v-hidden" method="post">
 					           ${smartResp.data.parseHtml}
 					       </form>
 					   </div>

@@ -72,9 +72,6 @@ input[type=radio], input[type=checkbox] {margin: 3px 0 0;}
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
-.flow-form-contents .nav-tabs>li{
-	margin-bottom: -2px;
-}
 
 .popover-title {padding: 6px 10px;}
 .popover-content {padding: 5px 10px;}
