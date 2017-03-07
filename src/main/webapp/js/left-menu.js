@@ -41,6 +41,7 @@ $(document).ready(function(){
 	});
 	menuTreeListener();
 	tabListner();
+	//2.0.15 版本中添加该方法；去除了cnoj.event.listener.js中的方法
 	setTimeout('initEvent()', 300);
 });
 
@@ -327,13 +328,13 @@ function tabListner() {
 	$('#main-tab').tabs({
 		onLoad: function(panel) {
 			panel.wrapInner('<div class="loading-content"></div>');
-			panel.append('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
+			panel.prepend('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
 			var $target = panel.find(".loading-content");
 			$target.css("visibility","hidden");
 			$("body").css({"overflow":"hidden"});
 			setTimeout(function(){
-				panel.find(".cnoj-loading").remove();
 				initEvent();
+				panel.find(">.cnoj-loading").remove();
 				$target.css("visibility","visible");
 				$("body").css("overflow","auto");
 			}, 100);

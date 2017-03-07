@@ -155,7 +155,7 @@
 					<ul class="nav nav-tabs ui-state-default" role="tablist">
 						<li class="active"><a href="#process-form-tab" role="presentation" data-toggle="tab"> 表单信息</a></li>
 						<c:if test="${isAtt==1 }">
-						   <li><a href="#process-att-tab" id="process-att-tab-a" role="presentation" data-toggle="tab"> 附件</a></li>
+						   <li><a href="#process-att-tab" id="process-att-tab-a" role="presentation" data-toggle="tab"> 附件 <span class="badge">1</span></a></li>
 						</c:if>
 						<li><a href="#process-record-tab" role="presentation" data-toggle="tab"> 流转记录</a></li>
 					</ul>
@@ -165,7 +165,7 @@
 				<div id="flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white">
 					<div role="tabpanel" class="tab-pane active" id="process-form-tab">
 						<div class="form-prop">
-						   <form id="process-handle-form" class="v-hidden" method="post">
+					       <form id="process-handle-form" method="post">
 					           ${smartResp.data.parseHtml}
 					       </form>
 					   </div>

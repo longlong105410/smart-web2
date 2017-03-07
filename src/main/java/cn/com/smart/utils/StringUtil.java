@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
- * 字符串处理工具类
+ * 字符串处理工具类；
+ * 该类已过时，请使用{@link com.mixsmart.utils.StringUtils}类代替
  * @author lmq
  * @version 1.0
  * @since 1.0

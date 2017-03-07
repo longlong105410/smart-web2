@@ -51,8 +51,10 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     protected List<CustomBtn> customBtns;
     
     protected SmartResponse<Object> smartResp;
-	
-    /**
+    
+    protected String searchPanelTag;
+
+	/**
      * 生成表尾（如：按钮，分页等信息）
      * @param out JSP输出对象
      */
@@ -106,8 +108,12 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     					btnHtml = "";
     					if(!customBtn.getIsAuth() || authServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
     						String icon = "";
-	    					if(!StringUtils.isEmpty(customBtn.getBtnIcon())) {
-	    						icon = "<i class='glyphicon "+StringUtils.handNull(customBtn.getBtnIcon())+"'></i>";
+	    					if(StringUtils.isNotEmpty(customBtn.getBtnIcon())) {
+	    						if(customBtn.getBtnIcon().split(" ").length > 1) {
+	    							icon = "<i class='"+StringUtils.handNull(customBtn.getBtnIcon())+"'></i>";
+	    						} else {
+	    							icon = "<i class='glyphicon "+StringUtils.handNull(customBtn.getBtnIcon())+"'></i>";
+	    						}
 	    					}
 	    					btnHtml = "<button type='button' id='"+customBtn.getId()+"' class='btn "+StringUtils.handNull(customBtn.getBtnStyle())+" "+customBtn.getOpenStyle()+" param' data-selected-type='"+StringUtils.handNull(customBtn.getSelectedType())+"' data-uri='"+
 	    					           StringUtils.handNull(customBtn.getUri())+"' data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' data-width='"+(StringUtils.isEmpty(customBtn.getWidth())?600:customBtn.getWidth())+
@@ -137,13 +143,17 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
         			pageUri = "";
         		}
         		count++;
+        		String searchPanel = "";
+        		if(StringUtils.isNotEmpty(searchPanelTag)) {
+        			searchPanel = "data-search-panel-tag='"+searchPanelTag+"'";
+        		}
     			pageStyleFlag = "${btnPageStyle}";
     			htmlContent.append("<div class='btn-page' "+StringUtils.handNull(pageStyleFlag)+">");
     			htmlContent.append("<div class='page'><ul class='pagination pagination-sm'><li class='"+(page.getPage()==1?"disabled":"")+"'>");
     			if(page.getPage() == 1) {
-    				htmlContent.append("<a href='javascript:void(0)' class='pre-page'>&laquo;</a>");
+    				htmlContent.append("<a href='javascript:void(0)' "+searchPanel+" class='pre-page'>&laquo;</a>");
     			} else {
-    				htmlContent.append("<a data-uri='"+pageUri+(page.getPage()-1)+"' href='#' class='cnoj-change-page pre-page' data-target='"+StringUtils.handNull(page.getTarget())+"'>&laquo;</a>");
+    				htmlContent.append("<a data-uri='"+pageUri+(page.getPage()-1)+"' "+searchPanel+" href='#' class='cnoj-change-page pre-page' data-target='"+StringUtils.handNull(page.getTarget())+"'>&laquo;</a>");
     			}
     			htmlContent.append("</li>");
     			if(smartResp.getTotalPage()>1) {
@@ -169,17 +179,17 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     					first = (last-first)<(showPageNum-1)?(last-showPageNum+1):first;
     				
     				for (int i = first; i <= last; i++) {
-						htmlContent.append("<li class='"+(page.getPage()==i?"active":"")+"'><a class='cnoj-change-page' data-uri='"+pageUri+i+"' href='#' data-target='"+StringUtils.handNull(page.getTarget())+"'>"+i+"</a></li>");
+						htmlContent.append("<li class='"+(page.getPage()==i?"active":"")+"'><a class='cnoj-change-page' "+searchPanel+" data-uri='"+pageUri+i+"' href='#' data-target='"+StringUtils.handNull(page.getTarget())+"'>"+i+"</a></li>");
 					}
     			}
     			htmlContent.append("<li class='"+(page.getPage()>=smartResp.getTotalPage()?"disabled":"")+"'>");
     			if(page.getPage()>=smartResp.getTotalPage()) {
-    				htmlContent.append("<a href='javascript:void(0)' class='next-page'>&raquo;</a>");
+    				htmlContent.append("<a href='javascript:void(0)' "+searchPanel+" class='next-page'>&raquo;</a>");
     			} else {
-    				htmlContent.append("<a href='#' data-uri='"+pageUri+(page.getPage()+1)+"' class='cnoj-change-page next-page' data-target='"+StringUtils.handNull(page.getTarget())+"'>&raquo;</a>");
+    				htmlContent.append("<a href='#' data-uri='"+pageUri+(page.getPage()+1)+"' "+searchPanel+" class='cnoj-change-page next-page' data-target='"+StringUtils.handNull(page.getTarget())+"'>&raquo;</a>");
     			}
     			htmlContent.append("</li>");
-    			htmlContent.append("<li>&nbsp;到<input class='form-control input-sm goto-page-input' name='page' value='' />页<button data-uri='"+pageUri+"' class='btn btn-default btn-xs cnoj-goto-page' data-target='"+StringUtils.handNull(page.getTarget())+"'>确定</button></li>");
+    			htmlContent.append("<li>&nbsp;到<input class='form-control input-sm goto-page-input' name='page' value='' />页<button data-uri='"+pageUri+"' class='btn btn-default btn-xs cnoj-goto-page' "+searchPanel+" data-target='"+StringUtils.handNull(page.getTarget())+"'>确定</button></li>");
     			htmlContent.append("</ul>");
     			htmlContent.append("</div>");
     			htmlContent.append("</div>");
@@ -283,5 +293,13 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 
 	public void setSmartResp(SmartResponse<Object> smartResp) {
 		this.smartResp = smartResp;
+	}
+
+	public String getSearchPanelTag() {
+		return searchPanelTag;
+	}
+
+	public void setSearchPanelTag(String searchPanelTag) {
+		this.searchPanelTag = searchPanelTag;
 	}
 }

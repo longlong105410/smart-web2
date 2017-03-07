@@ -6,6 +6,8 @@ import java.util.List;
 import cn.com.smart.bean.SmartResponse;
 
 /**
+ * 该类已过期，不提倡使用；
+ * 如果考虑分页请使用{@link cn.com.smart.web.tag.PanelFooterTag} 类对应的标签（&lt;cnoj:panelFooter />）
  * @author lmq
  * @create 2015年7月17日
  * @version 1.0 

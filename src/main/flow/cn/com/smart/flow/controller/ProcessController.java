@@ -1,8 +1,5 @@
 package cn.com.smart.flow.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,12 +37,13 @@ import cn.com.smart.flow.ext.ExtProcess;
 import cn.com.smart.flow.ext.ExtProcessModel;
 import cn.com.smart.flow.ext.ExtTaskModel;
 import cn.com.smart.flow.helper.ProcessHelper;
-import cn.com.smart.flow.helper.ShowPageNumHelper;
 import cn.com.smart.flow.service.FlowFormService;
 import cn.com.smart.flow.service.ProcessFacade;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
+import cn.com.smart.web.tag.bean.PageParam;
+import cn.com.smart.web.tag.bean.RefreshBtn;
 
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
@@ -215,14 +213,6 @@ public class ProcessController extends BaseFlowControler {
 		ModelAndView modelView = new ModelAndView();
 		queryFilter = (null == queryFilter ? new QueryFilter():queryFilter);
 		String uri = "process/todo";
-		if(StringUtils.isNotEmpty(queryFilter.getTitle())) {
-			try {
-				queryFilter.setTitle(URLDecoder.decode(queryFilter.getTitle(), "UTF-8"));
-				uri += "?title="+queryFilter.getTitle(); 
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
 		queryFilter.setParam(super.getRequestParamMap(request));
 		page.setPageSize(getPerPageSize());
 		facets.getEngine().query().getWorkItems(page, queryFilter.orderBy(" t.create_time").order("desc").setOperators(getGroups(request)));
@@ -232,21 +222,12 @@ public class ProcessController extends BaseFlowControler {
 			smartResp = processFacade.todoClassify(page.getResult());
 			smartResp.setTotalNum(page.getTotalCount());
 			smartResp.setTotalPage((int)page.getTotalPages());
-			//处理分页数字
-			List<String> pageNums = ShowPageNumHelper.showNumHandle(smartResp, page.getPage());
-			modelMap.put("pageNums", pageNums.size()>0?pageNums:null);
 		}
+		pageParam = new PageParam(uri, null, page.getPage());
+		refreshBtn = new RefreshBtn(uri, null,null);
 		modelMap.put("smartResp", smartResp);
-		modelMap.put("pagedata", page);
-		modelMap.put("uri", uri);
-		String refreshUrl = uri+(uri.indexOf("?")>-1?'&':'?')+"page="+page.getPage();
-		try {
-			refreshUrl = URLEncoder.encode(refreshUrl, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		modelMap.put("refreshUrl", refreshUrl);
+		modelMap.put("pageParam", pageParam);
+		modelMap.put("refreshBtn", refreshBtn);
 		modelView.setViewName(VIEW_DIR+"/todo");
 		return modelView;
 	}
@@ -312,28 +293,27 @@ public class ProcessController extends BaseFlowControler {
 		ModelAndView modelView = new ModelAndView();
 		queryFilter = (null == queryFilter ? new QueryFilter():queryFilter);
 		String uri = "process/hasTodo";
-		if(StringUtils.isNotEmpty(queryFilter.getTitle())) {
+		/*if(StringUtils.isNotEmpty(queryFilter.getTitle())) {
 			try {
 				queryFilter.setTitle(URLDecoder.decode(queryFilter.getTitle(), "UTF-8"));
 				uri += "?title="+queryFilter.getTitle(); 
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		facets.getEngine().query().getHistoryWorkItems(page, queryFilter.orderBy(" t.finish_time").order("desc").setOperator(userId));
 		ModelMap modelMap = modelView.getModelMap();
 		if(null != page && page.getTotalCount()>0) {
 			smartResp = processFacade.todoClassify(page.getResult());
 			smartResp.setTotalNum(page.getTotalCount());
 			smartResp.setTotalPage((int)page.getTotalPages());
-			//处理分页数字
-			List<String> pageNums = ShowPageNumHelper.showNumHandle(smartResp, page.getPage());
-			modelMap.put("pageNums", pageNums.size()>0?pageNums:null);
 		}
+		pageParam = new PageParam(uri, null, page.getPage());
+		refreshBtn = new RefreshBtn(uri, null,null);
 		modelMap.put("smartResp", smartResp);
-		modelMap.put("pagedata", page);
+		modelMap.put("pageParam", pageParam);
+		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("queryFilter", queryFilter);
-		modelMap.put("uri", uri);
 		modelView.setViewName(VIEW_DIR+"/hasTodo");
 		return modelView;
 	}
@@ -358,6 +338,7 @@ public class ProcessController extends BaseFlowControler {
 			Map<String,Object> modelMap = modelView.getModelMap();
 			String json = SnakerHelper.getModelJson(processModel);
 			modelMap.put("process", json);
+			modelMap.put("processName", processModel.getDisplayName());
 			if(processModel != null && StringUtils.isNotEmpty(orderId)) {
 				List<Task> tasks = facets.getEngine().query().getActiveTasks(new QueryFilter().setOrderId(orderId));
 				List<HistoryTask> historyTasks = facets.getEngine().query().getHistoryRelateTasks(new QueryFilter().setOrderId(orderId));
@@ -499,7 +480,7 @@ public class ProcessController extends BaseFlowControler {
 	}
 	
 	/**
-	 * 保存表单数据
+	 * 更新表单数据
 	 * @param request
 	 * @param formId
 	 * @param formDataId

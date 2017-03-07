@@ -8,7 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 
 /**
- * 身份证合法性校验
+ * 身份证合法性校验；
+ * 该类已过时，请使用{@link com.mixsmart.utils.IdCardValidator}类代替
  * @author lmq
  * 15位身份证号码：第7、8位为出生年份(两位数)，第9、10位为出生月份，第11、12位代表出生日期，第15位代表性别，奇数为男，偶数为女。  <br />
  * 18位身份证号码：第7、8、9、10位为出生年份(四位数)，第11、第12位为出生月份，第13、14位代表出生日期，第17位代表性别，奇数为男，偶数为女。

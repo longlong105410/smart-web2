@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 提取身份证相关信息 
+ * 提取身份证相关信息 ；
+ * 该类已过时，请使用{@link com.mixsmart.utils.IdCardInfoExtractor}类代替
  * @author lmq
  * @version 1.0
  * @since 1.0

@@ -348,6 +348,7 @@ function formRequireListener() {
  * class="cnoj-change-page" 该标识主要是用来标记分页，点击页面时触发的事件
  *   参数:必须 data-uri 分页uri
  *       可选 data-target 显示地方(一般为一个div层)
+ *       data-search-panel-tag 搜索面板标识
  *   
  * class="cnoj-open-self" 点击时，指定的uri显示到当前"#main-content"里面
  *   参数：必须 data-uri 显示uri
@@ -367,6 +368,20 @@ function hrefListener() {
 			$this.click(function(event) {
 				var uri = $(this).data("uri");
 				uri = utils.isEmpty(uri)?$(this).attr("href"):uri;
+				//获取搜索参数
+				var searchPanelTag = $(this).data("search-panel-tag");
+				var $searchPanel = null;
+				if(utils.isEmpty(searchPanelTag)) {
+					$searchPanel = $(this).parents(".panel:eq(0)").find(">.panel-search");
+				} else {
+					$searchPanel = $(searchPanelTag);
+				}
+				if(utils.isExist($searchPanel)) {
+					var $form = $searchPanel.find("form");
+					if(utils.isExist($form)) {
+						uri = uri+"&"+$form.serialize();
+					}
+				}
 				var target = $(this).data("target");
 				if (!utils.isEmpty(uri)) {
 					if(!utils.isEmpty(target))
@@ -1958,6 +1973,7 @@ function submitFormListener() {
  *        data-uri 跳转到的页面 <br />
  *     可选 <br />
  *       data-target 跳转内容显示位置 <br />
+ *       data-search-panel-tag 搜索面板标识
  */
 function gotoPageListener() {
 	$(".cnoj-goto-page").each(function(){
@@ -1981,6 +1997,22 @@ function gotoPageListener() {
 					page = (page > totalPage)?totalPage:page;
 					var target = $(this).data("target");
 					uri = uri+page;
+					
+					//获取搜索参数
+					var searchPanelTag = $(this).data("search-panel-tag");
+					var $searchPanel = null;
+					if(utils.isEmpty(searchPanelTag)) {
+						$searchPanel = $(this).parents(".panel:eq(0)").find(">.panel-search");
+					} else {
+						$searchPanel = $(searchPanelTag);
+					}
+					if(utils.isExist($searchPanel)) {
+						var $form = $searchPanel.find("form");
+						if(utils.isExist($form)) {
+							uri = uri+"&"+$form.serialize();
+						}
+					}
+					
 					if(!utils.isEmpty(target))
 						loadUri(target,uri,true);
 					else 

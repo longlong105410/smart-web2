@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/flow/js/flow.simple.tree.js"></script>
 <div class="wrap-content">
@@ -71,42 +72,7 @@
 	       </tbody>
 	    </table>
 	  </div>
-	  <div class="panel-footer ui-state-default panel-footer-page" data-height="34">
-		     <c:if test="${smartResp.totalPage>1 }">
-		     <div class="btn-page">
-		         <div class="page">
-		              <ul class="pagination pagination-sm">
-		                <li class="${pagedata.page==1?'disabled':'' }">
-		                  <c:choose>
-		                     <c:when test="${pagedata.page==1}">
-		                        <a href="javascript:void(0)" class="pre-page">&laquo;</a>
-		                     </c:when>
-		                     <c:otherwise>
-		                        <a href="#" data-uri="${uri}${(fn:indexOf(uri,'?')>0?'&':'?')}page=${pagedata.page-1}" class="cnoj-change-page pre-page" data-target="${target }">&laquo;</a>
-		                     </c:otherwise>
-		                  </c:choose> 
-		                </li>
-		                <c:forEach var="pageNum" items="${pageNums }">
-		                    <li class="${pagedata.page==pageNum?'active':'' }"><a class="cnoj-change-page" href="#" data-uri="${uri}${(fn:indexOf(uri,'?')>0?'&':'?')}page=${pageNum}" data-target="${target }">${pageNum}</a></li>
-		                </c:forEach>
-					    
-					    <li class="${pagedata.page>=smartResp.totalPage?'disabled':'' }">
-					    <c:choose>
-		                  <c:when test="${pagedata.page>=smartResp.totalPage}">
-		                     <a href="javascript:void(0)" class="next-page">&raquo;</a>
-		                  </c:when>
-		                  <c:otherwise>
-		                     <a href="#" data-uri="${uri}${(fn:indexOf(uri,'?')>0?'&':'?')}page=${pagedata.page+1}" class="cnoj-change-page pre-page" data-target="${target }">&raquo;</a>
-		                  </c:otherwise>
-		                 </c:choose>
-		                 <li>&nbsp;到<input class="form-control input-sm goto-page-input" name="page" value="" />页
-		                 <button data-uri="${uri}${(fn:indexOf(uri,'?')>0?'&':'?')}page=" class="btn btn-default btn-xs cnoj-goto-page" data-target="${target}">确定</button></li>
-		              </ul>
-		         </div>
-		     </div>
-		     </c:if>
-		     <div class="page-info"><span>${smartResp.totalPage>0?pagedata.page:'0'} - ${smartResp.totalPage}</span><span>&nbsp;&nbsp; 共${smartResp.totalNum}条(每页显示${smartResp.perPageSize}条)</span></div>
-		</div>
+	  <cnoj:panelFooter smartResp="${smartResp }" refreshBtn="${refreshBtn}" page="${pageParam }" currentUri="${currentUri }" />
 	</div>
 </div>
 <script type="text/javascript">

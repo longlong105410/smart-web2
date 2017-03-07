@@ -15,6 +15,7 @@
 </div><!-- wrap-content-dialog -->
 <script type="text/javascript">
 	$(function() { 
+		setProcessName("${processName}");
 		var json="${process }";
 		var state = "${state}";//节点
 		var model = null;
@@ -36,5 +37,9 @@
 			restore : model,
 			editable : false
 			},state));
+		
+		function setProcessName(processName) {
+			$(".modal-dialog .bootstrap-dialog-title").html("查看【"+processName+"】流程图");
+		}
 	});
   </script>

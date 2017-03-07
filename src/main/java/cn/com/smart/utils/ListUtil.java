@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * List工具类
+ * List工具类；
+ *  该类已过时，请使用{@link com.mixsmart.utils.CollectionUtils}类代替
  * @author lmq
  * @version 1.0
  * @since 1.0

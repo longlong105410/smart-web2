@@ -1,7 +1,8 @@
 package cn.com.smart.utils;
 
 /**
- * 数组工具类
+ * 数组工具类；
+ * 该类已过时，请使用{@link com.mixsmart.utils.ArrayUtils}类代替
  * @author lmq
  * @version 1.0
  * @since JDK1.6

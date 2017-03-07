@@ -141,11 +141,15 @@
 		   <required>false</required>
 		   <rtexprvalue>true</rtexprvalue>
 		</attribute>
-		
 		<attribute>
 		   <name>isOriginalTable</name>
 		   <required>false</required>
 		   <rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>searchPanelTag</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	
@@ -238,6 +242,11 @@
 		   <name>subtractHeight</name>
 		   <required>false</required>
 		   <rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>searchPanelTag</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	
