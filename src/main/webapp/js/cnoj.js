@@ -48,7 +48,6 @@ cnoj.submitDialogData = function(uri,param,fun,$this,$form,isObj) {
 			if(typeof($this) !== 'string') {
 				jqGridId = $this.data("jqgrid-id");
 			}
-			console.log(jqGridId);
 			if(output.result == '1') {
 				if(!utils.isEmpty(fun) && typeof(eval(fun)) === 'function') {
 					fun = eval(fun);

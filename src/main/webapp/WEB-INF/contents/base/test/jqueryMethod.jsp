@@ -4,7 +4,7 @@
 	<div class="test1">
 		<input id="t11" value=""  />
 		<input id="t12" value=""  />
-		<input id="test1" value="测试1" />
+		<input id="jf_test1" value="测试1" />
 	</div>
 	
 	<h3>测试二</h3>
@@ -12,12 +12,12 @@
 	    <input id="t21" value=""  />
 		<input id="t22" value=""  />
 		<span>*</span>
-		<input id="test2" value="测试2" />
+		<input id="jf_test2" value="测试2" />
 	</div>
 	<script type="text/javascript">
 		$(function(){
-			var $test1 = $("#test1");
-			var $test2 = $("#test2");
+			var $test1 = $("#jf_test1");
+			var $test2 = $("#jf_test2");
 			var is = true;
 			var $prev = utils.findPrevTag($test1,"input");
 			//alert($test1.prop("tagName"));

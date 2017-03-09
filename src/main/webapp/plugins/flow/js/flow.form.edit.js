@@ -14,7 +14,7 @@ var END_NODE_KEY = "end";
 		var $this = $(this);
 		$this.addClass("v-hidden");
 		var $parent = $this.parent();
-		$parent.prepend('<div class="loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
+		$parent.prepend('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
 		initFormData(setting.formData);
 		listenerProcessBtns();
 		if(!utils.isEmpty(setting.callback) && typeof(setting.callback) === 'function') {
@@ -23,17 +23,18 @@ var END_NODE_KEY = "end";
 		if(typeof(handleForm) === 'function') {
 			handleForm();
 		}
-		$parent.find(".loading").remove();
+		$parent.find(">.cnoj-loading").remove();
 		$this.removeClass("v-hidden");
 		
 		/**
 		 * 监听流程处理表单按钮
 		 */
 		function listenerProcessBtns() {
-			$this.find(".edit-update-form").unbind("click");
-			$this.find(".edit-update-form").click(function() {  //保存表单
+			var $wrap = $this.parents(".wrap-content:eq(0)");
+			$wrap.find(".edit-update-form").unbind("click");
+			$wrap.find(".edit-update-form").click(function() {  //保存表单
 				//if($this.validateForm()) {
-					var formPorcessInnfo = $this.find("#edit-flow-process-form").serialize();//流程信息
+					var formPorcessInnfo = $wrap.find("#edit-flow-process-form").serialize();//流程信息
 					formPorcessInnfo += "&"+$this.serialize();//流程表单信息
 					var uri = $this.attr("action");
 					if(!utils.isEmpty(uri)) {

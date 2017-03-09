@@ -27,7 +27,7 @@ UE.plugins['text'] = function () {
 				name:thePlugins,
 				editor:this,
 				title: '文本框',
-				cssRules:"width:650px;height:350px;",
+				cssRules:"width:700px;height:400px;",
 				buttons:[
 				{
 					className:'edui-okbutton',
@@ -932,7 +932,7 @@ UE.plugins['listctrl'] = function () {
                 name:thePlugins,
                 editor:this,
                 title: '列表控件',
-                cssRules:"width:800px;height:400px;",
+                cssRules:"width:950px;height:500px;",
                 buttons:[
                 {
                     className:'edui-okbutton',

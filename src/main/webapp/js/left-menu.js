@@ -333,7 +333,7 @@ function tabListner() {
 			$target.css("visibility","hidden");
 			$("body").css({"overflow":"hidden"});
 			setTimeout(function(){
-				initEvent();
+				initEvent(panel);
 				panel.find(">.cnoj-loading").remove();
 				$target.css("visibility","visible");
 				$("body").css("overflow","auto");

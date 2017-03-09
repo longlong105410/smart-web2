@@ -77,18 +77,20 @@
 	 */
 	$.fn.btnListener = function() {
 		var $idTag = $(this);
+		//add
 		$idTag.find(".add").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "add-listener")) {
+			if(!$this.hasClass("add-listener")) {
 				$this.addClass("add-listener");
 				$this.click(function(){
 					openProp($(this),"add");
 				});
 			}
 		});
+		//edit
 		$idTag.find(".edit").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "edit-listener")) {
+			if(!$this.hasClass("edit-listener")) {
 				$this.addClass("edit-listener");
 				$this.click(function(){
 					var value = $(this).attr("selected-value");
@@ -99,80 +101,83 @@
 						} else {
 							openProp($(this),"edit");
 						} 
-					} else 
+					} else {
 						BootstrapDialogUtil.warningAlert("请选择一条数据!");
+					}
 				});
 			}
-			//$this = null;
 		});
-		
+		//del
 		$idTag.find(".del").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "del-listener")) {
-				$this.addClass("del-listener");
-				$this.click(function(){
-					var uri = $(this).data("uri");
-					var value = $(this).attr("selected-value");
-					var busiName = $(this).data("busi");
-					var msg = $(this).data("msg");
-					var successFun = $(this).data("del-after");
-					var refreshUri = $(this).data("refresh-uri");
-					var target = $(this).data("target");
-					if(!utils.isEmpty(value)) {
-						if(!utils.isEmpty(uri)) {
-							if(uri.indexOf("?")>0)
-								uri = uri+"&id="+value+"&busiName="+busiName;
-							else 
-								uri = uri+"?id="+value+"&busiName="+busiName;
-							BootstrapDialogUtil.confirmDialog(msg,function(){
-								$.post(uri,function(data){
-									var output = data;//$.parseJSON(data.output);
-									utils.showMsg(output.msg+"！");
-									if(output.result=='1') {
-										if(!utils.isEmpty(successFun)) {
-											setTimeout(successFun, 0);
-										} else {
-											if(!utils.isEmpty(refreshUri)) {
-												if(!utils.isEmpty(target)) {
-													loadUri(target, refreshUri, true);
-												} else {
-													//loadLocation(refreshUri);
-													loadActivePanel(refreshUri);
-												}
-											}
-										}
-									}
-								});
-							});
-						}
-					} else 
-						BootstrapDialogUtil.warningAlert("请选择数据!");
-				});
-				
+			if($this.hasClass("del-listener")) {
+				return true;
 			}
+			$this.addClass("del-listener");
+			$this.click(function(){ 
+				var uri = $(this).data("uri");
+				var value = $(this).attr("selected-value");
+				var busiName = $(this).data("busi");
+				var msg = $(this).data("msg");
+				var successFun = $(this).data("del-after");
+				var refreshUri = $(this).data("refresh-uri");
+				var target = $(this).data("target");
+				if(utils.isNotEmpty(value)) {
+					if(utils.isEmpty(uri)) {
+						return;
+					}
+					if(uri.indexOf("?")>0)
+						uri = uri+"&id="+value+"&busiName="+busiName;
+					else 
+						uri = uri+"?id="+value+"&busiName="+busiName;
+					
+					BootstrapDialogUtil.confirmDialog(msg,function(){
+						$.post(uri,function(data){
+							var output = data;//$.parseJSON(data.output);
+							utils.showMsg(output.msg+"！");
+							if(output.result !='1') {
+								return;
+							}
+							if(!utils.isEmpty(successFun)) {
+									setTimeout(successFun, 0);
+							} else {
+								if(utils.isNotEmpty(refreshUri)) {
+									if(utils.isNotEmpty(target)) {
+										loadUri(target, refreshUri, true);
+									} else {
+										loadActivePanel(refreshUri);
+									}
+								}
+							}
+						});
+					});
+				} else {
+					BootstrapDialogUtil.warningAlert("请选择数据!");
+				}
+			});
 		});
-		
+		//refresh
 		$idTag.find(".refresh").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "refresh-listener")) {
+			if(!$this.hasClass("refresh-listener")) {
 				$this.addClass("refresh-listener");
 				$this.click(function(){
 					var uri = $(this).data("uri");
 					var target = $(this).data("target");
-					if(!utils.isEmpty(uri)) {
+					if(utils.isNotEmpty(uri)) {
 						if(!utils.isEmpty(target)) {
 							loadUri(target,uri);
 						} else {
 							loadLocation(uri);
 						}
-					}
+					}//if
 				});
 			}
 		});
 		
 		$idTag.find(".open-pop").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "open-pop-listener")) {
+			if(!$this.hasClass("open-pop-listener")) {
 				$this.addClass("open-pop-listener");
 				$this.click(function(){
 					openProp($(this),null,'open-pop');
@@ -181,7 +186,7 @@
 		});
 		$idTag.find(".open-self").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "open-self-listener")) {
+			if(!$this.hasClass("open-self-listener")) {
 				$this.addClass("open-self-listener");
 				$this.click(function(){
 					openProp($(this),null,'open-self');
@@ -190,7 +195,7 @@
 		});
 		$idTag.find(".open-new-tab").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "open-new-tab-listener")) {
+			if(!$this.hasClass("open-new-tab-listener")) {
 				$this.addClass("open-new-tab-listener");
 				$this.click(function(){
 					openProp($(this),null,'open-new-tab');
@@ -199,7 +204,7 @@
 		});
 		$idTag.find(".open-blank").each(function(){
 			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "open-blank-listener")) {
+			if(!$this.hasClass("open-blank-listener")) {
 				$this.addClass("open-blank-listener");
 				$this.click(function(){
 					openProp($(this),null,'open-blank');
@@ -212,6 +217,7 @@
 
 /**
  * 监听单击全选(复选框)
+ * @param $elementWrap 元素对象
  * 标识
  *  class="cnoj-checkbox-all" 
  *  参数
@@ -222,129 +228,192 @@
  *  里面class为"param"元素里面.
  *  
  */
-function checkboxAllListener() {
-	$(".cnoj-checkbox-all").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-checkbox-all-listener")) {
-			$this.addClass("cnoj-checkbox-all-listener");
-			$this.click(function(){
-				var target = $this.data("target");
-				var $panel = $(this).parents(".panel");
-				if(!utils.isEmpty(target)) {
-					if($(this).prop("checked")) {
-						$panel.find(target).each(function(){
-							if(!$(this).prop("disabled")) {
-								var $tr = $(this).parents("tr.tr-mutil-selected:eq(0)");
-								if(!utils.isEmpty($tr.attr("class"))) {
-									$tr.addClass("ui-state-focus");
-									$tr.find("td").addClass("ui-state-focus");
-								}
-								$(this).prop("checked",true);
-							}
-						});
-					} else {
-						$panel.find(target).each(function(){
-							var $tr = $(this).parents("tr.tr-mutil-selected:eq(0)");
-							if(!utils.isEmpty($tr.attr("class"))) {
-								$tr.removeClass("ui-state-focus");
-								$tr.find("td").removeClass("ui-state-focus");
-							}
-							$(this).prop("checked",false);
-						});
-					}
-				} 
-				var classNames = $this.attr("class");
-				if(utils.isContain(classNames,"cnoj-op-checkbox")) {
-					var ids = "";
-					$panel.find(target).each(function(){
-						if($(this).prop("checked")) {
-							var id = $(this).val();
-							if(!utils.isEmpty(id))
-							   ids += id+",";
-						}
-					});
-					if(!utils.isEmpty(ids))
-						ids = ids.substring(0, ids.length-1);
-					var $param = null;
-					if(typeof($panel.attr("class")) !== 'undefined') {
-						$param = $panel.find(".cnoj-op-btn-list .param");
-						if(typeof($param.attr("class")) === 'undefined') {
-							$param = null;
-						}
-					}
-					if(null != $param) {
-						$param.attr("selected-value",ids);
-					}
-				}
+function checkboxAllListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || $elementWrap.length == 0) {
+		$(".cnoj-checkbox-all").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-checkbox-all").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理复选框全选情况
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-checkbox-all-listener")) {
+			$element.addClass("cnoj-checkbox-all-listener");
+			$element.click(function(event) {
+				_clickElement(event, $(this));
 			});
 		}
-		//$this = null;
-  });
+	}
+	
+	/**
+	 * 单机全选复选框时候处理的方法（单击元素）
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event,$this) {
+		var target = $this.data("target");
+		var $panel = $this.parents(".panel:eq(0)");
+		if(utils.isNotEmpty(target)) {
+			if($this.prop("checked")) {
+				$panel.find(target).each(function(){
+					if(!$(this).prop("disabled")) {
+						var $tr = $(this).parents("tr.tr-mutil-selected:eq(0)");
+						if($tr.length>0) {
+							$tr.addClass("ui-state-focus");
+							$tr.find("td").addClass("ui-state-focus");
+						}
+						$(this).prop("checked",true);
+					}
+				});
+			} else {
+				$panel.find(target).each(function(){
+					var $tr = $(this).parents("tr.tr-mutil-selected:eq(0)");
+					if($tr.length>0) {
+						$tr.removeClass("ui-state-focus");
+						$tr.find("td").removeClass("ui-state-focus");
+					}
+					$(this).prop("checked",false);
+				});
+			}
+		} 
+		if($this.hasClass("cnoj-op-checkbox")) {
+			var ids = "";
+			$panel.find(target).each(function(){
+				if($(this).prop("checked")) {
+					var id = $(this).val();
+					if(!utils.isEmpty(id))
+					   ids += id+",";
+				}
+			});
+			if(utils.isNotEmpty(ids))
+				ids = ids.substring(0, ids.length-1);
+			var $param = null;
+			if($panel.length>0) {
+				$param = $panel.find(".cnoj-op-btn-list .param");
+				if($param.length == 0) {
+					$param = null;
+				}
+			}
+			if(null != $param) {
+				$param.attr("selected-value",ids);
+			}
+		}
+	}
 }
 
 
 /**
  * 监听单击单个复选框
+ * @param $elementWrap 元素对象
  * class="cnoj-op-checkbox"
  * 点击该复选框时，会把对应的值赋值到指定的地方；"<div class='btn-list'><div class='cnoj-op-btn-list'></div></div>" 
  * 下面class为"param"元素里面.
  * 
  */
-function checkboxListener() {
-	$(".cnoj-op-checkbox").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-op-checkbox-listener")) {
-				classNames = $(this).attr("class");
-				$this.addClass("cnoj-op-checkbox-listener");
-				if(!utils.isContain(classNames,"cnoj-checkbox-all")) {
-					$this.click(function(){
-						var ids = "";
-						$(this).parents(".cnoj-checkbox-wrap:eq(0)").find(".cnoj-op-checkbox").each(function(){
-							if($(this).prop("checked")) {
-								var id = $(this).val();
-								if(!utils.isEmpty(id))
-								   ids += id+",";
-							}
-						});
-						if(!utils.isEmpty(ids))
-							ids = ids.substring(0, ids.length-1);
-						var $panel = $(this).parents(".panel:eq(0)");
-						var $param = null;
-						if(typeof($panel.attr("class")) !== 'undefined') {
-							$param = $panel.find(".cnoj-op-btn-list .param");
-							if(typeof($param.attr("class")) === 'undefined') {
-								$param = null;
-							}
-						}
-						if(null != $param) {
-							$param.attr("selected-value",ids);
-						}
-					});
-				}
+function checkboxListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || $elementWrap.length == 0) {
+		$(".cnoj-op-checkbox").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-op-checkbox").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理复选框
+	 * @param $element
+	 * 
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-op-checkbox-listener")) {
+			$element.addClass("cnoj-op-checkbox-listener");
+			if(!$element.hasClass("cnoj-checkbox-all")) {
+				$element.click(function(event){
+					_clickElement(event, $(this));
+					
+				});
+			}
 		}
-		//$this = null;
-	});
+	}
+	
+	/**
+	 * 单击复选框时处理的方法
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var ids = "";
+		$this.parents(".cnoj-checkbox-wrap:eq(0)").find(".cnoj-op-checkbox").each(function(){
+			if($(this).prop("checked")) {
+				var id = $(this).val();
+				if(!utils.isEmpty(id))
+				   ids += id+",";
+			}
+		});
+		if(utils.isNotEmpty(ids))
+			ids = ids.substring(0, ids.length-1);
+		var $panel = $this.parents(".panel:eq(0)");
+		var $param = null;
+		if($panel.length > 0) {
+			$param = $panel.find(".cnoj-op-btn-list .param");
+			if($param.length == 0) {
+				$param = null;
+			}
+		}
+		if(null != $param) {
+			$param.attr("selected-value",ids);
+		}
+	}
 }
 
 /**
  * 表单必填监听
+ * @param $elementWrap
  * 标识
  * class="require"
  */
-function formRequireListener() {
-	$("input[type=text].require,select.require,textarea.require").each(function(){
-		if(!$(this).prop("disabled")) {
-			var id = $(this).attr("id");
-			var newIdTag = id+"-"+"require";
-			if(utils.isEmpty($(this).parent().find("#"+newIdTag).attr("class"))) {
-				$(this).after("<span id='"+newIdTag+"' class='star-require hidden-print'> * </span>");
+function formRequireListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$("input[type=text].require,select.require,textarea.require").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find("input[type=text].require,select.require,textarea.require").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理必填元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		var id = $element.attr("id");
+		var newIdTag = id+"-"+"require";
+		if(!$element.prop("disabled") && !$element.prop("readonly")) {
+			if($element.parent().find("#"+newIdTag).length == 0) {
+				$element.after("<span id='"+newIdTag+"' class='star-require hidden-print'> * </span>");
 			}
+		} else if($element.prop("readonly") && $element.hasClass("require")) {  
+			//如果输入框是只读，并且有必填标记时，去掉必填标记，去掉输入框后面的星号
+			$element.removeClass("require");
+			$element.parent().find("#"+newIdTag).remove();
 		}
-	});
+	}
 }
 
 /**
  * 链接监听,也可以是按钮或其他
+ * @param $elementWrap 元素对象
  * class="cnoj-change-page" 该标识主要是用来标记分页，点击页面时触发的事件
  *   参数:必须 data-uri 分页uri
  *       可选 data-target 显示地方(一般为一个div层)
@@ -359,95 +428,172 @@ function formRequireListener() {
  *         可选 data-title 弹出窗口的标题;data-width 弹出窗口的宽度
  *         
  */
-function hrefListener() {
-	//$(".cnoj-change-page").unbind("click")
-	$(".cnoj-change-page").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-change-page-listener")) {
-			$this.addClass("cnoj-change-page-listener");
-			$this.click(function(event) {
-				var uri = $(this).data("uri");
-				uri = utils.isEmpty(uri)?$(this).attr("href"):uri;
-				//获取搜索参数
-				var searchPanelTag = $(this).data("search-panel-tag");
-				var $searchPanel = null;
-				if(utils.isEmpty(searchPanelTag)) {
-					$searchPanel = $(this).parents(".panel:eq(0)").find(">.panel-search");
-				} else {
-					$searchPanel = $(searchPanelTag);
-				}
-				if(utils.isExist($searchPanel)) {
-					var $form = $searchPanel.find("form");
-					if(utils.isExist($form)) {
-						uri = uri+"&"+$form.serialize();
-					}
-				}
-				var target = $(this).data("target");
-				if (!utils.isEmpty(uri)) {
-					if(!utils.isEmpty(target))
-						loadUri(target,uri,true);
-					else
-						loadActivePanel(uri);
-				}
-				event.stopPropagation();
-				return false;
+function hrefListener($elementWrap) {
+	changePageListner($elementWrap);
+	openSelfListner($elementWrap);
+	openBlankListener($elementWrap);
+	
+	/**
+	 * 改变页面监听
+	 * @param $elementWrap
+	 */
+	function changePageListner($elementWrap) {
+		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+			$(".cnoj-change-page").each(function(){
+				_handler($(this));
+			});
+		} else {
+			$elementWrap.find(".cnoj-change-page").each(function(){
+				_handler($(this));
 			});
 		}
-		//$this = null;
-	});
+
+		/**
+		 * 处理分页元素
+		 * @param $element
+		 */
+		function _handler($element) {
+			if(!$element.hasClass("cnoj-change-page-listener")) {
+				$element.addClass("cnoj-change-page-listener");
+				$element.click(function(event) {
+					_clickElement(event, $(this));
+					return false;
+				});
+			}
+		}
+		
+		/**
+		 * 点击元素处理方法
+		 * @param event
+		 * @param $this
+		 */
+		function _clickElement(event, $this) {
+			var uri = $this.data("uri");
+			uri = utils.isEmpty(uri)?$this.attr("href"):uri;
+			//获取搜索参数
+			var searchPanelTag = $this.data("search-panel-tag");
+			var $searchPanel = null;
+			if(utils.isEmpty(searchPanelTag)) {
+				$searchPanel = $this.parents(".panel:eq(0)").find(">.panel-search");
+			} else {
+				$searchPanel = $(searchPanelTag);
+			}
+			if(utils.isExist($searchPanel)) {
+				var $form = $searchPanel.find("form");
+				if(utils.isExist($form)) {
+					uri = uri+"&"+$form.serialize();
+				}
+			}
+			var target = $this.data("target");
+			if (utils.isNotEmpty(uri)) {
+				if(utils.isNotEmpty(target))
+					loadUri(target,uri,true);
+				else
+					loadActivePanel(uri);
+			}
+		}
+	} //end fun
 	
-	//$(".cnoj-open-self").unbind("click")
-	$(".cnoj-open-self").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-open-self-listener")) {
-			$this.addClass("cnoj-open-self-listener");
-			$this.click(function(event) {
-				var uri = $(this).data("uri");
-				var target = $(this).data("target");
-				var title = $(this).data("title");
-				if(utils.isEmpty(uri)) {
-					uri = $(this).attr("href");
-				}
-				if (!utils.isEmpty(uri)) {
-					if(!utils.isEmpty(target) && target != '#main-content')
-						loadUri(target, uri, true);
-					else 
-						openTab(title, uri, true);
-						//loadLocation(uri);
-				}
-				event.stopPropagation();
-				return false;
+	/**
+	 * open-self 事件监听
+	 * @param $elementWrap
+	 */
+	function openSelfListner($elementWrap) {
+		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+			$(".cnoj-open-self").each(function(){
+				_handler($(this));
+			});
+		} else {
+			$elementWrap.find(".cnoj-open-self").each(function(){
+				_handler($(this));
 			});
 		}
-		//$this = null;
-	});
-	
-	//$(".cnoj-open-blank").unbind("click")
-	$(".cnoj-open-blank").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-open-blank-listener")) {
-			$this.addClass("cnoj-open-blank-listener");
-			$this.click(function(event){
-		        var uri = $(this).data("uri");
-		        var title = $(this).data("title");
-		        var w = $this.data("width");
-		        if(!utils.isEmpty(uri)) {
-		          if(utils.isEmpty(w)) {
-		        	  w = $(window).width()-100;
-		          }
-		          BootstrapDialogUtil.loadUriDialog(title,uri,w,"#fff",false,function(){
-						setTimeout(function(){
-							initEvent();
-						}, 200);
-				  });
-		        }
-		        event.stopPropagation();
-		        return false;
-		     });
-			
+
+		/**
+		 * 处理必填元素
+		 * @param $element
+		 */
+		function _handler($element) {
+			if(!$element.hasClass("cnoj-open-self-listener")) {
+				$element.addClass("cnoj-open-self-listener");
+				$element.click(function(event) {
+					_clickElement(event, $(this));
+					return false;
+				});
+			}
 		}
-		//$this = null;
-	});
+		
+		/**
+		 * 点击元素处理方法
+		 * @param event
+		 * @param $this
+		 */
+		function _clickElement(event, $this) {
+			var uri = $this.data("uri");
+			var target = $this.data("target");
+			var title = $this.data("title");
+			if(utils.isEmpty(uri)) {
+				uri = $this.attr("href");
+			}
+			if (!utils.isEmpty(uri)) {
+				if(!utils.isEmpty(target) && target != '#main-content')
+					loadUri(target, uri, true);
+				else 
+					openTab(title, uri, true);
+			}
+		}
+	}
+	
+	/**
+	 * open-blank 监听
+	 * @param $elementWrap
+	 */
+	function openBlankListener($elementWrap) {
+		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+			$(".cnoj-open-blank").each(function(){
+				_handler($(this));
+			});
+		} else {
+			$elementWrap.find(".cnoj-open-blank").each(function(){
+				_handler($(this));
+			});
+		}
+
+		/**
+		 * 处理元素超链接新开窗口（弹出窗口）
+		 * @param $element
+		 */
+		function _handler($element) {
+			if(!$element.hasClass("cnoj-open-blank-listener")) {
+				$element.addClass("cnoj-open-blank-listener");
+				$element.click(function(event) {
+					_clickElement(event, $(this));
+					return false;
+				});
+			}
+		}
+		
+		/**
+		 * 点击元素处理方法
+		 * @param event
+		 * @param $this
+		 */
+		function _clickElement(event, $this) {
+			var uri = $this.data("uri");
+	        var title = $this.data("title");
+	        var w = $this.data("width");
+	        if(!utils.isEmpty(uri)) {
+	          if(utils.isEmpty(w)) {
+	        	  w = $(window).width()-50;
+	          }
+	          BootstrapDialogUtil.loadUriDialog(title, uri, w, "#fff", false, function(dialog){
+					setTimeout(function(){
+						initEvent(dialog.getModal());
+					}, 200);
+			  });
+	        }
+		}
+	}
 	
 }
 
@@ -456,13 +602,12 @@ function hrefListener() {
  * @param uri
  */
 function loadActivePanel(uri) {
-	//var $panel = getActiveTabPanel();
-	//handleLoading(uri, $panel);
 	reloadTab(uri); 
 }
 
 /**
  * 单击搜索按钮提交数据
+ * @param $elementWrap 元素对象
  * 标识
  *   class="cnoj-search-submit" 标记在触发按钮上
  *   参数
@@ -472,39 +617,57 @@ function loadActivePanel(uri) {
  *       target 该参数为form表单的target属性；提交数据请求之后，返回内容显示的位置，默认为"#main-content"
  *       data-loading-target-tag 要获取载入页面指定的内容
  */
-function searchSubmitListener(){
-	//$(".cnoj-search-submit").unbind("click");
-	$(".cnoj-search-submit").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-search-submit-listener")) {
-			$this.addClass("cnoj-search-submit-listener");
-			$this.click(function() {
-			    var $form = $(this).parents("form:eq(0)");
-				var param = $form.serialize();
-			    var uri = $form.attr("action");
-			    var target = $form.attr("target");
-			    var loadingTargetTag = $form.data("loading-target-tag");
-			    param = encodeURI(param);
-			    if(!utils.isEmpty(uri)) {
-			    	if(utils.isContain(uri, "?")) {
-			    		 uri = uri+"&"+param;
-			    	} else {
-			    		 uri = uri+"?"+param;
-			    	}
-			    	uri = utils.isEmpty(loadingTargetTag)?uri:uri+" "+loadingTargetTag;
-			 	    if(!utils.isEmpty(target) && mainTag != target) {
-			 		    loadUri(target,uri);
-			 	    } else {
-			 		    //loadLocation(uri);
-			 	    	loadActivePanel(uri);
-			 	    }
-			    }
-			    return false;
+function searchSubmitListener($elementWrap){
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-search-submit").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-search-submit").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-search-submit-listener")) {
+			$element.addClass("cnoj-search-submit-listener");
+			$element.click(function(event) {
+				_clickElement(event, $(this));
+				return false;
 			});
 		}
-		//$this = null;
-	});
+	}
 	
+	/**
+	 * 点击元素处理方法
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var $form = $this.parents("form:eq(0)");
+		var param = $form.serialize();
+	    var uri = $form.attr("action");
+	    var target = $form.attr("target");
+	    var loadingTargetTag = $form.data("loading-target-tag");
+	    param = encodeURI(param);
+	    if(!utils.isEmpty(uri)) {
+	    	if(utils.isContain(uri, "?")) {
+	    		 uri = uri+"&"+param;
+	    	} else {
+	    		 uri = uri+"?"+param;
+	    	}
+	    	uri = utils.isEmpty(loadingTargetTag)?uri:uri+" "+loadingTargetTag;
+	 	    if(!utils.isEmpty(target) && mainTag != target) {
+	 		    loadUri(target,uri);
+	 	    } else {
+	 	    	loadActivePanel(uri);
+	 	    }
+	    }
+	}
 }
 
 /**
@@ -550,7 +713,7 @@ function handleLoading(uri,obj) {
 		$target.load(array[0],array[1],function() {
 			setTimeout(function(){
 				obj.find(".cnoj-loading").remove();
-				initEvent();
+				initEvent($target);
 				$target.css("visibility","visible");
 				$("body").css("overflow","auto");
 			}, 200);
@@ -559,124 +722,179 @@ function handleLoading(uri,obj) {
 }
 
 /**
+ *  
  * 表格树监听
+ * @param $elementWrap
  * 标识
  * table class为:"cnoj-tree-table"
  * tr class为:"tr-tree"
  * td class为:"op-tree"
  */
-function tableTreeListener() {
-	//$(".cnoj-tree-table .tr-tree .op-tree").unbind("click");
-	$(".cnoj-tree-table .tr-tree .op-tree").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "op-tree-listener")) {
-			$this.addClass("op-tree-listener");
-			$this.click(function(){
-				var classNames = $(this).attr("class");
-				if(utils.isContain(classNames," shrink-data")) {
-					var $spanIcon = $(this).find("span.ui-icon");
-					var trId = $(this).parent().attr("id");
-					if(trId !== 'undefined') {
-						$("."+trId).show();
-						$spanIcon.removeClass("ui-icon-triangle-1-e");
-						$spanIcon.addClass("ui-icon-triangle-1-s");
-						
-						$(this).removeClass("shrink-data");
-						$(this).addClass("open-data");
-					}
-				} else {
-					var stackArray = new Array();
-					var id = $(this).parent().attr("id");
-					if(!utils.isEmpty(id)) {
-						$("."+id).hide();
-						var $spanIcon = $(this).find("span.ui-icon");
-						$spanIcon.removeClass("ui-icon-triangle-1-s");
-						$spanIcon.addClass("ui-icon-triangle-1-e");
-						
-						$(this).removeClass("open-data");
-						$(this).addClass("shrink-data");
-						stackArray.push(id);
-					}
-					while(stackArray.length>0) {
-						stackArray = stackArray.concat(shrinkTableTree(stackArray.pop()));
-					}
-					stackArray = null;
-				}
+function tableTreeListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-tree-table .tr-tree .op-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-tree-table .tr-tree .op-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理必填元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("op-tree-listener")) {
+			$element.addClass("op-tree-listener");
+			$element.click(function(event) {
+				_clickElement(event, $(this));
+				return false;
 			});
 		}
-	});
-}
-/**
- * 收缩表格树
- * @param id
- * @returns {Array}
- */
-function shrinkTableTree(id) {
-	var array = new Array();
-	$(".cnoj-tree-table .open-data").each(function(){
-		var parentId = $(this).parent().attr("parentid");
-		$("."+id).hide();
-		var $spanIcon = $("#"+id).find("span.ui-icon");
-		$spanIcon.removeClass("ui-icon-triangle-1-s");
-		$spanIcon.addClass("ui-icon-triangle-1-e");
-		
-		$("#"+id+" .op-tree").removeClass("open-data");
-		$("#"+id+" .op-tree").addClass("shrink-data");
-		if(id == parentId) {
-			var trId = $(this).parent().attr("id");
-			array.push(trId);
+	}
+	
+	/**
+	 * 点击元素处理方法
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		if($this.hasClass("shrink-data")) {
+			var $spanIcon = $this.find("span.ui-icon");
+			var trId = $this.parent().attr("id");
+			if(trId !== 'undefined') {
+				$this.parents("table:eq(0)").find("."+trId).show();
+				$spanIcon.removeClass("ui-icon-triangle-1-e");
+				$spanIcon.addClass("ui-icon-triangle-1-s");
+				$this.removeClass("shrink-data");
+				$this.addClass("open-data");
+			}
+		} else {
+			var stackArray = new Array();
+			var id = $this.parent().attr("id");
+			if(!utils.isEmpty(id)) {
+				$this.parents("table:eq(0)").find("."+id).hide();
+				var $spanIcon = $this.find("span.ui-icon");
+				$spanIcon.removeClass("ui-icon-triangle-1-s");
+				$spanIcon.addClass("ui-icon-triangle-1-e");
+				
+				$this.removeClass("open-data");
+				$this.addClass("shrink-data");
+				stackArray.push(id);
+			}
+			while(stackArray.length>0) {
+				stackArray = stackArray.concat(_shrinkTableTree(stackArray.pop()));
+			}
+			stackArray = null;
 		}
-	});
-	return array;
+	}
+	
+	/**
+	 * 收缩表格树
+	 * @param id
+	 * @returns {Array}
+	 */
+	function _shrinkTableTree(id) {
+		function __handler(array,$this) {
+			var parentId = $this.parent().attr("parentid");
+			var $table = $this.parents("table:eq(0)");
+			$table.find("."+id).hide();
+			var $spanIcon = $table.find("#"+id+" span.ui-icon");
+			$spanIcon.removeClass("ui-icon-triangle-1-s");
+			$spanIcon.addClass("ui-icon-triangle-1-e");
+			$table.find("#"+id+" .op-tree").removeClass("open-data");
+			$table.find("#"+id+" .op-tree").addClass("shrink-data");
+			if(id == parentId) {
+				var trId = $(this).parent().attr("id");
+				array.push(trId);
+			}
+		}
+		var array = new Array();
+		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+			$(".cnoj-tree-table .open-data").each(function(){
+				__handler(array, $(this));
+			});
+		} else {
+			$elementWrap.find(".cnoj-tree-table .open-data").each(function(){
+				__handler(array, $(this));
+			});
+		}
+		return array;
+	}
 }
+
 
 
 /**
  * 树形表格行选中监听
+ * @param $elementWrap
  * 标识
  * table为：class="cnoj-tree-table"
  * tr为：class="tr-tree"
  */
-function tableTreeSelectListener() {
-	//$(".cnoj-tree-table .tr-tree").unbind("click");
-	$(".cnoj-tree-table .tr-tree").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "tr-tree-listener")) {
-			$this.click(function(){
-				var classNames = $(this).attr("class");
-				$(".cnoj-tree-table .tr-tree").each(function(){
-					$(this).removeClass("ui-state-focus");
-					$(this).find("td").removeClass("ui-state-focus");
-				});
-				var $panel = $(this).parents(".panel:eq(0)");
-				var $param = null;
-				if(typeof($panel.attr("class")) !== 'undefined') {
-					$param = $panel.find(".cnoj-op-btn-list .param");
-					if(typeof($param.attr("class")) === 'undefined') {
-						$param = null;
-					}
-				}
-				if(!utils.isContain(classNames," ui-state-focus")) {
-					$(this).addClass("ui-state-focus");
-					$(this).find("td").addClass("ui-state-focus");
-					var id = $(this).attr("id");
-					id = id.substring(2,id.length);
-					if(null != $param) {
-						$param.attr("selected-value",id);
-					}
-					
-				} else {
-					$(this).removeClass("ui-state-focus");
-					$(this).find("td").removeClass("ui-state-focus");
-					if(null != $param) {
-						$param.attr("selected-value","");
-					}
-				}
+function tableTreeSelectListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-tree-table .tr-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-tree-table .tr-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("tr-tree-listener")) {
+			$element.addClass("tr-tree-listener");
+			$element.click(function(event) {
+				_clickElement(event, $(this));
+				return false;
 			});
-			$this.addClass("tr-tree-listener");
 		}
-		//$this = null;
-	});
+	}
+	
+	/**
+	 * 点击元素处理方法
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var $wrap = $this.parents("table:eq(0)").parent();
+		$wrap.find(".cnoj-tree-table .tr-tree").each(function(){
+			$(this).removeClass("ui-state-focus");
+			$(this).find("td").removeClass("ui-state-focus");
+		});
+		var $param = null;
+		var $panel = $this.parents(".panel:eq(0)");
+		if($panel.length>0) {
+			$param = $panel.find(".cnoj-op-btn-list .param");
+			if($param.length == 0) {
+				$param = null;
+			}
+		}
+		if(!$this.hasClass("ui-state-focus")) {
+			$this.addClass("ui-state-focus");
+			$this.find("td").addClass("ui-state-focus");
+			var id = $this.attr("id");
+			id = id.substring(2,id.length);
+			if(null != $param) {
+				$param.attr("selected-value",id);
+			}
+			
+		} else {
+			$this.removeClass("ui-state-focus");
+			$this.find("td").removeClass("ui-state-focus");
+			if(null != $param) {
+				$param.attr("selected-value","");
+			}
+		}
+	}
 }
 
 
@@ -692,92 +910,116 @@ function tableTreeSelectListener() {
  *并且class设置为param
  *    
  */
-function tableSelectListener() {
-	//$(".cnoj-table .tr-selected").unbind("click");
-	$(".cnoj-table .tr-selected").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "tr-selected-listener")) {
-			$this.addClass("tr-selected-listener");
-			$this.click(function(){
-				var classNames = $(this).attr("class");
-				var $panel = $(this).parents(".panel:eq(0)");
-				var $param = null;
-				if(typeof($panel.attr("class")) !== 'undefined') {
-					$param = $panel.find(".btn-list .cnoj-op-btn-list .param");
-					if(typeof($param.attr("class")) === 'undefined') {
-						$param = null;
-					}
-				}
-				
-				var ids = null;
-				//单选
-				if(utils.isContain(classNames, "tr-one-selected")) {
-					 $(".cnoj-table .tr-one-selected").each(function(){
-						 $(this).removeClass("ui-state-focus");
-						 $(this).find("td").removeClass("ui-state-focus");
-					});
-					if(!utils.isContain(classNames," ui-state-focus")) {
-						$(this).addClass("ui-state-focus");
-						$(this).find("td").addClass("ui-state-focus");
-						ids = $(this).attr("id");
-						ids = ids.substring(2,ids.length);
-						if(null != $param) {
-							$param.attr("selected-value",ids);
-						}
-					} else {
-						$(this).removeClass("ui-state-focus");
-						$(this).find("td").removeClass("ui-state-focus");
-						if(null != $param) {
-							$param.attr("selected-value","");
-						}
-					}
-				} else if(utils.isContain(classNames, "tr-mutil-selected")) {
-					//var $checkbox = $(this).find(".cnoj-op-checkbox");
-					//alert($checkbox.prop("checked"));
-					if(!utils.isContain(classNames," ui-state-focus")) {
-						$(this).addClass("ui-state-focus");
-						$(this).find("td").addClass("ui-state-focus");
-						$(this).find(".cnoj-op-checkbox").prop("checked",true);
-					} else {
-						$(this).removeClass("ui-state-focus");
-						$(this).find("td").removeClass("ui-state-focus");
-						$(this).find(".cnoj-op-checkbox").prop("checked",false);
-					}
-					ids = "";
-					$(this).parents(".cnoj-checkbox-wrap:eq(0)").find(".cnoj-op-checkbox").each(function(){
-						if($(this).prop("checked")) {
-							var id = $(this).val();
-						    if(!utils.isEmpty(id))
-						        ids += id+",";
-						}
-					});
-					if(!utils.isEmpty(ids))
-						ids = ids.substring(0, ids.length-1);
-					if(null != $param) {
-						$param.attr("selected-value",ids);
-					}
-				}
-				//执行选中触发事件
-				var selectedEventType = $this.data("selected-type");
-				if(!utils.isEmpty(selectedEventType)) {
-					var selectedUri = $this.data("selected-uri");
-					var selectedTarget = $this.data("selected-target");
-					var selectedVarName = $this.data("selected-varname");
-					selectedVarName = utils.isEmpty(selectedVarName)?"id":selectedVarName;
-					if(!utils.isEmpty(selectedUri) && !utils.isEmpty(ids)) {
-						selectedUri = selectedUri+(selectedUri.indexOf("?")>0?"&":"?")+selectedVarName+"="+ids;
-						cnoj.selectedEvent(selectedEventType,selectedUri,selectedTarget);
-					}
-				}
+function tableSelectListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-table .tr-selected").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-table .tr-selected").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("tr-selected-listener")) {
+			$element.addClass("tr-selected-listener");
+			$element.click(function(event) {
+				_clickElement(event, $(this));
 			});
 		}
-		//$this = null;
-	});
+	}
+	
+	/**
+	 * 点击元素处理方法
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var $panel = $this.parents(".panel:eq(0)");
+		var $param = null;
+		if($panel) {
+			$param = $panel.find(".btn-list .cnoj-op-btn-list .param");
+			if(typeof($param.attr("class")) === 'undefined') {
+				$param = null;
+			}
+		}
+		var ids = null;
+		var $wrap = $this.parents("table:eq(0)").parent(); 
+		//单选
+		if($this.hasClass("tr-one-selected")) {
+			$wrap.find(".cnoj-table .tr-one-selected").each(function(){
+				 $(this).removeClass("ui-state-focus");
+				 $(this).find("td").removeClass("ui-state-focus");
+			});
+			if(!$this.hasClass("ui-state-focus")) {
+				$this.addClass("ui-state-focus");
+				$this.find("td").addClass("ui-state-focus");
+				ids = $this.attr("id");
+				ids = ids.substring(2,ids.length);
+				if(null != $param) {
+					$param.attr("selected-value",ids);
+				}
+			} else {
+				$this.removeClass("ui-state-focus");
+				$this.find("td").removeClass("ui-state-focus");
+				if(null != $param) {
+					$param.attr("selected-value","");
+				}
+			}
+		} else if($this.hasClass("tr-mutil-selected")) {
+			if(!$this.hasClass("ui-state-focus")) {
+				$this.addClass("ui-state-focus");
+				$this.find("td").addClass("ui-state-focus");
+				var $opcheckbox = $this.find(".cnoj-op-checkbox");
+				if(!$opcheckbox.prop("checked")) {
+					$opcheckbox.prop("checked",true);
+				}
+			} else {
+				$this.removeClass("ui-state-focus");
+				$this.find("td").removeClass("ui-state-focus");
+				var $opcheckbox = $this.find(".cnoj-op-checkbox");
+				if($opcheckbox.prop("checked")) {
+					$opcheckbox.prop("checked",false);
+				}
+			}
+			ids = "";
+			$this.parents(".cnoj-checkbox-wrap:eq(0)").find(".cnoj-op-checkbox").each(function(){
+				if($(this).prop("checked")) {
+					var id = $(this).val();
+				    if(!utils.isEmpty(id))
+				        ids += id+",";
+				}
+			});
+			if(!utils.isEmpty(ids))
+				ids = ids.substring(0, ids.length-1);
+			if(null != $param) {
+				$param.attr("selected-value",ids);
+			}
+		}
+		//执行选中触发事件
+		var selectedEventType = $this.data("selected-type");
+		if(!utils.isEmpty(selectedEventType)) {
+			var selectedUri = $this.data("selected-uri");
+			var selectedTarget = $this.data("selected-target");
+			var selectedVarName = $this.data("selected-varname");
+			selectedVarName = utils.isEmpty(selectedVarName)?"id":selectedVarName;
+			if(!utils.isEmpty(selectedUri) && !utils.isEmpty(ids)) {
+				selectedUri = selectedUri+(selectedUri.indexOf("?")>0?"&":"?")+selectedVarName+"="+ids;
+				cnoj.selectedEvent(selectedEventType,selectedUri,selectedTarget);
+			}
+		}
+	}
 }
 
 
 /**
  * 监听表单输入框树
+ * @param $elementWrap
  * 标识
  *   class='cnoj-input-tree'
  * 参数
@@ -790,34 +1032,42 @@ function tableSelectListener() {
  *     data-async-url 异步加载的话（即：data-is-async="yes"），异步加载URL;
  *     data-on-click 列表单机时除非该事件；传递js方法名称 
  */
-function inputTreeListener() {
-	//$(".cnoj-input-tree").unbind("click");
-	$(".cnoj-input-tree").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-input-tree-listener")) {
-			$this.addClass("cnoj-input-tree-listener");
-			var uri = $this.data("uri");
-			var isShowNode = $this.data("is-show-none");
+function inputTreeListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-input-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-input-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-input-tree-listener")) {
+			$element.addClass("cnoj-input-tree-listener");
+			var uri = $element.data("uri");
+			var isShowNode = $element.data("is-show-none");
 			isShowNode = (isShowNode == 'yes'?true:false);
-			
-			var isAjaxAsync = $this.data("is-ajax-async");
+			var isAjaxAsync = $element.data("is-ajax-async");
 			isAjaxAsync = (isAjaxAsync == 'yes'?true:false);
-			
-			var onClickFun = $this.data("on-click");
+			var onClickFun = $element.data("on-click");
 			onClickFun = utils.isEmpty(onClickFun)?null:onClickFun;
-			
-			var isAsync = $this.data("is-async");
+			var isAsync = $element.data("is-async");
 			isAsync = (isAsync == 'yes'?true:false);
 			var asyncUrl = null;
 			if(isAsync) {
-				asyncUrl = $this.data("async-url");
+				asyncUrl = $element.data("async-url");
 				if(utils.isEmpty(asyncUrl)) {
 					asyncUrl = uri;
 				}
 			}
-			
 			if(!utils.isEmpty(uri)) {
-				$(this).zTreeUtil({
+				$element.zTreeUtil({
 					uri:uri,
 					isAsync : isAsync,
 					isAjaxAsync : isAjaxAsync,
@@ -828,7 +1078,7 @@ function inputTreeListener() {
 					onClick:onClickFun
 				});
 			}
-			$this.click(function(event){
+			$element.click(function(event) {
 				if(!utils.isEmpty(uri)) {
 					$(this).zTreeUtil({
 						uri:uri,
@@ -840,34 +1090,46 @@ function inputTreeListener() {
 				event.stopPropagation();
 			});
 		}
-	});
+	}
 }
 
 /**
  * 监听表单组织机构树
+ * @param $elementWrap
  * 标识
  *   class='cnoj-input-org-tree'
  *   参数
  *   可选
  *     data-is-show-none 是否显示"无"数据节点;默认为:no(不显示) 可选的值为:"yes"或"no"
  */
-function inputOrgTreeListener() {
-	//$(".cnoj-input-org-tree").unbind("click");
-	//var uri = 'op/queryTree?resId=select_org_tree';
+function inputOrgTreeListener($elementWrap) {
 	var uri = 'org/tree.json';
-	$(".cnoj-input-org-tree").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-input-org-tree-listener")) {
-			$this.addClass("cnoj-input-org-tree-listener");
-			var isShowNode = $(this).data("is-show-none");
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-input-org-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-input-org-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-input-org-tree-listener")) {
+			$element.addClass("cnoj-input-org-tree-listener");
+			var isShowNode = $element.data("is-show-none");
 			isShowNode = (isShowNode == 'yes'?true:false);
-			var isAjaxAsync = $(this).data("is-ajax-async");
+			var isAjaxAsync = $element.data("is-ajax-async");
 			isAjaxAsync = (isAjaxAsync == 'yes'?true:false);
 			
-			var isAsync = $(this).data("is-async");
+			var isAsync = $element.data("is-async");
 			isAsync = (isAsync == 'yes'?true:false);
 			if(!utils.isEmpty(uri)) {
-				$(this).zTreeUtil({
+				$element.zTreeUtil({
 					uri:uri,
 					isInput:true,
 					isAsync : isAsync,
@@ -876,7 +1138,7 @@ function inputOrgTreeListener() {
 					isShowNone:isShowNode
 				});
 			}
-			$this.click(function(event){
+			$element.click(function(event){
 				if(!utils.isEmpty(uri)) {
 					$(this).zTreeUtil({
 						uri:uri,
@@ -887,14 +1149,13 @@ function inputOrgTreeListener() {
 				event.stopPropagation();
 			});
 		}
-		//$this = null;
-	});
-	
+	}
 }
 
 
 /**
  * 监听面板树
+ * @param $elementWrap
  * 标识
  *   class='cnoj-panel-tree'
  * 参数
@@ -908,35 +1169,48 @@ function inputOrgTreeListener() {
  *     data-target 指定uri内容显示的位置；如果该值为空或没设置，则默认显示到"#main-content"层，一般与"data-redirect-uri"成对出现;
  *     data-param-name 指定节点ID的参数名称，默认名称为："id"
  */
-function panelTreeListener() {
-	$(".cnoj-panel-tree").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-panel-tree-listener")) {
-			$this.addClass("cnoj-panel-tree-listener");
-			var uri = $(this).data("uri");
-			var redirectUri = $(this).data("redirect-uri");
-			var target = $(this).data("target");
-			var isSearch = $(this).data("is-search");
+function panelTreeListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-panel-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-panel-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-panel-tree-listener")) {
+			$element.addClass("cnoj-panel-tree-listener");
+			var uri = $element.data("uri");
+			var redirectUri = $element.data("redirect-uri");
+			var target = $element.data("target");
+			var isSearch = $element.data("is-search");
 			isSearch = utils.isEmpty(isSearch)?false:(isSearch=='yes'?true:false);
-			var paramName = $(this).data("param-name");
-			var isNodeLink = $(this).data("is-node-link");
-			var panelHeight = $(this).data("panel-height");
+			var paramName = $element.data("param-name");
+			var isNodeLink = $element.data("is-node-link");
+			var panelHeight = $element.data("panel-height");
 			panelHeight = utils.regexInteger(panelHeight)?panelHeight:0;
 			isNodeLink = utils.isEmpty(isNodeLink)?false:(isNodeLink == 'yes'?true:false);
 			var isDefaultLoad = false;
 			if(isNodeLink) {
-				isDefaultLoad = $(this).data("is-default-load");
+				isDefaultLoad = $element.data("is-default-load");
 				isDefaultLoad = utils.isEmpty(isDefaultLoad)?false:(isDefaultLoad == 'yes'?true:false);
 			}
 			
-			var isAjaxAsync = $(this).data("is-ajax-async");
+			var isAjaxAsync = $element.data("is-ajax-async");
 			isAjaxAsync = (isAjaxAsync == 'yes'?true:false);
 			
-			var isAsync = $(this).data("is-async");
+			var isAsync = $element.data("is-async");
 			isAsync = (isAsync == 'yes'?true:false);
 			
-			if(!utils.isEmpty(uri)) {
-				$(this).zTreeUtil({
+			if(utils.isNotEmpty(uri)) {
+				$element.zTreeUtil({
 					uri:uri,
 					isInput:false,
 					isAsync : isAsync,
@@ -951,8 +1225,7 @@ function panelTreeListener() {
 				});
 			}
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
@@ -970,31 +1243,44 @@ function panelTreeListener() {
  *     data-is-async 是否异步加载（即：分步加载）；默认为:no(否) 可选的值为:"yes"或"no"
  *     data-async-url 异步加载的话（即：data-is-async="yes"），异步加载URL
  */
-function panelCheckTreeListener() {
-	$(".cnoj-panel-check-tree").each(function(){	
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-panel-check-tree-listener")) {
-			$this.addClass("cnoj-panel-check-tree-listener");
-			var uri = $(this).data("uri");
-			var isSearch = $(this).data("is-search");
+function panelCheckTreeListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-panel-check-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-panel-check-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-panel-check-tree-listener")) {
+			$element.addClass("cnoj-panel-check-tree-listener");
+			var uri = $element.data("uri");
+			var isSearch = $element.data("is-search");
 			    isSearch = utils.isNotEmpty(isSearch)?("yes"==isSearch?true:false):false;
-			var checkOpt = $(this).data("check-opt");
+			var checkOpt = $element.data("check-opt");
 			    checkOpt = utils.isNotEmpty(checkOpt)?checkOpt:null;
-			var paramName = $(this).data("param-name");
+			var paramName = $element.data("param-name");
 			    paramName = utils.isEmpty(paramName)?"id":paramName;
-			var isAjaxAsync = $(this).data("is-ajax-async");
+			var isAjaxAsync = $element.data("is-ajax-async");
 			isAjaxAsync = (isAjaxAsync == 'no'?false:true);
-			var isAsync = $(this).data("is-async");
+			var isAsync = $element.data("is-async");
 			isAsync = (isAsync == 'yes'?true:false);
 			var asyncUrl = null;
 			if(isAsync) {
-				asyncUrl = $this.data("async-url");
+				asyncUrl = $element.data("async-url");
 				if(utils.isEmpty(asyncUrl)) {
 					asyncUrl = uri;
 				}
 			}
 			if(!utils.isEmpty(uri)) {
-				$(this).zTreeUtil({
+				$element.zTreeUtil({
 					uri:uri,
 					isInput:false,
 					isAsync : isAsync,
@@ -1007,8 +1293,7 @@ function panelCheckTreeListener() {
 				});
 			}
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
@@ -1021,35 +1306,45 @@ function panelCheckTreeListener() {
  *   data-param-name 指定节点ID的参数名称，默认名称为："id"
  * 
  */
-function panelOrgTreeListener() {
+function panelOrgTreeListener($elementWrap) {
 	var uri = 'org/tree';
-	$(".cnoj-panel-org-tree").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-panel-org-tree-listener")) {
-			$this.addClass("cnoj-panel-org-tree-listener");
-			var redirectUri = $(this).data("redirect-uri");
-			var target = $(this).data("target");
-			var isSearch = $(this).data("is-search");
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-panel-org-tree").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-panel-org-tree").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-panel-org-tree-listener")) {
+			$element.addClass("cnoj-panel-org-tree-listener");
+			var redirectUri = $element.data("redirect-uri");
+			var target = $element.data("target");
+			var isSearch = $element.data("is-search");
 			isSearch = utils.isEmpty(isSearch)?false:(isSearch=='yes'?true:false);
-			var paramName = $(this).data("param-name");
-			var isNodeLink = $(this).data("is-node-link");
-			var panelHeight = $(this).data("panel-height");
+			var paramName = $element.data("param-name");
+			var isNodeLink = $element.data("is-node-link");
+			var panelHeight = $element.data("panel-height");
 			panelHeight = utils.regexInteger(panelHeight)?panelHeight:0;
 			isNodeLink = utils.isEmpty(isNodeLink)?false:(isNodeLink == 'yes'?true:false);
 			var isDefaultLoad = false;
 			if(isNodeLink) {
-				isDefaultLoad = $(this).data("is-default-load");
+				isDefaultLoad = $element.data("is-default-load");
 				isDefaultLoad = utils.isEmpty(isDefaultLoad)?false:(isDefaultLoad == 'yes'?true:false);
 			}
-			
-			var isAjaxAsync = $(this).data("is-ajax-async");
+			var isAjaxAsync = $element.data("is-ajax-async");
 			isAjaxAsync = (isAjaxAsync == 'yes'?true:false);
-			
-			var isAsync = $(this).data("is-async");
+			var isAsync = $element.data("is-async");
 			isAsync = (isAsync == 'yes'?true:false);
-			
 			if(!utils.isEmpty(uri)) {
-				$(this).zTreeUtil({
+				$element.zTreeUtil({
 					uri:uri,
 					isInput:false,
 					isAsync : isAsync,
@@ -1064,8 +1359,7 @@ function panelOrgTreeListener() {
 				});
 			}
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
@@ -1085,165 +1379,226 @@ function panelOrgTreeListener() {
  *      与data-refresh-uri成对出现.
  *      
  */
-function submitBtnListener() {
-	//$(".cnoj-data-submit").unbind("click");
-	$(".cnoj-data-submit").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-data-submit-listener")) {
-			$this.addClass("cnoj-data-submit-listener");
-			$this.click(function(event){
-				var target = $(this).data("target-form");
-				var fun = $(this).data("fun");
-				var $form = null;
-				if(!utils.isEmpty(target)) {
-					$form = $("#"+target);
-					if(typeof($form.attr("id")) === 'undefined') {
-						$form = null;
-						//console.error("data-target-form 必须指定form的id");
-					}
-				} else {
-					 $form = $(this).parents("form:eq(0)");
-				}
-				if($form.validateForm()) {
-					var param = $form.serialize();
-				    var uri = $form.attr("action");
-				    cnoj.submitDialogData(uri,param,fun,$(this),$form);
-				}
+function submitBtnListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-data-submit").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-data-submit").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-data-submit-listener")) {
+			$element.addClass("cnoj-data-submit-listener");
+			$element.click(function(event){
+				_clickElement(event, $(this));
 				event.stopPropagation();
 				return false;
 			});
 		}
-		//$this = null;
-	});
+	}
+	
+	/**
+	 * 点击元素处理方法
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var target = $this.data("target-form");
+		var fun = $this.data("fun");
+		var $form = null;
+		if(!utils.isEmpty(target)) {
+			if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+				$form = $("#"+target);
+			} else {
+				$form = $elementWrap.find("#"+target);
+			}
+			if(typeof($form.attr("id")) === 'undefined') {
+				$form = null;
+			}
+		} else {
+			 $form = $this.parents("form:eq(0)");
+		}
+		if($form.validateForm()) {
+			var param = $form.serialize();
+		    var uri = $form.attr("action");
+		    cnoj.submitDialogData(uri,param,fun,$this,$form);
+		}
+	}
 }
 
 /**
  * 监听表格内容的高度
+ * @param $elementWrap
  * 标识
  * class="cnoj-table-wrap"
  * 该标识是用于包裹表格而设计的，非表格请使用"auto-limit-height"标识
  */
-function tableWrapListener() {
-	$(".cnoj-table-wrap").each(function(){
-		if(!utils.isContain($(this).attr("class"), "cnoj-table-wrap-listener")) {
-			$(this).addClass("cnoj-table-wrap-listener");
-			var $tableWrap = $(this);
-			var h = 0;
-			var $autoLimitHeiht = $tableWrap.parents(".cnoj-auto-limit-height:eq(0)");
-			if(utils.isExist($autoLimitHeiht)) {
-				h = $autoLimitHeiht.height();
-			} else {
-				h = getMainHeight();
-				//去掉tabs高度
-				h = h - getTabHeaderHeight();
+function tableWrapListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-table-wrap").each(function(){
+			return _handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-table-wrap").each(function(){
+			return _handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if($element.hasClass("cnoj-table-wrap-listener")) {
+			return true;
+		}
+		$element.addClass("cnoj-table-wrap-listener");
+		var $tableWrap = $element;
+		var h = 0;
+		var $autoLimitHeiht = $tableWrap.parents(".cnoj-auto-limit-height:eq(0)");
+		if(utils.isExist($autoLimitHeiht)) {
+			h = $autoLimitHeiht.height();
+		} else {
+			h = getMainHeight();
+			//去掉tabs高度
+			h = h - getTabHeaderHeight();
+		}
+		var $parentWrap = $tableWrap.parent();
+		var subtractHeight = $parentWrap.data("subtract-height");
+		subtractHeight = utils.isEmpty(subtractHeight)?0:subtractHeight;
+		h = h - subtractHeight;
+		
+		var panelHeadingHeight = 0;
+		var $panelHeading = $parentWrap.find(".panel-heading");
+		if(utils.isExist($panelHeading)) {
+			panelHeadingHeight = $panelHeading.data("height");
+			if(utils.isEmpty(panelHeadingHeight)) {
+				panelHeadingHeight = $panelHeading.outerHeight(true);
+				panelHeadingHeight = Math.ceil(panelHeadingHeight);
 			}
-			var $parentWrap = $tableWrap.parent();
-			var subtractHeight = $parentWrap.data("subtract-height");
-			subtractHeight = utils.isEmpty(subtractHeight)?0:subtractHeight;
-			h = h - subtractHeight;
-			
+		}
+		h = h - panelHeadingHeight;
+		var $panelFooter = $parentWrap.find(".panel-footer");
+		var panelFooterHeight = 0;
+		var panelFooterDataH = $panelFooter.data("height");
+		if(utils.isNotEmpty(panelFooterDataH)) {
+			panelFooterHeight = panelFooterDataH;
+		} else {
+			panelFooterHeight = $panelFooter.outerHeight(true);
+		}
+		panelFooterHeight = utils.isEmpty(panelFooterHeight)?0:panelFooterHeight;
+		h = h - panelFooterHeight;
+		var $panelSearch = $parentWrap.find(".panel-search");
+		if(utils.isExist($panelSearch)) {
+			var searchH = $panelSearch.outerHeight(true);
+			searchH = Math.ceil(searchH);
+			var dataSearchH = $panelSearch.data("height");
+			searchH = (dataSearchH>searchH)?dataSearchH:searchH;
+			searchH = utils.isEmpty(searchH)?0:searchH;
+			h = h - searchH;
+		}
+		$tableWrap.height(h - 5);
+		$tableWrap.css({"overflow":"auto"});
+		if($tableWrap.hasClass("table-body-scroll")) {
+			_separateTableHeaderAndBody($tableWrap, $panelFooter, h);
+		}
+		
+	}
+	
+	/**
+	 * 表头和表内容分离，即thead头作为一个表格，tbody作为一个表格
+	 * @param $tableWrap
+	 * @param h
+	 */
+	function _separateTableHeaderAndBody($tableWrap, $panelFooter, h) {
+		//调整表格；使表格头和表格内容分离
+		var $table = $tableWrap.find("table");
+		var $theadTr = $table.find("thead").clone(true);
+		var $tableTheader = null;
+		if(!utils.isEmpty($theadTr)) {
+			$tableWrap.before("<div class='table-theader-bg "+$table.find("thead").find("tr").attr("class")+"'><div class='table-theader' data-height='"+$table.find("thead").find("tr").data("height")+"'><table class='"+$table.attr("class")+"'></table></div></div>");
+			$table.find("thead").remove();
+			$tableTheader = $tableWrap.prev().find(".table-theader");
+			$tableTheader.find("table").append($theadTr);
 			var panelHeadingHeight = 0;
-			var $panelHeading = $parentWrap.find(".panel-heading");
-			if(utils.isExist($panelHeading)) {
-				panelHeadingHeight = $panelHeading.data("height");
-				if(utils.isEmpty(panelHeadingHeight)) {
-					panelHeadingHeight = $panelHeading.outerHeight(true);
-					panelHeadingHeight = Math.ceil(panelHeadingHeight);
-				}
-			}
-			h = h - panelHeadingHeight;
-			var $panelFooter = $parentWrap.find(".panel-footer");
-			var panelFooterHeight = 0;
-			var panelFooterDataH = $panelFooter.data("height");
-			if(utils.isNotEmpty(panelFooterDataH)) {
-				panelFooterHeight = panelFooterDataH;
+			var panelHeadingDataH = $panelFooter.data("height");
+			if(utils.isNotEmpty(panelHeadingDataH)) {
+				panelHeadingHeight = panelHeadingDataH;
 			} else {
-				panelFooterHeight = $panelFooter.outerHeight(true);
+				panelHeadingHeight = $tableTheader.outerHeight(true);
+				panelHeadingHeight = Math.ceil(panelHeadingHeight);
 			}
-			panelFooterHeight = utils.isEmpty(panelFooterHeight)?0:panelFooterHeight;
-			h = h - panelFooterHeight;
-			var $panelSearch = $parentWrap.find(".panel-search");
-			if(utils.isExist($panelSearch)) {
-				var searchH = $panelSearch.outerHeight(true);
-				searchH = Math.ceil(searchH);
-				var dataSearchH = $panelSearch.data("height");
-				searchH = (dataSearchH>searchH)?dataSearchH:searchH;
-				searchH = utils.isEmpty(searchH)?0:searchH;
-				h = h - searchH;
-			}
-			$tableWrap.height(h - 5);
-			$tableWrap.css({"overflow":"auto"});
-			if(!$tableWrap.hasClass("table-body-scroll")) {
-				return;
-			}
-			//调整表格；使表格头和表格内容分离
-			var $table = $tableWrap.find("table");
-			var $theadTr = $table.find("thead").clone(true);
-			var $tableTheader = null;
-			if(!utils.isEmpty($theadTr)) {
-				$tableWrap.before("<div class='table-theader-bg "+$table.find("thead").find("tr").attr("class")+"'><div class='table-theader' data-height='"+$table.find("thead").find("tr").data("height")+"'><table class='"+$table.attr("class")+"'></table></div></div>");
-				$table.find("thead").remove();
-				$tableTheader = $tableWrap.prev().find(".table-theader");
-				$tableTheader.find("table").append($theadTr);
-				var panelHeadingHeight = 0;
-				var panelHeadingDataH = $panelFooter.data("height");
-				if(utils.isNotEmpty(panelHeadingDataH)) {
-					panelHeadingHeight = panelHeadingDataH;
-				} else {
-					panelHeadingHeight = $tableTheader.outerHeight(true);
-					panelHeadingHeight = Math.ceil(panelHeadingHeight);
-				}
-				panelHeadingHeight = utils.isEmpty(panelHeadingHeight)?0:panelHeadingHeight;
-				h = h - panelHeadingHeight;
-				$tableWrap.height(h);
-			}
-			$tableWrap.css({"overflow":"auto"});
-			$parentWrap = null;
+			panelHeadingHeight = utils.isEmpty(panelHeadingHeight)?0:panelHeadingHeight;
+			h = h - panelHeadingHeight;
+			$tableWrap.height(h);
+		}
+		$tableWrap.css({"overflow":"auto"});
+		$parentWrap = null;
+		if(utils.isScroll($tableWrap)) {
+			$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
+		} else {
+			$tableTheader.css({"width":"auto"});
+		}	
+		$tableWrap.click(function(e) {
 			if(utils.isScroll($tableWrap)) {
 				$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
-			} else {
+			} else 
 				$tableTheader.css({"width":"auto"});
-			}	
-			$tableWrap.click(function(e) {
-				if(utils.isScroll($tableWrap)) {
-					$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
-				} else 
-					$tableTheader.css({"width":"auto"});
-			});
-		}
-	});
+		});
+	}
 }
 
 /**
  * 监听限制高度标识
+ * @param $elementWrap
  * 标识
  * class="cnoj-auto-limit-height"
  * 该标识会根据浏览器高度，自适应被该标识标记的DIV层
  */
-function limitHeightListener() {
-	//var $limitHeight = $(".cnoj-auto-limit-height");
-	$(".cnoj-auto-limit-height").each(function(){
-		var $limitHeight = $(this);
-		if(!utils.isContain($limitHeight.attr("class"), "cnoj-auto-limit-height-listener")) {
-			$limitHeight.addClass("cnoj-auto-limit-height-listener");
+function limitHeightListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-auto-limit-height").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-auto-limit-height").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-auto-limit-height-listener")) {
+			$element.addClass("cnoj-auto-limit-height-listener");
 			var h = getMainHeight();
-			var subtractHeight = $limitHeight.data("subtract-height");
+			var subtractHeight = $element.data("subtract-height");
 			if(!utils.isEmpty(subtractHeight)) {
 				h = h - getTabHeaderHeight() - subtractHeight;
 			} else {
-				var top = $limitHeight.position().top;
+				var top = $element.position().top;
 				top = Math.ceil(top);
 				h = h - getTabHeaderHeight() - top - 8;
 			}
-			$limitHeight.height(h);
-			$limitHeight.css({"overflow":"auto"});
+			$element.height(h);
+			$element.css({"overflow":"auto"});
 		}
-		//$limitHeight = null;
-	});
+	}
 }
 
 /**
  * 监听文件上传标识
+ * @param $elementWrap
  * 标识
  * class="cnoj-upload"
  * 参数
@@ -1259,28 +1614,42 @@ function limitHeightListener() {
  *     data-close-after 文件上传结束后，关闭窗口时执行的回调函数;返回一个数组
  *     
  */
-function uploadFileListener() {
-	$(".cnoj-upload").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-upload-listener")) {
-			$this.addClass("cnoj-upload-listener");
-			var uri = $this.data("uri");
-			var formData = $this.data("form-data");
-			var acceptFileTypes = $this.data("accept-file-types");
-			var maxFileSize = $this.data("max-file-size");
-			var popWidth = $this.data("pop-width");
-			var popHeight = $this.data("pop-height");
-			var progressBar = $this.data("progressbar");
-			var closeAfterFun = $this.data("close-after");
-			if(!utils.isEmpty(uri)) {
+function uploadFileListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-upload").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-upload").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-upload-listener")) {
+			$element.addClass("cnoj-upload-listener");
+			
+			var uri = $element.data("uri");
+			var formData = $element.data("form-data");
+			var acceptFileTypes = $element.data("accept-file-types");
+			var maxFileSize = $element.data("max-file-size");
+			var popWidth = $element.data("pop-width");
+			var popHeight = $element.data("pop-height");
+			var progressBar = $element.data("progressbar");
+			var closeAfterFun = $element.data("close-after");
+			if(utils.isNotEmpty(uri)) {
 				formData = utils.isEmpty(formData)?null:$(formData).serializeArray();
 				popWidth = utils.isEmpty(popWidth)?450:popWidth;
 				popHeight = utils.isEmpty(popHeight)?300:popHeight;
 				progressBar = (utils.isEmpty(progressBar) || progressBar=='0')?false:true;
 				closeAfterFun = utils.isEmpty(closeAfterFun)?null:eval(closeAfterFun);
-				if(null != formData) {
+				/*if(null != formData) {
 					formData = JSON.stringify(param);
-				}
+				}*/
 				var param = {
 						uri:uri,
 						formData:formData,
@@ -1289,22 +1658,22 @@ function uploadFileListener() {
 						progressBar:progressBar,
 						closeAfterFun:closeAfterFun
 				};
-				if(!utils.isEmpty(acceptFileTypes)) {
+				if(utils.isNotEmpty(acceptFileTypes)) {
 					acceptFileTypes = acceptFileTypes.replace(/\,/g,'|');
 					param = $.extend(param,{acceptFileTypes:'/'+acceptFileTypes+'$/i'});
 				}
-				if(!utils.isEmpty(maxFileSize) && utils.regexInteger(maxFileSize)) {
+				if(utils.isNotEmpty(maxFileSize) && utils.regexInteger(maxFileSize)) {
 					param = $.extend(param,{maxFileSize:maxFileSize});
 				}
-				$this.jqueryFileUpload(param);
+				$element.jqueryFileUpload(param);
 			}
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
  * 监听日期时间标识
+ * @param $elementWrap
  * 标识
  * class="cnoj-datetime"(yyyy-mm-dd hh:ii:ss)或
  * class="cnoj-date"(yyyy-mm-dd) 或
@@ -1314,122 +1683,149 @@ function uploadFileListener() {
  * data-end-date=""   设置时间范围--结束时间
  * data-date-format="" 日期格式；如：yyyy-mm-dd 或yyyy年mm月dd日
  */
-function inputDateListener() {
-	$(".cnoj-datetime,.cnoj-date,.cnoj-time").each(function(){
-		  var $this = $(this);
-		  if(!utils.isContain($this.attr("class"), "cnoj-datetime-listener") && 
-				  !utils.isContain($this.attr("class"), "cnoj-date-listener") && 
-				  !utils.isContain($this.attr("class"), "cnoj-time-listener") && 
-				  !$this.prop("readonly") && !$this.prop("disabled") && !$this.hasClass("hide")) {
-			  var $formGroup = $(this).parents(".form-group:eq(0)");
-			  var classParentNames = $formGroup.attr("class");
-			  var classNames = $this.attr("class");
-			  if(!utils.isContain(classParentNames,'has-feedback') && (!utils.isContain(classNames, "cnoj-datetime-listener") 
-					  || !utils.isContain(classNames, "cnoj-date-listener") || !utils.isContain(classNames, "cnoj-time-listener"))) {
-				  if(utils.isEmpty(classParentNames)) {
-					  /*$this.parent().addClass('has-feedback');
-					  var top = 0;
-					  var left = 0;
-					  var pos = $this.position();
-					  top = pos.top-3;
-					  left = pos.left+($this.width()-18);
-					  $this.after("<span class='glyphicon glyphicon-calendar inline-icon form-control-feedback hidden-print' style='top:"+top+"px;left:"+left+"px'></span>");
-					  var $icon = $this.find(".inline-icon");*/
-					  var $parent = $this.parent();
-					  var count = 0;
-					  //$parent.find(".cnoj-datetime,.cnoj-date,.cnoj-time").each(function(){
-					  $parent.find("input").each(function(){
-						  count++;
-					  });
-					  if(count>1) {
-						  if(!$parent.hasClass("form-group")) {
-							  var $next = $this.next();
-							  if($next.hasClass("star-require")) {
-								  $next.remove();
-							  }
-							  $this.wrap("<div class='text-inline-block' style='width:"+($this.outerWidth(true)+10)+"px'></div>");
-						  }
-						  $this.parent().addClass('has-feedback');
-						  $this.after("<span class='glyphicon glyphicon-calendar inline-icon form-control-feedback hidden-print' style='right:3px;line-height: 30px;'></span>");
-					  } else {
-						  var $next = $this.next();
-						  if($next.hasClass("star-require")) {
-							  $next.remove();
-						  }
-						  var parentW = $parent.outerWidth();
-						  var thisW = $this.outerWidth();
-						  var w = ((thisW+30)<parentW)?(thisW+10):parentW;
-						  $this.wrap("<div class='text-inline-block' style='width:"+w+"px'></div>");
-						  $this.parent().addClass('has-feedback');
-						  var inputH = $this.outerHeight();
-						  var top = inputH>28?0:-2;
-						  var style = "top:"+top+"px;";
-						  //判断是否在iframe中；如果相等，不是iframe；否则是iframe
-						  var notIframe = (top.location == location);
-						  if(notIframe) {
-							  style = style+"right:5%;";
-						  }
-						  $this.after("<span class='glyphicon glyphicon-calendar inline-icon form-control-feedback hidden-print' style='"+style+"'></span>");
-					  }
-					  var $icon = $this.find(".inline-icon");
-				  } else {
-					  $formGroup.addClass("has-feedback");
-					  $this.after("<span class='glyphicon glyphicon-calendar form-control-feedback hidden-print'></span>");
-				  }
-				  var setting = {};
-				  if(utils.isContain(classNames,'cnoj-datetime')) {
-					  setting = {format: 'yyyy-mm-dd hh:ii:ss',startView:2};
-				  } else if(utils.isContain(classNames,'cnoj-date')) {
-					  setting = {format: 'yyyy-mm-dd',minView: 2};
-				  } else if(utils.isContain(classNames,'cnoj-time')) {
-					  var date = new Date();
-					  var month = date.getMonth()+1;
-					  month = month<10?('0'+month):month;
-					  var day = date.getDate();
-					  day = day<10?('0'+day):day;
-					 var startDate = date.getFullYear()+"-"+month+"-"+day;
-					  setting = {format: 'hh:ii:ss',startDate:startDate,startView: 1,minView: 0,maxView:1};
-				  }
-				  var startDate = $this.data("start-date");
-				  var endDate = $this.data("end-date");
-				  if(!utils.isEmpty(startDate)) {
-					  setting = $.extend(setting,{startDate:startDate});
-				  }
-				  if(!utils.isEmpty(endDate)) {
-					  setting = $.extend(setting,{endDate:endDate});
-				  }
-				  //获取日期格式
-				  var dateFormat = $this.data("date-format");
-				  if(utils.isNotEmpty(dateFormat)) {
-					  setting = $.extend(setting,{format:dateFormat});
-				  }
-				  var pickerHeight = 230;
-				  var offset = $(this).offset();
-				  var windowHeight = $(window).height();
-				  if((offset.top+pickerHeight)>windowHeight) {
-					  setting = $.extend(true, setting,{pickerPosition:'top-right'});
-				  }
-				  setting = $.extend(true, setting,{language:'zh-CN',autoclose:true});
-				  $this.datetimepicker(setting).on('show',function(){
-					  $this.prop("readonly",true);
-				  }).on('hide',function(){
-					  $this.prop("readonly",false);
-				  });
-				  if(utils.isContain($this.attr("class"), "cnoj-datetime")) {
-					  $this.addClass("cnoj-datetime-listener");
-				  } else if(utils.isContain($this.attr("class"), "cnoj-date")) {
-					  $this.addClass("cnoj-date-listener");
-				  } else if(utils.isContain($this.attr("class"), "cnoj-time")) {
-					  $this.addClass("cnoj-time-listener");
-				  }
-			  }
-		  }
-		  //$this = null;
-	  });
+function inputDateListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-datetime,.cnoj-date,.cnoj-time").each(function(){
+			return _handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-datetime,.cnoj-date,.cnoj-time").each(function(){
+			return _handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if($element.hasClass("cnoj-datetime-listener") || 
+				$element.hasClass("cnoj-date-listener") || 
+				$element.hasClass("cnoj-time-listener") || 
+				$element.prop("readonly") || $element.prop("disabled") || $element.hasClass("hide")) {
+			return true;
+		}
+		if($element.hasClass("cnoj-datetime")) {
+			$element.addClass("cnoj-datetime-listener");
+		} else if($element.hasClass("cnoj-date")) {
+			$element.addClass("cnoj-date-listener");
+		} else if($element.hasClass("cnoj-time")) {
+			$element.addClass("cnoj-time-listener");
+		}
+		var $formGroup = $element.parents(".form-group:eq(0)");
+		if($formGroup.hasClass("has-feedback")) {
+			return true;
+		}
+		_addFeedback($formGroup, $element);
+		_initDatetimePicker($element);
+		return true;
+	}
+	
+	/**
+	 * 添加日期图标
+	 * @param $formGroup
+	 * @param $element
+	 */
+	function _addFeedback($formGroup,$element) {
+		if($formGroup.length > 0) {
+			$formGroup.addClass("has-feedback");
+			$element.after("<span class='glyphicon glyphicon-calendar form-control-feedback hidden-print'></span>");
+		} else {
+			var $parent = $element.parent();
+			var count = 0;
+			$parent.find("input").each(function(){
+				count++;
+			});
+			if(count>1) {
+				if(!$parent.hasClass("form-group")) {
+					var $next = $element.next();
+					if($next.hasClass("star-require")) {
+						$next.remove();
+					}
+					$element.wrap("<div class='text-inline-block' style='width:"+($element.outerWidth(true)+10)+"px'></div>");
+				}
+				$element.parent().addClass('has-feedback');
+				$element.after("<span class='glyphicon glyphicon-calendar inline-icon form-control-feedback hidden-print' style='right:3px;line-height: 30px;'></span>");
+			} else {
+				var $next = $element.next();
+				if($next.hasClass("star-require")) {
+					$next.remove();
+				}
+				var parentW = $parent.width();
+				var thisW = $element.outerWidth();
+				var w = thisW;//((thisW+30)<parentW)?(thisW+10):parentW;
+				console.log(thisW+","+parentW);
+				//$element.wrap("<div class='text-inline-block' style='width:"+w+"px'></div>");
+				$element.wrap("<div class='text-inline'></div>");
+				$element.parent().addClass('has-feedback');
+				var inputH = $element.outerHeight();
+				//var top = inputH>28?0:-2;
+				//var style = "top:"+top+"px;";
+				var style = "";
+				//判断是否在iframe中；如果相等，不是iframe；否则是iframe
+				/*var notIframe = (top.location == location);
+				if(notIframe) {
+					style = style+"right:5%;";
+				}*/
+				$element.after("<span class='glyphicon glyphicon-calendar inline-icon form-control-feedback hidden-print' style='"+style+"'></span>");
+			}
+			var $icon = $element.find(".inline-icon");
+		 }
+	}
+	
+	/**
+	 * 初始化日期控件
+	 * @param $element
+	 */
+	function _initDatetimePicker($element) {
+		var setting = {};
+		if($element.hasClass('cnoj-datetime')) {
+			setting = {format: 'yyyy-mm-dd hh:ii:ss',startView:2};
+		} else if($element.hasClass('cnoj-date')) {
+			setting = {format: 'yyyy-mm-dd',minView: 2};
+		} else if($element.hasClass('cnoj-time')) {
+			var date = new Date();
+			var month = date.getMonth()+1;
+			month = month<10?('0'+month):month;
+			var day = date.getDate();
+			day = day<10?('0'+day):day;
+			var startDate = date.getFullYear()+"-"+month+"-"+day;
+			setting = {format: 'hh:ii:ss',startDate:startDate,startView: 1,minView: 0,maxView:1};
+		}
+		var startDate = $element.data("start-date");
+		var endDate = $element.data("end-date");
+		if(utils.isNotEmpty(startDate)) {
+			setting = $.extend(setting,{startDate:startDate});
+		}
+		if(utils.isNotEmpty(endDate)) {
+			setting = $.extend(setting,{endDate:endDate});
+		}
+		//获取日期格式
+		var dateFormat = $element.data("date-format");
+		if(utils.isNotEmpty(dateFormat)) {
+			setting = $.extend(setting,{format:dateFormat});
+		}
+		var pickerHeight = 230;
+		var offset = $element.offset();
+		var windowHeight = $(window).height();
+		if((offset.top+pickerHeight)>windowHeight) {
+			setting = $.extend(true, setting,{pickerPosition:'top-right'});
+		}
+		setting = $.extend(true, setting,{language:'zh-CN',autoclose:true});
+		$element.datetimepicker(setting).on('show',function(){
+			$element.prop("readonly",true);
+		}).on('hide',function(){
+			$element.prop("readonly",false);
+		});
+		if($element.hasClass("cnoj-date-defvalue") && utils.isEmpty($element.val())) {
+			$element.val($element.datetimepicker('getFormattedDate'));
+		}
+	}
 }
 
 /**
  * 下拉列表监听
+ * @param $elementWrap 
  * 标识
  *   class="cnoj-select"
  *  参数
@@ -1437,30 +1833,50 @@ function inputDateListener() {
  *       data-uri 提供数据uri(数据来源)；数据格式为json数组格式;第一个字段为ID;第二个字段为名称
  *    可选
  *       data-default-value  默认值
+ *       data-edit-enable 是否可编辑；默认为：可以编辑
  *       data-is-null 是否有空值（如：请选择）默认为:no(没有) 可选的值为:"yes"或"no"
  */
-function selectListener() {
-	$(".cnoj-select").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-select-listener")) {
-			$this.addClass("cnoj-select-listener");
-			var uri = $this.data("uri");
-			var isNull = $this.data("is-null");
+function selectListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-select").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-select").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-select-listener")) {
+			$element.addClass("cnoj-select-listener");
+			var uri = $element.data("uri");
+			var isNull = $element.data("is-null");
 			isNull = (isNull == 'yes'?true:false);
-			var defaultValue = $this.data("default-value");
+			var defaultValue = $element.data("default-value");
+			var editEnable = $element.data("edit-enable");
+			var isEditEnable = (utils.isEmpty(editEnable) || editEnable == 1) ? true : false;
 			if(isNull) {
-				$this.append("<option value=''>请选择</option>");
+				$element.append("<option value=''>请选择</option>");
 			}
 			if(!utils.isEmpty(uri)) {
-				utils.selectItem(this, uri, defaultValue);
+				utils.selectItem($element, uri, defaultValue,function(){
+					if(!isEditEnable) {
+						$element.prop("disabled",true);
+					}
+				});
 			}
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
  * 复选框监听
+ * @param $elementWrap
  * 标识
  *   class="cnoj-checkbox"
  *  参数
@@ -1472,27 +1888,48 @@ function selectListener() {
  *       data-is-horizontal 是否横排;默认为：yes；可设置的值为:"yes"或"no" <br />
  *       data-require 是否必填
  */
-function inputCheckboxListener() {
-	$(".cnoj-checkbox").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-checkbox-listener")) {
-			$this.addClass("cnoj-checkbox-listener");
-			var uri = $this.data("uri");
-			var defaultValue = $this.data("default-value");
-			var isH = $this.data("is-horizontal");
+function inputCheckboxListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-checkbox").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-checkbox").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-checkbox-listener")) {
+			$element.addClass("cnoj-checkbox-listener");
+			var uri = $element.data("uri");
+			var defaultValue = $element.data("default-value");
+			var isH = $element.data("is-horizontal");
 			isH = (isH == 'no'?false:true);
-			var require = $this.data("require");
-			var name = $this.data("name");
+			var require = $element.data("require");
+			var name = $element.data("name");
 			name = utils.handleNull(name);
+			var editEnable = $element.data("edit-enable");
+			console.log(editEnable);
+			var isEditEnable = (utils.isEmpty(editEnable) || editEnable == 1) ? true : false;
 			if(!utils.isEmpty(uri)) {
-				utils.checkboxItem(this, uri, defaultValue, name, isH, require, null);
+				utils.checkboxItem($element, uri, defaultValue, name, isH, require, function(){
+					if(!isEditEnable) {
+						$element.find(":checkbox").prop("disabled",true);
+					}
+				});
 			}
 		}
-	});
+	}
 }
 
 /**
  * 单选框监听
+ * @param $elementWrap
  * 标识
  *   class="cnoj-radio"
  *  参数
@@ -1504,28 +1941,48 @@ function inputCheckboxListener() {
  *       data-default-value  默认值
  *       data-require 是否必填
  */
-function inputRadioListener() {
-	$(".cnoj-radio").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-radio-listener")) {
-			$this.addClass("cnoj-radio-listener");
-			var uri = $this.data("uri");
-			var defaultValue = $this.data("default-value");
-			var isH = $this.data("is-horizontal");
+function inputRadioListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-radio").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-radio").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-radio-listener")) {
+			$element.addClass("cnoj-radio-listener");
+			var uri = $element.data("uri");
+			var defaultValue = $element.data("default-value");
+			var isH = $element.data("is-horizontal");
 			isH = (isH == 'no'?false:true);
-			var require = $this.data("require");
-			var name = $this.data("name");
+			var require = $element.data("require");
+			var name = $element.data("name");
 			name = utils.handleNull(name);
+			var editEnable = $element.data("edit-enable");
+			var isEditEnable = (utils.isEmpty(editEnable) || editEnable == 1) ? true : false;
 			if(!utils.isEmpty(uri)) {
-				utils.radioItem(this, uri, defaultValue, name,isH, require, null);
+				utils.radioItem($element, uri, defaultValue, name, isH, require, function(){
+					if(!isEditEnable) {
+						$element.find(":radio").prop("disabled",true);
+					}
+				});
 			}
 		}
-	});
+	}
 }
 
 
 /**
  * 级联下拉列表监听
+ * @param $elementWrap
  * 标识
  *   class="cnoj-cascade-select"
  *  参数
@@ -1537,28 +1994,41 @@ function inputRadioListener() {
  *       data-param-name 参数名称
  *       data-change-id 父级的数据改变时，要获取值的ID；如果data-cascade-id和data-change-id为同一个ID时，data-change-id属性可以不设置
  */
-function cascadeSelectListener() {
-	$(".cnoj-cascade-select").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-cascade-select-listener")) {
-			$this.addClass("cnoj-cascade-select-listener");
-			var uri = $this.data("uri");
-			var defaultValue = $this.data("default-value");
-			var cascadeId = $this.data("cascade-id");
-			var paramName = $this.data("param-name");
-			var changeId = $this.data("change-id");
+function cascadeSelectListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-cascade-select").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-cascade-select").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-cascade-select-listener")) {
+			$element.addClass("cnoj-cascade-select-listener");
+			var uri = $element.data("uri");
+			var defaultValue = $element.data("default-value");
+			var cascadeId = $element.data("cascade-id");
+			var paramName = $element.data("param-name");
+			var changeId = $element.data("change-id");
 			changeId = utils.isEmpty(changeId)?null:changeId;
-			if(!utils.isEmpty(uri) && !utils.isEmpty(cascadeId)) {
-				utils.selectCascadeItem(this,cascadeId, uri,paramName, defaultValue,changeId);
+			if(utils.isNotEmpty(uri) && utils.isNotEmpty(cascadeId)) {
+				utils.selectCascadeItem($element,cascadeId, uri,paramName, defaultValue,changeId);
 			}
 		}
-		//$this = null;
-	});
+	}
 }
 
 
 /**
  * 输入表单实现下拉列表 <br />
+ * @param $elementWrap
  * 标识 <br />
  *    class="cnoj-input-select" <br />
  *  参数  <br />
@@ -1570,51 +2040,65 @@ function cascadeSelectListener() {
  *       data-is-show-none 是否显示“无”;默认为：“no”；可设置的值为:"yes"或"no" <br />
  *       data-default-value 默认值
  */
-function inputSelectListener() {
-	$(".cnoj-input-select").each(function() {
-		var $this= $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-input-select-listener")) {
-			$(this).addClass("cnoj-input-select-listener");
-			var uri = $this.data("uri");
-			if(!utils.isEmpty(uri)) {
-				var paramName = $this.data("param-name");
-				var defaultValue = $this.data("default-value");
+function inputSelectListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-input-select").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-input-select").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-input-select-listener")) {
+			$element.addClass("cnoj-input-select-listener");
+			var uri = $element.data("uri");
+			if(utils.isNotEmpty(uri)) {
+				var paramName = $element.data("param-name");
+				var defaultValue = $element.data("default-value");
 				if(utils.isEmpty(defaultValue))
-					defaultValue = $this.val();
-				var isShowAll = $(this).data("is-show-all");
+					defaultValue = $element.val();
+				var isShowAll = $element.data("is-show-all");
 				isShowAll = (isShowAll == 'yes'?true:false);
-				var isShowNone = $(this).data("is-show-none");
+				var isShowNone = $element.data("is-show-none");
 				isShowNone = (isShowNone == 'yes'?true:false);
 				var setting = {uri:uri,isShow:false,isShowAll:isShowAll,isShowNone:isShowNone};
-				if(!utils.isEmpty(paramName)) 
+				if(utils.isNotEmpty(paramName)) 
 					setting = $.extend(setting,{paramName:paramName});
-				if(!utils.isEmpty(defaultValue)) 
+				if(utils.isNotEmpty(defaultValue)) 
 					setting = $.extend(setting,{defaultValue:defaultValue});
-				$this.inputSelect(setting);
+				$element.inputSelect(setting);
 		   }
-			$(this).on("click focus",function(event){
-				$(this).prop("readonly",true);
-				if(!utils.isEmpty(uri)) {
-					var paramName = $(this).data("param-name");
-					var defaultValue = $(this).data("default-value");
-					var isShowAll = $(this).data("is-show-all");
+		   $element.on("click focus",function(event){
+			   var $this = $(this);
+			   $this.prop("readonly",true);
+				if(utils.isNotEmpty(uri)) {
+					var paramName = $this.data("param-name");
+					var defaultValue = $this.data("default-value");
+					var isShowAll = $this.data("is-show-all");
 					isShowAll = (isShowAll == 'yes'?true:false);
 					var setting = {uri:uri,isShow:true};
-					if(!utils.isEmpty(paramName)) 
+					if(utils.isNotEmpty(paramName)) 
 						setting = $.extend(setting,{paramName:paramName});
-					if(!utils.isEmpty(defaultValue)) 
+					if(utils.isNotEmpty(defaultValue)) 
 						setting = $.extend(setting,{defaultValue:defaultValue});
-					$(this).inputSelect(setting);
+					$this.inputSelect(setting);
 				}
 				event.stopPropagation();
 			});
-		}
-		//$this = null;
-	});
+		}//if
+	}
 }
 
 /**
  * 输入表单实现下拉列表 <br />
+ * @param $elementWrap
  * 标识 <br />
  *    class="cnoj-input-select-relate" <br />
  *  参数  <br />
@@ -1626,66 +2110,56 @@ function inputSelectListener() {
  *       data-is-show-none 是否显示“无”;默认为：“no”；可设置的值为:"yes"或"no" <br />
  *       data-default-value 默认值
  */
-function inputSelectRelateListener() {
-	$(".cnoj-input-select-relate").each(function() {
-		var $this= $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-input-select-relate-listener")) {
-			$(this).addClass("cnoj-input-select-relate-listener");
-			
-			var uri = $this.data("uri");
-			if(!utils.isEmpty(uri)) {
-				var paramName = $this.data("param-name");
-				var defaultValue = $this.data("default-value");
+function inputSelectRelateListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-input-select-relate").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-input-select-relate").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-input-select-relate-listener")) {
+			$element.addClass("cnoj-input-select-relate-listener");
+			var uri = $element.data("uri");
+			if(utils.isNotEmpty(uri)) {
+				var paramName = $element.data("param-name");
+				var defaultValue = $element.data("default-value");
 				if(utils.isEmpty(defaultValue))
-					defaultValue = $this.val();
-				var isShowAll = $this.data("is-show-all");
+					defaultValue = $element.val();
+				var isShowAll = $element.data("is-show-all");
 				isShowAll = (isShowAll == 'yes'?true:false);
-				var isShowNone = $this.data("is-show-none");
+				var isShowNone = $element.data("is-show-none");
 				isShowNone = (isShowNone == 'yes'?true:false);
 				var setting = {uri:uri,isShow:false,isShowAll:isShowAll,isShowNone:isShowNone,
 						selectCallback:function(obj,datas){
-							selectRelate(datas, $this,2);
+							selectRelate(datas, $element,2);
 				}};
-				if(!utils.isEmpty(paramName)) 
+				if(utils.isNotEmpty(paramName)) 
 					setting = $.extend(setting,{paramName:paramName});
-				if(!utils.isEmpty(defaultValue)) 
+				if(utils.isNotEmpty(defaultValue)) 
 					setting = $.extend(setting,{defaultValue:defaultValue});
-				$this.inputSelect(setting);
+				$element.inputSelect(setting);
 		    }
-			
-			$(this).on("click focus",function(event){
+			$element.on("click focus",function(event){
 				$(this).prop("readonly",true);
-				/*var uri = $this.data("uri");
-				if(!utils.isEmpty(uri)) {
-					var paramName = $this.data("param-name");
-					var defaultValue = $this.data("default-value");
-					if(utils.isEmpty(defaultValue))
-						defaultValue = $this.val();
-					var isShowAll = $(this).data("is-show-all");
-					isShowAll = (isShowAll == 'yes'?true:false);
-					var isShowNone = $(this).data("is-show-none");
-					isShowNone = (isShowNone == 'yes'?true:false);
-					var setting = {uri:uri,isShow:true,isShowAll:isShowAll,isShowNone:isShowNone,
-							selectCallback:function(obj,datas){
-								selectRelate(datas, $this,2);
-					}};
-					if(!utils.isEmpty(paramName)) 
-						setting = $.extend(setting,{paramName:paramName});
-					if(!utils.isEmpty(defaultValue)) 
-						setting = $.extend(setting,{defaultValue:defaultValue});
-					$this.inputSelect(setting);
-			   }*/
-			   $this.inputSelect({isShow:true});
+				$(this).inputSelect({isShow:true});
 			   event.stopPropagation();
 			});
 		}
-		//$this = null;
-		
-	});
+	}
 }
 
 /**
  * 输入框自动完成监听 <br />
+ * @param $elementWrap
  * 标识 <br /> 
  *   class="cnoj-auto-complete" <br />
  *   参数  <br />
@@ -1698,40 +2172,51 @@ function inputSelectRelateListener() {
  *       data-multiple-separator 多个值时，多个值之间的分隔符；默认为英文分号:";"；<br />
  *       “data-multiple”与“data-multiple-separator”成对出现 
  */
-function autoCompleteListener() {
-	//$(".cnoj-auto-complete").autocomplete("destroy");
-	$(".cnoj-auto-complete").each(function() {
-		var $this= $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-auto-complete-listener")) {
-			$this.addClass("cnoj-auto-complete-listener");
-			var uri = $this.data("uri");
-			var jsonData = $this.data("json-data");
-			var multiple = $this.data("multiple");
-			var multipleSeparator = $this.data("multiple-separator");
+function autoCompleteListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-auto-complete").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-auto-complete").each(function(){
+			_handler($(this));
+		});
+	}
+
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-auto-complete-listener")) {
+			$element.addClass("cnoj-auto-complete-listener");
+			var uri = $element.data("uri");
+			var jsonData = $element.data("json-data");
+			var multiple = $element.data("multiple");
+			var multipleSeparator = $element.data("multiple-separator");
 			var options = {};
 			var is = false;
-			if(!utils.isEmpty(uri)) {
+			if(utils.isNotEmpty(uri)) {
 				options=$.extend(options,{uri:uri});
 				is = true;
 			}
-			if(!is && !utils.isEmpty(jsonData)) {
+			if(!is && utils.isNotEmpty(jsonData)) {
 				options=$.extend(options,{jsonData:jsonData});
 				is = true;
 			}
-			if(is && !utils.isEmpty(multiple) && (multiple=='1' || multiple=='0')) 
+			if(is && utils.isNotEmpty(multiple) && (multiple=='1' || multiple=='0')) 
 				options=$.extend(options,{multiple:(multiple==1?true:false)});
-			if(is && !utils.isEmpty(multiple) && multiple=='1' && !utils.isEmpty(multipleSeparator)) 
+			if(is && utils.isNotEmpty(multiple) && multiple=='1' && utils.isNotEmpty(multipleSeparator)) 
 				options=$.extend(options,{multipleSeparator:multipleSeparator});
 			if(is)
-				$this.autoComplete(options);
-				
+				$element.autoComplete(options);
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
  * 输入框自动完成关联监听 <br />
+ * @param $elementWrap
  * 标识 <br /> 
  *   class="cnoj-auto-complete-relate" <br />
  *   参数  <br />
@@ -1740,69 +2225,52 @@ function autoCompleteListener() {
  *     或data-json-data 提供数据uri(数据来源)；数据格式为json数组格式;第一个字段为ID;第二个字段为名称;第三个为显示内容; <br />
  *       “data-uri”属性的优先级高于“data-json-data”属性; <br />
  */
-function autoCompleteRelateListener() {
-	//$(".cnoj-auto-complete").autocomplete("destroy");
-	$(".cnoj-auto-complete-relate").each(function() {
-		var $this= $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-auto-complete-relate-listener")) {
-			$this.addClass("cnoj-auto-complete-relate-listener");
-			var uri = $this.data("uri");
-			var jsonData = $this.data("json-data");
+function autoCompleteRelateListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-auto-complete-relate").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-auto-complete-relate").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-auto-complete-listener")) {
+			$element.addClass("cnoj-auto-complete-listener");
+			var uri = $element.data("uri");
+			var jsonData = $element.data("json-data");
 			var options = {
 					selectCallback:function(event,data){
 						 if(utils.isNotEmpty(data)) {
 							 var otherValue = data.item.otherValue;
-							 selectRelate(otherValue, $this, 0);
-							 /*
-							 if(utils.isNotEmpty(otherValue)) {
-								 var len = otherValue.length;
-								 var $parentDiv = $this.parents("td:eq(0)");
-								 var isTd = true;
-								 if(utils.isEmpty($parentDiv.html())) {
-									 isTd = false;
-									 $parentDiv = $this.parents(".form-group:eq(0)").parent();
-								 }
-								 for (var i = 0; i < len; i++) {
-									 var $input = $parentDiv.next().find(".form-control");
-									 if(utils.isNotEmpty($input.attr("class"))) {
-										 $input.val(otherValue[i]);
-									 } else {
-										
-										 $input = $parentDiv.next().next().find(".form-control");
-										 if(utils.isNotEmpty($input.attr("class"))) { 
-											 $input.val(otherValue[i]);
-										 } else {
-											 break;
-										 }
-									 }
-									 if(isTd) {
-										 $parentDiv = $input.parents("td:eq(0)");
-									 } else {
-										 $parentDiv = $input.parents(".form-group:eq(0)").parent();
-									 }
-								}
-							 }*/
+							 selectRelate(otherValue, $element, 0);
 						 }
 					 }
 			};
 			var is = false;
-			if(!utils.isEmpty(uri)) {
+			if(utils.isNotEmpty(uri)) {
 				options=$.extend(options,{uri:uri});
 				is = true;
 			}
-			if(!is && !utils.isEmpty(jsonData)) {
+			if(!is && utils.isNotEmpty(jsonData)) {
 				options=$.extend(options,{jsonData:jsonData});
 				is = true;
 			}
 			if(is)
-				$this.autoComplete(options);
+				$element.autoComplete(options);
 		}
-		//$this = null;
-	});
+	}
 }
 
 /**
  * 微调数据 数据类型为number <br />
+ * @param $elementWrap
  * 标识 <br />
  *   class="cnoj-num-spinner" <br />
  *   参数  <br />
@@ -1811,79 +2279,128 @@ function autoCompleteRelateListener() {
  *       data-max 最大值 <br />
  *       data-step 每一次变化数值
  */
-function spinnerNumListener() {
-	$(".cnoj-num-spinner").each(function() {
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-num-spinner-listener")) {
-			$this.addClass("cnoj-num-spinner-listener");
-			var min = $this.data("min");
+function spinnerNumListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-num-spinner").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-num-spinner").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-num-spinner-listener")) {
+			$element.addClass("cnoj-num-spinner-listener");
+			var min = $element.data("min");
 			min = utils.isEmpty(min)?0:(utils.regexNum(min)?min:0);
-			var max = $this.data("max");
+			var max = $element.data("max");
 			max = utils.isEmpty(max)?0:(utils.regexNum(max)?max:0);
-			var step = $this.data("step");
+			var step = $element.data("step");
 			step = utils.isEmpty(step)?1:(utils.regexNum(step)?step:1);
 			var options = {min:min,step:step,numberFormat:"n",change: function(event, ui ) {
 				var value = $(event.target).val();
 				if(!utils.regexNum(value) || value<min || (max>0 && value>max)) {
 					utils.showMsg("输入的数据格式错误！");
-					$this.focus();
+					$element.focus();
 				}
 			}};
 			if(max>0) {
 				options = $.extend(options,{max:max});
 			}
-			$(this).spinner(options);
+			$element.spinner(options);
 		}
-	});
+	}
 }
 
 
 /**
  * URL载入标记监听 <br />
+ * @param $elementWrap
  * 标识 <br />
  *   class="cnoj-load-url" <br />
  * 参数  <br />
  *   必须 <br />
  *    data-uri 提供数据uri
  */
-function loadUrlListener() {
-	$(".cnoj-load-url").each(function() {
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-load-url-listener")) {
-			$this.addClass("cnoj-load-url-listener");
-			var uri = $this.data("uri");
-			if(!utils.isEmpty(uri)) {
-				$this.append('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
-				$this.load(uri,function() {
-					$this.find(".cnoj-loading").remove();
-					initEvent();
-					loadUrlListener();
+function loadUrlListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-load-url").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-load-url").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-load-url-listener")) {
+			$element.addClass("cnoj-load-url-listener");
+			var uri = $element.data("uri");
+			if(utils.isNotEmpty(uri)) {
+				$element.append('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
+				$element.load(uri,function() {
+					$element.find(".cnoj-loading").remove();
+					initEvent($element);
+					loadUrlListener($element);
 				});
 			}
-			return false;
 		}
-	});
+	}
 }
 
 
 /**
  * 处理回车提交表单功能
+ * @param $elementWrap
+ * 标识
+ *   class="cnoj-entry-submit"
  */
-function handleEntrySubmit() {
-	$("input").keydown(function(e){
-		if(e.keyCode == 13) {
-			var $form = $(this).parents("form:eq(0)");
-			var $btn = $form.find(".cnoj-search-submit,.cnoj-data-submit,.login-btn");
-			if(!utils.isEmpty($btn.attr("class"))) {
-				$btn.trigger("click");
-				return false;
-			}
+function handleEntrySubmit($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-entry-submit input").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-entry-submit input").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-entry-submit-listener")) {
+			$element.addClass("cnoj-entry-submit-listener");
+			$element.keydown(function(e) {
+				if(e.keyCode == 13) {
+					var $form = $(this).parents("form:eq(0)");
+					var $btn = $form.find(".cnoj-search-submit,.cnoj-data-submit,.login-btn");
+					if(!utils.isEmpty($btn.attr("class"))) {
+						$btn.trigger("click");
+						return false;
+					}
+				}
+			});
 		}
-	});
+	}
 }
 
 /**
  * 数据提交监听
+ * @param $elementWrap
  * class="cnoj-post-data" 该标识主要是用来标post提交数据，点击标该class的按钮或链接时触发
  *   参数:必须 data-uri 分页uri
  *            data-refresh-uri刷新URI
@@ -1891,33 +2408,58 @@ function handleEntrySubmit() {
  *           data-param 参数
  *           data-del-alert 删除后提醒信息
  */
-function submitDataListener() {
-	$(".cnoj-post-data").click(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-post-data-listener")) {
-			$this.addClass("cnoj-post-data-listener");
-			var uri = $(this).data("uri");
-			var params = $(this).data("param");
-			params = utils.isEmpty(params)?"":params;
-			var refreshUri = $(this).data("refresh-uri");
-			var target = $(this).data("target");
-			var delAlertMsg = $(this).data("del-alert");
-			if(!utils.isEmpty(uri)) {
-				if(!utils.isEmpty(delAlertMsg)) {
-					BootstrapDialogUtil.confirmDialog(delAlertMsg,function(){
-						cnoj.postData(uri,params,target,refreshUri);
-					});
-					return false;
-				}
-				cnoj.postData(uri,params,target,refreshUri);
-			}
+function submitDataListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-post-data").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-post-data").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-post-data-listener")) {
+			$element.addClass("cnoj-post-data-listener");
+			$element.click(function(event){
+				_clickElement(event, $(this));
+				return false;
+			});
 		}
-		return false;
-	});
+	}
+	
+	/**
+	 * 处理单击元素
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event,$this) {
+		var uri = $this.data("uri");
+		var params = $this.data("param");
+		params = utils.isEmpty(params)?"":params;
+		var refreshUri = $this.data("refresh-uri");
+		var target = $this.data("target");
+		var delAlertMsg = $this.data("del-alert");
+		if(utils.isNotEmpty(uri)) {
+			if(utils.isNotEmpty(delAlertMsg)) {
+				BootstrapDialogUtil.confirmDialog(delAlertMsg,function(){
+					cnoj.postData(uri,params,target,refreshUri);
+				});
+				return;
+			}
+			cnoj.postData(uri,params,target,refreshUri);
+		}
+	}
 }
 
 /**
  * 提交表单监听（含有附件时使用）
+ * @param $elementWrap
  * 标识
  * class="cnoj-form-submit"
  * 该标识是提交表单触发的事件
@@ -1933,39 +2475,64 @@ function submitDataListener() {
  *      与data-refresh-uri成对出现.
  *      
  */
-function submitFormListener() {
-	$(".cnoj-form-submit").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-form-submit-listener")) {
-			$this.addClass("cnoj-form-submit-listener");
-			$this.click(function(event){
-				var target = $(this).data("target-form");
-				var fun = $(this).data("fun");
-				var $form = null;
-				if(!utils.isEmpty(target)) {
-					$form = $(target);
-					if(typeof($form.attr("id")) === 'undefined') {
-						$form = null;
-						//console.error("data-target-form 必须指定form的id");
-					}
-				} else {
-					 $form = $(this).parents("form:eq(0)");
-				}
-				if($form.validateForm()) {
-					var param = $form.serialize();
-				    var uri = $form.attr("action");
-				    cnoj.submitFormDialogData(uri,param,fun,$(this),$form);
-				}
+function submitFormListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-form-submit").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-form-submit").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-form-submit-listener")) {
+			$element.addClass("cnoj-form-submit-listener");
+			$element.click(function(event){
+				_clickElement(event, $(this));
 				event.stopPropagation();
 				return false;
 			});
 		}
-		//$this = null;
-	});
+	}
+	
+	/**
+	 * 处理单击元素
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var target = $this.data("target-form");
+		var fun = $this.data("fun");
+		var $form = null;
+		if(utils.isNotEmpty(target)) {
+			if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+				$form = $(target);
+			} else {
+				$form = $elementWrap.find(target);
+			}
+			if($form.length == 0) {
+				$form = null;
+			}
+		} else {
+			 $form = $this.parents("form:eq(0)");
+		}
+		if($form.validateForm()) {
+			var param = $form.serialize();
+		    var uri = $form.attr("action");
+		    cnoj.submitFormDialogData(uri,param,fun,$this,$form);
+		}
+	}
 }
 
 /**
  * 跳转到指定的页面<br />
+ * @param $elementWrap
  * 标识 <br />
  *   class="cnoj-goto-page" <br />
  *   参数  <br />
@@ -1975,211 +2542,303 @@ function submitFormListener() {
  *       data-target 跳转内容显示位置 <br />
  *       data-search-panel-tag 搜索面板标识
  */
-function gotoPageListener() {
-	$(".cnoj-goto-page").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-goto-page-listener")) {
-			$this.addClass("cnoj-goto-page-listener");
-			$this.click(function(event) {
-				var uri = $(this).data("uri");
-				var page = $(this).prev().val();
-				if (!utils.isEmpty(uri) && utils.isNotEmpty(page) && utils.regexInteger(page)) {
-					var $btnPage = $(this).parents(".btn-page:eq(0)");
-					var $pageInfo = $btnPage.next().find("span:first");
-					var pageInfoText = $pageInfo.text();
-					if(utils.isNotEmpty(pageInfoText)) {
-						var reg = new RegExp("(\\d+) - (\\d+)","gmi")
-						pageInfoText = pageInfoText.replace(reg, "$2");
-					} else {
-						pageInfoText = 1;
-					}
-					var totalPage = parseInt(pageInfoText);
-					page = (page > totalPage)?totalPage:page;
-					var target = $(this).data("target");
-					uri = uri+page;
-					
-					//获取搜索参数
-					var searchPanelTag = $(this).data("search-panel-tag");
-					var $searchPanel = null;
-					if(utils.isEmpty(searchPanelTag)) {
-						$searchPanel = $(this).parents(".panel:eq(0)").find(">.panel-search");
-					} else {
-						$searchPanel = $(searchPanelTag);
-					}
-					if(utils.isExist($searchPanel)) {
-						var $form = $searchPanel.find("form");
-						if(utils.isExist($form)) {
-							uri = uri+"&"+$form.serialize();
-						}
-					}
-					
-					if(!utils.isEmpty(target))
-						loadUri(target,uri,true);
-					else 
-						loadActivePanel(uri);
-						//loadLocation(uri);
-				}
+function gotoPageListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-goto-page").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-goto-page").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-goto-page-listener")) {
+			$element.addClass("cnoj-goto-page-listener");
+			$element.click(function(event){
+				_clickElement(event, $(this));
 				event.stopPropagation();
 				return false;
 			});
+			//回车跳转到指定页面
+			$element.parent().find(".goto-page-input").keydown(function(event){
+				if(event.keyCode == 13) {
+					_clickElement(event, $(this).next());
+				}
+			});
 		}
-		//$this = null;
-	});
+	}
+	
+	/**
+	 * 处理单击元素
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var uri = $this.data("uri");
+		var page = $this.prev().val();
+		if (utils.isEmpty(uri) || utils.isEmpty(page) || !utils.regexInteger(page)) {
+			return;
+		}
+		var $btnPage = $this.parents(".btn-page:eq(0)");
+		var $pageInfo = $btnPage.next().find("span:first");
+		var pageInfoText = $pageInfo.text();
+		if(utils.isNotEmpty(pageInfoText)) {
+			var reg = new RegExp("(\\d+) - (\\d+)","gmi")
+			pageInfoText = pageInfoText.replace(reg, "$2");
+		} else {
+			pageInfoText = 1;
+		}
+		var totalPage = parseInt(pageInfoText);
+		page = (page > totalPage)?totalPage:page;
+		var target = $this.data("target");
+		uri = uri+page;
+			
+		//获取搜索参数
+		var searchPanelTag = $this.data("search-panel-tag");
+		var $searchPanel = null;
+		if(utils.isEmpty(searchPanelTag)) {
+			$searchPanel = $this.parents(".panel:eq(0)").find(">.panel-search");
+		} else {
+			$searchPanel = $(searchPanelTag);
+		}
+		if(utils.isExist($searchPanel)) {
+			var $form = $searchPanel.find("form");
+			if(utils.isExist($form)) {
+				uri = uri+"&"+$form.serialize();
+			}
+		}
+		if(!utils.isEmpty(target))
+			loadUri(target,uri,true);
+		else 
+			loadActivePanel(uri);
+	}
 }
 
 /**
  * 打印标识监听<br />
+ * @param $elementWrap
  * 标识 <br />
  *   class="cnoj-print" <br />
  *   参数  <br />
  *     必须 <br />
  *        data-target 打印目标对象 <br />
  */
-function printListener() {
-	$(".cnoj-print").each(function(){
-		var $this = $(this);
-		if(!utils.isContain($this.attr("class"), "cnoj-print-listener")) {
-			$this.addClass("cnoj-print-listener");
-			$this.click(function(event) {
-				var target = $(this).data("target");
-				if (utils.isNotEmpty(target)) {
-					utils.handleFormPrintLabel(target);
-					$(target).printArea();
-				}
+function printListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-print").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-print").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-print-listener")) {
+			$element.addClass("cnoj-print-listener");
+			$element.click(function(event){
+				_clickElement(event, $(this));
 				event.stopPropagation();
 				return false;
 			});
 		}
-	});
+	}
+	
+	/**
+	 * 处理单击元素
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var target = $this.data("target");
+		if (utils.isNotEmpty(target)) {
+			utils.handleFormPrintLabel(target, $elementWrap);
+			if(utils.isNotEmpty($elementWrap) && !utils.isExist($elementWrap)) {
+				$elementWrap.find(target).printArea();
+			} else {
+				$(target).printArea();
+			}
+		}
+	}
 }
 
 /**
  * popover标识监听<br />
+ * @param $elementWrap
  * 标识 <br />
  *   class="mix-popover" <br />
  *   参数  <br />
  *     必须 <br />
  *        data-uri 打印目标对象 <br />
  */
-function popoverListener() {
-	$(".mix-popover").each(function(){
-		var $this = $(this);
-		if(!$this.hasClass("cnoj-popover-listener")) {
-			$this.addClass("cnoj-popover-listener");
-			var id = $this.attr("id");
-			var uri = $this.data("uri");
-			var content = $this.data("content");
-			$this.click(function(){
-				if(utils.isNotEmpty(uri)) {
-					$.ajax({type:"get",url:uri,async:false,success:function(data){
-						content = data;
-					}});
-				} 
-				if(utils.isNotEmpty(content)){
-					$this.popover({
-						placement:'auto',
-						content:content,
-						trigger:"manual",
-						html:true
-					});
-					$this.popover('show');
-				}
-				$(document).click(function(event){
-					if ($(event.target).closest('.popover').length === 0) {
-						$this.popover('hide');
-					}
-				});
+function popoverListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".mix-popover").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".mix-popover").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("mix-popover-listener")) {
+			$element.addClass("mix-popover-listener");
+			$element.click(function(event){
+				_clickElement(event, $(this));
 				return false;
 			});
 		}
-	});
-}
-
-/**
- * 富文本编辑器监听<br />
- * 标识 <br />
- *   class="cnoj-richtext" <br />
- *   参数  <br />
- *     无
- */
-function richtextListener() {
-	if(typeof(UE) != 'undefined') {
-		if(UEDITOR_CONFIG.UEDITOR_HOME_URL.indexOf("/plugins/ueditor/")<0) {
-			UEDITOR_CONFIG.UEDITOR_HOME_URL = UEDITOR_CONFIG.UEDITOR_HOME_URL+"plugins/ueditor/";
+	}
+	
+	/**
+	 * 处理单击元素
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var id = $this.attr("id");
+		var uri = $this.data("uri");
+		var content = $this.data("content");
+		if(utils.isNotEmpty(uri)) {
+			$.ajax({type:"get",url:uri,async:false,success:function(data){
+				content = data;
+			}});
+		} 
+		if(utils.isNotEmpty(content)){
+			$this.popover({
+				placement:'auto',
+				content:content,
+				trigger:"manual",
+				html:true
+			});
+			$this.popover('show');
 		}
-		$(".cnoj-richtext").each(function(){
-			var $this = $(this);
-			if(!utils.isContain($this.attr("class"), "cnoj-richtext-listener")) {
-				$this.addClass("cnoj-richtext-listener");
-				var id = $this.attr("id");
-				UE.delEditor(id);
-				//$this.width($this.width());
-				UE.getEditor(id,{
-					toolbars: [[
-					            'fullscreen',
-					            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'blockquote', '|', 'forecolor', 'insertorderedlist', 'insertunorderedlist', '|',
-					            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
-					            'paragraph', 'fontfamily', 'fontsize', '|', 'indent', '|',
-					            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
-					            'link', 'unlink', 'anchor', '|','pagebreak','|',
-					            'horizontal', 'date', 'time', 'spechars', '|',
-					            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts'
-					        ]]
-				});
+		$(document).click(function(event){
+			if ($(event.target).closest('.popover').length === 0) {
+				$this.popover('hide');
 			}
 		});
 	}
 }
 
 /**
- * 初始化
+ * 富文本编辑器监听<br />
+ * @param $elementWrap
+ * 标识 <br />
+ *   class="cnoj-richtext" <br />
+ *   参数  <br />
+ *     无
  */
-function initEvent() {
-	formRequireListener();
-	$(".cnoj-op-btn-list").btnListener();
+function richtextListener($elementWrap) {
+	if(typeof(UE) != 'undefined') {
+		if(UEDITOR_CONFIG.UEDITOR_HOME_URL.indexOf("/plugins/ueditor/")<0) {
+			UEDITOR_CONFIG.UEDITOR_HOME_URL = UEDITOR_CONFIG.UEDITOR_HOME_URL+"plugins/ueditor/";
+		}
+		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+			$(".cnoj-richtext").each(function(){
+				_handler($(this));
+			});
+		} else {
+			$elementWrap.find(".cnoj-richtext").each(function(){
+				_handler($(this));
+			});
+		}
+	}
 	
-	submitDataListener();
-	submitFormListener();
-	checkboxAllListener();
-	checkboxListener();
-	tableTreeListener();
-	tableTreeSelectListener();
-	tableSelectListener();
-	
-	tableAsyncTreeListener();
-	tableAsyncTreeSelectListener();
-	
-	panelTreeListener();
-	panelCheckTreeListener();
-	panelOrgTreeListener();
-	submitBtnListener();
-	searchSubmitListener();
-	limitHeightListener();
-	tableWrapListener();
-	
-	hrefListener();
-	gotoPageListener();
-	uploadFileListener();
-	selectListener();
-	cascadeSelectListener();
-	loadUrlListener();
-	//handleEntrySubmit();
-	spinnerNumListener();
-	inputPluginEvent();
-	printListener();
-	popoverListener();
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-richtext-listener")) {
+			$element.addClass("cnoj-richtext-listener");
+			var id = $element.attr("id");
+			UE.delEditor(id);
+			UE.getEditor(id,{
+				toolbars: [[
+				            'fullscreen',
+				            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'blockquote', '|', 'forecolor', 'insertorderedlist', 'insertunorderedlist', '|',
+				            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+				            'paragraph', 'fontfamily', 'fontsize', '|', 'indent', '|',
+				            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+				            'link', 'unlink', 'anchor', '|','pagebreak','|',
+				            'horizontal', 'date', 'time', 'spechars', '|',
+				            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts'
+				        ]]
+			});
+		}
+	}
 }
 
-function inputPluginEvent() {
-	inputTreeListener();
-	inputOrgTreeListener();
-	inputDateListener();
-	inputSelectListener();
-	inputSelectRelateListener();
-	autoCompleteListener();
-	autoCompleteRelateListener();
-	inputCheckboxListener();
-	inputRadioListener();
+/**
+ * 初始化
+ */
+function initEvent($elementWrap) {
+	formRequireListener($elementWrap);
+	if($elementWrap instanceof jQuery) {
+		$elementWrap.find(".cnoj-op-btn-list").btnListener();
+	} else {
+		$(".cnoj-op-btn-list").btnListener();
+	}
+	submitDataListener($elementWrap);
+	submitFormListener($elementWrap);
+	checkboxAllListener($elementWrap);
+	checkboxListener($elementWrap);
+	tableTreeListener($elementWrap);
+	tableTreeSelectListener($elementWrap);
+	tableSelectListener($elementWrap);
+	
+	tableAsyncTreeListener($elementWrap);
+	tableAsyncTreeSelectListener($elementWrap);
+	
+	panelTreeListener($elementWrap);
+	panelCheckTreeListener($elementWrap);
+	panelOrgTreeListener($elementWrap);
+	submitBtnListener($elementWrap);
+	searchSubmitListener($elementWrap);
+	limitHeightListener($elementWrap);
+	tableWrapListener($elementWrap);
+	
+	hrefListener($elementWrap);
+	gotoPageListener($elementWrap);
+	uploadFileListener($elementWrap);
+	selectListener($elementWrap);
+	cascadeSelectListener($elementWrap);
+	loadUrlListener($elementWrap);
+	//handleEntrySubmit();
+	spinnerNumListener($elementWrap);
+	inputPluginEvent($elementWrap);
+	printListener($elementWrap);
+	popoverListener($elementWrap);
+}
+
+function inputPluginEvent($elementWrap) {
+	inputTreeListener($elementWrap);
+	inputOrgTreeListener($elementWrap);
+	inputDateListener($elementWrap);
+	inputSelectListener($elementWrap);
+	inputSelectRelateListener($elementWrap);
+	autoCompleteListener($elementWrap);
+	autoCompleteRelateListener($elementWrap);
+	inputCheckboxListener($elementWrap);
+	inputRadioListener($elementWrap);
 }
 
 /**
@@ -2189,79 +2848,80 @@ function inputPluginEvent() {
  * @param flag
  */
 function openProp(obj,op,flag) {
-	if(!utils.isEmpty(obj)) {
-		var $obj = null;
-		if(typeof(obj) === 'string') {
-			$obj = $(obj);
+	if(utils.isEmpty(obj)) {
+		return;
+	}
+	var $obj = null;
+	if(obj instanceof jQuery) {
+		$obj = obj;
+	} else {
+		$obj = $(obj);
+	}
+	var uri = $obj.data("uri");
+	var title = $obj.data("title");
+	var value = $obj.attr("selected-value");
+	var busiName = $obj.data("busi");
+	var paramName = $obj.data("param-name");
+	var selectedType = $obj.data("selected-type");
+	var beforeCheck = $obj.data("before-check");
+	selectedType = utils.isEmpty(selectedType)?'none-selected':selectedType;
+	var width = $obj.data("width");
+	width = utils.regexNum(width)?width:600;
+	paramName = utils.isEmpty(paramName)?'id':paramName;
+	if(utils.isEmpty(selectedType)) {
+		return;
+	}
+	if(selectedType=='one-selected') {
+		if(!utils.isEmpty(value) && value.indexOf(',')>0){
+			BootstrapDialogUtil.warningAlert("只能选择一条数据!");
+			return;
+		} else if(utils.isEmpty(value)) {
+			BootstrapDialogUtil.warningAlert("请选择一条数据!");
+			return;
+		}
+	} else if(selectedType== 'multi-selected') {
+		if(utils.isEmpty(value)) {
+			BootstrapDialogUtil.warningAlert("请选择数据!");
+			return;
+		}
+	} else {
+		value = utils.isEmpty(value)?"":value;
+	}
+	var params = '';
+	if(!utils.isEmpty(value)) {
+		params = paramName+"="+value;
+	}
+	if(!utils.isEmpty(busiName)) {
+		params += "&busiName="+busiName;
+		if(!utils.isEmpty(op)) {
+			params = params+"&op="+op;
+		}
+	}
+	var is = true;
+	if(utils.isNotEmpty(beforeCheck)) {
+		beforeCheck = eval(beforeCheck);
+		if(typeof(beforeCheck) == 'function') {
+			is = beforeCheck(paramName,value);
+		}
+	}
+	if(utils.isEmpty(uri) || !is) {
+		return;
+	}
+	if(!utils.isEmpty(params)) {
+		if(utils.isContain(uri, "?")) {
+			uri = uri+"&"+params;
 		} else {
-			$obj = obj;
+			uri = uri+"?"+params;
 		}
-		var uri = $obj.data("uri");
-		var title = $obj.data("title");
-		var value = $obj.attr("selected-value");
-		var busiName = $obj.data("busi");
-		var paramName = $obj.data("param-name");
-		var selectedType = $obj.data("selected-type");
-		var beforeCheck = $obj.data("before-check");
-		selectedType = utils.isEmpty(selectedType)?'none-selected':selectedType;
-		var width = $obj.data("width");
-		width = utils.regexNum(width)?width:600;
-		paramName = utils.isEmpty(paramName)?'id':paramName;
-		if(!utils.isEmpty(selectedType)) {
-			if(selectedType=='one-selected') {
-				if(!utils.isEmpty(value) && value.indexOf(',')>0){
-					BootstrapDialogUtil.warningAlert("只能选择一条数据!");
-					return;
-				} else if(utils.isEmpty(value)) {
-					BootstrapDialogUtil.warningAlert("请选择一条数据!");
-					return;
-				}
-			} else if(selectedType== 'multi-selected') {
-				if(utils.isEmpty(value)) {
-					BootstrapDialogUtil.warningAlert("请选择数据!");
-					return;
-				}
-			} else {
-				value = utils.isEmpty(value)?"":value;
-			}
-			var params = '';
-			if(!utils.isEmpty(value)) {
-				params = paramName+"="+value;
-			}
-			if(!utils.isEmpty(busiName)) {
-				params += "&busiName="+busiName;
-				if(!utils.isEmpty(op)) {
-					params = params+"&op="+op;
-				}
-			}
-			var is = true;
-			if(utils.isNotEmpty(beforeCheck)) {
-				beforeCheck = eval(beforeCheck);
-				if(typeof(beforeCheck) == 'function') {
-					is = beforeCheck(paramName,value);
-				}
-			}
-			if(!utils.isEmpty(uri) && is) {
-				if(!utils.isEmpty(params)) {
-					if(utils.isContain(uri, "?")) {
-						uri = uri+"&"+params;
-					} else {
-						uri = uri+"?"+params;
-					}
-			    }
-				if(!utils.isEmpty(flag) && flag == 'open-self') {
-					//loadLocation(uri);
-					openTab(title, uri,true);
-				} else if(!utils.isEmpty(flag) && flag == 'open-new-tab') {
-					//loadLocation(uri);
-					openTab(title, uri,true);
-				} else {
-					BootstrapDialogUtil.loadUriDialog(title,uri,width,"#fff",false,function(){
-						initEvent();
-					});
-				}
-			}
-		}
+	}
+	if(!utils.isEmpty(flag) && flag == 'open-self') {
+		openTab(title, uri,true);
+	} else if(!utils.isEmpty(flag) && flag == 'open-new-tab') {
+		openTab(title, uri,true);
+	} else {
+		BootstrapDialogUtil.loadUriDialog(title,uri,width,"#fff",false,function(dialog){
+			initEvent(dialog.getModal());
+		});
 	}
 }
 
@@ -2272,52 +2932,48 @@ function openProp(obj,op,flag) {
  * @param start
  */
 function selectRelate(datas,$this,start) {
-	if(utils.isNotEmpty(datas)) {
-		 var otherValue = datas;
-		 if(utils.isNotEmpty(otherValue)) {
-			 var len = otherValue.length-start;
-			 var $parentDiv = $this.parents("td:eq(0)");
-			 var isTd = true;
-			 if(utils.isEmpty($parentDiv.html())) {
-				 isTd = false;
-				 $parentDiv = $this.parents(".form-group:eq(0)").parent();
-			 }
-			 var $currentDiv = $parentDiv;
-			 for (var i = 0; i < len; i++) {
-				 $parentDiv = $currentDiv.next();
-				 var $input = $parentDiv.find(".form-control");
-				 if(utils.isNotEmpty($input.attr("class"))) {
-					 $input.val(otherValue[i+start]);
-					 $currentDiv = $parentDiv;
-				 } else {
-					 var isBr = false;
-					 var $tmp = $parentDiv.next();
-					 if(utils.isNotEmpty($tmp.attr("class")) || utils.isNotEmpty($tmp.html())) {
-						 $currentDiv = $tmp;
-						 $input = $currentDiv.find(".form-control");
-						 if(utils.isNotEmpty($input.attr("class"))) { 
-							 $input.val(otherValue[i+start]);
-						 } else {
-							 isBr = true;
-						 }
-					 } else {
-						 isBr = true;
-					 }
-					 if(isBr) {
-						 $currentDiv = findNextInput($currentDiv,otherValue[i+start]);
-						 if(null == $currentDiv) {
-							 break;
-						 } 
-					 }
-				 }
-				 if(isTd && !isBr) {
-					 //console.log("执行表格");
-					 $currentDiv = $input.parents("td:eq(0)");
-				 } else {
-					 //$currentDiv = $input.parents(".form-group:eq(0)").parent();
-				 }
+	if(utils.isEmpty(datas)) {
+		return;
+	}
+	var otherValue = datas;
+	var len = otherValue.length-start;
+	var $parentDiv = $this.parents("td:eq(0)");
+	var isTd = true;
+	if(utils.isEmpty($parentDiv.html())) {
+		 isTd = false;
+		 $parentDiv = $this.parents(".form-group:eq(0)").parent();
+	}
+	var $currentDiv = $parentDiv;
+	for (var i = 0; i < len; i++) {
+		$parentDiv = $currentDiv.next();
+		var $input = $parentDiv.find(".form-control");
+		if(utils.isNotEmpty($input.attr("class"))) {
+			$input.val(otherValue[i+start]);
+			$currentDiv = $parentDiv;
+		} else {
+			var isBr = false;
+			var $tmp = $parentDiv.next();
+			if(utils.isNotEmpty($tmp.attr("class")) || utils.isNotEmpty($tmp.html())) {
+				$currentDiv = $tmp;
+				$input = $currentDiv.find(".form-control");
+				if(utils.isNotEmpty($input.attr("class"))) { 
+					$input.val(otherValue[i+start]);
+				} else {
+					isBr = true;
+				}
+			} else {
+				isBr = true;
 			}
-		 }
+			if(isBr) {
+				$currentDiv = findNextInput($currentDiv,otherValue[i+start]);
+				if(null == $currentDiv) {
+					break;
+				} 
+			}
+		}
+		if(isTd && !isBr) {
+			$currentDiv = $input.parents("td:eq(0)");
+		}
 	}
 }
 
@@ -2329,16 +2985,16 @@ function selectRelate(datas,$this,start) {
  */
 function findNextInput($parentDiv,value){
 	$parentDiv = $parentDiv.parent().next();
-	var $input = hasInput($parentDiv);
+	var $input = _hasInput($parentDiv);
 	if(null != $input) {
 		var $tmp = $parentDiv.children().eq(0);
-		$input = hasInput($tmp);
+		$input = _hasInput($tmp);
 		if(null != $input) {
 			$input.val(value);
 			$parentDiv = $tmp;
 		} else {
 			$parentDiv = $parentDiv.children().eq(1);
-			$input = hasInput($parentDiv);
+			$input = _hasInput($parentDiv);
 			if(null != $input) {
 				$input.val(value);
 			} else {
@@ -2349,17 +3005,18 @@ function findNextInput($parentDiv,value){
 		$parentDiv = null;
 	}
 	return $parentDiv;
-}
-/**
- * 判断是否有input[class=form-control]
- * @param $div
- * @returns
- */
-function hasInput($div) {
-	var $input = $div.find(".form-control");
-	var className = $input.attr("class");
-	if(utils.isEmpty(className)) {
-		$input = null;
+	
+	/**
+	 * 判断是否有input[class=form-control]
+	 * @param $div
+	 * @returns
+	 */
+	function _hasInput($div) {
+		var $input = $div.find(".form-control");
+		var className = $input.attr("class");
+		if(utils.isEmpty(className)) {
+			$input = null;
+		}
+		return $input;
 	}
-	return $input;
 }

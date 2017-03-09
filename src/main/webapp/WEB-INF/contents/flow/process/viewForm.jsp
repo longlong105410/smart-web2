@@ -12,9 +12,7 @@
 				<div class="panel-tabs-tab">
 					<ul class="nav nav-tabs ui-state-default" role="tablist">
 						<li class="active"><a href="#view-process-form-tab" role="presentation" data-toggle="tab"> 表单信息</a></li>
-						<c:if test="${isAtt==1 }">
-						  <li><a href="#view-process-att-tab" id="view-process-att-tab-a" role="presentation" data-toggle="tab"> 附件</a></li>
-						</c:if>
+						<li><a href="#view-process-att-tab" id="view-process-att-tab-a" role="presentation" data-toggle="tab"> 附件</a></li>
 						<li><a href="#view-process-record-tab" role="presentation" data-toggle="tab"> 流转记录</a></li>
 					</ul>
 				</div>
@@ -33,11 +31,9 @@
 					       </form>
 					   </div>
 					</div>
-					<c:if test="${isAtt==1 }">
-				    <div role="tabpanel" class="tab-pane" id="view-process-att-tab">
+					<div role="tabpanel" class="tab-pane" id="view-process-att-tab">
 						<div class="cnoj-load-url" data-uri="process/attachment/list?processId=${processId}&orderId=${orderId}&taskId=${taskId}&taskKey=${taskKey}&formId=${formId }&isAtt=${isAtt}&isView=1" ></div>
 					</div>
-					</c:if>
 					<div role="tabpanel" class="tab-pane" id="view-process-record-tab">
 						<div class="cnoj-load-url" data-uri="process/processHandleInfo?orderId=${orderId }" ></div>
 					</div>
@@ -53,7 +49,7 @@
 	    	formData:'${output}'
 	    });
 	   var mainContentH = $(window).height() - 70;
-	   var flowFormContentH = mainContentH - 40 - 35;
+	   var flowFormContentH = mainContentH - 40 - 35 - 25;
 	   $("#view-flow-form-panel-contents").height(flowFormContentH);
   });
 </script>

@@ -90,7 +90,8 @@ BootstrapDialogUtil.dialogContent = function(title,contents,popWidth,bgColor,isF
 	if(typeof(isFooter) === 'undefined') {
 		isFooter = false;
 	}
-	 BootstrapDialog.show({
+	var dialog = null;
+	BootstrapDialog.show({
 	 	title:title,draggable: true,width:popWidth,backgroundColor:bgColor,
 	 	message: function(dialog) {
 	 		var html = dialog.getModalFooter();
@@ -102,7 +103,7 @@ BootstrapDialogUtil.dialogContent = function(title,contents,popWidth,bgColor,isF
 	 	}
 	 });
 	 if(typeof(callback) !== 'undefined' && null != callback && typeof(callback) === 'function') {
-  	   callback();
+  	   callback(dialog);
      }
 }
 

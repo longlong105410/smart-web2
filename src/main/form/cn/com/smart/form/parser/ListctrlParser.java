@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -35,6 +36,7 @@ public class ListctrlParser implements IFormParser {
 		String sum = StringUtil.handNull(dataMap.get("orgsum"));*/
 		String pluginType = StringUtils.handNull(dataMap.get("plugintype"));
 		String pluginUri = StringUtils.handNull(dataMap.get("pluginuri"));
+		String fieldRequire = StringUtils.handNull(dataMap.get("fieldrequire"));
 		
 		String colValue = StringUtils.handNull(dataMap.get("orgcolvalue"));
 		String fieldName = StringUtils.handNull(dataMap.get("bind_table_field"));
@@ -44,7 +46,6 @@ public class ListctrlParser implements IFormParser {
 			tableWidth = "100%";
 		}
 		
-		
 		String[] titles = title.split("`");
 		String[] colTypes = colType.split("`");
 		//String[] units = unit.split("`");
@@ -53,6 +54,7 @@ public class ListctrlParser implements IFormParser {
 		String[] pluginUris = pluginUri.split("`");
 		String[] colValues = colValue.split("`");
 		String[] fieldNames = fieldName.split("`");
+		String[] fieldRequires = fieldRequire.split("`");
 		
 		if(pluginTypes.length<titles.length) {
 			String[] tmps = pluginTypes;
@@ -118,6 +120,7 @@ public class ListctrlParser implements IFormParser {
         
         StringBuilder thBuild = new StringBuilder(),tbBuild = new StringBuilder(),tfTdBuild = new StringBuilder();
         int isNum = 0,tdNum = 0;
+        String require = "";
         for (int i=0;i<titles.length;i++) {
         	tdNum++;
 			/*String sumTotalHtml = "";
@@ -136,14 +139,20 @@ public class ListctrlParser implements IFormParser {
 			} else if("int".equals(colTypes[i])) {
 				tbBuild.append("<td><input class=\"form-control input-medium "+fieldNames[i]+"\" "+sumTotalHtml+" class=\""+fieldNames[i]+"\" type=\"text\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\">"+units[i]+"</td>");
 			}*/
+			if(YesNoType.YES.getStrValue().equals(fieldRequires[i])) {
+				require = " require";
+			} else {
+				require = "";
+			}
+			pluginTypes[i] += pluginTypes[i]+require;
 			if("text".equals(colTypes[i])) {
 				if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
-					tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\"  name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+					tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 				} else {
-					tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+					tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 				}
 			} else if("textarea".equals(colTypes[i])) {
-				tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+				tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
 			} 
 			/*else if("int".equals(colTypes[i])) {
 				tbBuild.append("<td><input class=\"form-control input-medium "+fieldNames[i]+"\" "+sumTotalHtml+" class=\""+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");

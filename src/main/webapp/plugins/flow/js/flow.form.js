@@ -8,15 +8,17 @@ var END_NODE_KEY = "end";
 		var defaultOptions = {
 			formData:null,
 			formFieldNames:null,
+			username:null,
+			deptName:null,
 			callback:null
 	    };
 		var setting = $.extend(true,defaultOptions,options);
 		var $this = $(this);
 		var $parent = $this.parent();
-		if(!$this.hasClass("v-hidden")) {
-			$this.addClass("v-hidden");
-			$parent.prepend('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
-		}
+		//if(!$this.hasClass("v-hidden")) {
+		$this.addClass("v-hidden");
+		$parent.prepend('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
+		//}
 		setTimeout(function() {
 			controlFormField();
 			initFormData(setting.formData);
@@ -27,18 +29,23 @@ var END_NODE_KEY = "end";
 			if(typeof(handleForm) === 'function') {
 				handleForm();
 			}
-			$parent.find(".cnoj-loading").remove();
+			$parent.find(">.cnoj-loading").remove();
 			$this.removeClass("v-hidden");
-		}, 500);
-		
+		}, 100);
 		
 		/**
 		 * 控制表单字段
 		 */
 		function controlFormField() {
-			$this.find("input,select,textarea").each(function(){
-				$(this).prop("disabled",true);
-				$(this).attr("title","");
+			$this.find("input,select,textarea,span.cnoj-checkbox,span.cnoj-radio").each(function(){
+				var $findElement = $(this);
+				var tagName = $findElement.prop("tagName").toLowerCase();
+				if(tagName == 'span' || tagName == 'select') {
+					$findElement.attr("data-edit-enable", "0");
+				} else {
+					$findElement.prop("disabled",true);
+					$findElement.attr("title","");
+				}
 			});
 			//所有list-ctrl属性改为只读
 			$this.find(".list-ctrl").find("input,select,textarea").each(function(){
@@ -47,10 +54,22 @@ var END_NODE_KEY = "end";
 			});
 			if(!utils.isEmpty(setting.formFieldNames)) {
 				var fieldNames = setting.formFieldNames.split(",");
+				var self = this;
 				for(var i=0;i<fieldNames.length;i++) {
-					$this.find("input[name='"+fieldNames[i]+"'],select[name='"+fieldNames[i]+"'],textarea[name='"+fieldNames[i]+"'],#"+fieldNames[i]).each(function(){
-						$(this).prop("disabled",false);
-						$(this).prop("readonly",false);
+					$this.find("input[name='"+fieldNames[i]+"'],select[name='"+fieldNames[i]+"'],textarea[name='"+fieldNames[i]+"'],#"+fieldNames[i]+",span[data-name='"+fieldNames[i]+"']").each(function(){
+						var $findElement = $(this);
+						var tagName = $findElement.prop("tagName").toLowerCase();
+						if(tagName == 'span') {
+							$findElement.attr("data-edit-enable", "1");
+						} else {
+							$findElement.prop("disabled",false);
+							$findElement.prop("readonly",false);
+							if($findElement.hasClass("cnoj-sysuser-defvalue")) {
+								$findElement.val(setting.username);
+							} else if($findElement.hasClass("cnoj-sysdeptname-defvalue")) {
+								$findElement.val(setting.deptName);
+							}
+						}
 					});
 				}
 			}
@@ -232,7 +251,8 @@ var END_NODE_KEY = "end";
 						 // }
 					   } else {
 						   var index = 0;
-						   $this.find("input[name='"+datas[i].name+"'],select[name='"+datas[i].name+"'],textarea[name='"+datas[i].name+"'],#"+datas[i].name).each(function(){
+						   var name = datas[i].name;
+						   $this.find("input[name='"+name+"'],select[name='"+name+"'],textarea[name='"+name+"'],#"+name+",span[data-name='"+name+"']").each(function(){
 							   var value = datas[i].value;
 							   var $findElement = $(this);
 							   var tagName = $findElement.prop("tagName").toLowerCase();

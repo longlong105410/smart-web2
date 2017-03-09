@@ -49,7 +49,9 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/flow/js/snaker.model.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/flow/js/snaker.editors.js"></script>
     
+    <!--  
    <script type="text/javascript" src="${pageContext.request.contextPath}/js/left-menu.js"></script>
+   -->
    <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/flow/js/flow.designer.js"></script>
 <!--[if lt IE 9]>
     <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/html5shiv.js"></script>

@@ -18,7 +18,7 @@ response.flushBuffer();
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">
+	<meta http-equiv="expires" content="-1">
     <meta name="description" content="">
     <meta name="author" content="">   
 	<meta http-equiv="keywords" content="${project.name }">
@@ -46,4 +46,8 @@ response.flushBuffer();
     
     <!-- Font-Awesome -->
 	<link href="${pageContext.request.contextPath}/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" /> 
-  
+<script type="text/javascript">
+	$.ajaxSetup ({
+		cache: false //关闭AJAX相应的缓存 
+	});
+</script>

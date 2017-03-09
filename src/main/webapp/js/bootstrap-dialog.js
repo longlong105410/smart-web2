@@ -680,9 +680,10 @@ var BootstrapDialog = null;
         },
         runCallback : function() {
         	var callback = this.options.callback;
+        	var self = this;
         	if(typeof(callback) === 'function') {
         		setTimeout(function(){
-        			callback();
+        			callback(self);
         		}, 300);
         	}
         }

@@ -17,6 +17,12 @@
 			<c:choose>
 			   <c:when test="${smartResp.result != 1 }">
 			      <tr><td colspan="6">没有查询到相关数据！</td></tr>
+			      <script type="text/javascript">
+				      var $attTabA = $("#view-process-att-tab-a");
+			          if($attTabA.find("span").hasClass("badge")) {
+			        	  $attTabA.find(".badge").remove();
+			          }
+			      </script>
 			   </c:when>
 			   <c:otherwise>
 			       <c:forEach var="datas" items="${smartResp.datas }" varStatus="st" >
@@ -30,7 +36,7 @@
 				    </tr>
 			       </c:forEach>
 			       <script type="text/javascript">
-			         var $attTabA = $("#process-att-tab-a");
+			         var $attTabA = $("#view-process-att-tab-a");
 			          if($attTabA.find("span").hasClass("badge")) {
 			        	  $attTabA.find(".badge").html('${fn:length(smartResp.datas)}');
 			          } else {

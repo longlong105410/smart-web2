@@ -50,11 +50,24 @@ public class TextParser implements IFormParser {
 			return null;
 		}
 		boolean isHide = false;
-		if("1".equals(StringUtils.handNull(dataMap.get("orghide")))) {
+		if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("orghide")))) {
 			isHide = true;
 		}
+		
+		String value = StringUtils.handNull(dataMap.get("value"));
+		String classDefaultTag = "";
+		if(StringUtils.isNotEmpty(value) && value.startsWith("${")) {
+			if("${today}".equals(value)) {
+				classDefaultTag = "cnoj-date-defvalue";
+			} else if("${username}".equals(value)) {
+				classDefaultTag = "cnoj-sysuser-defvalue";
+			} else if("${deptname}".equals(value)) {
+				classDefaultTag = "cnoj-sysdeptname-defvalue";
+			}
+			value = "";
+		}
 		StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<input type=\"text\" name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" value=\""+dataMap.get("value")+"\"  style=\""+dataMap.get("style")+"\"");
+		strBuild.append("<input type=\"text\" name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" value=\""+value+"\"  style=\""+dataMap.get("style")+"\"");
 		String dataFormat = StringUtils.handNull(dataMap.get("data_format"));
 		if(!StringUtils.isEmpty(dataFormat)) {
 			strBuild.append(" data-format=\""+dataFormat+"\"");
@@ -71,10 +84,11 @@ public class TextParser implements IFormParser {
 		if(StringUtils.isNotEmpty(relateFieldValue)) {
 			strBuild.append(" relate-field-value=\""+relateFieldValue+"\"");
 		}
+		String className = StringUtils.handNull(dataMap.get("class"))+" "+classDefaultTag;
 		String orgType = StringUtils.handNull(dataMap.get("orgtype"));
 		String inputPlugin = StringUtils.handNull(dataMap.get("input_plugin"));
 		if(!StringUtils.isEmpty(inputPlugin)) {
-			strBuild.append(" class=\""+dataMap.get("class"));
+			strBuild.append(" class=\""+className);
 			if(isHide) strBuild.append(" hide ");
 			strBuild.append(" "+inputPlugin+"\"");
 			strBuild.append(" data-uri=\""+StringUtils.handNull(dataMap.get("input_plugin_uri"))+"\"");
@@ -87,12 +101,12 @@ public class TextParser implements IFormParser {
 					strBuild.append(" data-is-show-all=\"no\"");
 			}
 		} else if(!("date").equals(orgType) && !"datetime".equals(orgType) && !"time".equals(orgType) && !"text".equals(orgType)){
-			strBuild.append(" class=\""+dataMap.get("class"));
+			strBuild.append(" class=\""+className);
 			if(isHide) strBuild.append(" hide ");
 			strBuild.append(" \"");
 			strBuild.append(" data-format=\""+orgType+"\" ");
 		} else {
-			strBuild.append(" class=\""+dataMap.get("class")+" "+(isHide?"hide":"")+" \"");
+			strBuild.append(" class=\""+className+" "+(isHide?"hide":"")+" \"");
 		}
 		strBuild.append(" />");
 		return strBuild.toString();

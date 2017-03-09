@@ -636,7 +636,7 @@ utils.selectItem = function(id,uri,defaultValue,callback) {
 		if(typeof(defaultValue) === 'undefined') {
 			defaultValue = '';
 		}
-		var $select = $(id);
+		var $select = (id instanceof jQuery) ? id:$(id);
 		$.get(uri,function(data){
 			var output = data;//$.parseJSON(data.output);
 			if(output.result=='1') {
@@ -693,7 +693,7 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 		if(typeof(isH) == 'undefined' || utils.isEmpty(isH)) {
 			isH = true;
 		}
-		var $wrap = $(id);
+		var $wrap = (id instanceof jQuery) ? id:$(id);
 		$.get(uri,function(data){
 			var output = data;//$.parseJSON(data.output);
 			if(output.result=='1') {
@@ -767,7 +767,7 @@ utils.radioItem = function(id,uri,defaultValue,name,isH,require,callback) {
 		} else {
 			defaultValueArray.push(defaultValue);
 		}
-		var $wrap = $(id);
+		var $wrap = (id instanceof jQuery) ? id:$(id);
 		$.get(uri,function(data){
 			var output = data;//$.parseJSON(data.output);
 			if(output.result=='1') {
@@ -1266,8 +1266,14 @@ utils.UUID = function() {
  * 处理表单打印标签
  * @param element
  */
-utils.handleFormPrintLabel = function(element) {
-	$(element).find("input[type=text],select,textarea").each(function(){
+utils.handleFormPrintLabel = function(element, $root) {
+	var $element = null
+	if(utils.isNotEmpty($root)) {
+		var $element = ($root instanceof jQuery) ? ($root.find(element)) : ($($root).find(element));
+	} else {
+		$element = $(element);
+	}
+	$element.find("input[type=text],select,textarea").each(function(){
 		var $obj = $(this);
 		var value = $obj.val();
 		if(utils.isNotEmpty(value)) {
@@ -1306,6 +1312,10 @@ utils.findPrevTag = function(obj, tag) {
 	var targetObj = null;
 	while(is && num<10 && utils.isNotEmpty($prev)) {
 		$prev = $prev.prev();
+		if($prev.length == 0) {
+			is = false;
+			break;
+		}
 		if(utils.isNotEmpty($prev) && $prev.prop("tagName").toLowerCase() == tag || 
 				$prev.hasClass(tag) || $prev.prop("id").toLowerCase() == tag) {
 			is = false;
