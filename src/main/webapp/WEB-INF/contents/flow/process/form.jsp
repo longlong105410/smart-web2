@@ -186,6 +186,8 @@
 <script type="text/javascript">
     $("#process-handle-form").flowForm({
     	formFieldNames:'${taskModel.formPropIds}',
+    	username:'${userInfo.fullName}',
+    	deptName: '${userInfo.deptName}',
     	formData:'${output}'
     });
    var mainContentH = $("#main-content").height()-$(".tabs-wrap").outerHeight(true);

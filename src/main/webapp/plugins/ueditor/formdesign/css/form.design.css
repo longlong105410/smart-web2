@@ -34,3 +34,5 @@ select[multiple] {height: 110px;}
 .input-medium {
   width: 120px;
 }
+.input-default-value label{display: inline-block;margin:0 2px;}
+.input-default-value label input {margin:0;}
