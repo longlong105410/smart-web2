@@ -48,10 +48,10 @@
 		var isBody = true;
 		//判断输入框是否在弹出窗口内
 		var $modelDialog = $this.parents(".modal-dialog");
-		if(!utils.isEmpty($modelDialog.attr("class"))) {
+		if($modelDialog.length > 0) {
 			isBody = false;
 		}
-		if(utils.isEmpty($newDiv.attr("id"))) {
+		if($newDiv.length == 0) {
 			if(!isBody) {
 				$this.after("<div id='"+newId+"' data-target-inputid='"+hiddenInputId+"' class='input-select-panel'></div>");
 			} else {
@@ -78,25 +78,15 @@
 				$newDiv.find(".input-select-content").html("没有搜索到相关数据");
 			} else {
 				loadData(setting.uri);
-				$(".search-btn").click(function(){
-					var uri = setting.uri;
-					if(utils.isContain(setting.uri,"?")) {
-						if(setting.uri.startWith("op/queryReq")) {
-							uri = setting.uri+"&"+setting.paramName+"="+$newDiv.find(".search-input").val();
-						} else if(utils.isContain(setting.uri,"op/"))
-							uri = setting.uri+"&paramName="+setting.paramName+"&paramValue="+$newDiv.find(".search-input").val();
-						else 
-							uri = setting.uri+"&"+setting.paramName+"="+$newDiv.find(".search-input").val();
-					} else {
-						if(setting.uri.startWith("op/queryReq")) {
-							uri = setting.uri+"?"+setting.paramName+"="+$newDiv.find(".search-input").val();
-						} else if(utils.isContain(setting.uri,"op/"))
-							uri = setting.uri+"?paramName="+setting.paramName+"&paramValue="+$newDiv.find(".search-input").val();
-						else 
-							uri = setting.uri+"?"+setting.paramName+"="+$newDiv.find(".search-input").val();
-					}
-					loadData(uri);
+				$newDiv.find(".search-btn").click(function(){
+					_search();
 					return false;
+				});
+				//如果在输入框中，按回车，则触发搜索
+				$newDiv.find(".search-input").keydown(function(event){
+					if(event.keyCode == 13) {
+						_search();
+					}
 				});
 			}
 			$newDiv.append("<div class='input-select-footer'></div>");
@@ -135,6 +125,26 @@
 				$this.prop("readonly",false);
 			}
 		});
+		
+		function _search() {
+			var uri = setting.uri;
+			if(utils.isContain(setting.uri,"?")) {
+				if(setting.uri.startWith("op/queryReq")) {
+					uri = setting.uri+"&"+setting.paramName+"="+$newDiv.find(".search-input").val();
+				} else if(utils.isContain(setting.uri,"op/"))
+					uri = setting.uri+"&paramName="+setting.paramName+"&paramValue="+$newDiv.find(".search-input").val();
+				else 
+					uri = setting.uri+"&"+setting.paramName+"="+$newDiv.find(".search-input").val();
+			} else {
+				if(setting.uri.startWith("op/queryReq")) {
+					uri = setting.uri+"?"+setting.paramName+"="+$newDiv.find(".search-input").val();
+				} else if(utils.isContain(setting.uri,"op/"))
+					uri = setting.uri+"?paramName="+setting.paramName+"&paramValue="+$newDiv.find(".search-input").val();
+				else 
+					uri = setting.uri+"?"+setting.paramName+"="+$newDiv.find(".search-input").val();
+			}
+			loadData(uri);
+		}
 		
 		function resize(isBody) {
 			var thisW = $this.outerWidth(true);
@@ -205,9 +215,10 @@
 							contents += "<div class='option-row'><a href='#' data-all-data='"+allData+"' data-value='"+datas[i][0]+"'>"+datas[i][1]+"</a></div>";
 						}
 						$showContentTag.html(contents);
-						$(".option-row a").unbind("click");
-						$(".option-row a").click(function(){
-							var hiddenInputId = $(this).parents(".input-select-panel").data("target-inputid");
+						$showContentTag.find(".option-row a").unbind("click");
+						$showContentTag.find(".option-row a").click(function(){
+							var $inputSelectPanel = $(this).parents(".input-select-panel:eq(0)");
+							var hiddenInputId = $inputSelectPanel.data("target-inputid");
 							var $hiddenInput = $("#"+hiddenInputId);
 							var $input = utils.findPrevTag($hiddenInput,"input");
 							$hiddenInput.val($(this).data("value"));
@@ -216,7 +227,7 @@
 								$input.trigger("change");
 								$input.prop("readonly",false);
 							}
-							$(".input-select-panel").hide();
+							$inputSelectPanel.hide();
 							var allData= $(this).data("all-data");
 							var array = null;
 							if(utils.isNotEmpty(allData)){
@@ -278,7 +289,7 @@
 		 * 销毁下拉框
 		 */
 		function destory() {
-			$(".option-row a").unbind("click");
+			$("#"+newId).find(".option-row a").unbind("click");
 			var $inputSelectFooter = $("#"+newId).find(".input-select-footer");
 			$inputSelectFooter.find(".previous a").unbind("click");
 			$inputSelectFooter.find(".next a").unbind("click");

@@ -3,7 +3,7 @@
 <div class="wrap-content">
     <div data-subtract-height="30">
         <div class="panel-search">
-              <form class="form-inline" id="search-form-user" method="post" role="form" action="user/rolelist" target="#user-role-tab">
+              <form class="form-inline cnoj-entry-submit" id="search-form-user" method="post" role="form" action="user/rolelist" target="#user-role-tab">
                   <input type="hidden" name="id" value="${searchParam.id }" />
                   <div class="form-group p-r-10">
 				    <label for="search-input02">关键字：</label>

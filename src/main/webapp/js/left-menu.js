@@ -2,6 +2,7 @@
  * @author lmq
  */
 var selectedMenuIndex = 0;
+var uuid = 1;
 $(document).ready(function(){
 	initMenuHeight();
 	$(".menu-resizer-toggler").click(function() {
@@ -37,7 +38,9 @@ $(document).ready(function(){
 		$("#main-content").trigger("resize");
 	});
 	$(window).resize(function(){
+		uuid = utils.UUID();
 		initMenuHeight();
+		resizePanel(getActiveTabPanel());
 	});
 	menuTreeListener();
 	tabListner();
@@ -86,7 +89,8 @@ function tableAuto($activeTab) {
  * 初始化菜单高度
  */
 function initMenuHeight() {
-	var h = $(document).height();
+	//var h = $(document).height();
+	var h = $(window).height();
 	var vh = $(".header-body-dividing").outerHeight(true);
 	h = h - $(".wrap-footer").outerHeight(true) - $(".header").outerHeight(true)-vh-3;
     var menuResizerH = h;
@@ -338,6 +342,10 @@ function tabListner() {
 				$target.css("visibility","visible");
 				$("body").css("overflow","auto");
 			}, 100);
+		},
+		onSelect: function(title, index) {
+			var tab = $('#main-tab').tabs('getTab', index);
+			resizePanel(tab.panel());
 		}
 	});
 	$('#main-tab').tabsContextMenu();
@@ -372,4 +380,21 @@ function getActiveTabPanel() {
 function getActiveTab() {
 	var tab = $('#main-tab').tabs('getSelected');
 	return tab;
+}
+
+/**
+ * 重写计算tab中panel自适应的高度
+ * @param panel
+ */
+function resizePanel(panel) {
+	var panelUUID = panel.attr("uuid");
+	if(uuid != panelUUID) {
+		tableWrapListener(panel, true);
+		limitHeightListener(panel,true);
+		panel.find(".cnoj-jq-grid").each(function(){
+			$(this).setGridWidth($("#main-content").width()-10);
+			$(this).setGridHeight(getMainHeight()-10);
+		});
+		panel.attr("uuid",uuid);
+	}
 }

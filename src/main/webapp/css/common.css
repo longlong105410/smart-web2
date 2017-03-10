@@ -95,7 +95,7 @@ tr.text-center td,tr.text-center th {text-align: center;}
 	font-size:12px;
 }
 .dropdown-loading {padding-top:5px;padding-left:5px;padding-bottom:10px;}
-.cnoj-loading {padding-top:20px;padding-left:50px;padding-bottom:20px;}
+.cnoj-loading {position: absolute;padding-top:20px;padding-left:50px;padding-bottom:20px;}
 
 .v-show {visibility:visible;}
 .v-hidden {visibility: hidden;}
@@ -111,3 +111,7 @@ tr.text-center td,tr.text-center th {text-align: center;}
 .v-d-header {font-weight: 700;color: #555555;margin-bottom: 5px; }
 .v-d-content {line-height: 150%;padding-left: 5px;color: #444444;}
 .cnoj-checkbox p {margin-bottom: 5px;}
+
+.text-inline .form-control-feedback {
+	top: -8px;
+}

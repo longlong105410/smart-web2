@@ -1,9 +1,9 @@
-<%@page import="cn.com.smart.web.tag.bean.CustomBtn"%>
-<%@page import="cn.com.smart.web.bean.UserInfo"%>
-<%@page import="cn.com.smart.web.tag.bean.DelBtn"%>
-<%@page import="cn.com.smart.web.service.OPAuthService"%>
-<%@page import="cn.com.smart.web.helper.HttpRequestHelper"%>
-<%@page import="cn.com.smart.web.spring.util.SpringBeanFactoryUtil"%>
+<%@page import="yn.cn.com.smart.web.tag.bean.CustomBtn"%>
+<%@page import="yn.cn.com.smart.web.bean.UserInfo"%>
+<%@page import="yn.cn.com.smart.web.tag.bean.DelBtn"%>
+<%@page import="yn.cn.com.smart.web.service.OPAuthService"%>
+<%@page import="yn.cn.com.smart.web.helper.HttpRequestHelper"%>
+<%@page import="yn.cn.com.smart.web.spring.util.SpringBeanFactoryUtil"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -33,10 +33,10 @@
     pageContext.setAttribute("jumpNode", jumpNode);
     pageContext.setAttribute("formEdit", formEdit);
 %>
-<div class="wrap-content">
+<div class="wrap-content-order">
     <div>
         <div class="panel-search">
-              <form class="form-inline search-param" id="search-form-order" method="post" role="form" action="process/mgr/orderList" target="${target }">
+              <form class="form-inline search-param cnoj-entry-submit" id="search-form-order" method="post" role="form" action="process/mgr/orderList" target="${target }">
                   <div class="form-group p-r-10">
 				    <label for="search-input01">流程名称：</label>
 				    <input type="text" class="form-control input-form-sm-control" id="search-input01" name="name" placeholder="请输入流程名称或标题" value="${searchParam.name }"/>

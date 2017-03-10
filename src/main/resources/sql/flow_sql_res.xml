@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap SYSTEM "./mapsql.dtd">
+<!DOCTYPE sqlMap SYSTEM "mapsql.dtd">
 <sqlMap>
 	<!-- 流程用到的sql语句 -->
 	
@@ -89,7 +89,7 @@
 	 <!-- 流程附件列表 -->
 	 <sqlUnit name="process_attachment_list">
 	     <sql>
-	         select pa.id,pa.attachment_id,a.file_name,a.file_size,a.file_type,a.create_time,u.full_name,a.user_id,pa.task_id  
+	         select pa.id,pa.attachment_id,a.file_name,a.file_size,a.file_suffix,a.create_time,u.full_name,a.user_id,pa.task_id  
 	         from t_flow_attachment pa,t_n_attachment a,t_n_user u where pa.attachment_id=a.id and a.user_id = u.id 
 	         [ and pa.form_id=:formId] [ and a.user_id=:userId] [ and pa.order_id=:orderId] 
 	     </sql>

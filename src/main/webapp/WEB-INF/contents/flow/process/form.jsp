@@ -190,9 +190,18 @@
     	deptName: '${userInfo.deptName}',
     	formData:'${output}'
     });
-   var mainContentH = $("#main-content").height()-$(".tabs-wrap").outerHeight(true);
-   var flowFormContentH = mainContentH - $(".flow-process").outerHeight(true) - $(".panel-tabs-tab").outerHeight(true);
-   $("#flow-form-panel-contents").height(flowFormContentH-30);
+   var $wrap = $("#process-handle-form").parents(".wrap-content:eq(0)");
+   autoHeight();
+   $(window).resize(function(){
+	   setTimeout(function() {
+		 autoHeight();
+	   }, 200);
+   });
    $("#process-handle-form").formPropListener();
-   //$(".form-prop").height(flowFormContentH-30);
+   
+   function autoHeight() {
+	   var mainContentH = getMainHeight()-getTabHeaderHeight();
+	   var flowFormContentH = mainContentH - $wrap.find(".flow-process").outerHeight(true) - $wrap.find(".panel-tabs-tab").outerHeight(true);
+	   $("#flow-form-panel-contents").height(flowFormContentH-20);
+   }
 </script>

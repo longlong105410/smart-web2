@@ -3,7 +3,7 @@
 <div class="wrap-content">
     <div>
         <div class="panel-search borer-bottom">
-              <form class="form-inline" id="search-form-role" method="post" role="form" action="role/simplist" target="#role-tab">
+              <form class="form-inline cnoj-entry-submit" id="search-form-role" method="post" role="form" action="role/simplist" target="#role-tab">
                   <div class="form-group p-r-10">
 				    <label for="search-input01">名称：</label>
 				    <input type="text" class="form-control input-form-sm-control" id="search-input01" name="name" placeholder="请输入角色名" value="${searchParam.name }"/>

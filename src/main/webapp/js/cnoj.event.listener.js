@@ -1437,27 +1437,30 @@ function submitBtnListener($elementWrap) {
 /**
  * 监听表格内容的高度
  * @param $elementWrap
+ * @param isResize 是否改变窗口大小
  * 标识
  * class="cnoj-table-wrap"
  * 该标识是用于包裹表格而设计的，非表格请使用"auto-limit-height"标识
  */
-function tableWrapListener($elementWrap) {
+function tableWrapListener($elementWrap, isResize) {
+	isResize = utils.isEmpty(isResize) ? false : (isResize == true);
 	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
 		$(".cnoj-table-wrap").each(function(){
-			return _handler($(this));
+			return _handler($(this), isResize);
 		});
 	} else {
 		$elementWrap.find(".cnoj-table-wrap").each(function(){
-			return _handler($(this));
+			return _handler($(this), isResize);
 		});
 	}
 
 	/**
 	 * 处理元素
 	 * @param $element
+	 * @param isResize
 	 */
-	function _handler($element) {
-		if($element.hasClass("cnoj-table-wrap-listener")) {
+	function _handler($element, isResize) {
+		if(!isResize && $element.hasClass("cnoj-table-wrap-listener")) {
 			return true;
 		}
 		$element.addClass("cnoj-table-wrap-listener");
@@ -1508,7 +1511,7 @@ function tableWrapListener($elementWrap) {
 		$tableWrap.height(h - 5);
 		$tableWrap.css({"overflow":"auto"});
 		if($tableWrap.hasClass("table-body-scroll")) {
-			_separateTableHeaderAndBody($tableWrap, $panelFooter, h);
+			_separateTableHeaderAndBody($tableWrap, $panelFooter, h, isResize);
 		}
 		
 	}
@@ -1516,29 +1519,27 @@ function tableWrapListener($elementWrap) {
 	/**
 	 * 表头和表内容分离，即thead头作为一个表格，tbody作为一个表格
 	 * @param $tableWrap
+	 * @param $panelFooter
 	 * @param h
+	 * @param isResize
 	 */
-	function _separateTableHeaderAndBody($tableWrap, $panelFooter, h) {
+	function _separateTableHeaderAndBody($tableWrap, $panelFooter, h, isResize) {
+		var $tableTheader = null;
+		if(isResize) {
+			$tableTheader = $tableWrap.prev().find(".table-theader");
+			__autoTableHeight($tableWrap, $tableTheader, $panelFooter, h);
+			return;
+		}
 		//调整表格；使表格头和表格内容分离
 		var $table = $tableWrap.find("table");
 		var $theadTr = $table.find("thead").clone(true);
-		var $tableTheader = null;
+		
 		if(!utils.isEmpty($theadTr)) {
 			$tableWrap.before("<div class='table-theader-bg "+$table.find("thead").find("tr").attr("class")+"'><div class='table-theader' data-height='"+$table.find("thead").find("tr").data("height")+"'><table class='"+$table.attr("class")+"'></table></div></div>");
 			$table.find("thead").remove();
 			$tableTheader = $tableWrap.prev().find(".table-theader");
 			$tableTheader.find("table").append($theadTr);
-			var panelHeadingHeight = 0;
-			var panelHeadingDataH = $panelFooter.data("height");
-			if(utils.isNotEmpty(panelHeadingDataH)) {
-				panelHeadingHeight = panelHeadingDataH;
-			} else {
-				panelHeadingHeight = $tableTheader.outerHeight(true);
-				panelHeadingHeight = Math.ceil(panelHeadingHeight);
-			}
-			panelHeadingHeight = utils.isEmpty(panelHeadingHeight)?0:panelHeadingHeight;
-			h = h - panelHeadingHeight;
-			$tableWrap.height(h);
+			__autoTableHeight($tableWrap, $tableTheader, $panelFooter, h);	
 		}
 		$tableWrap.css({"overflow":"auto"});
 		$parentWrap = null;
@@ -1553,33 +1554,57 @@ function tableWrapListener($elementWrap) {
 			} else 
 				$tableTheader.css({"width":"auto"});
 		});
+		
+		/**
+		 * 自动计算表格高度
+		 * @param $tableWrap
+		 * @param $tableTheader
+		 * @param $panelFooter
+		 */
+		function __autoTableHeight($tableWrap, $tableTheader, $panelFooter, h) {
+			//$tableTheader = $tableWrap.prev().find(".table-theader");
+			var panelHeadingHeight = 0;
+			var panelHeadingDataH = $panelFooter.data("height");
+			if(utils.isNotEmpty(panelHeadingDataH)) {
+				panelHeadingHeight = panelHeadingDataH;
+			} else {
+				panelHeadingHeight = $tableTheader.outerHeight(true);
+				panelHeadingHeight = Math.ceil(panelHeadingHeight);
+			}
+			panelHeadingHeight = utils.isEmpty(panelHeadingHeight)?0:panelHeadingHeight;
+			h = h - panelHeadingHeight;
+			$tableWrap.height(h);
+		}
 	}
 }
 
 /**
  * 监听限制高度标识
  * @param $elementWrap
+ * @param isResize
  * 标识
  * class="cnoj-auto-limit-height"
  * 该标识会根据浏览器高度，自适应被该标识标记的DIV层
  */
-function limitHeightListener($elementWrap) {
+function limitHeightListener($elementWrap, isResize) {
+	isResize = utils.isEmpty(isResize) ? false : (isResize == true);
 	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
 		$(".cnoj-auto-limit-height").each(function(){
-			_handler($(this));
+			_handler($(this), isResize);
 		});
 	} else {
 		$elementWrap.find(".cnoj-auto-limit-height").each(function(){
-			_handler($(this));
+			_handler($(this), isResize);
 		});
 	}
 
 	/**
 	 * 处理元素
 	 * @param $element
+	 * @param isResize
 	 */
-	function _handler($element) {
-		if(!$element.hasClass("cnoj-auto-limit-height-listener")) {
+	function _handler($element, isResize) {
+		if(isResize || !$element.hasClass("cnoj-auto-limit-height-listener")) {
 			$element.addClass("cnoj-auto-limit-height-listener");
 			var h = getMainHeight();
 			var subtractHeight = $element.data("subtract-height");
@@ -1914,7 +1939,6 @@ function inputCheckboxListener($elementWrap) {
 			var name = $element.data("name");
 			name = utils.handleNull(name);
 			var editEnable = $element.data("edit-enable");
-			console.log(editEnable);
 			var isEditEnable = (utils.isEmpty(editEnable) || editEnable == 1) ? true : false;
 			if(!utils.isEmpty(uri)) {
 				utils.checkboxItem($element, uri, defaultValue, name, isH, require, function(){
@@ -2822,11 +2846,11 @@ function initEvent($elementWrap) {
 	selectListener($elementWrap);
 	cascadeSelectListener($elementWrap);
 	loadUrlListener($elementWrap);
-	//handleEntrySubmit();
 	spinnerNumListener($elementWrap);
 	inputPluginEvent($elementWrap);
 	printListener($elementWrap);
 	popoverListener($elementWrap);
+	handleEntrySubmit($elementWrap);
 }
 
 function inputPluginEvent($elementWrap) {

@@ -597,9 +597,7 @@ utils.closeWaitLoading = function() {
  */
 utils.selectDataItem = function(id,datas,defaultValue,callback) {
 	if(!this.isEmpty(datas) && datas.length>0) {
-		if(typeof(defaultValue) === 'undefined') {
-			defaultValue = '';
-		}
+		defaultValue = utils.handleNull(defaultValue);
 		var options = '';
 		var selectValue = '';
 		for(var i=0;i<datas.length;i++) {
@@ -633,9 +631,7 @@ utils.selectDataItem = function(id,datas,defaultValue,callback) {
  */
 utils.selectItem = function(id,uri,defaultValue,callback) {
 	if(!this.isEmpty(uri)) {
-		if(typeof(defaultValue) === 'undefined') {
-			defaultValue = '';
-		}
+		defaultValue = utils.handleNull(defaultValue);
 		var $select = (id instanceof jQuery) ? id:$(id);
 		$.get(uri,function(data){
 			var output = data;//$.parseJSON(data.output);
@@ -682,9 +678,7 @@ utils.selectItem = function(id,uri,defaultValue,callback) {
 utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 	if(!this.isEmpty(uri)) {
 		var defaultValueArray = new Array();
-		if(typeof(defaultValue) === 'undefined') {
-			defaultValue = '';
-		}
+		defaultValue = utils.handleNull(defaultValue);
 		if(defaultValue.indexOf(",")) {
 			defaultValueArray = defaultValue.split(",");
 		} else {
@@ -759,9 +753,7 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 utils.radioItem = function(id,uri,defaultValue,name,isH,require,callback) {
 	if(!this.isEmpty(uri)) {
 		var defaultValueArray = new Array();
-		if(typeof(defaultValue) === 'undefined') {
-			defaultValue = '';
-		}
+		defaultValue = utils.handleNull(defaultValue);
 		if(defaultValue.indexOf(",")) {
 			defaultValueArray = defaultValue.split(",");
 		} else {
@@ -829,9 +821,7 @@ utils.radioItem = function(id,uri,defaultValue,name,isH,require,callback) {
  */
 utils.selectCascadeItem = function(id,cascadeId,uri,paramName,defaultValue,changeId) {
 	if(utils.isNotEmpty(uri)) {
-		if(typeof(defaultValue) === 'undefined') {
-			defaultValue = '';
-		}
+		defaultValue = utils.handleNull(defaultValue);
 		if(utils.isEmpty(cascadeId)) {
 			return false;
 		}

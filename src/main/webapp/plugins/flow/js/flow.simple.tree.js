@@ -3,23 +3,23 @@
  */
 function simpleTreeListener(tag) {
 	tag = utils.isEmpty(tag)?"":tag+" ";
-	$(tag+".tr-parent-tree").click(function(){
+	$(tag+" .tr-parent-tree").click(function(){
  	   var $this = $(this);
-	   var classNames = $this.attr("class");
-	   if(!utils.isEmpty(classNames) && utils.isContain(classNames, "shrink-data")) {
+	   //var classNames = $this.attr("class");
+ 	   if($this.hasClass("shrink-data")) {
 		   $this.removeClass("shrink-data");
 		   $this.addClass("expand-data");
 		   var $uiIcon = $this.find("span.ui-icon");
 		   $uiIcon.removeClass("ui-icon-triangle-1-e");
 		   $uiIcon.addClass("ui-icon-triangle-1-s");
-		   $("."+$this.attr("id")).show();
+		   $(tag+" ."+$this.attr("id")).show();
 	   } else {
 		   $this.removeClass("expand-data");
 		   $this.addClass("shrink-data");
 		   var $uiIcon = $this.find("span.ui-icon");
 		   $uiIcon.removeClass("ui-icon-triangle-1-s");
 		   $uiIcon.addClass("ui-icon-triangle-1-e");
-		   $("."+$this.attr("id")).hide();
+		   $(tag+" ."+$this.attr("id")).hide();
 	   }
    });
 	

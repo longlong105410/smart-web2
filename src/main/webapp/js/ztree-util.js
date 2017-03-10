@@ -70,10 +70,10 @@ var zTreeInstance = new Array();
 			var isBody = true;
 			//判断输入框是否在弹出窗口内
 			var $modelDialog = $this.parents(".modal-dialog");
-			if(!utils.isEmpty($modelDialog.attr("class"))) {
+			if($modelDialog.length > 0) {
 				isBody = false;
 			}
-			if(utils.isEmpty($("#"+divTagId).attr("id"))) {
+			if($("#"+divTagId).length == 0) {
 				isCreate = true;
 				//判断输入框是否在弹出窗口内
 				if(!isBody) {
@@ -85,11 +85,11 @@ var zTreeInstance = new Array();
 				var top=0,left=0;
 				if(!isBody) {
 					var pos = $this.position();
-					top  = pos.top+$this.outerHeight(true);
+					top  = pos.top + $this.outerHeight(true);
 					left = pos.left;
 				} else {
 					var offset = $this.offset();
-					top  = offset.top+$this.outerHeight(true);
+					top  = offset.top + $this.outerHeight(true);
 					left = offset.left;
 				}
 				var winW = $(window).width();
@@ -103,6 +103,7 @@ var zTreeInstance = new Array();
 					}
 					w = minWidth;
 				}
+				console.log("top:"+top+",left:"+left);
 				h = setting.inputSelectHeight<1?200:setting.inputSelectHeight;
 				$showContainer.css({"top":top+"px","left":left+"px","width":w+"px"});
 				

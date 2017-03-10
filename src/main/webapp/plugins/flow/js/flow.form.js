@@ -42,7 +42,8 @@ var END_NODE_KEY = "end";
 				var tagName = $findElement.prop("tagName").toLowerCase();
 				if(tagName == 'span' || tagName == 'select') {
 					$findElement.attr("data-edit-enable", "0");
-				} else {
+				}
+				if(tagName != 'span') {
 					$findElement.prop("disabled",true);
 					$findElement.attr("title","");
 				}
@@ -62,6 +63,9 @@ var END_NODE_KEY = "end";
 						if(tagName == 'span') {
 							$findElement.attr("data-edit-enable", "1");
 						} else {
+							if(tagName == 'select') {
+								$findElement.attr("data-edit-enable", "1");
+							}
 							$findElement.prop("disabled",false);
 							$findElement.prop("readonly",false);
 							if($findElement.hasClass("cnoj-sysuser-defvalue")) {
