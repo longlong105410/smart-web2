@@ -34,7 +34,7 @@ $(document).ready(function(){
 		$activeTab.parent().width("auto");
 		$activeTab.width("auto");
 		$('#main-tab').tabs('select',title);
-		tableAuto($activeTab);
+		autoTableWidth($activeTab.panel('panel'));
 		$("#main-content").trigger("resize");
 	});
 	$(window).resize(function(){
@@ -74,15 +74,27 @@ function getTabHeaderHeight() {
 
 /**
  * 表格自适应
- * @param $activeTab
  */
-function tableAuto($activeTab) {
+function autoTableWidth($activeTab) {
+	if(utils.isEmpty($activeTab)) {
+		$activeTab = getActiveTabPanel();
+	}
 	var $tableTheader = $activeTab.find(".table-theader");
 	var $tableWrap = $activeTab.find(".cnoj-table-wrap");
-	if(utils.isScroll($tableWrap))
+	var $parentTable = $tableWrap.parent().parent();
+	var w = $parentTable.width();
+	/*if(utils.isScroll($tableWrap))
 		$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
 	else 
-		$tableTheader.css({"width":"auto"});
+		$tableTheader.css({"width":"auto"});*/
+	var scrollWidth = utils.getScrollWidth();
+	$tableTheader.width(w - scrollWidth);
+	if(utils.isScroll($tableWrap)) {
+		$tableWrap.width(w);
+	} else {
+		$tableWrap.width(w - scrollWidth);
+	}
+	
 }
 
 /**
@@ -345,7 +357,7 @@ function tabListner() {
 		},
 		onSelect: function(title, index) {
 			var tab = $('#main-tab').tabs('getTab', index);
-			resizePanel(tab.panel());
+			resizePanel(tab.panel('panel'));
 		}
 	});
 	$('#main-tab').tabsContextMenu();
@@ -370,7 +382,7 @@ function getActiveTabIndex() {
  */
 function getActiveTabPanel() {
 	var tab = $('#main-tab').tabs('getSelected');
-	return tab.panel();
+	return tab.panel('panel');
 }
 
 /**
@@ -391,6 +403,7 @@ function resizePanel(panel) {
 	if(uuid != panelUUID) {
 		tableWrapListener(panel, true);
 		limitHeightListener(panel,true);
+		autoTableWidth(panel);
 		panel.find(".cnoj-jq-grid").each(function(){
 			$(this).setGridWidth($("#main-content").width()-10);
 			$(this).setGridHeight(getMainHeight()-10);

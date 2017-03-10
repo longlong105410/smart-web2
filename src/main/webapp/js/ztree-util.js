@@ -103,7 +103,6 @@ var zTreeInstance = new Array();
 					}
 					w = minWidth;
 				}
-				console.log("top:"+top+",left:"+left);
 				h = setting.inputSelectHeight<1?200:setting.inputSelectHeight;
 				$showContainer.css({"top":top+"px","left":left+"px","width":w+"px"});
 				

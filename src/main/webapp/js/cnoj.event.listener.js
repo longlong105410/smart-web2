@@ -750,6 +750,7 @@ function tableTreeListener($elementWrap) {
 			$element.addClass("op-tree-listener");
 			$element.click(function(event) {
 				_clickElement(event, $(this));
+				autoTableWidth();
 				return false;
 			});
 		}
@@ -784,8 +785,9 @@ function tableTreeListener($elementWrap) {
 				$this.addClass("shrink-data");
 				stackArray.push(id);
 			}
+			var $table = $this.parents("table:eq(0)");
 			while(stackArray.length>0) {
-				stackArray = stackArray.concat(_shrinkTableTree(stackArray.pop()));
+				stackArray = stackArray.concat(_shrinkTableTree(stackArray.pop(), $table));
 			}
 			stackArray = null;
 		}
@@ -794,31 +796,32 @@ function tableTreeListener($elementWrap) {
 	/**
 	 * 收缩表格树
 	 * @param id
+	 * @param $table
 	 * @returns {Array}
 	 */
-	function _shrinkTableTree(id) {
-		function __handler(array,$this) {
+	function _shrinkTableTree(id, $table) {
+		var array = new Array();
+		function __handler($this) {
 			var parentId = $this.parent().attr("parentid");
-			var $table = $this.parents("table:eq(0)");
 			$table.find("."+id).hide();
 			var $spanIcon = $table.find("#"+id+" span.ui-icon");
 			$spanIcon.removeClass("ui-icon-triangle-1-s");
 			$spanIcon.addClass("ui-icon-triangle-1-e");
+			
 			$table.find("#"+id+" .op-tree").removeClass("open-data");
 			$table.find("#"+id+" .op-tree").addClass("shrink-data");
 			if(id == parentId) {
-				var trId = $(this).parent().attr("id");
+				var trId = $this.parent().attr("id");
 				array.push(trId);
 			}
 		}
-		var array = new Array();
 		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
 			$(".cnoj-tree-table .open-data").each(function(){
-				__handler(array, $(this));
+				__handler($(this));
 			});
 		} else {
 			$elementWrap.find(".cnoj-tree-table .open-data").each(function(){
-				__handler(array, $(this));
+				__handler($(this));
 			});
 		}
 		return array;
@@ -854,6 +857,7 @@ function tableTreeSelectListener($elementWrap) {
 			$element.addClass("tr-tree-listener");
 			$element.click(function(event) {
 				_clickElement(event, $(this));
+				//autoTableWidth();
 				return false;
 			});
 		}
@@ -886,7 +890,6 @@ function tableTreeSelectListener($elementWrap) {
 			if(null != $param) {
 				$param.attr("selected-value",id);
 			}
-			
 		} else {
 			$this.removeClass("ui-state-focus");
 			$this.find("td").removeClass("ui-state-focus");
@@ -1513,7 +1516,7 @@ function tableWrapListener($elementWrap, isResize) {
 		if($tableWrap.hasClass("table-body-scroll")) {
 			_separateTableHeaderAndBody($tableWrap, $panelFooter, h, isResize);
 		}
-		
+		$parentWrap = null;
 	}
 	
 	/**
@@ -1533,7 +1536,6 @@ function tableWrapListener($elementWrap, isResize) {
 		//调整表格；使表格头和表格内容分离
 		var $table = $tableWrap.find("table");
 		var $theadTr = $table.find("thead").clone(true);
-		
 		if(!utils.isEmpty($theadTr)) {
 			$tableWrap.before("<div class='table-theader-bg "+$table.find("thead").find("tr").attr("class")+"'><div class='table-theader' data-height='"+$table.find("thead").find("tr").data("height")+"'><table class='"+$table.attr("class")+"'></table></div></div>");
 			$table.find("thead").remove();
@@ -1542,18 +1544,7 @@ function tableWrapListener($elementWrap, isResize) {
 			__autoTableHeight($tableWrap, $tableTheader, $panelFooter, h);	
 		}
 		$tableWrap.css({"overflow":"auto"});
-		$parentWrap = null;
-		if(utils.isScroll($tableWrap)) {
-			$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
-		} else {
-			$tableTheader.css({"width":"auto"});
-		}	
-		$tableWrap.click(function(e) {
-			if(utils.isScroll($tableWrap)) {
-				$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
-			} else 
-				$tableTheader.css({"width":"auto"});
-		});
+		__autoTableWidth($tableWrap, $tableTheader, $table);
 		
 		/**
 		 * 自动计算表格高度
@@ -1574,6 +1565,18 @@ function tableWrapListener($elementWrap, isResize) {
 			panelHeadingHeight = utils.isEmpty(panelHeadingHeight)?0:panelHeadingHeight;
 			h = h - panelHeadingHeight;
 			$tableWrap.height(h);
+		}
+		
+		/**
+		 * 自动计算表格宽度
+		 * @param $tableWrap
+		 * @param $tableTheader
+		 * @param $table
+		 */
+		function __autoTableWidth($tableWrap, $tableTheader, $table) {
+			var tableWidth = $tableWrap.width() - utils.getScrollWidth();
+			$tableTheader.width(tableWidth);
+			$tableWrap.width(tableWidth);
 		}
 	}
 }
