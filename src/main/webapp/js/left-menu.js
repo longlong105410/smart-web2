@@ -99,10 +99,6 @@ function autoTableWidth($activeTab) {
 	var $tableWrap = $activeTab.find(".cnoj-table-wrap");
 	var $parentTable = $tableWrap.parent().parent();
 	var w = $parentTable.width();
-	/*if(utils.isScroll($tableWrap))
-		$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
-	else 
-		$tableTheader.css({"width":"auto"});*/
 	
 	if(w > 0) {
 		var scrollWidth = utils.getScrollWidth();

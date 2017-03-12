@@ -58,12 +58,19 @@
      </div>
 </div>
 <script type="text/javascript">
-   setTimeout("loadJs()", 300);
-   function loadJs() {
-	   var h = $("#main-content").height();
-	   var panelBodyH = h-$(".tabs-header:eq(0)").outerHeight(true)-($(".panel-heading:eq(0)").outerHeight(true)*2)-26;
-	   panelBodyH = panelBodyH/2;
-	   $(".default-page-body").height(panelBodyH);
-	  
-   }
+   $(function(){
+	   autoIndexHeight();
+	   $(window).resize(function(){
+		   setTimeout(function() {
+			   autoIndexHeight();
+		   }, 200);
+		   
+	   });
+	   function autoIndexHeight(){
+		   var h = getMainHeight();
+		   var panelBodyH = h-$(".tabs-header:eq(0)").outerHeight(true)-($(".panel-heading:eq(0)").outerHeight(true)*2)-26;
+		   panelBodyH = panelBodyH/2;
+		   $(".default-page-body").height(panelBodyH);
+	   }
+   });
 </script>
