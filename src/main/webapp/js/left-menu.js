@@ -65,11 +65,27 @@ function getMainHeight() {
 }
 
 /**
+ * 获取主内容top位置
+ * @returns
+ */
+function getMainTop() {
+	return $("#main-content").offset().top;
+}
+
+/**
  * 获取tab头高度
  * @returns {Number}
  */
 function getTabHeaderHeight() {
 	return 30;
+}
+
+/**
+ * 获取底部版权信息的高度
+ * @returns
+ */
+function getFooterHeight() {
+	return $(".wrap-footer").outerHeight(true);
 }
 
 /**
@@ -87,14 +103,16 @@ function autoTableWidth($activeTab) {
 		$tableTheader.width($tableWrap.width()-utils.getScrollWidth());
 	else 
 		$tableTheader.css({"width":"auto"});*/
-	var scrollWidth = utils.getScrollWidth();
-	$tableTheader.width(w - scrollWidth);
-	if(utils.isScroll($tableWrap)) {
-		$tableWrap.width(w);
-	} else {
-		$tableWrap.width(w - scrollWidth);
-	}
 	
+	if(w > 0) {
+		var scrollWidth = utils.getScrollWidth();
+		$tableTheader.width(w - scrollWidth);
+		if(utils.isScroll($tableWrap)) {
+			$tableWrap.width(w);
+		} else {
+			$tableWrap.width(w - scrollWidth);
+		}
+	}
 }
 
 /**

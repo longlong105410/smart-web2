@@ -162,7 +162,7 @@
 				</div>
 			</div>
 			<div class="panel-body p-0">
-				<div id="flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white">
+				<div id="flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height">
 					<div role="tabpanel" class="tab-pane active" id="process-form-tab">
 						<div class="form-prop">
 					       <form id="process-handle-form" method="post">
@@ -190,7 +190,7 @@
     	deptName: '${userInfo.deptName}',
     	formData:'${output}'
     });
-   var $wrap = $("#process-handle-form").parents(".wrap-content:eq(0)");
+   /*var $wrap = $("#process-handle-form").parents(".wrap-content:eq(0)");
    autoHeight();
    $(window).resize(function(){
 	   setTimeout(function() {
@@ -203,5 +203,5 @@
 	   var mainContentH = getMainHeight()-getTabHeaderHeight();
 	   var flowFormContentH = mainContentH - $wrap.find(".flow-process").outerHeight(true) - $wrap.find(".panel-tabs-tab").outerHeight(true);
 	   $("#flow-form-panel-contents").height(flowFormContentH-20);
-   }
+   }*/
 </script>

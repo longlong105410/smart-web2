@@ -4,7 +4,7 @@
 	   <div class="row">
 		   <div class="col-sm-4 p-l-0 p-r-0">
 		      <div class="panel panel-default m-b-0">
-				    <div class="panel-tabs-wrap">
+				    <div class="panel-tabs-wrap" id="config-auth-tabs">
 				         <div class="panel-heading p-0">
 							<div class="panel-tabs-tab">
 								<ul class="nav nav-tabs ui-widget-header" role="tablist">
@@ -46,4 +46,12 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+	  $(function(){
+		  $("#config-auth-tabs").find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			  var id = $(e.target).attr("href");
+			  tableWrapListener($(id), false);
+		  });
+	  });
+	</script>
 </div>

@@ -1453,7 +1453,13 @@ function tableWrapListener($elementWrap, isResize) {
 		});
 	} else {
 		$elementWrap.find(".cnoj-table-wrap").each(function(){
-			return _handler($(this), isResize);
+			//return _handler($(this), isResize);
+			var $this = $(this);
+			//判断是否在bootstrap的tabs隐藏panel中；如果在则不处理
+			var $tabpanel = $this.parents(".tab-pane:eq(0)");
+			if($tabpanel.length == 0 || $tabpanel.css("display") !='none') {
+				_handler($this, isResize);
+			}
 		});
 	}
 
@@ -1575,8 +1581,10 @@ function tableWrapListener($elementWrap, isResize) {
 		 */
 		function __autoTableWidth($tableWrap, $tableTheader, $table) {
 			var tableWidth = $tableWrap.width() - utils.getScrollWidth();
-			$tableTheader.width(tableWidth);
-			$tableWrap.width(tableWidth);
+			if(tableWidth > 0) {
+				$tableTheader.width(tableWidth);
+				$tableWrap.width(tableWidth);
+			}
 		}
 	}
 }
@@ -1597,7 +1605,12 @@ function limitHeightListener($elementWrap, isResize) {
 		});
 	} else {
 		$elementWrap.find(".cnoj-auto-limit-height").each(function(){
-			_handler($(this), isResize);
+			var $this = $(this);
+			//判断是否在bootstrap的tabs隐藏panel中；如果在则不处理
+			var $tabpanel = $this.parents(".tab-pane:eq(0)");
+			if($tabpanel.length == 0 || $tabpanel.css("display") !='none') {
+				_handler($this, isResize);
+			}
 		});
 	}
 
@@ -1611,13 +1624,17 @@ function limitHeightListener($elementWrap, isResize) {
 			$element.addClass("cnoj-auto-limit-height-listener");
 			var h = getMainHeight();
 			var subtractHeight = $element.data("subtract-height");
-			if(!utils.isEmpty(subtractHeight)) {
+			/*if(!utils.isEmpty(subtractHeight)) {
 				h = h - getTabHeaderHeight() - subtractHeight;
 			} else {
 				var top = $element.position().top;
 				top = Math.ceil(top);
 				h = h - getTabHeaderHeight() - top - 8;
-			}
+			}*/
+			subtractHeight = utils.isEmpty(subtractHeight)?0:subtractHeight;
+			var top = $element.offset().top;
+			var mainTop = getMainTop();
+			h = h - (top - mainTop) - subtractHeight - 8; 
 			$element.height(h);
 			$element.css({"overflow":"auto"});
 		}

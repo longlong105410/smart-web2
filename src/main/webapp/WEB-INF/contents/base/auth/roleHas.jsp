@@ -3,7 +3,7 @@
   <div class="panel panel-default m-b-0">
 	<div class="panel-heading ui-widget-header">拥有该角色【${name }】的用户或组织机构</div>
 	<div class="panel-body p-0 p-t-2 body-bg borer-top">
-	   <div class="panel-tabs-wrap">
+	   <div class="panel-tabs-wrap" id="has-role-content">
 			<div class="panel-tabs-tab">
 				<ul class="nav nav-tabs" role="tablist">
 				   <li class="active"><a href="#role-user-tab" role="presentation" data-toggle="tab"> 用户列表</a></li>
@@ -25,4 +25,12 @@
 		</div>
 	</div>
   </div><!-- panel -->
+  <script type="text/javascript">
+	  $(function(){
+		  $("#has-role-content").find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			  var id = $(e.target).attr("href");
+			  tableWrapListener($(id), false);
+		  });
+	  });
+	</script>
 </div>
