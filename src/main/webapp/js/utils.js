@@ -640,13 +640,14 @@ utils.selectItem = function(id,uri,defaultValue,callback) {
 				if(datas.length>0) {
 					var options = '';
 					var selectValue = '';
+					var selected = '';
 					for(var i=0;i<datas.length;i++) {
+						selected = '';
 						if(datas[i][0] == defaultValue) {
-							options +='<option value="'+datas[i][0]+'" class="cnoj-dyn-opt" selected>'+datas[i][1]+'</option>';
+							selected = 'selected="selected"';
 							selectValue = datas[i][0];
-						} else {
-							options +='<option value="'+datas[i][0]+'" class="cnoj-dyn-opt" >'+datas[i][1]+'</option>';
 						}
+						options +='<option value="'+datas[i][0]+'" '+selected+' class="cnoj-dyn-opt" >'+datas[i][1]+'</option>';
 					}
 					$select.find(".cnoj-dyn-opt").remove();
 					$select.append(options);
@@ -847,7 +848,8 @@ utils.selectCascadeItem = function(id,cascadeId,uri,paramName,defaultValue,chang
 				value = $(changeId).val();
 			else 
 				value = $(this).val();
-			utils.selectItem(id, uri+value, defaultValue);
+			if(null != value && typeof(value) != undefined) 
+				utils.selectItem(id, uri+value, defaultValue);
 		});
 	}
 }

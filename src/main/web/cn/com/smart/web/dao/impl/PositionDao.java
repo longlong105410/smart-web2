@@ -93,7 +93,7 @@ public class PositionDao extends BaseDaoImpl<TNPosition>{
 		if(null == id || StringUtils.isEmpty(id.toString())) {
 			return position;
 		}
-		String sql = sqlMap.getSQL("get_org_by_id");
+		String sql = sqlMap.getSQL("get_position_by_id");
 		if(StringUtils.isEmpty(sql)) {
 			return position;
 		}
@@ -115,7 +115,7 @@ public class PositionDao extends BaseDaoImpl<TNPosition>{
 	@Override
 	public List<TNPosition> findAll() throws DaoException {
 		List<TNPosition> positions = null;
-		String sql = sqlMap.getSQL("get_org_all");
+		String sql = sqlMap.getSQL("get_position_all");
 		if(StringUtils.isEmpty(sql)) {
 			return positions;
 		}
