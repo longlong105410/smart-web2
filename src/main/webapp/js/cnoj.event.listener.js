@@ -653,7 +653,7 @@ function searchSubmitListener($elementWrap){
 	    var uri = $form.attr("action");
 	    var target = $form.attr("target");
 	    var loadingTargetTag = $form.data("loading-target-tag");
-	    param = encodeURI(param);
+	    //param = encodeURI(param);
 	    if(!utils.isEmpty(uri)) {
 	    	if(utils.isContain(uri, "?")) {
 	    		 uri = uri+"&"+param;

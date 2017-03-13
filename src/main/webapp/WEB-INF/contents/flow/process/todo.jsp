@@ -7,16 +7,16 @@
 <div class="wrap-content">
     <div class="panel panel-default my-todo">
        <div class="panel-search" data-height="37">
-           <form class="form-inline search-param" id="search-form-order" method="post" role="form" action="process/todo" target="${target }">
+           <form class="form-inline search-param cnoj-entry-submit" method="post" role="form" action="process/todo" target="${target }">
                <div class="form-group p-r-10">
 				  <label for="search-input01">项目名称：</label>
 				  <input type="text" class="form-control input-form-sm-control" style="width: 400px" id="search-input01" name="title" placeholder="请输入项目名称" value="${queryFilter.title }"/>
 			  </div>
 			  <div class="form-group">
-				<span class="btn btn-primary btn-sm cnoj-search-submit">
+				<button type="button" class="btn btn-primary btn-sm cnoj-search-submit">
 					<i class="glyphicon glyphicon-search"></i>
-					<span>搜索</span>
-				</span>
+					搜索
+				</button>
 			 </div>
            </form>
         </div>
