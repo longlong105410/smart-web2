@@ -344,11 +344,7 @@ public class ProcessFacade {
 					smartResp.setMsg(IWebConstant.OP_SUCCESS_MSG);
 					smartResp.setMsg("任务处理成功");
 					isSuccess = true;
-					//更新流程实力名称
-					ExtProcess extProcess = facets.getProcess(submitFormData.getProcessId());
-					//获取标题
-					flowFormServ.updateInsTitle(submitFormData.getOrderId(), 
-							flowFormServ.getInsTitle(submitFormData,userId,extProcess.getDisplayName()));
+					flowFormServ.updateInsTitle(submitFormData.getParams(), formDataId);
 				}
 				if(isSuccess) {
 					 List<IProcessExecuteAware> processExeList = SmartContextService.finds(IProcessExecuteAware.class);

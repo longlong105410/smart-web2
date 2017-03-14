@@ -1781,19 +1781,23 @@ function inputDateListener($elementWrap) {
 			$parent.find("input").each(function(){
 				count++;
 			});
+			var starRequire = '';
 			if(count>1) {
 				if(!$parent.hasClass("form-group")) {
 					var $next = $element.next();
 					if($next.hasClass("star-require")) {
+						starRequire = $next.clone();
 						$next.remove();
 					}
 					$element.wrap("<div class='text-inline-block' style='width:"+($element.outerWidth(true)+10)+"px'></div>");
+					$element.parent().append(starRequire);
 				}
 				$element.parent().addClass('has-feedback');
 				$element.after("<span class='glyphicon glyphicon-calendar inline-icon form-control-feedback hidden-print' style='right:3px;line-height: 30px;'></span>");
 			} else {
 				var $next = $element.next();
 				if($next.hasClass("star-require")) {
+					starRequire = $next.clone();
 					$next.remove();
 				}
 				var parentW = $parent.width();
@@ -1802,6 +1806,7 @@ function inputDateListener($elementWrap) {
 				console.log(thisW+","+parentW);
 				//$element.wrap("<div class='text-inline-block' style='width:"+w+"px'></div>");
 				$element.wrap("<div class='text-inline'></div>");
+				$element.parent().append(starRequire);
 				$element.parent().addClass('has-feedback');
 				var inputH = $element.outerHeight();
 				//var top = inputH>28?0:-2;
