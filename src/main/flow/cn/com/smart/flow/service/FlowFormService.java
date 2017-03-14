@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -222,7 +221,11 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		if(null != lists && lists.size()>0) {
 			String insTitleFieldId = StringUtils.handNull(lists.get(0));
 			title = StringUtils.handNull(datas.get(insTitleFieldId));
-			title = processName + title;
+			if(StringUtils.isNotEmpty(title)) {
+				title = processName + title;
+			} else {
+				title = null;
+			}
 		}
 		return title;
 	}
