@@ -1,8 +1,8 @@
-<%@page import="cn.com.smart.CustomBtn"%>
-<%@page import="cn.com.smart.UserInfo"%>
-<%@page import="cn.com.smart.HttpRequestHelper"%>
-<%@page import="cn.com.smart.SpringBeanFactoryUtil"%>
-<%@page import="cn.com.smart.OPAuthService"%>
+<%@page import="cn.com.smart.web.service.OPAuthService"%>
+<%@page import="cn.com.smart.web.spring.util.SpringBeanFactoryUtil"%>
+<%@page import="cn.com.smart.web.helper.HttpRequestHelper"%>
+<%@page import="cn.com.smart.web.tag.bean.CustomBtn"%>
+<%@page import="cn.com.smart.web.bean.UserInfo"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
