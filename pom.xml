@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.com.smart</groupId>
   <artifactId>smart-web2</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>war</packaging>
   <name>smart-web2</name>
   <description/>
@@ -17,12 +17,46 @@
   </properties>
   <dependencies>
   
+    <!--  
     <dependency>
 		<groupId>com.mixsmart</groupId>
 		<artifactId>mixsmart-utils</artifactId>
 		<version>${mixsmart.utils.version}</version>
 	</dependency>
-  
+   -->
+   
+   <dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+		<version>1.10</version>
+	</dependency>
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+	</dependency>
+	<!-- log4j -->
+    <dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.17</version>
+    </dependency>
+    <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.7.13</version>
+    </dependency>
+    <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>1.7.13</version>
+    </dependency>
+    <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-jdk14</artifactId>
+		<version>1.7.13</version>
+    </dependency>
+   
   	<!-- Spring -->
     <dependency>
         <groupId>org.springframework</groupId>
@@ -186,6 +220,12 @@
          <groupId>org.quartz-scheduler</groupId>
          <artifactId>quartz</artifactId>
          <version>2.2.3</version>
+         <exclusions>
+         	<exclusion>
+         		<groupId>c3p0</groupId>
+         		<artifactId>c3p0</artifactId>
+         	</exclusion>
+         </exclusions>
      </dependency>
      <dependency>
          <groupId>org.quartz-scheduler</groupId>
@@ -218,6 +258,13 @@
 		<version>1.6.3</version>
 		<scope>system</scope>
 		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/snaker-core-1.6.3.jar</systemPath>
+	</dependency>
+	<dependency>
+		<groupId>com.mixsmart</groupId>
+		<artifactId>mixsmart-utils</artifactId>
+		<version>1.0.0</version>
+		<scope>system</scope>
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/mixsmart-utils-1.0.0.jar</systemPath>
 	</dependency>
 	
 	<dependency>
