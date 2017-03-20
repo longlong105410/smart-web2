@@ -15,7 +15,6 @@ import cn.com.smart.bean.DateBean;
 /**
  * 流程表单
  * @author lmq
- * @create 2015年6月9日
  * @version 1.0 
  * @since 
  *

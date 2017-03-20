@@ -10,7 +10,6 @@ import cn.com.smart.bean.BaseBeanImpl;
 /**
  * 流程附件
  * @author lmq
- * @create 2015年6月22日
  * @version 1.0 
  * @since 
  *
