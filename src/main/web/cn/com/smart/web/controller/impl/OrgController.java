@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNOrg;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
@@ -47,7 +48,9 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		String uri = "org/list"; 
 		addBtn = new EditBtn("add","showPage/base_org_add", "org", "添加组织机构", "600");
 		editBtn = new EditBtn("edit","showPage/base_org_edit", "org", "修改组织机构", "600");
-		delBtn = new DelBtn("op/del.json", "org", "确定要删除选中的组织机构吗？（注：如果该机构下面有子机构的话，会一起删除的哦~）",uri,null, null);
+		delBtn = new DelBtn("org/delete.json", "确定要删除选中的组织机构吗？（注：如果该机构下面有子机构的话，会一起删除的哦~）",uri,null, null);
+		
+		//delBtn = new DelBtn("op/del.json", "org", "确定要删除选中的组织机构吗？（注：如果该机构下面有子机构的话，会一起删除的哦~）",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "org",null);
 		
 		ModelMap modelMap = modelView.getModelMap();
@@ -62,11 +65,22 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		return modelView;
 	}
 	
+	/**
+	 * 
+	 * @param session
+	 * @param org
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public @ResponseBody SmartResponse<String> add(TNOrg org) throws Exception {
+	public @ResponseBody SmartResponse<String> add(HttpSession session, TNOrg org) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != org) {
 			smartResp = orgServ.save(org);
+			if(OP_SUCCESS.equals(smartResp.getResult())) {
+				UserInfo userInfo = super.getUserInfoFromSession(session);
+				userInfo.getOrgIds().add(smartResp.getData());
+			}
 		}
 		return smartResp;
 	}
@@ -76,6 +90,23 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != org) {
 			smartResp = orgServ.update(org);
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 删除
+	 * @param session
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public SmartResponse<String> delete(HttpSession session, String id) {
+		SmartResponse<String> smartResp = orgServ.delete(id);
+		if(OP_SUCCESS.equals(smartResp.getResult())) {
+			UserInfo userInfo = super.getUserInfoFromSession(session);
+			userInfo.getOrgIds().remove(id);
 		}
 		return smartResp;
 	}

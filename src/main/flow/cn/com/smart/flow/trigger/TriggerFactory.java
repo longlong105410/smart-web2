@@ -22,7 +22,7 @@ public class TriggerFactory<T> {
 	
 	/**
 	 * 获取触发器
-	 * @param triggerBean
+	 * @param triggerType
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })

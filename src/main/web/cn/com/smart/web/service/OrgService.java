@@ -142,11 +142,36 @@ public class OrgService extends MgrServiceImpl<TNOrg> {
 				parentOrg = null;
 				smartResp = super.update(updateOrgs);
 				updateOrgs = null;
+				if(OP_SUCCESS.equals(smartResp.getResult())) {
+					orgCache.refreshCache();
+				}
 			}
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
 		} catch (Exception e) {
 			throw new ServiceException(e.getCause());
+		}
+		return smartResp;
+	}
+	
+	/**
+	 *  删除
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+	public SmartResponse<String> delete(String id) {
+		SmartResponse<String> smartResp = new SmartResponse<String>();
+		try {
+			if(super.getDao().delete(id)) {
+				smartResp.setResult(OP_SUCCESS);
+				smartResp.setMsg(OP_SUCCESS_MSG);
+				orgCache.refreshCache();
+			}
+		} catch (DaoException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return smartResp;
 	}
