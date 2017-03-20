@@ -8,7 +8,6 @@ import cn.com.smart.flow.bean.SubmitFormData;
 /**
  * 流程执行接口
  * @author lmq
- * @date 2015年8月15日
  * @since 1.0
  */
 public interface IProcessExecuteAware {

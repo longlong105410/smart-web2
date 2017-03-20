@@ -27,7 +27,6 @@ import com.mixsmart.utils.StringUtils;
 /**
  * 流程处理助手
  * @author lmq
- * @create 2015年6月10日
  * @version 1.0 
  * @since 
  *
@@ -132,7 +131,7 @@ public class ProcessHelper {
 	 * 获取当前任务模式 <br />
 	 * TaskModel中包含了设计流程节点时的所有数据信息
 	 * @param models
-	 * @param taskKey
+	 * @param taskKeys
 	 * @return
 	 */
 	public static List<ExtTaskModel> getTaskModels(List<TaskModel> models,List<String> taskKeys) {
@@ -276,7 +275,7 @@ public class ProcessHelper {
 	
 	/**
 	 * 节点字符串集合转换为数组
-	 * @param nodes 节点集合
+	 * @param nodeCollection 节点集合
 	 * @return 返回节点字符串；多个节点直接用英文分号“;”隔开
 	 */
 	public static String[] nodeStrToArray(String nodeCollection) {

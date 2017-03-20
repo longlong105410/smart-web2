@@ -52,7 +52,6 @@ import com.mixsmart.utils.StringUtils;
 /**
  * 流程实例--执行
  * @author lmq
- * @create 2015年7月14日
  * @version 1.0 
  * @since 
  *
@@ -200,6 +199,7 @@ public class ProcessController extends BaseFlowControler {
 	/**
 	 * 待办任务
 	 * @param request
+	 * @param queryFilter
 	 * @param modelView
 	 * @param page
 	 * @return
@@ -262,6 +262,7 @@ public class ProcessController extends BaseFlowControler {
 	 * @param session
 	 * @param processId
 	 * @param taskId
+	 * @param taskKey
 	 * @return
 	 */
 	@RequestMapping("/takeTask")
@@ -409,7 +410,6 @@ public class ProcessController extends BaseFlowControler {
 	 * @param processId
 	 * @param orderId
 	 * @param taskKey
-	 * @param isDepartFilter
 	 * @return
 	 */
 	@RequestMapping("/selectNextAssigner")

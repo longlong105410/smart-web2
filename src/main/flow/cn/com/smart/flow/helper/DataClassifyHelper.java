@@ -14,7 +14,6 @@ import cn.com.smart.utils.StringUtil;
 /**
  * 数据分类助手
  * @author lmq
- * @create 2015年7月17日
  * @version 1.0 
  * @since 
  *
@@ -62,7 +61,7 @@ public class DataClassifyHelper {
 	
 	/**
 	 * 待办分类；按流程名称分类，相同的流程名称归为一类
-	 * @param workItems
+	 * @param datas
 	 * @return
 	 */
 	public static List<DataClassify<Object>> orderClassify(List<Object> datas) {

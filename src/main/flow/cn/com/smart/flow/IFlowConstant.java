@@ -3,7 +3,6 @@ package cn.com.smart.flow;
 /**
  * 流程常量定义
  * @author lmq
- * @create 2015年6月11日
  * @version 1.0 
  * @since 
  *

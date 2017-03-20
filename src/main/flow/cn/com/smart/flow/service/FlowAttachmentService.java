@@ -15,7 +15,6 @@ import cn.com.smart.utils.StringUtil;
 /**
  * 流程附件
  * @author lmq
- * @create 2015年6月23日
  * @version 1.0 
  * @since 
  *

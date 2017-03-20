@@ -8,7 +8,6 @@ import cn.com.smart.flow.bean.TaskBefore;
 /**
  * 提交任务，任务未执行之前--拦截执行的类接口
  * @author lmq
- * @date 2015年8月15日
  * @since 1.0
  */
 public interface ITaskSubmitBeforeAware {

@@ -50,7 +50,6 @@ import com.mixsmart.utils.StringUtils;
 /**
  * 流程运行处理类
  * @author lmq
- * @create 2015年5月13日
  * @version 1.0 
  * @since 
  *
@@ -438,6 +437,7 @@ public class ProcessFacade {
 	 * 与任务模版元素关联 <br />
 	 * 如：判断任务是否需要领取(用于待办查询)
 	 * @param workItems
+	 * @param userId
 	 */
 	public void assocTaskModel(List<WorkItem> workItems,String userId) {
 		if(null != workItems && workItems.size()>0) {

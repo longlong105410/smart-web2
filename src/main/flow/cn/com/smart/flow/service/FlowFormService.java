@@ -33,7 +33,6 @@ import com.mixsmart.utils.StringUtils;
 /**
  * 流程表单
  * @author lmq
- * @create 2015年6月4日
  * @version 1.0 
  * @since 
  *
@@ -418,7 +417,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	/**
 	 * 更新标题
 	 * @param datas
-	 * @param title
+	 * @param formDataId
 	 * @return
 	 */
 	public boolean updateInsTitle(Map<String, Object> datas, String formDataId) {
