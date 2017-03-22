@@ -13,7 +13,6 @@ import com.mixsmart.utils.StringUtils;
  * @author lmq
  * @version 1.0 
  * @since 1.0
- * 2015年7月4日
  */
 @Component
 public class ListctrlParser implements IFormParser {
@@ -37,6 +36,7 @@ public class ListctrlParser implements IFormParser {
 		String pluginType = StringUtils.handNull(dataMap.get("plugintype"));
 		String pluginUri = StringUtils.handNull(dataMap.get("pluginuri"));
 		String fieldRequire = StringUtils.handNull(dataMap.get("fieldrequire"));
+		String fieldHide = StringUtils.handNull(dataMap.get("fieldhide"));
 		
 		String colValue = StringUtils.handNull(dataMap.get("orgcolvalue"));
 		String fieldName = StringUtils.handNull(dataMap.get("bind_table_field"));
@@ -48,13 +48,12 @@ public class ListctrlParser implements IFormParser {
 		
 		String[] titles = title.split("`");
 		String[] colTypes = colType.split("`");
-		//String[] units = unit.split("`");
-		//String[] sums = sum.split("`");
 		String[] pluginTypes = pluginType.split("`");
 		String[] pluginUris = pluginUri.split("`");
 		String[] colValues = colValue.split("`");
 		String[] fieldNames = fieldName.split("`");
 		String[] fieldRequires = fieldRequire.split("`");
+		String[] fieldHides = fieldHide.split("`");
 		
 		if(pluginTypes.length<titles.length) {
 			String[] tmps = pluginTypes;
@@ -75,6 +74,20 @@ public class ListctrlParser implements IFormParser {
 			colValues = Arrays.copyOf(tmps,titles.length);
 			for (int i = tmps.length; i < titles.length; i++) {
 				colValues[i] = "";
+			}
+		}
+		if(fieldRequires.length<titles.length) {
+			String[] tmps = fieldRequires;
+			fieldRequires = Arrays.copyOf(tmps,titles.length);
+			for (int i = tmps.length; i < titles.length; i++) {
+				fieldRequires[i] = "";
+			}
+		}
+		if(fieldHides.length<titles.length) {
+			String[] tmps = fieldHides;
+			fieldHides = Arrays.copyOf(tmps,titles.length);
+			for (int i = tmps.length; i < titles.length; i++) {
+				fieldHides[i] = "";
 			}
 		}
 		
@@ -121,24 +134,12 @@ public class ListctrlParser implements IFormParser {
         StringBuilder thBuild = new StringBuilder(),tbBuild = new StringBuilder(),tfTdBuild = new StringBuilder();
         int isNum = 0,tdNum = 0;
         String require = "";
+        String tdEndTag = "</td>";
         for (int i=0;i<titles.length;i++) {
         	tdNum++;
-			/*String sumTotalHtml = "";
-			sums[i] = StringUtil.isInteger(sums[i])?sums[i]:"0";
-			if(Integer.parseInt(sums[i])>0) {
-				isNum++;
-				colTypes[i] = "int";
-				sumTotalHtml = "onblur=\"sum_total('"+fieldNames[i]+"')\"";
-			}*/
-			//thead
-			thBuild.append("<td>"+titles[i]+"</td>");
-			/*if("text".equals(colTypes[i])) {
-				tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" class=\""+fieldNames[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\">"+units[i]+"</td>");
-			} else if("textarea".equals(colTypes[i])) {
-				tbBuild.append("<td><textarea class=\"form-control input-medium "+fieldNames[i]+"\" type=\"text\" class=\""+fieldNames[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea>"+units[i]+"</td>");
-			} else if("int".equals(colTypes[i])) {
-				tbBuild.append("<td><input class=\"form-control input-medium "+fieldNames[i]+"\" "+sumTotalHtml+" class=\""+fieldNames[i]+"\" type=\"text\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\">"+units[i]+"</td>");
-			}*/
+        	if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
+        		thBuild.append("<td>"+titles[i]+"</td>");
+        	}
 			if(YesNoType.YES.getStrValue().equals(fieldRequires[i])) {
 				require = " require";
 			} else {
@@ -146,28 +147,30 @@ public class ListctrlParser implements IFormParser {
 			}
 			pluginTypes[i] += pluginTypes[i]+require;
 			if("text".equals(colTypes[i])) {
-				if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
-					tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
+					if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
+						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+					} else {
+						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+					}
 				} else {
-					tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+					if(tbBuild.toString().endsWith(tdEndTag)) {
+						tbBuild.delete(tbBuild.length() - tdEndTag.length(), tbBuild.length());
+						tbBuild.append("<input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+					}
 				}
 			} else if("textarea".equals(colTypes[i])) {
-				tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
-			} 
-			/*else if("int".equals(colTypes[i])) {
-				tbBuild.append("<td><input class=\"form-control input-medium "+fieldNames[i]+"\" "+sumTotalHtml+" class=\""+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
-			}*/
-			//tfooter
-			/*if(Integer.parseInt(sums[i])>0) {
-				tfTdBuild.append("<td>合计：<input type=\"text\" class=\"form-control input-small "+fieldNames[i]+"_total\" name=\""+fieldNames[i]+"[total]\" onblur=\"sum_total('"+fieldNames[i]+"')\" value=\""+colValues[i]+"\"> "+units[i]+"</td>");
-			} else {*/
-				tfTdBuild.append("<td></td>");
-			//}
+				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
+					tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+				} else {
+					if(tbBuild.toString().endsWith(tdEndTag)) {
+						tbBuild.delete(tbBuild.length() - tdEndTag.length(), tbBuild.length());
+						tbBuild.append("<textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+					}
+				}
+			}
+			tfTdBuild.append("<td></td>");
 		}
-      //有编辑值时，还原table
-       // StringBuilder tbTfTrBuild = new StringBuilder(); //tbody  tfooter
-       // if(!StringUtil.isEmpty(StringUtil.handNull(dataMap.get("value")))) {
-      //  }
         strBuild.append("<table id=\""+name+"_table\" cellspacing=\"0\" class=\"list-ctrl table table-bordered table-condensed\" style=\"width:"+tableWidth+"\">");
         strBuild.append("<thead><tr><th colspan=\""+(tdNum+1)+"\"><div class=\"col-sm-6 p-l-5 listctrl-title\">"+dataMap.get("title")+"</div> <div class=\"col-sm-6 p-r-5 text-right\">");
         strBuild.append("<button class=\"btn btn-sm btn-success listctrl-add-row hidden-print \" type=\"button\" onclick=\"tbAddRow('"+name+"')\">添加一行</button>");
@@ -183,5 +186,6 @@ public class ListctrlParser implements IFormParser {
         
 		return strBuild.toString();
 	}
+
 
 }

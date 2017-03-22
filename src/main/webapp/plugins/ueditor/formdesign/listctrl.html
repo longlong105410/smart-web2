@@ -68,9 +68,9 @@ function createElement(type, name)
             -->
             <th><span>插件</span></th>
             <th><span>数据来源</span></th>
-            <!--   <th></th>-->
-            <th> <span>默认值</span> </th>
+            <th><span>默认值</span></th>
             <th>必填</th>
+            <th>隐藏</th>
            </tr>
         </thead>
          <tbody id="tbl1">
@@ -118,6 +118,13 @@ function createElement(type, name)
 							  </label>
 							</div>
                         </td>
+                        <td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_1" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
 
                     <tr>
@@ -156,6 +163,13 @@ function createElement(type, name)
                           <div class="checkbox">
 							  <label>
 							    <input type="checkbox" id="field_require_2" value="1">
+							  </label>
+							</div>
+                        </td>
+                        <td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_2" value="1">
 							  </label>
 							</div>
                         </td>
@@ -200,6 +214,13 @@ function createElement(type, name)
 							  </label>
 							</div>
 						</td>
+						<td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_3" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
                     <tr>
                         <td><span class="badge">4</span></td>
@@ -241,6 +262,13 @@ function createElement(type, name)
 							  </label>
 							</div>
 						</td>
+						<td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_4" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
                     <tr>
                         <td><span class="badge">5</span></td>
@@ -282,6 +310,13 @@ function createElement(type, name)
 							  </label>
 							</div>
 						</td>
+						<td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_5" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
 
                     <tr>
@@ -324,6 +359,13 @@ function createElement(type, name)
 							  </label>
 							</div>
 						</td>
+						<td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_6" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
 
                     <tr>
@@ -366,6 +408,13 @@ function createElement(type, name)
 							  </label>
 							</div>
 						</td>
+						<td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_7" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
                     <tr class="row-clone">
                         <td><span class="badge">8</span></td>
@@ -407,6 +456,13 @@ function createElement(type, name)
 							  </label>
 							</div>
 						</td>
+						<td>
+                        	<div class="checkbox">
+							  <label>
+							    <input type="checkbox" id="field_hide_8" value="1">
+							  </label>
+							</div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -446,7 +502,8 @@ window.onload = function() {
                 gPluginUri = oNode.getAttribute('pluginuri'),
                 gColValue = oNode.getAttribute('orgcolvalue'),
                 gBindField = oNode.getAttribute('bind_table_field'),
-                gFieldRequire = oNode.getAttribute('fieldrequire');
+                gFieldRequire = oNode.getAttribute('fieldrequire'),
+                gFieldHide = oNode.getAttribute('fieldhide');
         var aTitle = gTitle.split('`'),
                 aColType = gColType ? gColType.split('`') : null,
                 aColValue = gColValue ? gColValue.split('`') : null,
@@ -456,6 +513,7 @@ window.onload = function() {
         gPluginType = gPluginType ? gPluginType.split('`') : null;
         gPluginUri = gPluginUri ? gPluginUri.split('`')  :null;
         gFieldRequire = gFieldRequire ? gFieldRequire.split('`') : null;
+        gFieldHide = gFieldHide ? gFieldHide.split('`') : null;
                
         var gTableWidth =  oNode.getAttribute('tablewidth');
         var gBindTable = oNode.getAttribute('bind_table');
@@ -479,6 +537,7 @@ window.onload = function() {
             sPluginUri = 'plugin_uri_'+(i+1),
             gBindField = 'bind_table_field_'+(i+1),
             sFieldRequire = 'field_require_'+(i+1),
+            sFieldHide = 'field_hide_'+(i+1),
             sColValue = 'colvalue_' + (i + 1);
             
             $G(sItem).value = aTitle[i];
@@ -490,6 +549,9 @@ window.onload = function() {
             }
             if(null != gFieldRequire && typeof(gFieldRequire[i]) !== 'undefined') {
                $G(sFieldRequire).checked = (gFieldRequire[i] == 1 ? true : false);
+            }
+            if(null != gFieldHide && typeof(gFieldHide[i]) !== 'undefined') {
+               $G(sFieldHide).checked = (gFieldHide[i] == 1 ? true : false);
             }
            /* $G(sUnit).value = aUnit[i];
             if ( gSum ) {
@@ -572,7 +634,7 @@ dialog.onok = function (){
         return false;
     }
     var gTitle = '',gColType = '' ,gUnitValue='' ,gSum = '' ,gColValue = '' ,gBindField='',
-    gPluginType = '',gPluginUri = '',nCount = 0,gFieldRequire = '';
+    gPluginType = '',gPluginUri = '',nCount = 0,gFieldRequire = '',gFieldHide = '';
     for (var i = 1;i <= rows_count; i ++ ) {
         var oItem  = $G( "item_" + i ) ,
         /*oSum = $G( 'sum_'+i ) ,  oUnit = $G( 'unit_' + i),*/
@@ -580,6 +642,7 @@ dialog.onok = function (){
         oPluginUri = $G('plugin_uri_'+i),
         oColType = $G('coltype_' + i) ,
         oFieldRequire = $G('field_require_'+i),
+        oFieldHide = $G('field_hide_'+i),
         oColValue = $G('colvalue_' + i) ,oBindField=$G('bind_table_field_'+i);
         if ( oItem.value != '') {
             if(gTitle.indexOf(oItem.value+ '`') !== -1 ) {
@@ -603,6 +666,11 @@ dialog.onok = function (){
             } else {
             	gFieldRequire += '0`';
             }
+            if(oFieldHide.checked) {
+            	gFieldHide += '1`';
+            } else {
+            	gFieldHide += '0`';
+            }
             
         }//end if
     }//end for
@@ -614,6 +682,7 @@ dialog.onok = function (){
     gPluginType = gPluginType.substring(0, gPluginType.length-1);
     gPluginUri = gPluginUri.substring(0, gPluginUri.length-1);
     gFieldRequire = gFieldRequire.substring(0, gFieldRequire.length-1);
+    gFieldHide = gFieldHide.substring(0, gFieldHide.length-1);
     if ( nCount == 0 ) {
         alert("表头项目不能为空");
         return false;
@@ -635,6 +704,7 @@ dialog.onok = function (){
             //oNode.setAttribute('orgsum',gSum);
             
             oNode.setAttribute('fieldrequire',gFieldRequire);
+            oNode.setAttribute('fieldhide',gFieldHide);
             oNode.setAttribute('plugintype',gPluginType);
             oNode.setAttribute('pluginuri',gPluginUri);
             
@@ -669,6 +739,7 @@ dialog.onok = function (){
         oNode.setAttribute('plugintype',gPluginType);
         oNode.setAttribute('pluginuri',gPluginUri);
         oNode.setAttribute('fieldrequire',gFieldRequire);
+        oNode.setAttribute('fieldhide',gFieldHide);
         
         oNode.setAttribute('orgcolvalue',gColValue);
         oNode.setAttribute('bind_table',gBindTable);
