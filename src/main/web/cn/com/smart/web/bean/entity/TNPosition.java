@@ -24,6 +24,8 @@ import cn.com.smart.bean.DateBean;
 @Table(name="t_n_position")
 public class TNPosition extends BaseBeanImpl implements DateBean {
 	
+	public static final String PREFIX = "P";
+	
 	private static final long serialVersionUID = -2667428026760101120L;
 
 	private String id;
@@ -86,7 +88,7 @@ public class TNPosition extends BaseBeanImpl implements DateBean {
 	@Override
 	@Transient
 	public String getPrefix() {
-		return "P";
+		return PREFIX;
 	}
 	
 	

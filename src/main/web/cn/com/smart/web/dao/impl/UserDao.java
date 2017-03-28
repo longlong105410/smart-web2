@@ -428,4 +428,30 @@ public class UserDao extends BaseDaoImpl<TNUser> {
 		}
 		return users;
 	}
+	
+	/**
+	 * 根据职位ID获取用户信息
+	 * @param positionIds
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<TNUser> findByPositionId(String[] positionIds) {
+		List<TNUser> users = null;
+		String sql = sqlMap.getSQL("get_user_by_positionid");
+		if(StringUtils.isEmpty(sql)) {
+			return users;
+		}
+		params = new HashMap<String, Object>();
+		params.put("positionIds", positionIds);
+		try {
+			SQLQuery sqlQuery = (SQLQuery) super.getQuery(sql, params, true);
+			sqlQuery.addEntity(TNUser.class);
+			users = sqlQuery.list();
+		} catch (Exception e) {
+			throw new DaoException(e);
+		} finally {
+			params = null;
+		}
+		return users;
+	}
 }

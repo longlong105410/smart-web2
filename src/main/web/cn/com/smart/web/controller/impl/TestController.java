@@ -20,6 +20,8 @@ import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
 import cn.com.smart.web.helper.PageHelper;
+import cn.com.smart.web.push.MessageType;
+import cn.com.smart.web.push.impl.PushMessageContext;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.UserService;
 import cn.com.smart.web.tag.bean.CustomBtn;
@@ -42,9 +44,10 @@ public class TestController extends BaseController {
 	
 	@Autowired
 	private OPService opServ;
-	
 	@Autowired
 	private UserService userServ;
+	@Autowired
+	private PushMessageContext pushMsgContext;
 	
 	@RequestMapping("/upload")
 	public ModelAndView upload(ModelAndView modelView) throws Exception {
@@ -243,5 +246,12 @@ public class TestController extends BaseController {
 		
 		modelView.setViewName(VIEW_DIR+"/cellList");
 		return modelView;
+	}
+	
+	@RequestMapping("/sendMsgTest")
+	@ResponseBody
+	public SmartResponse<String> sendMsgTest(String index) {
+		pushMsgContext.sendMsg(MessageType.NOTICE, null, null, "测试消息推送"+index, null);
+		return new SmartResponse<String>();
 	}
 }

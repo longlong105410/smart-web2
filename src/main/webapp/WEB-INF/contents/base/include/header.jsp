@@ -28,6 +28,11 @@
 	<script src="${pageContext.request.contextPath}/plugins/jqueryFileUpload/js/jquery.iframe-transport.js" type="text/javascript" ></script>
 	<script src="${pageContext.request.contextPath}/plugins/jqueryFileUpload/js/jquery.fileupload.js" type="text/javascript" ></script>
 	
+	<!-- comet4j插件 -->
+    <script src="${pageContext.request.contextPath}/plugins/comet4j/comet4j-0.1.7.min.js"></script>
+    <link href="${pageContext.request.contextPath}/plugins/comet4j/message-push.css" rel="stylesheet">
+	<script src="${pageContext.request.contextPath}/plugins/comet4j/message-push.js"></script>
+	
 	<!-- 打印 -->
 	<link href="${pageContext.request.contextPath}/plugins/printArea/css/jquery.printarea.css" rel="stylesheet"/>
 	<script src="${pageContext.request.contextPath}/plugins/printArea/js/jquery.printarea.js" type="text/javascript" ></script>

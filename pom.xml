@@ -16,15 +16,6 @@
     <jackson.version>2.5.0</jackson.version>
   </properties>
   <dependencies>
-  
-    <!--  
-    <dependency>
-		<groupId>com.mixsmart</groupId>
-		<artifactId>mixsmart-utils</artifactId>
-		<version>${mixsmart.utils.version}</version>
-	</dependency>
-   -->
-   
    <dependency>
 	   <groupId>commons-codec</groupId>
 	   <artifactId>commons-codec</artifactId>
@@ -49,11 +40,6 @@
     <dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-log4j12</artifactId>
-		<version>1.7.13</version>
-    </dependency>
-    <dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-jdk14</artifactId>
 		<version>1.7.13</version>
     </dependency>
    
@@ -265,6 +251,13 @@
 		<version>1.0.0</version>
 		<scope>system</scope>
 		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/mixsmart-utils-1.0.0.jar</systemPath>
+	</dependency>
+	<dependency>
+		<groupId>org.comet4j</groupId>
+		<artifactId>comet4j</artifactId>
+		<version>comet4j-0.1.8-SNAPSHOT</version>
+		<scope>system</scope>
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/comet4j-0.1.8-SNAPSHOT.jar</systemPath>
 	</dependency>
 	
 	<dependency>

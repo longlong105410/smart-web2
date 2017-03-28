@@ -26,6 +26,8 @@ import cn.com.smart.validate.Validate;
 @Table(name = "T_N_USER")
 public class TNUser extends BaseBeanImpl implements DateBean {
 
+	public static final String PREFIX = "U";
+	
 	/**
 	 * 
 	 */
@@ -190,7 +192,7 @@ public class TNUser extends BaseBeanImpl implements DateBean {
 	@Override
 	@Transient
 	public String getPrefix() {
-		return "U";
+		return PREFIX;
 	}
 	
 	

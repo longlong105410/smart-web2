@@ -15,6 +15,9 @@
    }
    
    function loadingTodoData() {
+	   var $listContent = $("#my-todo-index .list-content");
+	   if($listContent.find(".line-loading").length == 0) 
+		   $listContent.html("<div class=\"row\"><div class=\"line-loading m-t-10\">正在加载数据...</div></div>");
        $.post('process/indexTodo.json',function(output){
           var contents = '';
           if(output.result == '1') {

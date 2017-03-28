@@ -35,6 +35,13 @@
         </sql>
     </sqlUnit>
     
+    <!-- 根据职位ID获取用户信息 -->
+    <sqlUnit name="get_user_by_positionid">
+        <sql>
+            select * from t_n_user t where t.position_id in(:positionIds)
+        </sql>
+    </sqlUnit>
+    
     <!-- 用户登录 -->
      <sqlUnit name="user_login_sql">
         <sql>

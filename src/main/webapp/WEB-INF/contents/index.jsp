@@ -6,4 +6,26 @@
 	     <div id="index-tab" title="首页" href="index/welcome" data-options="iconCls:'glyphicon glyphicon-home'"></div>
 	 </div>
 </div>
-<jsp:include page="base/include/footer.jsp" />
+<script type="text/javascript">
+  $(function(){
+	  var messagePush = new MessagePush({cid: '${userInfo.id}', 
+		  remindCallback:function(id) {
+			  switch(id) {
+			      case "todo-push":
+				      loadingTodoData();
+				      break;
+				  default:
+					  break;
+			  }
+		  }
+	  });
+	  messagePush.init();
+	  setTimeout(function() {
+	  	$.get('test/sendMsgTest?index=12',function(){});
+	  }, 3000);
+  });
+</script>
+	 </div><!-- content -->
+	</div>
+  </body>
+</html>

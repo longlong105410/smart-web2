@@ -556,4 +556,8 @@ public class UserService extends MgrServiceImpl<TNUser> {
 		return smartResp;
 	}
 
+	@Override
+	public UserDao getDao() {
+		return (UserDao)super.getDao();
+	}
 }

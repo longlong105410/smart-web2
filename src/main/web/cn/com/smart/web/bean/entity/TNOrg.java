@@ -26,6 +26,8 @@ import cn.com.smart.validate.Validate;
 @Table(name = "T_N_ORG")
 public class TNOrg extends BaseBeanImpl implements BaseTree,DateBean {
 
+	public static final String PREFIX = "ORG";
+	
 	/**
 	 * 
 	 */
@@ -176,7 +178,7 @@ public class TNOrg extends BaseBeanImpl implements BaseTree,DateBean {
 	@Override
 	@Transient
 	public String getPrefix() {
-		return "org";
+		return PREFIX;
 	}
 	
 

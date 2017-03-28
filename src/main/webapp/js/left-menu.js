@@ -85,7 +85,8 @@ function getTabHeaderHeight() {
  * @returns
  */
 function getFooterHeight() {
-	return $(".wrap-footer").outerHeight(true);
+	//return $(".wrap-footer").outerHeight(true);
+	return 0;
 }
 
 /**
@@ -118,7 +119,7 @@ function initMenuHeight() {
 	//var h = $(document).height();
 	var h = $(window).height();
 	var vh = $(".header-body-dividing").outerHeight(true);
-	h = h - $(".wrap-footer").outerHeight(true) - $(".header").outerHeight(true)-vh-3;
+	h = h - getFooterHeight() - $(".header").outerHeight(true)-vh-3;
     var menuResizerH = h;
     if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0)){
     	menuResizerH = menuResizerH-5;
