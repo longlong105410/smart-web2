@@ -174,7 +174,11 @@ public class TableTag extends AbstractPanelFooterTag {
 	    		headerTrStyle = "ui-state-default";
 	    	}
 	    	if(StringUtils.isNotEmpty(headers)) {
-	    		out.println("<thead><tr class='"+headerTrStyle+"' data-height='36'>");
+	    		String dataHeight = "";
+	    		if(isAutoHeight == 0) {
+	    			dataHeight = "data-height='36'";
+	    		}
+	    		out.println("<thead><tr class='"+headerTrStyle+"' "+dataHeight+">");
 	    		if(isCheckbox==1) {
 		    		out.println("<th class='th-checkbox text-center'><div class='checkbox'><label><input class='cnoj-checkbox-all cnoj-op-checkbox' data-target='.one-checkbox' value='' type='checkbox'></label></div></th>");
 		    	}

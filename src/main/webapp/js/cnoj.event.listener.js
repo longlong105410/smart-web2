@@ -1543,7 +1543,13 @@ function tableWrapListener($elementWrap, isResize) {
 		var $table = $tableWrap.find("table");
 		var $theadTr = $table.find("thead").clone(true);
 		if(!utils.isEmpty($theadTr)) {
-			$tableWrap.before("<div class='table-theader-bg "+$table.find("thead").find("tr").attr("class")+"'><div class='table-theader' data-height='"+$table.find("thead").find("tr").data("height")+"'><table class='"+$table.attr("class")+"'></table></div></div>");
+			var dataHeight = $table.find("thead").find("tr").data("height");
+			if(utils.isNotEmpty(dataHeight)) {
+				dataHeight = "data-height='"+dataHeight+"'";
+			} else {
+				dataHeight = "";
+			}
+			$tableWrap.before("<div class='table-theader-bg "+$table.find("thead").find("tr").attr("class")+"'><div class='table-theader' "+dataHeight+"><table class='"+$table.attr("class")+"'></table></div></div>");
 			$table.find("thead").remove();
 			$tableTheader = $tableWrap.prev().find(".table-theader");
 			$tableTheader.find("table").append($theadTr);

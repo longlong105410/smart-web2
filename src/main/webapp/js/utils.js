@@ -710,7 +710,6 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 					var isDefault = false;
 					for(var i=0;i<datas.length;i++) {
 						isDefault = false;
-						isDefault = false;
 						for(var j=0,len=defaultValueArray.length;j<len;j++) {
 							if(datas[i][0] == defaultValueArray[j]) {
 								isDefault = true;

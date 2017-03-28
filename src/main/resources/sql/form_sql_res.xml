@@ -63,4 +63,11 @@
 	 		SELECT fh.id,fh.title FROM t_form_helper fh where fh.state=1 order by fh.create_time asc 
 	 	</sql>
 	 </sqlUnit>
+	 
+	 <!-- 根据字段ID获取表字段 -->
+	 <sqlUnit name="get_table_fields">
+	 	<sql>
+	 		select * from t_create_table_field t where t.id in(:ids)
+	 	</sql>
+	 </sqlUnit>
 </sqlMap>

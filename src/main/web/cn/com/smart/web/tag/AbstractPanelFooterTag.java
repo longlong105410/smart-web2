@@ -33,6 +33,8 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 	 */
 	private static final long serialVersionUID = -3901385946830480568L;
 
+	protected int isAutoHeight = 0;
+	
 	//是否分页
     protected PageParam page;
 	
@@ -63,7 +65,11 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     		UserInfo userInfo = getUserInfo();
     		OPAuthService authServ = (OPAuthService)getService("opAuthServ");
     		StringBuilder htmlContent = new StringBuilder();
-    		htmlContent.append("<div class='panel-footer ui-state-default panel-footer-page' data-height='34'>");
+    		String dataHeight = "";
+    		if(isAutoHeight == 0) {
+    			dataHeight = "data-height='34'";
+    		}
+    		htmlContent.append("<div class='panel-footer ui-state-default panel-footer-page' "+dataHeight+">");
     		int count = 0;
     		String btnStyleFlag = null, pageStyleFlag = null, infoStyleFlag = null;
     		if(null != addBtn || null != editBtn || null != delBtn || null != refreshBtn 
@@ -301,5 +307,13 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 
 	public void setSearchPanelTag(String searchPanelTag) {
 		this.searchPanelTag = searchPanelTag;
+	}
+
+	public int getIsAutoHeight() {
+		return isAutoHeight;
+	}
+
+	public void setIsAutoHeight(int isAutoHeight) {
+		this.isAutoHeight = isAutoHeight;
 	}
 }

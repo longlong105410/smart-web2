@@ -1,12 +1,19 @@
 package cn.com.smart.form.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
+import cn.com.smart.exception.DaoException;
 import cn.com.smart.form.bean.entity.TCreateTableField;
+import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.web.bean.entity.TNDict;
 import cn.com.smart.web.dao.impl.RalteDictDaoImpl;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * @author lmq
@@ -45,4 +52,29 @@ public class FormTableFieldDao extends RalteDictDaoImpl<TCreateTableField>{
 		}
 	}
 
+	/**
+	 * 根据表字段ID获取表字段实体集合
+	 * @param fieldIds
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<TCreateTableField> getTableFields(String[] fieldIds) {
+		List<TCreateTableField> tableFields = null;
+		String sql = SQLResUtil.getOpSqlMap().getSQL("get_table_fields");
+		if(StringUtils.isEmpty(sql)) {
+			return tableFields;
+		}
+		Map<String,Object> param = new HashMap<String, Object>(1);
+		param.put("ids", fieldIds);
+		try {
+			SQLQuery sqlQuery = (SQLQuery) super.getQuery(sql, param, true);
+			sqlQuery.addEntity(TCreateTableField.class);
+			tableFields = sqlQuery.list();
+		} catch (Exception e) {
+			throw new DaoException(e);
+		} finally {
+			param = null;
+		}
+		return tableFields;
+	}
 }
