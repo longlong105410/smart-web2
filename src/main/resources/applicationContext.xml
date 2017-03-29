@@ -120,11 +120,7 @@
 			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="check*" propagation="REQUIRED" read-only="true" />
-			
-			<!--  
-			<tx:method name="*" propagation="REQUIRED" />
-			-->
-			
+
 		</tx:attributes>
 	</tx:advice>
 	
@@ -138,24 +134,25 @@
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	
 	<!-- 定义用于执行定时任务的类(扫描任务定时器)-->
-	<bean id="scanTask" class="cn.com.smart.flow.timer.ScanTaskTimer" />
+	<bean id="scanProcess" class="cn.com.smart.flow.timer.ScanProcessTimer" />
 	<!-- 定时器配置 -->
-	<bean id="scanTaskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="scanTask" />
+	<bean id="scanProcessJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scanProcess" />
 		<property name="targetMethod" value="run" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+		<property name="concurrent" value="false"></property>
 	</bean>
 	<!-- 定义时间间隔触发器 -->
-	<bean id="scanTaskTigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="scanTaskJob" />
-		<property name="startDelay" value="60000" /><!-- 调度工厂实例化后，经过2分钟开始执行调度 -->  
-		 <property name="repeatInterval" value="3600000" /><!-- 每一个小时调度一次 -->  
-		<!--<property name="repeatInterval" value="10000" />--><!-- 每10秒调度一次(测试用) -->  
+	<bean id="scanProcessTigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="scanProcessJob" />
+		<property name="startDelay" value="60000" /><!-- 调度工厂实例化后，经过1分钟开始执行调度 -->  
+		<property name="repeatInterval" value="3600000" /><!-- 每一个小时调度一次 -->  
 	</bean>
 	<!-- 启动定时器 -->
 	<bean id="startJob" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="scanTaskTigger" />
+				<ref bean="scanProcessTigger" />
 			</list>
 		</property>
 	</bean>
