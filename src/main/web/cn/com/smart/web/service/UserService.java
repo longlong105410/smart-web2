@@ -235,7 +235,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 						userInfo.setOrgId(user.getOrgId());
 					}
 					userInfo.setPositionId(user.getPositionId());
-					if(StringUtils.isEmpty(user.getPositionId())){
+					if(StringUtils.isNotEmpty(user.getPositionId())){
 						TNPosition position = posDao.find(user.getPositionId());
 						if(null != position) {
 							userInfo.setPositionName(position.getName());
