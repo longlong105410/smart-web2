@@ -59,10 +59,12 @@ public class FilterParam implements IFilterParam {
 
 	
 	/**
-	 * 参数转化为字符串
+	 * 参数转化为字符串 
+	 * @see FilterParam#getParamToString()
 	 * @param varName
 	 * @return 返回转化结果
 	 */
+	@Deprecated
 	public String getParamToString(String varName) {
 		StringBuilder paramBuff = new StringBuilder();
 		varName = StringUtils.handNull(varName);
@@ -90,8 +92,10 @@ public class FilterParam implements IFilterParam {
 	
 	/**
 	 * 参数转化为字符串
+	 * 注：页面分页时，不用改方法也支持根据条件分页
 	 * @return 返回转化结果
 	 */
+	@Deprecated
 	public String getParamToString() {
 		return getParamToString(null);
 	}

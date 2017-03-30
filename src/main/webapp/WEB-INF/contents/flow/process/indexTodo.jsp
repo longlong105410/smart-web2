@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <div class="wrap-content">
-    <div class="wrap-content" id="my-todo-index">
+    <div id="my-todo-index">
 	    <div class="container-fluid list-content">
 	      <div class="row">
 	       <div class="line-loading m-t-10">正在加载数据...</div>

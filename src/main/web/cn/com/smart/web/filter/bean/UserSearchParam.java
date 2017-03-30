@@ -38,6 +38,7 @@ public class UserSearchParam extends FilterParam {
 	}
 	
 	@Override
+	@Deprecated
 	public String getParamToString() {
 		StringBuilder paramBuff = new StringBuilder();
 		String param = super.getParamToString();

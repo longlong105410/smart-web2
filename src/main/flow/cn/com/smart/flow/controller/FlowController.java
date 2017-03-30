@@ -94,8 +94,8 @@ public class FlowController extends BaseFlowControler {
 			searchParam.setOrgId(null);
 		}
 		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, null, page);
+		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
@@ -125,7 +125,6 @@ public class FlowController extends BaseFlowControler {
 		
 		delBtn = new DelBtn("flow/delete",null, "确定要删除选中的部署流程信息吗，删除后数据将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("customBtns", customBtns);

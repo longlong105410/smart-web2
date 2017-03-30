@@ -110,7 +110,6 @@ public class PositionController extends BaseController {
 		String uri = "position/simplist";
 		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		SmartResponse<Object> smartResp = opServ.getDatas("position_simp_list",searchParam, getStartNum(page), getPerPageSize());
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, "#position-tab", page);
 		selectedEventProp = new SelectedEventProp(SelectedEventType.OPEN_TO_TARGET.getValue(),"auth/positionHas","#has-auth-list","id");	
 
@@ -139,8 +138,7 @@ public class PositionController extends BaseController {
 		String uri = "position/rolelist";
 		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		SmartResponse<Object> smartResp = opServ.getDatas("position_role_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri + ((null != searchParam)?("?"+searchParam.getParamToString()):"");
-		pageParam = new PageParam(paramUri, null, page);
+		pageParam = new PageParam(uri, null, page);
 		
 		uri = uri+"?id="+searchParam.getId();
 		
@@ -173,8 +171,7 @@ public class PositionController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "position/addRole";
 		SmartResponse<Object> smartResp = opServ.getDatas("position_addrole_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
-		pageParam = new PageParam(paramUri, ".bootstrap-dialog-message", page);
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);

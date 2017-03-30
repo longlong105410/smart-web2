@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <div class="wrap-content">
-    <div data-subtract-height="30">
+    <div class="panel" data-subtract-height="30">
         <div class="panel-search">
               <form class="form-inline cnoj-entry-submit" id="search-form-user" method="post" role="form" action="user/rolelist" target="#user-role-tab">
                   <input type="hidden" name="id" value="${searchParam.id }" />

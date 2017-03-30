@@ -116,7 +116,7 @@ public class ProcessMgrController extends BaseFlowControler {
 		modelMap.put("refreshUri", refreshUri);
 		String target = "#process-order-tab";
 		refreshBtn = new RefreshBtn(searchUri, null, target);
-		pageParam = new PageParam(searchUri, target, page);
+		pageParam = new PageParam(uri, target, page);
 		
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("smartResp", smartResp);
@@ -172,7 +172,7 @@ public class ProcessMgrController extends BaseFlowControler {
 		
 		String target = "#process-hist-order-tab";
 		refreshBtn = new RefreshBtn(searchUri, null, target);
-		pageParam = new PageParam(searchUri, target, page);
+		pageParam = new PageParam(uri, target, page);
 		
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("smartResp", smartResp);

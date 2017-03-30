@@ -1,9 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <div class="wrap-content">
-    <div>
+    <div class="panel">
         <div class="panel-search borer-bottom" data-height="36">
-              <form class="form-inline" id="search-form-position" method="post" role="form" action="position/simplist" target="#position-tab">
+              <form class="form-inline cnoj-entry-submit" id="search-form-position" method="post" role="form" action="position/simplist" target="#position-tab">
                   <div class="form-group p-r-10">
 				    <label for="search-input01">名称：</label>
 				    <input type="text" class="form-control input-form-sm-control" id="search-input01" name="name" placeholder="请输入职位名称" value="${searchParam.name }"/>

@@ -62,7 +62,6 @@ public class FormHelperController extends BaseFormController {
 		editBtn = new EditBtn("edit", "form/helper/edit", null, "修改表单帮助信息", "800");
 		delBtn = new DelBtn("form/helper/delete", "您确定要删除选中的数据吗？", uri, null, null);
 		refreshBtn = new RefreshBtn(uri, null, null);
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, null, page);
 		ALink alink = new ALink("form/helper/view", "800", "查看表单帮助信息");
 		alinks = new ArrayList<ALink>();

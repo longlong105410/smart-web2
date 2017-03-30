@@ -153,7 +153,6 @@ public class RoleController extends BaseController {
 			searchParam.setRoleIds(StringUtil.list2Array(userInfo.getRoleIds()));
 		}
 		SmartResponse<Object> smartResp = opServ.getDatas("role_simp_list",searchParam, getStartNum(page), getPerPageSize());
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, "#role-tab", page);
 		selectedEventProp = new SelectedEventProp(SelectedEventType.OPEN_TO_TARGET.getValue(),"auth/roleHas","#has-auth-list","id");	
 		
@@ -179,8 +178,7 @@ public class RoleController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "role/userlist";
 		SmartResponse<Object> smartResp = opServ.getDatas("role_user_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri + ((null != searchParam)?("?"+searchParam.getParamToString()):"");
-		pageParam = new PageParam(paramUri, "#role-user-tab", page);
+		pageParam = new PageParam(uri, "#role-user-tab", page);
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addUser?id="+searchParam.getId(), null, "该角色中添加用户", "600");
 		delBtn = new DelBtn("op/moreParamDel.json?roleId="+searchParam.getId(), "roleUser", "确定要从该角色中删除选中的用户吗？",uri,"#role-user-tab", null);
@@ -209,8 +207,7 @@ public class RoleController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "role/orglist";
 		SmartResponse<Object> smartResp = opServ.getDatas("role_org_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri + ((null != searchParam)?("?"+searchParam.getParamToString()):"");
-		pageParam = new PageParam(paramUri, "#role-org-tab", page);
+		pageParam = new PageParam(uri, "#role-org-tab", page);
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addOrg?id="+searchParam.getId(), null, "该角色中添加组织机构", "600");
 		delBtn = new DelBtn("op/moreParamDel?roleId="+searchParam.getId(), "roleOrg", "确定要从该角色中删除选中的组织机构吗？",uri,"#role-org-tab", null);
@@ -239,8 +236,7 @@ public class RoleController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "role/positionlist";
 		SmartResponse<Object> smartResp = opServ.getDatas("role_position_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri + ((null != searchParam)?("?"+searchParam.getParamToString()):"");
-		pageParam = new PageParam(paramUri, "#role-position-tab", page);
+		pageParam = new PageParam(uri, "#role-position-tab", page);
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addPosition?id="+searchParam.getId(), null, "该角色中添加职位", "600");
 		delBtn = new DelBtn("op/moreParamDel?roleId="+searchParam.getId(), "rolePosition", "确定要从该角色中删除选中的职位吗？",uri,"#role-position-tab", null);
@@ -299,8 +295,7 @@ public class RoleController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "role/addUser";
 		SmartResponse<Object> smartResp = opServ.getDatas("role_adduser_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
-		pageParam = new PageParam(paramUri, ".bootstrap-dialog-message", page);
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -338,8 +333,7 @@ public class RoleController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "role/addOrg";
 		SmartResponse<Object> smartResp = opServ.getDatas("role_addorg_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
-		pageParam = new PageParam(paramUri, ".bootstrap-dialog-message", page);
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("pageParam", pageParam);
@@ -377,8 +371,7 @@ public class RoleController extends BaseController {
 			page = PageHelper.getPage(page);
 			String uri = "role/addPosition";
 			SmartResponse<Object> smartResp = opServ.getDatas("role_addposition_list",searchParam, getStartNum(page), getPerPageSize());
-			String paramUri = uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
-			pageParam = new PageParam(paramUri, ".bootstrap-dialog-message", page);
+			pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
 			ModelMap modelMap = modelView.getModelMap();
 			modelMap.put("smartResp", smartResp);
 			modelMap.put("pageParam", pageParam);

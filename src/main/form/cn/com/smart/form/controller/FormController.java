@@ -108,7 +108,6 @@ public class FormController extends BaseFormController {
 		
 		delBtn = new DelBtn("op/del.json","form", "确定要删除选中的表单吗，删除后数据将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, null, page);
 		
 		alinks = new ArrayList<ALink>();

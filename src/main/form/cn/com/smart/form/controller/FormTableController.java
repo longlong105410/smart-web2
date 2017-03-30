@@ -73,7 +73,6 @@ public class FormTableController extends BaseController {
 		editBtn = new EditBtn("edit","showPage/form_table_edit", "formTable", "修改表", "800");
 		delBtn = new DelBtn("op/del.json","formTable", "确定要删除选中的表吗，删除后将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, null, page);
 		alinks = new ArrayList<ALink>();
 		ALink link = new ALink();

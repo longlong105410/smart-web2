@@ -55,11 +55,7 @@ public class UserController extends BaseController {
 		addBtn = new EditBtn("add","showPage/base_user_add", null, "添加用户", "600");
 		editBtn = new EditBtn("edit","showPage/base_user_edit", "user", "修改用户信息", "600");
 		delBtn = new DelBtn("op/del.json", "user", "确定要删除选中的用户吗？",uri,null, null);
-		String paramStr = null;
-		paramStr = (null != searchParam)?searchParam.getParamToString():null;
-		uri += StringUtil.isNotEmpty(paramStr)?("?"+paramStr):"";
-		uri = StringUtil.isContains(uri, "?")?uri+"&page=":uri+"?page=";
-		uri += page;
+		
 		refreshBtn = new RefreshBtn(uri, "resource",null);
 		CustomBtn customBtn = new CustomBtn("changepwd", "修改密码", "修改密码", "showPage/base_user_batchChangePwd","glyphicon-pencil",BtnPropType.SelectType.MULTI.getValue());
 		customBtn.setWidth("500");
@@ -161,7 +157,6 @@ public class UserController extends BaseController {
 		String uri = "user/simplist";
 		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		SmartResponse<Object> smartResp = opServ.getDatas("user_simp_list",searchParam, getStartNum(page), getPerPageSize());
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, "#user-tab", page);
 		selectedEventProp = new SelectedEventProp(SelectedEventType.OPEN_TO_TARGET.getValue(),"auth/userHas","#has-auth-list","id");	
 
@@ -231,8 +226,7 @@ public class UserController extends BaseController {
 		page = PageHelper.getPage(page);
 		
 		SmartResponse<Object> smartResp = opServ.getDatas("user_role_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri + ((null != searchParam)?("?"+searchParam.getParamToString()):"");
-		pageParam = new PageParam(paramUri, null, page);
+		pageParam = new PageParam(uri, null, page);
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","user/addRole?id="+searchParam.getId(), null, "用户中添加角色", "600");
 		delBtn = new DelBtn("op/moreParamDel.json?flag=u&userId="+searchParam.getId(), "roleUser", "确定要从该用户中删除选中的角色吗？",uri,"#user-role-tab", null);
@@ -262,8 +256,7 @@ public class UserController extends BaseController {
 		page = PageHelper.getPage(page);
 		String uri = "user/addRole";
 		SmartResponse<Object> smartResp = opServ.getDatas("user_addrole_list",searchParam, getStartNum(page), getPerPageSize());
-		String paramUri = uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
-		pageParam = new PageParam(paramUri, ".bootstrap-dialog-message", page);
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);

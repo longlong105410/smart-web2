@@ -44,7 +44,6 @@ public class ResourceController extends BaseController {
 		editBtn = new EditBtn("edit","showPage/base_resource_edit", "resource", "修改资源", "600");
 		delBtn = new DelBtn("resource/delete.json", "确定要删除选中的资源吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "resource",null);
-		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		pageParam = new PageParam(uri, null, page);
 		
 		ModelMap modelMap = modelView.getModelMap();
