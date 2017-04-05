@@ -74,6 +74,11 @@ public class TNUser extends BaseBeanImpl implements DateBean {
 	private String state;
 	
 	private Date createTime;
+	
+	/**
+	 * 排序顺序
+	 */
+	private Integer sortOrder = 1;
 
 	@Id
 	@Column(name="id",length=50)
@@ -188,12 +193,19 @@ public class TNUser extends BaseBeanImpl implements DateBean {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+	
+	@Column(name="sort_order")
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 
 	@Override
 	@Transient
 	public String getPrefix() {
 		return PREFIX;
 	}
-	
-	
 }

@@ -1,7 +1,8 @@
 package cn.com.smart.flow.filter;
 
 import cn.com.smart.filter.bean.FilterParam;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程实例搜索bean
@@ -37,14 +38,15 @@ public class OrderSearchParam extends FilterParam {
 	public String getParamToString() {
 		StringBuilder paramBuff = new StringBuilder();
 		String param = super.getParamToString();
-		if(!StringUtil.isEmpty(startDate)) {
-			paramBuff.append("startDate="+startDate);
+		if(StringUtils.isNotEmpty(startDate)) {
+			paramBuff.append("startDate="+startDate+"&");
 		}
-		if(!StringUtil.isEmpty(endDate)) {
-			paramBuff.append("endDate="+endDate);
+		if(StringUtils.isNotEmpty(endDate)) {
+			paramBuff.append("endDate="+endDate+"&");
 		}
-		if(!StringUtil.isEmpty(paramBuff.toString())) {
-			param = StringUtil.isEmpty(param)?paramBuff.toString():"&"+paramBuff.toString();
+		if(StringUtils.isNotEmpty(paramBuff.toString())) {
+			param = StringUtils.isEmpty(param)?paramBuff.toString():"&"+paramBuff.toString();
+			param = param.substring(0, param.length()-1);
 		}
 		return param;
 	}

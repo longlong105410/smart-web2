@@ -6,11 +6,15 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.SubmitFormData;
 import cn.com.smart.flow.bean.entity.TFlowAttachment;
+import cn.com.smart.flow.dao.FlowAttachmentDao;
 import cn.com.smart.service.impl.MgrServiceImpl;
 import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.entity.TNAttachment;
 
 /**
  * 流程附件
@@ -30,7 +34,7 @@ public class FlowAttachmentService extends MgrServiceImpl<TFlowAttachment> {
 	 */
 	public boolean updateAtt(SubmitFormData data,String userId) {
 		boolean is = false;
-		if(null != data && !StringUtil.isEmpty(userId)) {
+		if(null != data && StringUtils.isNotEmpty(userId)) {
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("formId", data.getFormId());
 			param.put("userId", userId);
@@ -54,5 +58,20 @@ public class FlowAttachmentService extends MgrServiceImpl<TFlowAttachment> {
 			
 		}
 		return is;
+	}
+	
+	/**
+	 * 获取附件列表根据流程实例ID
+	 * @param orderId 流程实例id
+	 * @return 返回附件实体列表
+	 */
+	public List<TNAttachment> getAttachmentsByOrderId(String orderId) {
+		return getDao().queryAttachmentByOrderId(orderId);
+	}
+
+
+	@Override
+	public FlowAttachmentDao getDao() {
+		return (FlowAttachmentDao)super.getDao();
 	}
 }

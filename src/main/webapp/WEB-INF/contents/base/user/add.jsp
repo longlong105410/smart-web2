@@ -59,6 +59,12 @@
 			       <select class="form-control cnoj-select" data-uri="dict/item/DATA_STATE.json" name="state" id="input09"></select>
 			    </div>
 			</div>
+            <div class="form-group m-b-10">
+                <label for="input11" class="col-sm-2 control-label">序号</label>
+                <div class="col-sm-9 p-l-0">
+                    <input type="text" class="form-control" name="sortOrder" data-format="integer" data-label-name="序号" id="input11" />
+                </div>
+            </div>
 			<div class="form-group m-b-10">
 			    <label for="input10" class="col-sm-2 control-label">备注</label>
 			    <div class="col-sm-9 p-l-0">
