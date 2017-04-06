@@ -17,13 +17,14 @@ import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
 import cn.com.smart.cache.ICacheManagerAware;
 import cn.com.smart.cache.InitCache;
-import cn.com.smart.utils.ArrayUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.bean.entity.TNRoleResource;
 import cn.com.smart.web.dao.IRoleResourceDao;
 import cn.com.smart.web.dao.impl.RoleResourceDao;
+
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 角色资源缓存
@@ -78,7 +79,7 @@ public class RoleResourceMemoryCache  implements InitCache,ICacheManagerAware, I
 	@Override
 	public Map<String, List<TNOPAuth>> queryByRole(String roleId) {
 		Map<String,List<TNOPAuth>> authMaps = null;
-		if(StringUtil.isEmpty(roleId)) 
+		if(StringUtils.isEmpty(roleId)) 
 			return authMaps;
 		try {
 			List<TNRoleResource> roleResources = getRoleResources();
@@ -87,8 +88,8 @@ public class RoleResourceMemoryCache  implements InitCache,ICacheManagerAware, I
 				List<TNOPAuth> auths = null;
 				for (TNRoleResource roleRes : roleResources) {
 					if(roleRes.getRoleId().equals(roleId)) {
-						if(!StringUtil.isEmpty(roleRes.getOpAuths())) {
-							auths = authCache.queryAuths(ArrayUtil.stringToArray(roleRes.getOpAuths(),","));
+						if(StringUtils.isNotEmpty(roleRes.getOpAuths())) {
+							auths = authCache.queryAuths(ArrayUtils.stringToArray(roleRes.getOpAuths(),","));
 						}
 						authMaps.put(roleRes.getResourceId(), auths);
 					}
@@ -106,7 +107,7 @@ public class RoleResourceMemoryCache  implements InitCache,ICacheManagerAware, I
 	@Override
 	public List<TNRoleResource> queryByUriRoles(String uri, List<String> roleIds) {
 		List<TNRoleResource> lists = null;
-		if(StringUtil.isEmpty(uri) || null == roleIds || roleIds.isEmpty()) {
+		if(StringUtils.isEmpty(uri) || null == roleIds || roleIds.isEmpty()) {
 			return lists;
 		}
 		try {

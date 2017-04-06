@@ -14,7 +14,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 加载sql配置文件
@@ -56,7 +56,7 @@ public class LoadingSQLMapFile {
 	 */
 	public synchronized SQLMapFile loadFile(String xmlPath) throws SQLMapException {
 		SQLMapFile sqlMapFile = null;
-		if(StringUtil.isEmpty(xmlPath)) {
+		if(StringUtils.isEmpty(xmlPath)) {
 			throw new SQLMapException("xml路径为空");
 		} else {
 			if(null != SQL_MAP_FILES && SQL_MAP_FILES.size()>0) {
@@ -67,7 +67,7 @@ public class LoadingSQLMapFile {
 					pathList = null;
 				} /*else {
 					String devModel = InitSysConfig.getInstance().getValue("project.devModel");
-					if(!StringUtil.isEmpty(devModel) && IConstant.PROJECT_DEV_MODEL.equals(devModel)) {
+					if(StringUtils.isNotEmpty(devModel) && IConstant.PROJECT_DEV_MODEL.equals(devModel)) {
 						URL path = this.getClass().getResource(xmlPath);
 						File file = new File(path.getFile());
 						long lastModifyTime = file.lastModified();
@@ -121,7 +121,7 @@ public class LoadingSQLMapFile {
 				Element element = (Element) i.next();
 				if("include".equals(element.getName())) {
 					String fileStr = element.attributeValue("file");
-					if(!StringUtil.isEmpty(fileStr)) {
+					if(StringUtils.isNotEmpty(fileStr)) {
 						if(fileStr.startsWith("./")) {
 							String parentDir = xmlPath.substring(0,xmlPath.lastIndexOf("/")+1);
 							fileStr = fileStr.replace("./", parentDir);
@@ -184,7 +184,7 @@ public class LoadingSQLMapFile {
 	 */
 	private boolean isRepeat(String fileStr) {
 		boolean is = false;
-		if(null != pathList && pathList.size()>0 && !StringUtil.isEmpty(fileStr)) {
+		if(null != pathList && pathList.size()>0 && StringUtils.isNotEmpty(fileStr)) {
 			for (String path:pathList) {
 				if(fileStr.equals(path)) {
 					is = true;

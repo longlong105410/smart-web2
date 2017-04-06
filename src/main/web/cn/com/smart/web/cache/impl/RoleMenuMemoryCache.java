@@ -15,10 +15,11 @@ import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
 import cn.com.smart.cache.ICacheManagerAware;
 import cn.com.smart.cache.InitCache;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNRoleMenu;
 import cn.com.smart.web.dao.IRoleMenuDao;
 import cn.com.smart.web.dao.impl.RoleMenuDao;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 角色菜单缓存
@@ -69,7 +70,7 @@ public class RoleMenuMemoryCache implements InitCache,ICacheManagerAware,IRoleMe
 	@Override
 	public List<TNRoleMenu> queryByRole(String roleId) {
 		List<TNRoleMenu> lists = null;
-		if(StringUtil.isEmpty(roleId)) {
+		if(StringUtils.isEmpty(roleId)) {
 			return lists;
 		}
 		lists = new ArrayList<TNRoleMenu>();
@@ -126,7 +127,7 @@ public class RoleMenuMemoryCache implements InitCache,ICacheManagerAware,IRoleMe
 	@Override
 	public boolean isRoleMenuCombinExist(String roleId, String menuId) {
 		boolean is = false;
-		if(StringUtil.isEmpty(roleId) || StringUtil.isEmpty(menuId)) {
+		if(StringUtils.isEmpty(roleId) || StringUtils.isEmpty(menuId)) {
 			return is;
 		}
 		try {

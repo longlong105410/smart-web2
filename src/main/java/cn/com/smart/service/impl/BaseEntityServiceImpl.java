@@ -14,8 +14,9 @@ import cn.com.smart.exception.ServiceException;
 import cn.com.smart.filter.HandleFilterParam;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.service.IBaseEntityService;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.helper.PageHelper;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * @author lmq
@@ -165,7 +166,7 @@ public class BaseEntityServiceImpl<T extends BaseBean> extends BaseServiceImpl i
 	@Override
 	public SmartResponse<T> find(String id) {
 		SmartResponse<T> smartResp = new SmartResponse<T>();
-		if(StringUtil.isNotEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			T t = baseDao.find(id);
 			if(null != t) {
 				smartResp.setResult(OP_SUCCESS);

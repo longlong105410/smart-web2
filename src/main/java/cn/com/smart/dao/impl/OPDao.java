@@ -12,7 +12,6 @@ import cn.com.smart.filter.HandleFilterParam;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 
 import com.mixsmart.exception.NullArgumentException;
 import com.mixsmart.utils.StringUtils;
@@ -43,9 +42,9 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public List<Object> queryDatas(String resId) throws DaoException {
 		List<Object> objs = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				objs = queryObjSql(sql);
 			} else {
 				throw new DaoException("SQL语句为空--["+resId+"]值为空");
@@ -65,9 +64,9 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public List<Object> queryDatas(String resId,Map<String,Object> params) throws DaoException {
 		List<Object> objs = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				objs = queryObjSql(sql, params);
 			} else {
 				throw new DaoException("SQL语句为空--["+resId+"]值为空");
@@ -89,7 +88,7 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	public List<Object> queryDatas(String resId,FilterParam filterParam) throws DaoException{
 		List<Object> objs = null;
 		Map<String,Object> params = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			if(null != filterParam) {
 				params = new HandleFilterParam(filterParam).getParams();
 			}
@@ -112,9 +111,9 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public List<Object> queryDatas(String resId,int start,int rows) throws DaoException {
 		List<Object> objs = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				objs = queryObjSql(sql,null,start,rows);
 			} else {
 				throw new DaoException("SQL语句为空--["+resId+"]值为空");
@@ -136,9 +135,9 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public List<Object> queryDatas(String resId,Map<String,Object> params,int start,int rows) throws DaoException {
 		List<Object> objs = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				objs = queryObjSql(sql, params,start,rows);
 			} else {
 				throw new DaoException("SQL语句为空--["+resId+"]值为空");
@@ -180,7 +179,7 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public List<Object> queryDatas(String resId,FilterParam filterParam,int start,int rows) throws DaoException {
 		List<Object> objs = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String,Object> params = null;
 			if(null != filterParam) {
 				params = new HandleFilterParam(filterParam).getParams();
@@ -205,7 +204,7 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public List<Object> queryDatas(String resId,Map<String,Object> params,FilterParam filterParam,int start,int rows) throws DaoException {
 		List<Object> objs = null;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String,Object> filterParamMap = null;
 			if(null != filterParam) {
 				filterParamMap = new HandleFilterParam(filterParam).getParams();
@@ -225,9 +224,9 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	@Override
 	public Long count(String resId) throws DaoException{
 		long total = 0;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				total = super.countSql(sql);
 			} else {
 				throw new DaoException("SQL语句为空--["+resId+"]值为空");
@@ -241,9 +240,9 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	@Override
 	public Long count(String resId,Map<String,Object> params) throws DaoException {
 		long total = 0;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				total = super.countSql(sql, params);
 			} else {
 				throw new DaoException("SQL语句为空--["+resId+"]值为空");
@@ -263,7 +262,7 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public Long count(String resId,FilterParam filterParam) throws DaoException {
 		long total = 0;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String,Object> params = null;
 			if(null != filterParam) {
 				params = new HandleFilterParam(filterParam).getParams();
@@ -285,7 +284,7 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public Long count(String resId,Map<String,Object> params,FilterParam filterParam) throws DaoException {
 		long total = 0;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String,Object> filterParamMap = null;
 			if(null != filterParam) {
 				filterParamMap = new HandleFilterParam(filterParam).getParams();
@@ -311,12 +310,12 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	 */
 	public boolean execute(String resId,Map<String,Object> params) throws DaoException {
 		int result = -1;
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			String sql = sqlMap.getSQL(resId);
 			if(sql.indexOf(";")>-1) {
 				result = executeSql(Arrays.asList(sql.split(";")), params)?1:-1;
 			} else {
-				if(!StringUtil.isEmpty(sql)) {
+				if(StringUtils.isNotEmpty(sql)) {
 					result = executeSql(sql, params);
 				}
 			}

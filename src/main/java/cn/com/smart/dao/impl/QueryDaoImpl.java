@@ -12,7 +12,8 @@ import org.hibernate.SQLQuery;
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.dao.IQueryDao;
 import cn.com.smart.exception.DaoException;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 查询Dao实现类
@@ -31,7 +32,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public T find(Serializable id) throws DaoException {
 		T t = null;
-		if(null == id || StringUtil.isEmpty(id.toString())) {
+		if(null == id || StringUtils.isEmpty(id.toString())) {
 	    	return t;
 	    }
 		log.info("通过主键ID["+id+"]查询数据");
@@ -51,7 +52,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public <E> E find(Class<E> claszp,Serializable id) throws DaoException {
 		E t = null;
-		if(null == claszp || null == id || StringUtil.isEmpty(id.toString())) {
+		if(null == claszp || null == id || StringUtils.isEmpty(id.toString())) {
 	    	return t;
 	    }
 		log.info("通过主键ID["+id+"]查询数据");
@@ -115,7 +116,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public T find(String hql, Map<String, Object> param) throws DaoException {
 		T t = null;
-		if(StringUtil.isEmpty(hql)) {
+		if(StringUtils.isEmpty(hql)) {
 	    	return null;
 	    }
 		try {
@@ -205,7 +206,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	public List<T> queryByField(Map<String, Object> param,String orderBy) throws DaoException {
 		List<T> list = null;
 		String hql = combinHQL(param);
-		if(!StringUtil.isEmpty(orderBy)) {
+		if(StringUtils.isNotEmpty(orderBy)) {
 			hql += " order by "+orderBy;
 		}
 		log.info("通过HQL查询数据["+hql+"]");
@@ -219,7 +220,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	public List<T> queryByField(Map<String, Object> param, int start, int rows,String orderBy) throws DaoException {
 		List<T> list = null;
 		String hql = combinHQL(param);
-		if(!StringUtil.isEmpty(orderBy)) {
+		if(StringUtils.isNotEmpty(orderBy)) {
 			hql += " order by "+orderBy;
 		}
 		log.info("通过HQL查询数据["+hql+"]");
@@ -243,7 +244,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public List<T> queryHql(String hql,Map<String, Object> param,Integer start,Integer rows) throws DaoException {
 		List<T> list = null;
-		if(StringUtil.isEmpty(hql)) {
+		if(StringUtils.isEmpty(hql)) {
 	    	return list;
 	    }
 		try {
@@ -279,7 +280,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public List<Object> queryObjHql(String hql,Map<String, Object> param,Integer start,Integer rows) throws DaoException {
 		List<Object> list = null;
-		if(StringUtil.isEmpty(hql)) {
+		if(StringUtils.isEmpty(hql)) {
 	    	return list;
 	    }
 		try {
@@ -315,7 +316,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public List<T> querySql(String sql, Map<String, Object> param,Integer start, Integer rows) throws DaoException {
 		List<T> list = null;
-		if(StringUtil.isEmpty(sql)) {
+		if(StringUtils.isEmpty(sql)) {
 	    	return null;
 	    }
 		try {
@@ -352,10 +353,10 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	@Override
 	public Long count(String hql, Map<String, Object> param) throws DaoException {
 		long total = 0;
-		if(StringUtil.isEmpty(hql)) {
+		if(StringUtils.isEmpty(hql)) {
 	    	return total;
 	    }
-		if(!StringUtil.isEmpty(hql)) {
+		if(StringUtils.isNotEmpty(hql)) {
 			hql = "select count(*) "+hql;
 		}
 		try {

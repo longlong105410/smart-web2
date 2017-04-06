@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 加密算法
@@ -19,7 +19,7 @@ public class EncryptAlg {
 	 * @return 返回MD5加密后的值
 	 */
 	public static String MD5(String value) {
-		if(!StringUtil.isEmpty(value)) {
+		if(StringUtils.isNotEmpty(value)) {
 			byte[] bytes;
 			try {
 				bytes = value.getBytes("UTF-8");
@@ -49,7 +49,7 @@ public class EncryptAlg {
 	 * @return 返回加密后的值
 	 */
 	public static String SHA(String value) {
-		if(!StringUtil.isEmpty(value)) {
+		if(StringUtils.isNotEmpty(value)) {
 			byte[] bytes;
 			try {
 				bytes = value.getBytes("UTF-8");
@@ -89,7 +89,7 @@ public class EncryptAlg {
 	 * @return 返回加密后的值
 	 */
 	public static String DESEncode(String value,String key) {
-		if(!StringUtil.isEmpty(value) && !StringUtil.isEmpty(key)) {
+		if(StringUtils.isNotEmpty(value) && StringUtils.isNotEmpty(key)) {
 			try {
 				byte[] bytes = value.getBytes("UTF-8");
 				bytes = DESCoder.encrypt(bytes,key);

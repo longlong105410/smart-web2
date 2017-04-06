@@ -3,6 +3,8 @@ package cn.com.smart.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.mixsmart.utils.StringUtils;
+
 /**
  * 日期工具类
  * @author lmq
@@ -22,7 +24,7 @@ public class DateUtil extends BaseUtil {
 	public static String dateToStr(Date date,String formatter) {
 		String value = null;
 		if(null != date) {
-			if(StringUtil.isEmpty(formatter)) {
+			if(StringUtils.isEmpty(formatter)) {
 				formatter = "yyyy-MM-dd HH:mm:ss";
 			}
 			SimpleDateFormat dateFormat = new SimpleDateFormat(formatter);

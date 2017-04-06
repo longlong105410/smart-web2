@@ -12,6 +12,8 @@ import java.io.OutputStreamWriter;
 
 import org.apache.log4j.Logger;
 
+import com.mixsmart.utils.StringUtils;
+
 /**
  * 文件工具类
  * @author lmq
@@ -37,7 +39,7 @@ public class FileUtil {
 	public static boolean deleteFile(String filePath) {
 		boolean is = false;
 		log.info("删除文件...");
-		if(!StringUtil.isEmpty(filePath)) {
+		if(StringUtils.isNotEmpty(filePath)) {
 			File file = new File(filePath);
 			if(file.exists()) {
 				is = file.delete();
@@ -64,7 +66,7 @@ public class FileUtil {
 	 */
 	public static String readFile(String filePath,boolean isLine) {
 		StringBuffer content = null;
-		if(!StringUtil.isEmpty(filePath)) {
+		if(StringUtils.isNotEmpty(filePath)) {
 			File file = new File(filePath);
 			if(!file.exists()) {
 				log.error("文件不存在["+filePath+"]");
@@ -104,7 +106,7 @@ public class FileUtil {
 	 */
 	public static boolean writeFile(String contents,String filePath,boolean cover) {
 		boolean is = false;
-		if(!StringUtil.isEmpty(filePath) && !StringUtil.isEmpty(contents)) {
+		if(StringUtils.isNotEmpty(filePath) && StringUtils.isNotEmpty(contents)) {
 			File file = new File(filePath);
 			if(file.exists()) {
 				log.error("文件已存在["+filePath+"]");
@@ -144,7 +146,7 @@ public class FileUtil {
 	 */
 	public static boolean writeFile(String filePath,String contents) {
 		boolean is = false;
-		if(!StringUtil.isEmpty(filePath)) {
+		if(StringUtils.isNotEmpty(filePath)) {
 			File file = new File(filePath);
 			if(null != file && file.exists()) {
 				try {

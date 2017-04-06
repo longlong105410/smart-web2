@@ -36,10 +36,11 @@ import org.snaker.engine.model.TaskModel.TaskType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.com.smart.constant.enumdef.YesNoType;
 import cn.com.smart.flow.ext.ExtProcess;
 import cn.com.smart.flow.ext.ExtTaskModel;
 import cn.com.smart.flow.helper.ProcessHelper;
+
+import com.mixsmart.enums.YesNoType;
 
 /**
  * 封装snaker接口
@@ -608,7 +609,7 @@ public class SnakerEngineFacets {
 	public boolean isTakeTask(String processId,String taskKey) {
 		boolean is = false;
 		ExtTaskModel taskModel = getTaskModel(processId, taskKey);
-		if(null != taskModel && YesNoType.YES.getValue().equals(taskModel.getIsTakeTask())) {
+		if(null != taskModel && YesNoType.YES.getStrValue().equals(taskModel.getIsTakeTask())) {
 			is = true;
 		}
 		taskModel = null;

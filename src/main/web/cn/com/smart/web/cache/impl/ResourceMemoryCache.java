@@ -16,15 +16,16 @@ import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
 import cn.com.smart.cache.ICacheManagerAware;
 import cn.com.smart.cache.InitCache;
-import cn.com.smart.constant.enumdef.YesNoType;
 import cn.com.smart.filter.bean.FilterParam;
-import cn.com.smart.utils.ArrayUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.dao.IResourceDao;
 import cn.com.smart.web.dao.impl.OPAuthDao;
 import cn.com.smart.web.dao.impl.ResourceDao;
+
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 资源缓存
@@ -63,8 +64,8 @@ public class ResourceMemoryCache implements InitCache,ICacheManagerAware,IResour
 			List<TNResource> datas = resDao.queryByField(null, " createTime asc");
 			if(null != datas && datas.size()>0) {
 				for (TNResource res : datas) {
-					if(!StringUtil.isEmpty(res.getOpAuths())) {
-						List<TNOPAuth> auths = authDao.queryAuths(ArrayUtil.stringToArray(res.getOpAuths(), ","));
+					if(StringUtils.isNotEmpty(res.getOpAuths())) {
+						List<TNOPAuth> auths = authDao.queryAuths(ArrayUtils.stringToArray(res.getOpAuths(), ","));
 						if(null != auths && !auths.isEmpty())
 							res.setAuths(auths);
 					}
@@ -98,10 +99,10 @@ public class ResourceMemoryCache implements InitCache,ICacheManagerAware,IResour
 				boolean isAdd = false;
 				for (TNResource res : resources) {
 					isAdd = false;
-					if(!StringUtil.isEmpty(name))
-						isAdd = (YesNoType.YES.getValue().equals(res.getState()) && res.getName().contains(name));
+					if(StringUtils.isNotEmpty(name))
+						isAdd = (YesNoType.YES.getStrValue().equals(res.getState()) && res.getName().contains(name));
 					else 
-						isAdd = YesNoType.YES.getValue().equals(res.getState());
+						isAdd = YesNoType.YES.getStrValue().equals(res.getState());
 					if(isAdd)
 						lists.add(res);
 				}
@@ -119,7 +120,7 @@ public class ResourceMemoryCache implements InitCache,ICacheManagerAware,IResour
 	 */
 	public TNResource find(String id) {
 		TNResource res = null;
-		if(StringUtil.isEmpty(id)) {
+		if(StringUtils.isEmpty(id)) {
 			return res;
 		}
 		try {
@@ -145,7 +146,7 @@ public class ResourceMemoryCache implements InitCache,ICacheManagerAware,IResour
 	 */
 	public TNResource findByUri(String uri) {
 		TNResource res = null;
-		if(StringUtil.isEmpty(uri)) {
+		if(StringUtils.isEmpty(uri)) {
 			return res;
 		}
 		try {

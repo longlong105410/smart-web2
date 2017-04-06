@@ -14,8 +14,6 @@ import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
 import cn.com.smart.cache.ICacheManagerAware;
 import cn.com.smart.cache.InitCache;
-import cn.com.smart.constant.enumdef.YesNoType;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNDict;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.bean.entity.TNResource;
@@ -23,6 +21,9 @@ import cn.com.smart.web.bean.entity.TNRoleMenu;
 import cn.com.smart.web.dao.IMenuDao;
 import cn.com.smart.web.dao.impl.MenuDao;
 import cn.com.smart.web.dao.impl.ResourceDao;
+
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 初始化菜单缓存
@@ -64,7 +65,7 @@ public class MenuMemoryCache implements ICacheManagerAware, InitCache, IMenuDao 
 			if(null != datas && datas.size()>0) {
 				TNResource resource = null;
 				for (TNMenu menu : datas) {
-					if(!StringUtil.isEmpty(menu.getResourceId())) {
+					if(StringUtils.isNotEmpty(menu.getResourceId())) {
 						resource = resourceDao.find(menu.getResourceId());
 						if (null != resource) {
 							menu.setResource(resource);
@@ -152,7 +153,7 @@ public class MenuMemoryCache implements ICacheManagerAware, InitCache, IMenuDao 
 			List<TNMenu> menus = getMenus();
 			if(null != menus && menus.size()>0) {
 				for (TNMenu menu : menus) {
-					if(YesNoType.YES.getValue().equals(menu.getState())) 
+					if(YesNoType.YES.getStrValue().equals(menu.getState())) 
 						lists.add(menu);
 				}//for
 			}
@@ -178,7 +179,7 @@ public class MenuMemoryCache implements ICacheManagerAware, InitCache, IMenuDao 
 					lists = new ArrayList<TNMenu>();
 					for (String menuId : menuIds) {
 						for (TNMenu menu : menus) {
-							if(menuId.equals(menu.getId()) && YesNoType.YES.getValue().equals(menu.getState())) {
+							if(menuId.equals(menu.getId()) && YesNoType.YES.getStrValue().equals(menu.getState())) {
 								lists.add(menu);
 								break;
 							}

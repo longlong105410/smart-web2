@@ -4,6 +4,8 @@ import org.hibernate.internal.SessionFactoryImpl;
 
 import cn.com.smart.web.spring.util.SpringBeanFactoryUtil;
 
+import com.mixsmart.utils.StringUtils;
+
 /**
  * 数据库工具类
  * @author lmq
@@ -74,7 +76,7 @@ public class DBUtil {
 	 */
 	public static boolean isDB(String dbname) {
 		boolean is = false;
-		if(!StringUtil.isEmpty(dbname)) {
+		if(StringUtils.isNotEmpty(dbname)) {
 			SessionFactoryImpl sessionFactory = (SessionFactoryImpl)SpringBeanFactoryUtil.getInstance().getBean("sessionFactory");
 			if(null != sessionFactory) {
 				String dialect = sessionFactory.getDialect().toString();

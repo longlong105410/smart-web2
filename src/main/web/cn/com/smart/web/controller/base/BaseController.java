@@ -14,7 +14,6 @@ import cn.com.smart.Smart;
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.init.config.InitSysConfig;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.IActionConstant;
 import cn.com.smart.web.helper.HttpRequestHelper;
@@ -95,7 +94,7 @@ public abstract class BaseController extends Smart implements IBaseController {
      */
     protected BaseDaoImpl<?> getBaseDao(String busiName) {
     	BaseDaoImpl<?> dao = null;
-    	if(!StringUtil.isEmpty(busiName)) {
+    	if(StringUtils.isNotEmpty(busiName)) {
 	    	String daoName = busiName+"Dao";
 			try {
 			     dao = (BaseDaoImpl<?>)SpringBeanFactoryUtil.getInstance().getBean(daoName);
@@ -258,7 +257,7 @@ public abstract class BaseController extends Smart implements IBaseController {
 	 */
 	protected Map<String,Object> getParamMaps(HttpSession session,String paramName,String paramValue) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		if(!StringUtil.isEmpty(paramName) && !StringUtil.isEmpty(paramValue)) {
+		if(StringUtils.isNotEmpty(paramName) && StringUtils.isNotEmpty(paramValue)) {
 			String[] paramNames = paramName.split(",");
 			String[] paramValues = paramValue.split(",");
 			if(paramNames.length == paramValues.length) {
@@ -269,7 +268,7 @@ public abstract class BaseController extends Smart implements IBaseController {
 			paramNames = null;
 			paramValues = null;
 		}
-		params.put("orgIds", StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		return params;
 	}
 }

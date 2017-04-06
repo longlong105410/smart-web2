@@ -1,7 +1,8 @@
 package cn.com.smart.bean;
 
 import cn.com.smart.init.config.InitSysConfig;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 项目属性
@@ -124,15 +125,15 @@ public class ProjectInfo {
 	 * @param config
 	 */
 	public void initParam(String prefix,InitSysConfig config) {
-		if(!StringUtil.isEmpty(prefix)) {
+		if(StringUtils.isNotEmpty(prefix)) {
 			prefix += ".";
 		}
-		this.name = StringUtil.handNull(config.getValue(prefix+"name"));
+		this.name = StringUtils.handNull(config.getValue(prefix+"name"));
 		
-		this.devModel = StringUtil.handNull(config.getValue(prefix+"devModel"));
-		this.copyright = StringUtil.handNull(config.getValue(prefix+"copyright"));
+		this.devModel = StringUtils.handNull(config.getValue(prefix+"devModel"));
+		this.copyright = StringUtils.handNull(config.getValue(prefix+"copyright"));
 			
-		this.contactInfo = StringUtil.handNull(config.getValue(prefix+"contactInfo"));
-		this.version = StringUtil.handNull(config.getValue(prefix+"version"));
+		this.contactInfo = StringUtils.handNull(config.getValue(prefix+"contactInfo"));
+		this.version = StringUtils.handNull(config.getValue(prefix+"version"));
 	}
 }

@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 import org.springframework.stereotype.Component;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -95,12 +95,12 @@ public class ObjectTreeHelper {
 	protected List<Object> getChild(List<Object> lists, Object obj) {
 		List<Object> childs = new ArrayList<Object>();
 		for (Object objTmp : lists) {
-			if (StringUtil.handNull(((Object[]) objTmp)[1]).equals(
-					StringUtil.handNull(((Object[]) obj)[0]))) {
+			if (StringUtils.handNull(((Object[]) objTmp)[1]).equals(
+					StringUtils.handNull(((Object[]) obj)[0]))) {
 				// 此处保证集合中最后一个元素是需要显示在当前层级中第一个展示的子节点（因为堆栈中是最后一个元素先出）
 				if (childs != null
 						&& childs.size() != 0
-						&& Double.parseDouble(StringUtil .handNumNull(((Object[]) objTmp)[2])) >= Double.parseDouble(StringUtil.handNumNull(((Object[]) childs.get(0))[2]))) {
+						&& Double.parseDouble(StringUtils.handNumNull(((Object[]) objTmp)[2])) >= Double.parseDouble(StringUtils.handNumNull(((Object[]) childs.get(0))[2]))) {
 					childs.add(0, objTmp);
 				} else {
 					childs.add(objTmp);
@@ -148,9 +148,9 @@ public class ObjectTreeHelper {
 			roots = new TreeSet<Object>(new Comparator<Object>() {
 				@Override
 				public int compare(Object o1, Object o2) {
-					int compare = StringUtil.handObj2Integer(((Object[])o1)[2]).compareTo(StringUtil.handObj2Integer(((Object[])o2)[2]));
+					int compare = StringUtils.handObj2Integer(((Object[])o1)[2]).compareTo(StringUtils.handObj2Integer(((Object[])o2)[2]));
 					if(compare==0) {
-						if(StringUtil.handNull(((Object[])o1)[0]).equals(StringUtil.handNull(((Object[])o2)[0]))) {
+						if(StringUtils.handNull(((Object[])o1)[0]).equals(StringUtils.handNull(((Object[])o2)[0]))) {
 							compare = 0; 
 						} else {
 							compare = 1;
@@ -180,7 +180,7 @@ public class ObjectTreeHelper {
 			tmp = null;
 		}*/
 		for (Object tt : ts) {
-			if (StringUtil.handNull(((Object[])tt)[0]).equals(StringUtil.handNull(((Object[])t)[1]))) {
+			if (StringUtils.handNull(((Object[])tt)[0]).equals(StringUtils.handNull(((Object[])t)[1]))) {
 				tmp = tt;
 			}
 		}

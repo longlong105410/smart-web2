@@ -11,10 +11,11 @@ import cn.com.smart.bean.BaseBean;
 import cn.com.smart.bean.DateBean;
 import cn.com.smart.dao.IUpdateDao;
 import cn.com.smart.exception.DaoException;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.validate.ExecuteValidator;
 import cn.com.smart.validate.ValidateException;
 import cn.com.smart.validate.Validator;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 更新Dao实现类
@@ -58,10 +59,10 @@ public abstract class UpdateDaoImpl<T extends BaseBean> extends DeleteDaoImpl<T>
 		boolean is = false;
 		if(null != o) {
 			log.info("保存或更新数据ID["+o.getId()+"]");
-			if(StringUtil.isEmpty(o.getId())) {
+			if(StringUtils.isEmpty(o.getId())) {
 				String prefix = o.getPrefix();
-				String idNum = StringUtil.createSerialNum();
-				if(!StringUtil.isEmpty(prefix)) {
+				String idNum = StringUtils.createSerialNum();
+				if(StringUtils.isNotEmpty(prefix)) {
 					idNum = prefix.toUpperCase()+idNum; 
 				}
 				o.setId(idNum);

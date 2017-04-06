@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import cn.com.smart.Smart;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 配置实现类
@@ -19,13 +20,13 @@ public abstract class ConfigImpl extends Smart implements IConfig {
 
 	@Override
 	public String handleVar(String value) {
-		if(!StringUtil.isEmpty(value)) {
+		if(StringUtils.isNotEmpty(value)) {
 			String regex = "(?<=\\$\\{)[^\\{\\}]+(?=\\})";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(value);
 			while(matcher.find()) {
 				String varName = matcher.group();
-				if(!StringUtil.isEmpty(varName)) {
+				if(StringUtils.isNotEmpty(varName)) {
 					String val = null;
 					try {
 						val = getValue(varName);
@@ -34,10 +35,10 @@ public abstract class ConfigImpl extends Smart implements IConfig {
 						e.printStackTrace();
 						val = null;
 					}
-					if(StringUtil.isEmpty(val)) {
+					if(StringUtils.isEmpty(val)) {
 						log.info("变量【"+val+"】没定义");
 					}
-					value = value.replace("${"+varName+"}", StringUtil.handNull(val));
+					value = value.replace("${"+varName+"}", StringUtils.handNull(val));
 				}
 			}
 			matcher = pattern.matcher(value);
@@ -58,7 +59,7 @@ public abstract class ConfigImpl extends Smart implements IConfig {
 		Matcher matcher = pattern.matcher(value);
 		while(matcher.find()) {
 			String varName = matcher.group();
-			if(!StringUtil.isEmpty(varName)) {
+			if(StringUtils.isNotEmpty(varName)) {
 				String val = null;
 				try {
 				   val = System.getProperty(varName);
@@ -67,7 +68,7 @@ public abstract class ConfigImpl extends Smart implements IConfig {
 					e.printStackTrace();
 					val = null;
 				}
-				value = value.replace("#{"+varName+"}", StringUtil.handNull(val));
+				value = value.replace("#{"+varName+"}", StringUtils.handNull(val));
 			}
 		}
 		matcher = pattern.matcher(value);

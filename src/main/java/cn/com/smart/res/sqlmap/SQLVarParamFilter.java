@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 过滤处理sql语句中有可选条件的变量参数 <br />
@@ -37,14 +37,14 @@ public class SQLVarParamFilter {
 	 * 避免sql语句中没有的参数出现在params变量参数里面，防止SQL语句报错
 	 */
 	protected void initParamBySql() {
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			String regex = "(:\\w+)";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(sql);
 			Set<String> sqlInParams = new HashSet<String>();
 			while(matcher.find()) {
 				String param = matcher.group();
-				if(!StringUtil.isEmpty(param)) {
+				if(StringUtils.isNotEmpty(param)) {
 					param = param.substring(1,param.length());
 					sqlInParams.add(param);
 				}  
@@ -91,7 +91,7 @@ public class SQLVarParamFilter {
 			Set<String> sets = params.keySet();
 			for (String key : sets) {
 				Object value = this.params.get(key);
-				if(null != value && StringUtil.isNotEmpty(StringUtil.handNull(value))) {
+				if(null != value && StringUtils.isNotEmpty(StringUtils.handNull(value))) {
 					varParams.add(key);
 				}
 			}
@@ -106,7 +106,7 @@ public class SQLVarParamFilter {
 	 */
 	protected List<String> getOptionSql() {
 		List<String> options = null;
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			options = new ArrayList<String>();
 			//String regex = "(?<=\\[)[^\\[\\]]+(?=\\])";
 			//String regex = "\\[([^\\]]+)\\]";

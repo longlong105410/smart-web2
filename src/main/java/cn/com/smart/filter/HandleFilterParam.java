@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.com.smart.filter.bean.FilterParam;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 处理搜索参数 过滤参数值为空的 <br />
@@ -45,11 +46,11 @@ public class HandleFilterParam {
 					for(Field field : fields) {
 						if(field.getModifiers() == Modifier.PRIVATE || field.getModifiers() == Modifier.PROTECTED || field.getModifiers() == Modifier.PUBLIC) {
 							String fieldName = field.getName();
-							String methodName = "get"+ StringUtil.firstToUppercase(fieldName);
+							String methodName = "get"+ StringUtils.firstToUppercase(fieldName);
 							Method method = clasz.getDeclaredMethod(methodName);
 							if(null != method) {
 								Object value = method.invoke(searchParam);
-								if(null != value && !StringUtil.isEmpty(value.toString())) {
+								if(null != value && StringUtils.isNotEmpty(value.toString())) {
 									params.put(fieldName, value);
 								}
 							}

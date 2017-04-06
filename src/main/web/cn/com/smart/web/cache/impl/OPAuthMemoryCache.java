@@ -15,10 +15,11 @@ import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
 import cn.com.smart.cache.ICacheManagerAware;
 import cn.com.smart.cache.InitCache;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.dao.IOPAuthDao;
 import cn.com.smart.web.dao.impl.OPAuthDao;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 操作权限缓存
@@ -117,7 +118,7 @@ public class OPAuthMemoryCache implements InitCache,ICacheManagerAware,IOPAuthDa
 	 */
 	public TNOPAuth find(String id) {
 		TNOPAuth auth = null;
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			try {
 				List<TNOPAuth> auths = getAuths();
 				if(null != auths && !auths.isEmpty()) {

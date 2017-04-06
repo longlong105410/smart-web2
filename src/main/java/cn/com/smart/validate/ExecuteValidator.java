@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import cn.com.smart.utils.ArrayUtil;
-import cn.com.smart.utils.IdCardValidator;
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.IdCardValidator;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 执行验证器
@@ -49,7 +49,7 @@ public class ExecuteValidator implements Validator {
 					    	if(v.nullable()) {
 					    		is = is && true;
 					    	} else {
-								if(null != value && !StringUtil.isEmpty(value.toString())) {
+								if(null != value && StringUtils.isNotEmpty(value.toString())) {
 									is = is && true;
 								} else {
 									is = is && false;
@@ -58,22 +58,22 @@ public class ExecuteValidator implements Validator {
 					    	//只验证字符数据类型，其他数据类型不验证
 					    	if(is && (value instanceof String) && 
 					    			null != value && 
-					    			!StringUtil.isEmpty(value.toString())) {
+					    			StringUtils.isNotEmpty(value.toString())) {
 					    		
 					    		//验证长度
 					    		String len = v.length();
-					    		if(!StringUtil.isEmpty(len)) {
+					    		if(StringUtils.isNotEmpty(len)) {
 					    			is =  is && checkLength(value.toString(), len,m.getName());
 					    		}
 					    		//验证数据值范围
 					    		String valueArea = v.valueArea();
-					    		if(!StringUtil.isEmpty(valueArea)) {
+					    		if(StringUtils.isNotEmpty(valueArea)) {
 					    			is = is && checkValueArea(value.toString(),valueArea,m.getName());
 					    		}
 					    		if(!is) break;
 					    		//验证正则表达式
 					    		String regexExpr = v.regexExpr();
-					    		if(!StringUtil.isEmpty(regexExpr)) {
+					    		if(StringUtils.isNotEmpty(regexExpr)) {
 					    			try {
 						    			Pattern p = Pattern.compile(regexExpr);
 						    			Matcher mt = p.matcher(value.toString());
@@ -90,14 +90,14 @@ public class ExecuteValidator implements Validator {
 					    		if(!is) break;
 					    		//验证数据格式
 					    		String formatType = v.dataFormatType();
-					    		if(!StringUtil.isEmpty(formatType)) {
+					    		if(StringUtils.isNotEmpty(formatType)) {
 					    			is = is && checkDataFormat(value.toString(),formatType,m.getName());
 					    		}
 					    		
 					    		if(!is) break;
 					    		//判断是否配置了自定义验证类
 					    		String className = v.className();
-					    		if(!StringUtil.isEmpty(className)) {
+					    		if(StringUtils.isNotEmpty(className)) {
 					    			//执行自定义验证类
 									Class<?> cstClass = Class.forName(className);
 									if(cstClass.isAssignableFrom(Validator.class)) {
@@ -156,7 +156,7 @@ public class ExecuteValidator implements Validator {
 		if(len.indexOf("|")>-1) {
 			String[] lens = len.split("\\|");
 			for (String lenStr : lens) {
-				if(StringUtil.isNum(lenStr.trim())) {
+				if(StringUtils.isNum(lenStr.trim())) {
 					long l = Long.parseLong(lenStr.trim());
 					is = (valueLen == l);
 				} else {
@@ -170,7 +170,7 @@ public class ExecuteValidator implements Validator {
 		} else if(len.indexOf(",")>-1) {
 			String[] lens = len.split(",");
 			if(lens.length==2) {
-				if(StringUtil.isNum(lens[0].trim()) && StringUtil.isNum(lens[1].trim())) {
+				if(StringUtils.isNum(lens[0].trim()) && StringUtils.isNum(lens[1].trim())) {
 					long startLen = Long.parseLong(lens[0].trim());
 					long endLen = Long.parseLong(lens[1].trim());
 					if(startLen<=endLen) {
@@ -188,7 +188,7 @@ public class ExecuteValidator implements Validator {
 				throw new ValidateException("["+methodName+"]Validate.length属性配置错误");
 			}
 		} else {
-			if(StringUtil.isNum(len.trim())) {
+			if(StringUtils.isNum(len.trim())) {
 				is = is && (valueLen == Long.parseLong(len.trim()));
 			} else {
 				is = false;
@@ -212,12 +212,12 @@ public class ExecuteValidator implements Validator {
 	private boolean checkDataFormat(String value,String dataFormatType,String methodName) {
 		boolean is = true;
 		if(DataFormatType.NUM.equals(dataFormatType)) {
-			is = is && StringUtil.isNum(value);
+			is = is && StringUtils.isNum(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.NUM+"]数据类型验证失败");
 			}
 		} else if(DataFormatType.CHINESE.equals(dataFormatType)) {
-			is = is && StringUtil.isChinese(value);
+			is = is && StringUtils.isChinese(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.CHINESE+"]数据类型验证失败");
 			}
@@ -229,37 +229,37 @@ public class ExecuteValidator implements Validator {
 				log.error("["+methodName+"]--["+DataFormatType.ID_CARD+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.DECIMAL.equals(dataFormatType)) {
-			is = is && StringUtil.isDecimal(value);
+			is = is && StringUtils.isDecimal(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.DECIMAL+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.EMAIL.equals(dataFormatType)) {
-			is = is && StringUtil.isEmail(value);
+			is = is && StringUtils.isEmail(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.EMAIL+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.FIXED_TELPHONE.equals(dataFormatType)) {
-			is = is && StringUtil.isFixedTelephone(value);
+			is = is && StringUtils.isFixedTelephone(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.FIXED_TELPHONE+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.INTEGER.equals(dataFormatType)) {
-			is = is && StringUtil.isInteger(value);
+			is = is && StringUtils.isInteger(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.INTEGER+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.IP.equals(dataFormatType)) {
-			is = is && StringUtil.checkIp(value);
+			is = is && StringUtils.checkIp(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.IP+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.MOBILE_PHONE.equals(dataFormatType)) {
-			is = is && StringUtil.isPhoneNO(value);
+			is = is && StringUtils.isPhoneNO(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.MOBILE_PHONE+"]数据格式验证失败");
 			}
 		} else if(DataFormatType.QQ.equals(dataFormatType)) {
-			is = is && StringUtil.isQQ(value);
+			is = is && StringUtils.isQQ(value);
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.QQ+"]数据格式验证失败");
 			}
@@ -270,7 +270,7 @@ public class ExecuteValidator implements Validator {
 	
 	private boolean checkValueArea(String value,String valueArea,String methodName) {
 		boolean is = false;
-		if(ArrayUtil.isArrayContains(valueArea, value, ",")) {
+		if(ArrayUtils.isArrayContains(valueArea, value, ",")) {
 			is = true;
 		} else {
 			is = false;

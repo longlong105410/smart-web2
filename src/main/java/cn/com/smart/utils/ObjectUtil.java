@@ -1,5 +1,7 @@
 package cn.com.smart.utils;
 
+import com.mixsmart.utils.StringUtils;
+
 /**
  * 简单对象工具类
  * @author lmq
@@ -18,10 +20,10 @@ public class ObjectUtil {
 	public static Object covertDataType(Object value) {
 		Object obj = null;
 		String valueStr = value.toString();
-		if(!StringUtil.isEmpty(valueStr)) {
-			if(StringUtil.isInteger(valueStr)) {
+		if(StringUtils.isNotEmpty(valueStr)) {
+			if(StringUtils.isInteger(valueStr)) {
 				obj = Integer.parseInt(valueStr);
-			} else if(StringUtil.isDecimal(valueStr)) {
+			} else if(StringUtils.isDecimal(valueStr)) {
 				obj = Double.parseDouble(valueStr);
 			} else {
 				obj = value;

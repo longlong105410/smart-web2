@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * XML与Bean之间的转换类
@@ -27,7 +27,7 @@ public class XmlBeanConvert {
 	 */
 	public static String toXml(Object obj,String encoding) {
 		String xml = null;
-		if(StringUtil.isEmpty(encoding)) {
+		if(StringUtils.isEmpty(encoding)) {
 			encoding = "UTF-8";
 		}
 		try {

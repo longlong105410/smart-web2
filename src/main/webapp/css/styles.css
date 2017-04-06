@@ -84,7 +84,7 @@ input.ui-button { padding: 3px 15px; }
 .panel-footer-page {width:100%; overflow:hidden}
 .panel-footer-page .btn-list {float: left;width: 45%;}
 .panel-footer-page .btn-page {float: left;width: 35%;/*text-align: right;*/}
-.panel-footer-page .page-info {margin-left:80%;width: auto;text-align: right;padding: 5px;}
+.panel-footer-page .page-info {margin-left:75%;width: auto;text-align: right;padding: 5px;}
 /*.panel-footer-page .page-info {width: auto;text-align: right;padding: 5px;}*/
 .panel-footer-page .btn-default {background-color: #f5f5f5;}
 h4.ui-widget-header {margin-bottom: 0;font-size: 12px;}

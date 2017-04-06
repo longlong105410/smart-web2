@@ -22,10 +22,10 @@ import cn.com.smart.bean.DateBean;
 import cn.com.smart.dao.ICommonDao;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.sqlmap.SQLVarParamFilter;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.validate.ExecuteValidator;
 import cn.com.smart.validate.ValidateException;
 import cn.com.smart.validate.Validator;
+import cn.com.smart.web.builder.SQLBuilder;
 
 import com.mixsmart.exception.NullArgumentException;
 import com.mixsmart.utils.StringUtils;
@@ -44,7 +44,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public Long exeCountSql(String sql, Map<String, Object> param) throws DaoException {
 		long total = 0;
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			try {
 				log.info("统计数据SQL["+sql+"]");
 				SQLQuery query = (SQLQuery)getQuery(sql, param, true);
@@ -65,9 +65,13 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public Long countSql(String sql, Map<String, Object> param) throws DaoException {
 		long total = 0;
-		if(!StringUtil.isEmpty(sql)) {
-			sql = "select count(*) from ("+sql+") t";
-			total = exeCountSql(sql, param);
+		if(StringUtils.isNotEmpty(sql)) {
+			//sql = "select count(*) from ("+sql+") t";
+			String countSql = SQLBuilder.countSQL(sql);
+			if(StringUtils.isEmpty(countSql)) {
+				throw new NullArgumentException("统计SQL语句为空");
+			}
+			total = exeCountSql(countSql, param);
 		}
 		return total;
 	}
@@ -75,7 +79,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public Integer executeSql(String sql) throws DaoException {
 		int result = 0;
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			log.info("执行SQL["+sql+"]");
 			try {
 				result = getQuery(sql, null, true).executeUpdate();
@@ -91,7 +95,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public Integer executeSql(String sql,Map<String, Object> param) throws DaoException {
 		int result = 0;
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			try {
 				log.info("执行SQL["+sql+"]");
 			    result = getQuery(sql, param, true).executeUpdate(); 
@@ -109,7 +113,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public Integer executeSql(String sql,List<Map<String, Object>> params) throws DaoException {
 		int result = 0;
-		if(StringUtil.isEmpty(sql)) {
+		if(StringUtils.isEmpty(sql)) {
 			return result;
 		}
 		log.info("执行SQL["+sql+"]");
@@ -207,10 +211,10 @@ public class CommonDaoImpl implements ICommonDao {
 	public Serializable saveObj(BaseBean bean) throws DaoException {
 		Serializable id = null;
 		if(null != bean){
-			if(StringUtil.isEmpty(bean.getId())) {
+			if(StringUtils.isEmpty(bean.getId())) {
 				String prefix = bean.getPrefix();
-				String idNum = StringUtil.createSerialNum();
-				if(!StringUtil.isEmpty(prefix)) {
+				String idNum = StringUtils.createSerialNum();
+				if(StringUtils.isNotEmpty(prefix)) {
 					idNum = prefix.toUpperCase()+"_"+idNum; 
 				}
 				bean.setId(idNum);
@@ -261,10 +265,10 @@ public class CommonDaoImpl implements ICommonDao {
 			Validator validator = null;
 			try {
 				for (BaseBean o : beans) {
-					if(StringUtil.isEmpty(o.getId())) {
+					if(StringUtils.isEmpty(o.getId())) {
 						String prefix = o.getPrefix();
-						String idNum = StringUtil.createSerialNum();
-						if(!StringUtil.isEmpty(prefix)) {
+						String idNum = StringUtils.createSerialNum();
+						if(StringUtils.isNotEmpty(prefix)) {
 							idNum = prefix.toUpperCase()+"-"+idNum; 
 						}
 						o.setId(idNum);
@@ -437,7 +441,7 @@ public class CommonDaoImpl implements ICommonDao {
 	 */
 	protected Query getQuery(String statement,boolean isSql) throws Exception {
 		Query query = null;
-		if(!StringUtil.isEmpty(statement)) {
+		if(StringUtils.isNotEmpty(statement)) {
 			query = isSql?(getSession().createSQLQuery(statement)):(getSession().createQuery(statement));
 		}
 		return query;
@@ -458,7 +462,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public List<Object> queryObjSql(String sql,Map<String, Object> param,Integer start, Integer rows) throws DaoException {
 		List<Object> list = null;
-		if(StringUtil.isEmpty(sql)) {
+		if(StringUtils.isEmpty(sql)) {
 			log.error("SQL语句为空！");
 			return null;
 	    }
@@ -489,9 +493,13 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public Long countSql(String sql) throws DaoException {
 		long total = 0;
-		if(!StringUtil.isEmpty(sql)) {
-			sql = "select count(*) from ("+sql+") t";
-			total = exeCountSql(sql);
+		if(StringUtils.isNotEmpty(sql)) {
+			//sql = "select count(*) from ("+sql+") t";
+			String countSql = SQLBuilder.countSQL(sql);
+			if(StringUtils.isEmpty(countSql)) {
+				throw new NullArgumentException("统计SQL语句为空");
+			}
+			total = exeCountSql(countSql);
 		}
 		return total;
 	}
@@ -500,7 +508,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public <E> List<E> querySqlToBean(String sql, Class<?> toBean) throws DaoException {
 		List<E> list = null;
-		if(StringUtil.isEmpty(sql)) {
+		if(StringUtils.isEmpty(sql)) {
 	    	return null;
 	    }
 		try {
@@ -521,7 +529,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public <E> List<E> querySqlToBean(String sql, Map<String, Object> param, Class<?> toBean) throws DaoException {
 		List<E> list = null;
-		if(StringUtil.isEmpty(sql)) {
+		if(StringUtils.isEmpty(sql)) {
 	    	return null;
 	    }
 		try {
@@ -543,7 +551,7 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public <E> List<E> querySqlToBean(String sql, Map<String, Object> param, Class<?> toBean, Integer start, Integer rows) throws DaoException {
 		List<E> list = null;
-		if(StringUtil.isEmpty(sql)) {
+		if(StringUtils.isEmpty(sql)) {
 	    	return null;
 	    }
 		try {

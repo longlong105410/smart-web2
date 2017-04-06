@@ -8,7 +8,8 @@ import org.hibernate.Query;
 
 import cn.com.smart.dao.IExecuteDao;
 import cn.com.smart.exception.DaoException;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 执行Dao实现类
@@ -27,7 +28,7 @@ public abstract class ExecuteDaoImpl extends CommonDaoImpl implements IExecuteDa
 	@Override
 	public Integer executeHql(String hql) throws DaoException {
 		int result = 0;
-		if(StringUtil.isEmpty(hql)) {
+		if(StringUtils.isEmpty(hql)) {
 	    	return result;
 	    }
 		log.info("执行HQL["+hql+"]");
@@ -44,7 +45,7 @@ public abstract class ExecuteDaoImpl extends CommonDaoImpl implements IExecuteDa
 	@Override
 	public Integer executeHql(String hql,Map<String, Object> param) throws DaoException {
 	    int result = 0;
-	    if(StringUtil.isEmpty(hql)) {
+	    if(StringUtils.isEmpty(hql)) {
 	    	return result;
 	    }
 	    try {
@@ -65,7 +66,7 @@ public abstract class ExecuteDaoImpl extends CommonDaoImpl implements IExecuteDa
 	@Override
 	public Integer executeHql(String hql, List<Map<String, Object>> params) throws DaoException {
 		 int result = 0;
-		 if(!StringUtil.isEmpty(hql)) {
+		 if(StringUtils.isNotEmpty(hql)) {
 			 log.info("执行HQL["+hql+"]");
 			 try {
 				 if (null != params && params.size() > 0) {

@@ -22,9 +22,10 @@ import javax.servlet.http.HttpSession;
 import org.snaker.engine.impl.GeneralAccessStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.helper.HttpRequestHelper;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 自定义访问策略，根据操作人获取其所有组集合（部门、角色、权限）
@@ -41,12 +42,12 @@ public class CustomAccessStrategy extends GeneralAccessStrategy {
 		List<String> groups = null;
 		if(null != userInfo) {
 			groups = new ArrayList<String>();
-			if(!StringUtil.isEmpty(userInfo.getDepartmentId())) {
+			if(StringUtils.isNotEmpty(userInfo.getDepartmentId())) {
 				groups.add(userInfo.getDepartmentId());
-			} else if(!StringUtil.isEmpty(userInfo.getOrgId())) {
+			} else if(StringUtils.isNotEmpty(userInfo.getOrgId())) {
 				groups.add(userInfo.getOrgId());
 			}
-			if(!StringUtil.isEmpty(userInfo.getPositionId())) {
+			if(StringUtils.isNotEmpty(userInfo.getPositionId())) {
 				groups.add(userInfo.getPositionId());
 			}
 			groups.add(userInfo.getId());

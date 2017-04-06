@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentMap;
 import cn.com.smart.cache.CacheException;
 import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 内存缓存管理
@@ -27,7 +28,7 @@ public class MemoryCacheManager implements ICacheManager {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public <K,V> ICache<K, V> getCache(String name) throws CacheException {
-	    if(StringUtil.isEmpty(name)) {
+	    if(StringUtils.isEmpty(name)) {
 	    	throw new IllegalArgumentException("name不能为空！");
 	    }
 	    ICache cache = caches.get(name);

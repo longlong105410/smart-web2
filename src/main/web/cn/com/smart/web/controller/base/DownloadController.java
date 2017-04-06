@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.utils.FileUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNAttachment;
 import cn.com.smart.web.service.AttachmentService;
 
@@ -43,13 +42,13 @@ public class DownloadController extends BaseController {
 	@RequestMapping("/att")
 	public ResponseEntity<byte[]> att(HttpServletRequest request,String id) {
 		ResponseEntity<byte[]> responseEntity = null;
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			SmartResponse<TNAttachment> smartResp = attServ.findAtt(id);
 			if(OP_SUCCESS.equals(smartResp.getResult())) {
 				TNAttachment att = smartResp.getData();
 				String rootDir = getRootDir();
 				String filePath = rootDir+FileUtil.getFileSeparator()+att.getFilePath();
-				if(!StringUtil.isEmpty(filePath)) {
+				if(StringUtils.isNotEmpty(filePath)) {
 					File file = new File(filePath);
 					if(file.exists()) {
 						try {
@@ -59,7 +58,7 @@ public class DownloadController extends BaseController {
 							String userAgent = request.getHeader("USER-AGENT");
 							headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
 							//IE
-							if(!StringUtil.isEmpty(userAgent) && userAgent.indexOf("Windows NT ")>-1 && userAgent.indexOf("Firefox")==-1) {
+							if(StringUtils.isNotEmpty(userAgent) && userAgent.indexOf("Windows NT ")>-1 && userAgent.indexOf("Firefox")==-1) {
 								String fileName = URLEncoder.encode(att.getFileName(), "UTF-8");    
 								fileName = StringUtils.replace(fileName, "+", "%20");//替换空格 
 								headers.setContentDispositionFormData("attachment", fileName);

@@ -10,7 +10,8 @@ import org.apache.log4j.Logger;
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.dao.IBaseDao;
 import cn.com.smart.exception.DaoException;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 基础Dao实现类
@@ -30,7 +31,7 @@ public abstract class BaseDaoImpl<T extends BaseBean> extends UpdateDaoImpl<T> i
 		int sortOrder = 1;
 		Map<String,Object> param = null;
 		String hql = "select max(sortOrder) from "+clazz.getName();
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			hql = hql+" where parentId=:id";
 			param = new HashMap<String, Object>();
 			param.put("id", id);
@@ -39,7 +40,7 @@ public abstract class BaseDaoImpl<T extends BaseBean> extends UpdateDaoImpl<T> i
 		if(null != lists && lists.size()>0) {
 			try {
 			  Object obj = lists.get(0);
-			  if(StringUtil.isDecimal(obj.toString())) {
+			  if(StringUtils.isDecimal(obj.toString())) {
 				  sortOrder = (int)Double.parseDouble(obj.toString());
 			  } else {
 				  sortOrder = Integer.parseInt(obj.toString());

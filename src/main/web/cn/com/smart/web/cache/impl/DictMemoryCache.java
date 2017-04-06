@@ -15,12 +15,12 @@ import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
 import cn.com.smart.cache.ICacheManagerAware;
 import cn.com.smart.cache.InitCache;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNDict;
 import cn.com.smart.web.dao.IDictDao;
 import cn.com.smart.web.dao.impl.DictDao;
 
 import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 数据字典缓存
@@ -75,7 +75,7 @@ public class DictMemoryCache implements InitCache,ICacheManagerAware,IDictDao {
 			List<TNDict> dicts = getDicts();
 			if(null != dicts && dicts.size()>0) {
 				String dictId = getIdByValue(dicts, busiValue);
-				if(!StringUtil.isEmpty(dictId)) {
+				if(StringUtils.isNotEmpty(dictId)) {
 					lists= getItemById(dictId, name);
 				}
 			}
@@ -93,14 +93,14 @@ public class DictMemoryCache implements InitCache,ICacheManagerAware,IDictDao {
 	@Override
 	public List<TNDict> getItems(String busiValue) {
 		List<TNDict> lists = null;
-		if(StringUtil.isEmpty(busiValue)) {
+		if(StringUtils.isEmpty(busiValue)) {
 			return lists;
 		}
 		try {
 			List<TNDict> dicts = getDicts();
 			if(null != dicts && dicts.size()>0) {
 				String dictId = getIdByValue(dicts, busiValue);
-				if(!StringUtil.isEmpty(dictId)) {
+				if(StringUtils.isNotEmpty(dictId)) {
 					lists = new ArrayList<TNDict>();
 					for (TNDict dict : dicts) {
 						if(dict.getParentId().equals(dictId)) {
@@ -123,7 +123,7 @@ public class DictMemoryCache implements InitCache,ICacheManagerAware,IDictDao {
 	@Override
 	public List<Object> getItemById(String id, String name) {
 		List<Object> lists = null;
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			String[] datas = null;
 			lists = new ArrayList<Object>();
 			boolean isAdd = false;
@@ -131,7 +131,7 @@ public class DictMemoryCache implements InitCache,ICacheManagerAware,IDictDao {
 				List<TNDict> dicts = getDicts();
 				for (TNDict dict : dicts) {
 					isAdd = false;
-					if(!StringUtil.isEmpty(name)) {
+					if(StringUtils.isNotEmpty(name)) {
 						isAdd = id.equals(dict.getParentId()) && dict.getBusiName().contains(name);
 					} else {
 						isAdd = id.equals(dict.getParentId());
@@ -212,7 +212,7 @@ public class DictMemoryCache implements InitCache,ICacheManagerAware,IDictDao {
 	 */
 	public TNDict find(String id) {
 		TNDict dict = null;
-		if(StringUtil.isEmpty(id)) {
+		if(StringUtils.isEmpty(id)) {
 			return dict;
 		}
 		try {

@@ -10,7 +10,8 @@ import cn.com.smart.bean.ProjectInfo;
 import cn.com.smart.config.ConfigImpl;
 import cn.com.smart.constant.IConstant;
 import cn.com.smart.init.Init;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 初始化系统配置文件
@@ -34,7 +35,7 @@ public class InitSysConfig extends ConfigImpl implements Init {
 	 */
 	private void reloadConfig() {
 		String devModel = instance.getValue("project.devModel");
-		if(!StringUtil.isEmpty(devModel) && IConstant.PROJECT_DEV_MODEL.equals(devModel)) {
+		if(StringUtils.isNotEmpty(devModel) && IConstant.PROJECT_DEV_MODEL.equals(devModel)) {
 			URL path = this.getClass().getResource(IConstant.SYS_CONFIG_FILE);
 			File file = new File(path.getFile());
 			path = null;
@@ -97,9 +98,9 @@ public class InitSysConfig extends ConfigImpl implements Init {
 	 */
 	public String getValue(String key) {
 		String value = null;
-		if(null != prop && !StringUtil.isEmpty(key)){
+		if(null != prop && StringUtils.isNotEmpty(key)){
 			try {
-				value = StringUtil.handNull(prop.get(key));
+				value = StringUtils.handNull(prop.get(key));
 				value = handleSysVar(value);
 				value = handleVar(value);
 			} catch (Exception e) {

@@ -12,8 +12,9 @@ import javax.persistence.Transient;
 
 import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.bean.DateBean;
-import cn.com.smart.constant.enumdef.YesNoType;
 import cn.com.smart.validate.Validate;
+
+import com.mixsmart.enums.YesNoType;
 
 /**
  * 操作权限 （实体Bean）
