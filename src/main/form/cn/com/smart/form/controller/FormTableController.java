@@ -21,9 +21,9 @@ import cn.com.smart.form.bean.CreateTableData;
 import cn.com.smart.form.bean.entity.TCreateTable;
 import cn.com.smart.form.service.FormTableService;
 import cn.com.smart.form.util.FormTableUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.DelBtn;
@@ -63,17 +63,15 @@ public class FormTableController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpServletRequest request,ModelAndView modelView,FilterParam searchParam,Integer page) {
+	public ModelAndView list(HttpServletRequest request,ModelAndView modelView,FilterParam searchParam,RequestPage page) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		smartResp = opServ.getDatas("form_table_mgr_list",searchParam,getStartNum(page),getPerPageSize());
+		smartResp = opServ.getDatas("form_table_mgr_list",searchParam, page.getStartNum(), page.getPageSize());
 		String uri = "form/table/list";
 		addBtn = new EditBtn("add","showPage/form_table_add", null, "创建表", "800");
 		editBtn = new EditBtn("edit","showPage/form_table_edit", "formTable", "修改表", "800");
 		delBtn = new DelBtn("op/del.json","formTable", "确定要删除选中的表吗，删除后将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		alinks = new ArrayList<ALink>();
 		ALink link = new ALink();
 		link.setUri("form/table/show");

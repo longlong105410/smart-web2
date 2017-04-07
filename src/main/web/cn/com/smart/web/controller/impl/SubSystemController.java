@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNSubSystem;
 import cn.com.smart.web.controller.base.BaseController;
@@ -50,13 +51,10 @@ public class SubSystemController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session, Integer page) {
-		
-		page = (null == page)?0:page;
-		page = super.getPage(page);
+	public ModelAndView list(HttpSession session, RequestPage page) {
 		ModelAndView modelView = new ModelAndView();
 		Map<String, Object> params = null;
-		SmartResponse<Object> smartResp = opServ.getDatas("sub_system_list", params, super.getStartNum(page), super.getPerPageSize());
+		SmartResponse<Object> smartResp = opServ.getDatas("sub_system_list", params, page.getStartNum(), page.getPageSize());
 		String uri = "subSystem/list";
 		ModelMap modelMap = modelView.getModelMap();
 		
@@ -64,7 +62,7 @@ public class SubSystemController extends BaseController {
 		editBtn = new EditBtn("edit", "subSystem/edit", null, "修改子系统信息", "600");
 		delBtn = new DelBtn("subSystem/delete", "您确定要删除选择的数据吗？", uri, null, null);
 		refreshBtn = new RefreshBtn(uri, null, null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		modelMap.put("addBtn", addBtn);
 		modelMap.put("editBtn", editBtn);

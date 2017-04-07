@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 操作权限
@@ -34,17 +35,15 @@ public class OPAuthController extends BaseController {
 	private OPAuthService authServ;
 
 	@RequestMapping("/list")
-	public ModelAndView list(ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		SmartResponse<Object> smartResp = authServ.findAll(getStartNum(page), getPerPageSize());
+	public ModelAndView list(ModelAndView modelView,RequestPage page) throws Exception {
+		SmartResponse<Object> smartResp = authServ.findAll(page.getStartNum(), page.getPageSize());
 		
 		String uri = "opauth/list"; 
 		addBtn = new EditBtn("add","showPage/base_opauth_add", "opAuth", "添加操作权限", "600");
 		editBtn = new EditBtn("edit","showPage/base_opauth_edit", "opAuth", "修改操作权限", "600");
 		delBtn = new DelBtn("opauth/delete.json", "确定要删除选中的操作权限吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -95,7 +94,7 @@ public class OPAuthController extends BaseController {
 	@RequestMapping("/selectAuth")
 	public ModelAndView selectAuth(ModelAndView modelView,String ids) throws Exception {
 		SmartResponse<TNOPAuth> smartResp = null;
-		if(!StringUtil.isEmpty(ids)) {
+		if(StringUtils.isNotEmpty(ids)) {
 			smartResp = authServ.findAuth(ids.split(","));
 		} else {
 			smartResp = authServ.findAll();

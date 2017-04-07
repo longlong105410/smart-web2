@@ -20,9 +20,6 @@
 		  }
 	  });
 	  messagePush.init();
-	  setTimeout(function() {
-	  	$.get('test/sendMsgTest?index=12',function(){});
-	  }, 3000);
   });
 </script>
 	 </div><!-- content -->

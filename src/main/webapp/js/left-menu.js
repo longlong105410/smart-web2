@@ -96,7 +96,8 @@ function autoTableWidth($activeTab) {
 	if(utils.isEmpty($activeTab)) {
 		$activeTab = getActiveTabPanel();
 	}
-	var $tableTheader = $activeTab.find(".table-theader");
+	tableWrapListener($activeTab, true);
+	/*var $tableTheader = $activeTab.find(".table-theader");
 	var $tableWrap = $activeTab.find(".cnoj-table-wrap");
 	var $parentTable = $tableWrap.parent().parent();
 	var w = $parentTable.width();
@@ -109,7 +110,8 @@ function autoTableWidth($activeTab) {
 		} else {
 			$tableWrap.width(w - scrollWidth);
 		}
-	}
+	}*/
+	
 }
 
 /**
@@ -418,7 +420,6 @@ function resizePanel(panel) {
 	if(uuid != panelUUID) {
 		tableWrapListener(panel, true);
 		limitHeightListener(panel,true);
-		autoTableWidth(panel);
 		panel.find(".cnoj-jq-grid").each(function(){
 			$(this).setGridWidth($("#main-content").width()-10);
 			$(this).setGridHeight(getMainHeight()-10);

@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.dao.impl.BaseDaoImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.controller.base.BaseController;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 显示页面
@@ -22,14 +23,14 @@ public class ShowPageController extends BaseController {
 	@RequestMapping("/{pagePath}")
 	public ModelAndView index(ModelAndView modelView,@PathVariable String pagePath,
 			String id,String busiName,String op) throws Exception {
-		if(!StringUtil.isEmpty(pagePath)) {
+		if(StringUtils.isNotEmpty(pagePath)) {
 			String[] params = pagePath.split("_");
 			if(params.length>0) {
 				String dir = "";
-				String viewPage = StringUtil.filterFilePath(params[params.length-1]);
+				String viewPage = StringUtils.filterFilePath(params[params.length-1]);
 				if(params.length<5 && params.length>0){
 					for (int i = 0; i < (params.length-1); i++) {
-						dir += StringUtil.filterFilePath(params[i])+"/";
+						dir += StringUtils.filterFilePath(params[i])+"/";
 					}
 					viewPage = dir+viewPage;
 				}
@@ -38,7 +39,7 @@ public class ShowPageController extends BaseController {
 		}
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("id", id);
-		if(!StringUtil.isEmpty(op)) {
+		if(StringUtils.isNotEmpty(op)) {
 			int sortOrder = 0;
 			BaseDaoImpl<?> dao = getBaseDao(busiName);
 			if(ADD.equals(op)) {

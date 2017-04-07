@@ -8,6 +8,7 @@ import javax.servlet.jsp.JspWriter;
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
+import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.BaseBtn;
 import cn.com.smart.web.tag.bean.CustomBtn;
@@ -140,6 +141,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     		}
     		userInfo = null;
    			authServ = null;
+   			String searchPanel = "";
     		if(null != page && smartResp.getTotalPage()>1) {
     			String pageUri = page.getUri();
         		if(StringUtils.isNotEmpty(pageUri)) {
@@ -149,7 +151,6 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
         			pageUri = "";
         		}
         		count++;
-        		String searchPanel = "";
         		if(StringUtils.isNotEmpty(searchPanelTag)) {
         			searchPanel = "data-search-panel-tag='"+searchPanelTag+"'";
         		}
@@ -206,7 +207,28 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     		if(null != page) {
     			htmlContent.append("<span>"+(smartResp.getTotalPage()>0?page.getPage():"0")+" - "+smartResp.getTotalPage()+"</span>");
     		}
-    		htmlContent.append("<span>&nbsp;&nbsp; 共"+smartResp.getTotalNum()+"条(每页显示"+(smartResp.getPerPageSize()==0?smartResp.getTotalNum():smartResp.getPerPageSize())+"条)</span></div>");
+    		StringBuilder showPageBuilder = null;
+    		//每页显示数量选择
+    		if(null != page && page.getIsSelectSize()) {
+				int defaultPageSize = page.getPageSize();
+				if(defaultPageSize == 0) {
+					defaultPageSize = PageHelper.defaultPageSize();
+				}
+				Integer[] showPageSizeArray = PageHelper.getShowPageSize();
+				showPageBuilder = new StringBuilder();
+				if(null != showPageSizeArray && showPageSizeArray.length>0) {
+					showPageBuilder.append("<select class='form-control input-sm cnoj-change-pagesize' "+searchPanel+" data-uri='"+page.getUri()+"' data-target='"+StringUtils.handNull(page.getTarget())+"'>");
+					for (int i = 0; i < showPageSizeArray.length; i++) {
+						if(defaultPageSize == showPageSizeArray[i]) {
+							showPageBuilder.append("<option selected='selected' value='"+showPageSizeArray[i]+"'>"+showPageSizeArray[i]+"</option>");
+						} else {
+							showPageBuilder.append("<option value='"+showPageSizeArray[i]+"'>"+showPageSizeArray[i]+"</option>");
+						}
+					}
+					showPageBuilder.append("</select>");
+				}
+    		}
+    		htmlContent.append("<span>&nbsp;&nbsp; 共"+smartResp.getTotalNum()+"条(每页显示"+(smartResp.getTotalPage()==0?(smartResp.getTotalNum()==0?page.getPageSize():smartResp.getTotalNum()):""+(null == showPageBuilder ? smartResp.getPerPageSize():showPageBuilder.toString()))+"</span>条)</span></div>");
     		htmlContent.append("</div>");
     		String resultContent = htmlContent.toString();
     		String styleStart = "style=\"";

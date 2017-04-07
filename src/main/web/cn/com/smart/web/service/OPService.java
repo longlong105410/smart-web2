@@ -14,7 +14,6 @@ import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.helper.ObjectHelper;
 import cn.com.smart.helper.ObjectTreeHelper;
 import cn.com.smart.service.impl.BaseServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.AutoComplete;
 import cn.com.smart.web.constant.IWebConstant;
 import cn.com.smart.web.helper.PageHelper;
@@ -22,6 +21,7 @@ import cn.com.smart.web.plugins.ZTreeData;
 import cn.com.smart.web.plugins.service.ZTreeService;
 
 import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 	public SmartResponse<Object> getDatas(String resId) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId);
 				if(null != objs && objs.size()>0) {
 					objs = ObjectHelper.handleObjDate(objs);
@@ -78,7 +78,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 	public SmartResponse<Object> getDatas(String resId,Map<String,Object> params) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId, params);
 				if(null != objs && objs.size()>0) {
 					objs = ObjectHelper.handleObjDate(objs);
@@ -86,6 +86,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 					smartResp.setMsg(OP_SUCCESS_MSG);
 					smartResp.setDatas(objs);
 					smartResp.setSize(objs.size());
+					smartResp.setTotalNum(objs.size());
 				} else {
 					smartResp.setResult(OP_NOT_DATA_SUCCESS);
 					smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
@@ -110,7 +111,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 	public SmartResponse<Object> getDatas(String resId,FilterParam params) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId, params);
 				if(null != objs && objs.size()>0) {
 					objs = ObjectHelper.handleObjDate(objs);
@@ -118,6 +119,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 					smartResp.setMsg(OP_SUCCESS_MSG);
 					smartResp.setDatas(objs);
 					smartResp.setSize(objs.size());
+					smartResp.setTotalNum(objs.size());
 				} else {
 					smartResp.setResult(OP_NOT_DATA_SUCCESS);
 					smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
@@ -145,7 +147,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				long totalNum = getOPDao().count(resId);
 				if(start<=totalNum) {
 					List<Object> objs = getOPDao().queryDatas(resId,start,rows);
@@ -184,7 +186,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				long totalNum = getOPDao().count(resId, params);
 				if(start<=totalNum) {
 					List<Object> objs = getOPDao().queryDatas(resId, params,start,rows);
@@ -224,7 +226,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				long totalNum = getOPDao().count(resId, params);
 				if(start<=totalNum) {
 					List<Object> objs = getOPDao().queryDatas(resId, params,start,rows);
@@ -264,7 +266,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				long totalNum = getOPDao().count(resId, params,filterParam);
 				if(start<=totalNum) {
 					List<Object> objs = getOPDao().queryDatas(resId, params,filterParam,start,rows);
@@ -301,7 +303,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 	public SmartResponse<Object> getTreeDatas(String resId,Map<String,Object> params) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId, params);
 				if(null != objs && objs.size()>0) {
 					try {
@@ -338,7 +340,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId);
 				if(null != objs && objs.size()>0) {
 					try {
@@ -376,7 +378,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		List<ZTreeData> lists = null;
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				Object async = params.get("isAsync");
 				params.remove("isAsync");
 				Boolean isAsync = false;
@@ -439,7 +441,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		List<ZTreeData> lists = null;
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId);
 				if(null != objs && objs.size()>0) {
 					try {
@@ -482,7 +484,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 	public SmartResponse<AutoComplete> getAutoCompleteDatas(String resId,Map<String,Object> params) {
 		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				List<Object> objs = getOPDao().queryDatas(resId, params,0,10);
 				if(null != objs && objs.size()>0) {
 					List<AutoComplete> autoCompleteList = new ArrayList<AutoComplete>();
@@ -491,17 +493,17 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 						Object[] objArray = (Object[]) obj;
 						autoComplete = new AutoComplete();
 						if(objArray.length>=3) {
-							autoComplete.setId(StringUtil.handNull(objArray[0]));
-							autoComplete.setValue(StringUtil.handNull(objArray[1]));
-							autoComplete.setLabel(StringUtil.handNull(objArray[2]));
+							autoComplete.setId(StringUtils.handNull(objArray[0]));
+							autoComplete.setValue(StringUtils.handNull(objArray[1]));
+							autoComplete.setLabel(StringUtils.handNull(objArray[2]));
 						} else if(objArray.length==2) {
-							autoComplete.setId(StringUtil.handNull(objArray[0]));
-							autoComplete.setValue(StringUtil.handNull(objArray[1]));
-							autoComplete.setLabel(StringUtil.handNull(objArray[1]));
+							autoComplete.setId(StringUtils.handNull(objArray[0]));
+							autoComplete.setValue(StringUtils.handNull(objArray[1]));
+							autoComplete.setLabel(StringUtils.handNull(objArray[1]));
 						} else if(objArray.length==1) {
-							autoComplete.setId(StringUtil.handNull(objArray[0]));
-							autoComplete.setValue(StringUtil.handNull(objArray[0]));
-							autoComplete.setLabel(StringUtil.handNull(objArray[0]));
+							autoComplete.setId(StringUtils.handNull(objArray[0]));
+							autoComplete.setValue(StringUtils.handNull(objArray[0]));
+							autoComplete.setLabel(StringUtils.handNull(objArray[0]));
 						} 
 						if(objArray.length>3) {
 							List<Object> otherValues = new ArrayList<Object>();
@@ -517,6 +519,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 						smartResp.setMsg(OP_SUCCESS_MSG);
 						smartResp.setDatas(autoCompleteList);
 						smartResp.setSize(autoCompleteList.size());
+						smartResp.setTotalNum(autoCompleteList.size());
 					}
 					autoCompleteList = null;
 					autoComplete = null;
@@ -542,12 +545,12 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 	public SmartResponse<String> execute(String resId,Map<String,Object> params) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(resId)) {
+			if(StringUtils.isNotEmpty(resId)) {
 				//判断处理是否有逗号分割的多条数据组合
 				for (String key : params.keySet()) {
 					if(!params.get(key).getClass().isArray()) {
-						String value = StringUtil.handNull(params.get(key));
-						if(!StringUtil.isEmpty(value) && value.indexOf(",")>-1) {
+						String value = StringUtils.handNull(params.get(key));
+						if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
 							String[] values = value.split(",");
 							params.put(key, values);
 						}
@@ -582,6 +585,7 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 			smartRes.setDatas(lists);
 			smartRes.setMsg(OP_SUCCESS_MSG);
 			smartRes.setSize(lists.size());
+			smartRes.setTotalNum(lists.size());
 		}
 		return smartRes;
 	}

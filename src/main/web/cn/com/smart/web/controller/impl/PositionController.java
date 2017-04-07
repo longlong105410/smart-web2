@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNPosition;
 import cn.com.smart.web.constant.enumdef.SelectedEventType;
 import cn.com.smart.web.controller.base.BaseController;
@@ -29,6 +29,8 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 岗位
@@ -47,26 +49,22 @@ public class PositionController extends BaseController {
 	private OPService opServ;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,ModelAndView modelView,String orgId,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		
+	public ModelAndView list(HttpSession session,ModelAndView modelView,String orgId,RequestPage page) throws Exception {
 		Map<String,Object> params = null;
 		orgId = "0".equals(orgId)?null:orgId;
 		params = new HashMap<String, Object>();
-		if(!StringUtil.isEmpty(orgId)) {
+		if(StringUtils.isNotEmpty(orgId)) {
 			params.put("orgId", orgId);
 		}
-		
-		params.put("orgIds", StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		SmartResponse<Object> smartResp = opServ.getDatas("position_mgr_list",params,getStartNum(page),getPerPageSize());
+		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		SmartResponse<Object> smartResp = opServ.getDatas("position_mgr_list",params, page.getStartNum(), page.getPageSize());
 		params = null;
-		String uri = "position/list?orgId="+StringUtil.handNull(orgId);
-		addBtn = new EditBtn("add","showPage/base_position_add?id="+StringUtil.handNull(orgId),null, "添加职位", "600");
+		String uri = "position/list?orgId="+StringUtils.handNull(orgId);
+		addBtn = new EditBtn("add","showPage/base_position_add?id="+StringUtils.handNull(orgId),null, "添加职位", "600");
 		editBtn = new EditBtn("edit","showPage/base_position_edit", "position", "修改职位", "600");
 		delBtn = new DelBtn("op/del", "position", "确定要删除选中的职位吗？",uri,"#position-list", null);
 		refreshBtn = new RefreshBtn(uri, "position","#position-list");
-		pageParam = new PageParam(uri, "#position-list", page);
+		pageParam = new PageParam(uri, "#position-list", page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -104,13 +102,11 @@ public class PositionController extends BaseController {
 	
 	@RequestMapping("/simplist")
 	public ModelAndView simplist(HttpSession session,UserSearchParam searchParam,
-    		ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+    		ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "position/simplist";
-		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		SmartResponse<Object> smartResp = opServ.getDatas("position_simp_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, "#position-tab", page);
+		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		SmartResponse<Object> smartResp = opServ.getDatas("position_simp_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, "#position-tab", page.getPage(), page.getPageSize());
 		selectedEventProp = new SelectedEventProp(SelectedEventType.OPEN_TO_TARGET.getValue(),"auth/positionHas","#has-auth-list","id");	
 
 		ModelMap modelMap = modelView.getModelMap();
@@ -131,17 +127,12 @@ public class PositionController extends BaseController {
 	 */
 	@RequestMapping("/rolelist")
 	public ModelAndView rolelist(HttpSession session,UserSearchParam searchParam,
-    		ModelAndView modelView,Integer page) throws Exception {
-
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+    		ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "position/rolelist";
-		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		SmartResponse<Object> smartResp = opServ.getDatas("position_role_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, null, page);
-		
-		uri = uri+"?id="+searchParam.getId();
-		
+		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		SmartResponse<Object> smartResp = opServ.getDatas("position_role_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
+		uri = uri+"?id="+searchParam.getId();	
 		addBtn = new EditBtn("add","position/addRole?id="+searchParam.getId(), null, "该岗位中添加角色", "600");
 		delBtn = new DelBtn("op/moreParamDel?flag=p&positionId="+searchParam.getId(), "rolePosition", "确定要从该岗位中删除选中的角色吗？",uri,"#position-role-tab", null);
 		refreshBtn = new RefreshBtn(uri, null,"#position-role-tab");
@@ -166,12 +157,10 @@ public class PositionController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addRole")
-	public ModelAndView addRole(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView addRole(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "position/addRole";
-		SmartResponse<Object> smartResp = opServ.getDatas("position_addrole_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("position_addrole_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -185,7 +174,7 @@ public class PositionController extends BaseController {
 	@RequestMapping(value="/saveRole",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> saveUser(String submitDatas,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(submitDatas) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(submitDatas) && StringUtils.isNotEmpty(id)) {
 			String[] values = submitDatas.split(",");
 			smartResp = posServ.addRole2Position(id, values);
 		}

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.SubmitDataBean;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNRole;
@@ -33,6 +33,8 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 角色
@@ -53,23 +55,21 @@ public class RoleController extends BaseController {
 	private ResourceService resServ;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView list(HttpSession session,ModelAndView modelView,RequestPage page) throws Exception {
 		Map<String,Object> params = null;
 		UserInfo userInfo = getUserInfoFromSession(session);
 		if(!isSuperAdmin(userInfo)) {
 			params = new HashMap<String, Object>(1);
 			params.put("roleIds", userInfo.getRoleIds().toArray());
 		}
-		SmartResponse<Object> smartResp = opServ.getDatas("role_mgr_list", params, getStartNum(page), getPerPageSize());
+		SmartResponse<Object> smartResp = opServ.getDatas("role_mgr_list", params, page.getStartNum(), page.getPageSize());
 		
 		String uri = "role/list"; 
 		addBtn = new EditBtn("add","showPage/base_role_add", null, "添加角色", "600");
 		editBtn = new EditBtn("edit","showPage/base_role_edit", "role", "修改角色", "600");
 		delBtn = new DelBtn("role/delete.json", "确定要删除选中的角色吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		alinks = new ArrayList<ALink>();
 		ALink link = new ALink();
@@ -141,19 +141,17 @@ public class RoleController extends BaseController {
 	 */
 	@RequestMapping("/simplist")
 	public ModelAndView simplist(HttpSession session,FilterParam searchParam,
-			ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+			ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "role/simplist";
 		UserInfo userInfo = getUserInfoFromSession(session);
 		if(!isSuperAdmin(userInfo)) {
 			if(null == searchParam) {
 				searchParam = new FilterParam();
 			}
-			searchParam.setRoleIds(StringUtil.list2Array(userInfo.getRoleIds()));
+			searchParam.setRoleIds(StringUtils.list2Array(userInfo.getRoleIds()));
 		}
-		SmartResponse<Object> smartResp = opServ.getDatas("role_simp_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, "#role-tab", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("role_simp_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, "#role-tab", page.getPage(), page.getPageSize());
 		selectedEventProp = new SelectedEventProp(SelectedEventType.OPEN_TO_TARGET.getValue(),"auth/roleHas","#has-auth-list","id");	
 		
 		ModelMap modelMap = modelView.getModelMap();
@@ -173,12 +171,10 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/userlist")
-	public ModelAndView userlist(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView userlist(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "role/userlist";
-		SmartResponse<Object> smartResp = opServ.getDatas("role_user_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, "#role-user-tab", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("role_user_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, "#role-user-tab", page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addUser?id="+searchParam.getId(), null, "该角色中添加用户", "600");
 		delBtn = new DelBtn("op/moreParamDel.json?roleId="+searchParam.getId(), "roleUser", "确定要从该角色中删除选中的用户吗？",uri,"#role-user-tab", null);
@@ -202,12 +198,10 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/orglist")
-	public ModelAndView orglist(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView orglist(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "role/orglist";
-		SmartResponse<Object> smartResp = opServ.getDatas("role_org_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, "#role-org-tab", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("role_org_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, "#role-org-tab", page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addOrg?id="+searchParam.getId(), null, "该角色中添加组织机构", "600");
 		delBtn = new DelBtn("op/moreParamDel?roleId="+searchParam.getId(), "roleOrg", "确定要从该角色中删除选中的组织机构吗？",uri,"#role-org-tab", null);
@@ -231,12 +225,10 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/positionlist")
-	public ModelAndView positionlist(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView positionlist(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "role/positionlist";
-		SmartResponse<Object> smartResp = opServ.getDatas("role_position_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, "#role-position-tab", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("role_position_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, "#role-position-tab", page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addPosition?id="+searchParam.getId(), null, "该角色中添加职位", "600");
 		delBtn = new DelBtn("op/moreParamDel?roleId="+searchParam.getId(), "rolePosition", "确定要从该角色中删除选中的职位吗？",uri,"#role-position-tab", null);
@@ -262,7 +254,7 @@ public class RoleController extends BaseController {
 	@RequestMapping("/viewMenus")
 	public @ResponseBody SmartResponse<ZTreeData> viewMenus(String id) throws Exception {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			smartResp = menuServ.roleMenuTree(id);
 		}
 		return smartResp;
@@ -277,7 +269,7 @@ public class RoleController extends BaseController {
 	@RequestMapping("/viewRes")
 	public @ResponseBody SmartResponse<ZTreeData> viewRes(String id) throws Exception {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			smartResp = resServ.selectedResAuthTree(id);
 		}
 		return smartResp;
@@ -290,12 +282,10 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addUser")
-	public ModelAndView addUser(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView addUser(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "role/addUser";
-		SmartResponse<Object> smartResp = opServ.getDatas("role_adduser_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("role_adduser_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -309,7 +299,7 @@ public class RoleController extends BaseController {
 	@RequestMapping(value="/saveUser",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> saveUser(String submitDatas,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(submitDatas) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(submitDatas) && StringUtils.isNotEmpty(id)) {
 			String[] values = submitDatas.split(",");
 			smartResp = roleServ.addUser2Role(id, values);
 		}
@@ -328,12 +318,10 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addOrg")
-	public ModelAndView addOrg(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView addOrg(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "role/addOrg";
-		SmartResponse<Object> smartResp = opServ.getDatas("role_addorg_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("role_addorg_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page.getPage(), page.getPageSize());
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("pageParam", pageParam);
@@ -352,7 +340,7 @@ public class RoleController extends BaseController {
 	@RequestMapping(value="/saveOrg",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> saveOrg(String submitDatas,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(submitDatas) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(submitDatas) && StringUtils.isNotEmpty(id)) {
 			String[] values = submitDatas.split(",");
 			smartResp = roleServ.addOrg2Role(id, values);
 		}
@@ -366,12 +354,10 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addPosition")
-	public ModelAndView addPosition(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-			page = null == page?1:page;
-			page = PageHelper.getPage(page);
+	public ModelAndView addPosition(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 			String uri = "role/addPosition";
-			SmartResponse<Object> smartResp = opServ.getDatas("role_addposition_list",searchParam, getStartNum(page), getPerPageSize());
-			pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
+			SmartResponse<Object> smartResp = opServ.getDatas("role_addposition_list",searchParam, page.getStartNum(), page.getPageSize());
+			pageParam = new PageParam(uri, ".bootstrap-dialog-message", page.getPage(), page.getPageSize());
 			ModelMap modelMap = modelView.getModelMap();
 			modelMap.put("smartResp", smartResp);
 			modelMap.put("pageParam", pageParam);
@@ -388,7 +374,7 @@ public class RoleController extends BaseController {
 	@RequestMapping(value="/savePosition",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> savePosition(String submitDatas,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(submitDatas) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(submitDatas) && StringUtils.isNotEmpty(id)) {
 			String[] values = submitDatas.split(",");
 			smartResp = roleServ.addPosition2Role(id, values);
 		}

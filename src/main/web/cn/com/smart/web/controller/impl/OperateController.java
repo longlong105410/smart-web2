@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.dao.impl.BaseDaoImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.AutoComplete;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.helper.PageHelper;
@@ -50,7 +49,7 @@ public class OperateController extends BaseController {
 	@RequestMapping(value="/del",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> del(String busiName,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(busiName) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(busiName) && StringUtils.isNotEmpty(id)) {
 			BaseDaoImpl<?> dao = getBaseDao(busiName);
 			if(null != dao && dao.delete(id)) {
 				smartResp.setResult(OP_SUCCESS);
@@ -73,7 +72,7 @@ public class OperateController extends BaseController {
 	@RequestMapping(value="/del/{resId}",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> delByResId(@PathVariable String resId,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(resId) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(resId) && StringUtils.isNotEmpty(id)) {
 			Map<String,Object> params = new HashMap<String, Object>(1);
 			params.put("id", id);
 			smartResp = opServ.execute(resId, params);
@@ -95,7 +94,7 @@ public class OperateController extends BaseController {
 	@RequestMapping(value="/moreParamDel",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> moreParamDel(HttpServletRequest request,String busiName,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(busiName) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(busiName) && StringUtils.isNotEmpty(id)) {
 			Map<String,Object> paramMaps = getRequestParamMap(request);
 			paramMaps.remove("busiName");
 			BaseDaoImpl<?> dao = getBaseDao(busiName);
@@ -119,7 +118,7 @@ public class OperateController extends BaseController {
 	@RequestMapping(value="/executeReq/{resId}",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> execute(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String,Object> paramMaps = getRequestParamMap(request);
 			smartResp = opServ.execute(resId, paramMaps);
 		}
@@ -141,7 +140,7 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<String> execute(HttpSession session,@PathVariable String resId,
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
 			smartResp = opServ.execute(resId, params);
 			params = null;
@@ -163,7 +162,7 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<Object> query(HttpSession session,@PathVariable String resId,
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
 			smartResp = opServ.getDatas(resId, params);
 			params = null;
@@ -181,9 +180,9 @@ public class OperateController extends BaseController {
 	@RequestMapping("/queryReq/{resId}")
 	public @ResponseBody SmartResponse<Object> query(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getRequestParamMap(request);
-			params.put("orgIds", StringUtil.list2Array(getUserInfoFromSession(request).getOrgIds()));
+			params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
 			smartResp = opServ.getDatas(resId, params);
 			params = null;
 		}
@@ -206,7 +205,7 @@ public class OperateController extends BaseController {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		page = null == page?1:page;
 		page = PageHelper.getPage(page);
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
 			smartResp = opServ.getDatas(resId, params,getStartNum(page), getPerPageSize());
 			params = null;
@@ -227,9 +226,9 @@ public class OperateController extends BaseController {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		page = null == page?1:page;
 		page = PageHelper.getPage(page);
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getRequestParamMap(request);
-			params.put("orgIds", StringUtil.list2Array(getUserInfoFromSession(request).getOrgIds()));
+			params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
 			smartResp = opServ.getDatas(resId, params,getStartNum(page), getPerPageSize());
 			params = null;
 		}
@@ -249,7 +248,7 @@ public class OperateController extends BaseController {
 	@RequestMapping("/queryTree/{resId}")
 	public @ResponseBody SmartResponse<ZTreeData> queryTree(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getRequestParamMap(request);
 			smartResp = opServ.getZTreeDatas(resId, params);
 			params = null;
@@ -271,7 +270,7 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<ZTreeData> queryTree(HttpSession session,@PathVariable String resId,
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
 			smartResp = opServ.getZTreeDatas(resId, params);
 			params = null;
@@ -311,7 +310,7 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<AutoComplete> autoComplete(HttpSession session,@PathVariable String resId,
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
 			smartResp = opServ.getAutoCompleteDatas(resId, params);
 			params = null;
@@ -332,7 +331,7 @@ public class OperateController extends BaseController {
 	@RequestMapping("/autoCompleteReq/{resId}")
 	public @ResponseBody SmartResponse<AutoComplete> autoComplete(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
-		if(!StringUtil.isEmpty(resId)) {
+		if(StringUtils.isNotEmpty(resId)) {
 			Map<String, Object> params = getRequestParamMap(request);
 			smartResp = opServ.getAutoCompleteDatas(resId, params);
 			params = null;

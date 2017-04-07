@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNUserSetMenu;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.UserSettingService;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
@@ -42,9 +42,7 @@ public class UserSettingController extends BaseController {
 	
 	
 	@RequestMapping("/list")
-	public ModelAndView list(ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView list(ModelAndView modelView,RequestPage page) throws Exception {
 		 SmartResponse<Object> smartResp = userSettingServ.findSettingMenus();
 		
 		String uri = "user/setting/list"; 
@@ -52,7 +50,7 @@ public class UserSettingController extends BaseController {
 		editBtn = new EditBtn("edit","showPage/base_user_setting_edit", "userSetMenu", "修改个人设置菜单", "600");
 		delBtn = new DelBtn("op/del.json", "userSetMenu", "确定要删除选中的操作权限吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);

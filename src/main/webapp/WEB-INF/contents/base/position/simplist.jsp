@@ -1,8 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <div class="wrap-content">
-    <div class="panel">
-        <div class="panel-search borer-bottom" data-height="36">
+    <div class="panel" data-subtract-height="35">
+        <div class="panel-search borer-bottom">
               <form class="form-inline cnoj-entry-submit" id="search-form-position" method="post" role="form" action="position/simplist" target="#position-tab">
                   <div class="form-group p-r-10">
 				    <label for="search-input01">名称：</label>

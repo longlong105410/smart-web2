@@ -17,6 +17,7 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.form.bean.entity.TFormHelper;
 import cn.com.smart.form.service.FormHelperService;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
@@ -52,17 +53,15 @@ public class FormHelperController extends BaseFormController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpServletRequest request, FilterParam searchParam, Integer page) {
+	public ModelAndView list(HttpServletRequest request, FilterParam searchParam, RequestPage page) {
 		ModelAndView modelView = new ModelAndView();
-		page = (null == page)?0:page;
-		page = getPage(page);
-		SmartResponse<Object> smartResp = opServ.getDatas("form_helper_mgr_list", searchParam, getStartNum(page), getPerPageSize());
+		SmartResponse<Object> smartResp = opServ.getDatas("form_helper_mgr_list", searchParam, page.getStartNum(), page.getPageSize());
 		String uri = "form/helper/list";
 		addBtn = new EditBtn("add", "showPage/form_helper_add", null, "添加表单帮助信息", "800");
 		editBtn = new EditBtn("edit", "form/helper/edit", null, "修改表单帮助信息", "800");
 		delBtn = new DelBtn("form/helper/delete", "您确定要删除选中的数据吗？", uri, null, null);
 		refreshBtn = new RefreshBtn(uri, null, null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		ALink alink = new ALink("form/helper/view", "800", "查看表单帮助信息");
 		alinks = new ArrayList<ALink>();
 		alinks.add(alink);

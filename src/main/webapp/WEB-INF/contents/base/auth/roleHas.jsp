@@ -27,9 +27,13 @@
   </div><!-- panel -->
   <script type="text/javascript">
 	  $(function(){
+		  var isResize = false;
 		  $("#has-role-content").find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			  var id = $(e.target).attr("href");
-			  tableWrapListener($(id), false);
+			  tableWrapListener($(id), isResize);
+		  });
+		  $(window).resize(function(){
+			 isResize = true; 
 		  });
 	  });
 	</script>

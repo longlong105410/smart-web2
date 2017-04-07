@@ -6,7 +6,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/flow/js/flow.simple.tree.js"></script>
 <div class="wrap-content">
     <div class="panel panel-default my-hastodo">
-      <div class="panel-search" data-height="37">
+      <div class="panel-search">
            <form class="form-inline search-param cnoj-entry-submit" id="search-form-order" method="post" role="form" action="process/hasTodo" target="${target }">
                <div class="form-group p-r-10">
 				  <label for="search-input01">项目名称：</label>
@@ -20,7 +20,7 @@
 			 </div>
            </form>
         </div>
-      <div class="cnoj-auto-limit-height" data-subtract-height="75">
+      <div class="cnoj-table-wrap">
 	    <table class="table table-bordered table-condensed font-size-12">
 	        <thead>
 	        <tr class="ui-state-default">
@@ -66,8 +66,8 @@
 	       </tbody>
 	     </table>
 	  </div>
+      <cnoj:panelFooter smartResp="${smartResp }" refreshBtn="${refreshBtn}" page="${pageParam }" currentUri="${currentUri }" />
 	</div>
-	<cnoj:panelFooter smartResp="${smartResp }" refreshBtn="${refreshBtn}" page="${pageParam }" currentUri="${currentUri }" />
 </div>
 <script type="text/javascript">
    setTimeout("loadJs()", 200);

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNUser;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.constant.enumdef.SelectedEventType;
@@ -30,6 +30,8 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 用户
@@ -48,9 +50,7 @@ public class UserController extends BaseController {
 	private OPService opServ;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,UserSearchParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView list(HttpSession session,UserSearchParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "user/list"; 
 		addBtn = new EditBtn("add","showPage/base_user_add", null, "添加用户", "600");
 		editBtn = new EditBtn("edit","showPage/base_user_edit", "user", "修改用户信息", "600");
@@ -65,10 +65,10 @@ public class UserController extends BaseController {
 		if("0".equals(searchParam.getOrgId())) {
 			searchParam.setOrgId(null);
 		}
-		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		pageParam = new PageParam(uri, null, page);
+		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
-		SmartResponse<Object> smartResp = userServ.findAllObj(searchParam, getStartNum(page), getPerPageSize());
+		SmartResponse<Object> smartResp = userServ.findAllObj(searchParam, page.getStartNum(), page.getPageSize());
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("addBtn", addBtn);
@@ -151,13 +151,11 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping("/simplist")
     public ModelAndView simplist(HttpSession session,UserSearchParam searchParam,
-    		ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+    		ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "user/simplist";
-		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		SmartResponse<Object> smartResp = opServ.getDatas("user_simp_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, "#user-tab", page);
+		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		SmartResponse<Object> smartResp = opServ.getDatas("user_simp_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, "#user-tab", page.getPage(), page.getPageSize());
 		selectedEventProp = new SelectedEventProp(SelectedEventType.OPEN_TO_TARGET.getValue(),"auth/userHas","#has-auth-list","id");	
 
 		ModelMap modelMap = modelView.getModelMap();
@@ -174,7 +172,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/userInfo")
 	public ModelAndView userInfo(ModelAndView modelView,String id) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 		   smartResp = userServ.find(TNUser.class, id);
 		}
 		modelView.getModelMap().put("smartResp", smartResp);
@@ -187,8 +185,8 @@ public class UserController extends BaseController {
 			String confirmNewPwd,String oldPwd) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("请输入旧密码和新密码");
-		if(!StringUtil.isEmpty(newPwd) && !StringUtil.isEmpty(oldPwd) 
-				&& !StringUtil.isEmpty(confirmNewPwd)) {
+		if(StringUtils.isNotEmpty(newPwd) && StringUtils.isNotEmpty(oldPwd) 
+				&& StringUtils.isNotEmpty(confirmNewPwd)) {
 			smartResp = userServ.changePwd(getUserInfoFromSession(session).getId(), oldPwd, newPwd, confirmNewPwd);
 			log.info(smartResp.getMsg());
 		}
@@ -204,7 +202,7 @@ public class UserController extends BaseController {
 	public @ResponseBody SmartResponse<String> batchChangePwd(String id,String newPwd,String confirmNewPwd) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("请输入密码或确认密码");
-		if(!StringUtil.isEmpty(newPwd) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(newPwd) && StringUtils.isNotEmpty(id)) {
 			smartResp = userServ.batchChangePwd(id, newPwd,confirmNewPwd);
 			log.info(smartResp.getMsg());
 		} else {
@@ -220,13 +218,10 @@ public class UserController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/rolelist")
-	public ModelAndView rolelist(UserSearchParam searchParam,ModelAndView modelView,Integer page) throws Exception {
+	public ModelAndView rolelist(UserSearchParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "user/rolelist";
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		
-		SmartResponse<Object> smartResp = opServ.getDatas("user_role_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, null, page);
+		SmartResponse<Object> smartResp = opServ.getDatas("user_role_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","user/addRole?id="+searchParam.getId(), null, "用户中添加角色", "600");
 		delBtn = new DelBtn("op/moreParamDel.json?flag=u&userId="+searchParam.getId(), "roleUser", "确定要从该用户中删除选中的角色吗？",uri,"#user-role-tab", null);
@@ -251,12 +246,10 @@ public class UserController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/addRole")
-	public ModelAndView addRole(UserSearchParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView addRole(UserSearchParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
 		String uri = "user/addRole";
-		SmartResponse<Object> smartResp = opServ.getDatas("user_addrole_list",searchParam, getStartNum(page), getPerPageSize());
-		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page);
+		SmartResponse<Object> smartResp = opServ.getDatas("user_addrole_list",searchParam, page.getStartNum(), page.getPageSize());
+		pageParam = new PageParam(uri, ".bootstrap-dialog-message", page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -275,7 +268,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value="/saveRole",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> saveRole(String submitDatas,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(submitDatas) && !StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(submitDatas) && StringUtils.isNotEmpty(id)) {
 			String[] values = submitDatas.split(",");
 			smartResp = userServ.addRole2User(id, values);
 			values = null;

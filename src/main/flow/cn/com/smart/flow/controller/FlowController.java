@@ -31,9 +31,9 @@ import cn.com.smart.flow.ext.ExtModelParser;
 import cn.com.smart.flow.ext.ExtProcessModel;
 import cn.com.smart.flow.filter.FlowSearchParam;
 import cn.com.smart.flow.service.FlowService;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.CustomBtn;
@@ -85,21 +85,19 @@ public class FlowController extends BaseFlowControler {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,FlowSearchParam searchParam,Integer page) {
+	public ModelAndView list(HttpSession session,FlowSearchParam searchParam,RequestPage page) {
 		ModelAndView modelView  = new ModelAndView();
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
 		String uri = "flow/list";
 		if("0".equals(searchParam.getOrgId())) {
 			searchParam.setOrgId(null);
 		}
 		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
 		
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		SmartResponse<Object> smartResp = opServ.getDatas("flow_process_list",searchParam,getStartNum(page),getPerPageSize());
+		SmartResponse<Object> smartResp = opServ.getDatas("flow_process_list",searchParam, page.getStartNum(), page.getPageSize());
 		params = null;
 		
 		CustomBtn customBtn = new CustomBtn("edit_designer", "流程设计器", "修改流程设计", "flow/designer");

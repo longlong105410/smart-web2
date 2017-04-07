@@ -15,15 +15,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.constant.ResourceConstant;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNResource;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.ResourceService;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程资源
@@ -42,19 +43,17 @@ public class FlowResourceController extends BaseFlowControler {
 	private ResourceService resServ;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,ModelAndView modelView,String orgId,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+	public ModelAndView list(HttpSession session,ModelAndView modelView,String orgId,RequestPage page) throws Exception {
 		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("orgIds", StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
-		SmartResponse<Object> smartResp = opServ.getDatas("flow_resource_mgr_list",params,getStartNum(page),getPerPageSize());
+		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		SmartResponse<Object> smartResp = opServ.getDatas("flow_resource_mgr_list",params, page.getStartNum(), page.getPageSize());
 		params = null;
 		String uri = "flow/resource/list";
 		addBtn = new EditBtn("add","showPage/flow_resource_add", null, "添加流程菜单资源", "600");
 		editBtn = new EditBtn("edit","showPage/flow_resource_edit", "resource", "修改流程菜单资源", "600");
 		delBtn = new DelBtn("op/del.json", "resource", "确定要删除选中的流程菜单资源吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "resource",null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);

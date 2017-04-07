@@ -484,6 +484,11 @@ function hrefListener($elementWrap) {
 					uri = uri+"&"+$form.serialize();
 				}
 			}
+			//获取页面显示数量;即每页显示数
+	    	var $pageSize = $this.parents(".panel-footer-page:eq(0)").find(".cnoj-change-pagesize");
+	    	if($pageSize.length>0) {
+	    		uri +="&pageSize="+$pageSize.val();
+	    	}
 			var target = $this.data("target");
 			if (utils.isNotEmpty(uri)) {
 				if(utils.isNotEmpty(target))
@@ -659,6 +664,11 @@ function searchSubmitListener($elementWrap){
 	    		 uri = uri+"&"+param;
 	    	} else {
 	    		 uri = uri+"?"+param;
+	    	}
+	    	//获取页面显示数量;即每页显示数
+	    	var $pageSize = $form.parents(".panel:eq(0)").find(".cnoj-change-pagesize");
+	    	if($pageSize.length>0) {
+	    		uri +="&pageSize="+$pageSize.val();
 	    	}
 	    	uri = utils.isEmpty(loadingTargetTag)?uri:uri+" "+loadingTargetTag;
 	 	    if(!utils.isEmpty(target) && mainTag != target) {
@@ -1534,13 +1544,14 @@ function tableWrapListener($elementWrap, isResize) {
 	 */
 	function _separateTableHeaderAndBody($tableWrap, $panelFooter, h, isResize) {
 		var $tableTheader = null;
+		//调整表格；使表格头和表格内容分离
+		var $table = $tableWrap.find("table");
 		if(isResize) {
 			$tableTheader = $tableWrap.prev().find(".table-theader");
+			__autoTableWidth($tableWrap, $tableTheader, $table);
 			__autoTableHeight($tableWrap, $tableTheader, $panelFooter, h);
 			return;
 		}
-		//调整表格；使表格头和表格内容分离
-		var $table = $tableWrap.find("table");
 		var $theadTr = $table.find("thead").clone(true);
 		if(!utils.isEmpty($theadTr)) {
 			var dataHeight = $table.find("thead").find("tr").data("height");
@@ -1586,7 +1597,8 @@ function tableWrapListener($elementWrap, isResize) {
 		 * @param $table
 		 */
 		function __autoTableWidth($tableWrap, $tableTheader, $table) {
-			var tableWidth = $tableWrap.width() - utils.getScrollWidth();
+			var panelW =  $tableWrap.parent().width();
+			var tableWidth = panelW - utils.getScrollWidth();
 			if(tableWidth > 0) {
 				$tableTheader.width(tableWidth);
 				$tableWrap.width(tableWidth);
@@ -2668,6 +2680,84 @@ function gotoPageListener($elementWrap) {
 				uri = uri+"&"+$form.serialize();
 			}
 		}
+		//获取页面显示数量;即每页显示数
+    	var $pageSize = $this.parents(".panel-footer-page:eq(0)").find(".cnoj-change-pagesize");
+    	if($pageSize.length>0) {
+    		uri +="&pageSize="+$pageSize.val();
+    	}
+		if(!utils.isEmpty(target))
+			loadUri(target,uri,true);
+		else 
+			loadActivePanel(uri);
+	}
+}
+
+/**
+ * 改变显示页面数量<br />
+ * @param $elementWrap
+ * 标识 <br />
+ *   class="cnoj-change-pagesize" <br />
+ *   参数  <br />
+ *     必须 <br />
+ *        data-uri 刷新的页面 <br />
+ *     可选 <br />
+ *       data-target 刷新内容显示位置 <br />
+ *       data-search-panel-tag 搜索面板标识
+ */
+function changePageSizeListener($elementWrap) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-change-pagesize").each(function(){
+			_handler($(this));
+		});
+	} else {
+		$elementWrap.find(".cnoj-change-pagesize").each(function(){
+			_handler($(this));
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 */
+	function _handler($element) {
+		if(!$element.hasClass("cnoj-change-pagesize-listener")) {
+			$element.addClass("cnoj-change-pagesize-listener");
+			$element.change(function(event){
+				_clickElement(event, $(this));
+			});
+		}
+	}
+	
+	/**
+	 * 处理单击元素
+	 * @param event
+	 * @param $this
+	 */
+	function _clickElement(event, $this) {
+		var uri = $this.data("uri");
+		if (utils.isEmpty(uri)) {
+			return;
+		}
+		var target = $this.data("target");
+		if(uri.indexOf("?")>-1) {
+			uri += "&pageSize="+$this.val();
+		} else {
+			uri += "?pageSize="+$this.val();
+		}
+		//获取搜索参数
+		var searchPanelTag = $this.data("search-panel-tag");
+		var $searchPanel = null;
+		if(utils.isEmpty(searchPanelTag)) {
+			$searchPanel = $this.parents(".panel:eq(0)").find(">.panel-search");
+		} else {
+			$searchPanel = $(searchPanelTag);
+		}
+		if(utils.isExist($searchPanel)) {
+			var $form = $searchPanel.find("form");
+			if(utils.isExist($form)) {
+				uri = uri+"&"+$form.serialize();
+			}
+		}
 		if(!utils.isEmpty(target))
 			loadUri(target,uri,true);
 		else 
@@ -2882,6 +2972,8 @@ function initEvent($elementWrap) {
 	printListener($elementWrap);
 	popoverListener($elementWrap);
 	handleEntrySubmit($elementWrap);
+	
+	changePageSizeListener($elementWrap);
 }
 
 function inputPluginEvent($elementWrap) {

@@ -10,9 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.ZTreeData;
 import cn.com.smart.web.service.ResourceService;
 import cn.com.smart.web.tag.bean.DelBtn;
@@ -34,17 +34,23 @@ public class ResourceController extends BaseController {
 	@Autowired
 	private ResourceService resServ;
 	
+	/**
+	 * 资源列表 
+	 * @param searchParam
+	 * @param modelView
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/list")
-	public ModelAndView list(FilterParam searchParam,ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		SmartResponse<Object> smartResp = resServ.findAll(searchParam, getStartNum(page), getPerPageSize());
+	public ModelAndView list(FilterParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
+		SmartResponse<Object> smartResp = resServ.findAll(searchParam, page.getStartNum(), page.getPageSize());
 		String uri = "resource/list"; 
 		addBtn = new EditBtn("add","showPage/base_resource_add", null, "添加资源", "600");
 		editBtn = new EditBtn("edit","showPage/base_resource_edit", "resource", "修改资源", "600");
 		delBtn = new DelBtn("resource/delete.json", "确定要删除选中的资源吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "resource",null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);

@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNDict;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.service.DictService;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.RefreshBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 数据字典
@@ -93,7 +94,7 @@ public class DictController extends BaseController {
 	@RequestMapping("/item/{busiValue}")
 	public @ResponseBody SmartResponse<Object> item(@PathVariable String busiValue,String name) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(!StringUtil.isEmpty(busiValue)) {
+		if(StringUtils.isNotEmpty(busiValue)) {
 			smartResp = dictServ.getItem(busiValue, name);
 		}
 		return smartResp;
@@ -110,7 +111,7 @@ public class DictController extends BaseController {
 	@RequestMapping("/itemById/{id}")
 	public @ResponseBody SmartResponse<Object> itemById(@PathVariable String id,String name) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			smartResp = dictServ.getItemById(id, name);
 		}
 		return smartResp;

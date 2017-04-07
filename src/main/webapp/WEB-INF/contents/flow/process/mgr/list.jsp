@@ -4,7 +4,7 @@
 <div class="wrap-content">
 	<div class="panel panel-default">
 	    <div class="panel-body p-0 p-t-2 body-bg borer-top">
-	        <div class="panel-tabs-wrap">
+	        <div class="panel-tabs-wrap" id="order-list-tabs">
 			<div class="panel-tabs-tab">
 				<ul class="nav nav-tabs" role="tablist">
 				   <li class="active"><a href="#process-order-tab" role="presentation" data-toggle="tab"> 正在处理</a></li>
@@ -22,4 +22,16 @@
 		</div>
 	    </div>
 	</div>
+<script type="text/javascript">
+$(function(){
+	var isResize = false;
+    $("#order-list-tabs").find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var id = $(e.target).attr("href");
+        limitHeightListener($(id), isResize);
+    });
+    $(window).resize(function(){
+        isResize = true; 
+     });
+});
+</script>
 </div>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.VersionSearch;
 import cn.com.smart.web.bean.entity.TNVersion;
@@ -56,23 +57,16 @@ public class VersionController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session, VersionSearch searchParam, Integer page) {
+	public ModelAndView list(HttpSession session, VersionSearch searchParam, RequestPage page) {
 		ModelAndView modelView = new ModelAndView();
-		page = (null == page)?0:page;
-		page = getPage(page);
-		SmartResponse<Object> smartResp = opServ.getDatas("version_mgr_list", searchParam, getStartNum(page), getPerPageSize());
+		SmartResponse<Object> smartResp = opServ.getDatas("version_mgr_list", searchParam, page.getStartNum(), page.getPageSize());
 		addBtn = new EditBtn("add", "version/add", null, "添加版本信息", "800");
 		editBtn = new EditBtn("edit", "version/edit", null, "修改版本信息", "800");
 		delBtn = new DelBtn("version/delete", "确定要删除选中的版本信息吗？", "version/list", null, null);
 		String url = "version/list";
 		refreshBtn = new RefreshBtn(url, null, null);
 		
-		String pageUrl = url;
-		String param = searchParam.getParamToString();
-		if(StringUtils.isNotEmpty(param)) {
-			pageUrl += "?"+param;
-		}
-		pageParam = new PageParam(pageUrl, null, page);
+		pageParam = new PageParam(url, null, page.getPage(), page.getPageSize());
 		Map<String, Object> modelMap = modelView.getModelMap();
 		modelMap.put("addBtn", addBtn);
 		modelMap.put("editBtn", editBtn);

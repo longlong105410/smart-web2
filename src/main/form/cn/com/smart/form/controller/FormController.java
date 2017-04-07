@@ -16,9 +16,9 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.service.FormService;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.constant.enumdef.BtnPropType;
 import cn.com.smart.web.helper.JsonHelper;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.CustomBtn;
@@ -94,10 +94,8 @@ public class FormController extends BaseFormController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,ModelAndView modelView,FilterParam searchParam,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		SmartResponse<Object> smartResp = opServ.getDatas("form_mgr_list",searchParam,getStartNum(page),getPerPageSize());
+	public ModelAndView list(HttpSession session,ModelAndView modelView,FilterParam searchParam,RequestPage page) throws Exception {
+		SmartResponse<Object> smartResp = opServ.getDatas("form_mgr_list",searchParam,page.getStartNum(), page.getPageSize());
 		String uri = "form/list";
 		CustomBtn customBtn = new CustomBtn("edit_designer", "表单设计器", "修改表单设计", "form/designer");
 		customBtn.setSelectedType(BtnPropType.SelectType.ONE.getValue());
@@ -108,7 +106,7 @@ public class FormController extends BaseFormController {
 		
 		delBtn = new DelBtn("op/del.json","form", "确定要删除选中的表单吗，删除后数据将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		alinks = new ArrayList<ALink>();
 		ALink link = new ALink();
@@ -117,8 +115,7 @@ public class FormController extends BaseFormController {
 		link.setDialogWidth("");
 		alinks.add(link);
 		link = null;
-		
-		
+
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("customBtns", customBtns);

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOrg;
 import cn.com.smart.web.bean.entity.TNPosition;
 import cn.com.smart.web.bean.entity.TNRole;
@@ -19,6 +18,8 @@ import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.BaseBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 权限控制
@@ -50,7 +51,7 @@ public class AuthController extends BaseController {
 	@RequestMapping("/checkAuth")
 	public @ResponseBody SmartResponse<String> checkAuth(HttpSession session,String uri,String authId) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		if(!StringUtil.isEmpty(uri) && !StringUtil.isEmpty(authId)) {
+		if(StringUtils.isNotEmpty(uri) && StringUtils.isNotEmpty(authId)) {
 			if(opAuthServ.isAuth(uri, new BaseBtn(authId), getUserInfoFromSession(session).getRoleIds())) {
 				smartResp.setResult(OP_SUCCESS);
 				smartResp.setMsg(OP_SUCCESS_MSG);
@@ -61,7 +62,7 @@ public class AuthController extends BaseController {
 	
 	@RequestMapping("/roleHas")
 	public ModelAndView roleHas(ModelAndView modelView,String id) throws Exception {
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			SmartResponse<Object> smartResp = opServ.find(TNRole.class, id);
 			ModelMap modelMap = modelView.getModelMap();
 			modelMap.put("id", id);
@@ -79,7 +80,7 @@ public class AuthController extends BaseController {
 	
 	@RequestMapping("/userHas")
 	public ModelAndView userHas(ModelAndView modelView,String id) throws Exception {
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			SmartResponse<Object> smartResp = opServ.find(TNUser.class, id);
 			ModelMap modelMap = modelView.getModelMap();
 			modelMap.put("id", id);
@@ -97,7 +98,7 @@ public class AuthController extends BaseController {
 	
 	@RequestMapping("/orgHas")
 	public ModelAndView orgHas(ModelAndView modelView,String id) throws Exception {
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			SmartResponse<Object> smartResp = opServ.find(TNOrg.class, id);
 			ModelMap modelMap = modelView.getModelMap();
 			modelMap.put("id", id);
@@ -115,7 +116,7 @@ public class AuthController extends BaseController {
 	
 	@RequestMapping("/positionHas")
 	public ModelAndView positionHas(ModelAndView modelView,String id) throws Exception {
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			SmartResponse<Object> smartResp = opServ.find(TNPosition.class, id);
 			ModelMap modelMap = modelView.getModelMap();
 			modelMap.put("id", id);

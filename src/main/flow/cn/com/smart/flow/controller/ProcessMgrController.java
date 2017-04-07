@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.snaker.engine.SnakerEngine;
@@ -38,8 +37,8 @@ import cn.com.smart.flow.helper.ShowPageNumHelper;
 import cn.com.smart.flow.service.FlowService;
 import cn.com.smart.flow.service.ProcessFacade;
 import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.BaseBtn;
@@ -86,12 +85,10 @@ public class ProcessMgrController extends BaseFlowControler {
 	 */
 	@RequestMapping("/orderList")
 	public ModelAndView orderList(HttpServletRequest request,ModelAndView modelView,
-			OrderSearchParam searchParam,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+			OrderSearchParam searchParam,RequestPage page) throws Exception {
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
-		SmartResponse<Object> chRes = opServ.getDatas("process_order_mgr_list",params,searchParam,getStartNum(page),getPerPageSize());
+		SmartResponse<Object> chRes = opServ.getDatas("process_order_mgr_list",params,searchParam, page.getStartNum(), page.getPageSize());
 		SmartResponse<DataClassify<Object>> smartResp = new SmartResponse<DataClassify<Object>>(); 
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		if(OP_SUCCESS.equals(chRes.getResult())) {
@@ -109,25 +106,19 @@ public class ProcessMgrController extends BaseFlowControler {
 		String paramStr = null;
 		paramStr = (null != searchParam)?searchParam.getParamToString():null;
 		String searchUri = uri+"?1=1"+(StringUtils.isNotEmpty(paramStr)?("&"+paramStr):"");
-		String refreshUri = searchUri+"&page="+page;
+		String refreshUri = searchUri+"&page="+page.getPage();
 		refreshUri = URLEncoder.encode(refreshUri, "UTF-8");
 		modelMap.put("searchUri", searchUri);
-		//modelMap.put("uri", uri);
 		modelMap.put("refreshUri", refreshUri);
 		String target = "#process-order-tab";
 		refreshBtn = new RefreshBtn(searchUri, null, target);
-		pageParam = new PageParam(uri, target, page);
+		pageParam = new PageParam(uri, target, page.getPage(), page.getPageSize());
 		
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("target", target);
-		//处理分页数字
-		//List<String> pageNums = ShowPageNumHelper.showNumHandle(smartResp, page);
-		//modelMap.put("pageNums", pageNums.size()>0?pageNums:null);
-		
-		//modelMap.put("page", page);
 		modelView.setViewName(VIEW_DIR+"/orderList");
 		return modelView;
 	}
@@ -144,12 +135,10 @@ public class ProcessMgrController extends BaseFlowControler {
 	 */
 	@RequestMapping("/histOrderList")
 	public ModelAndView histOrderList(HttpServletRequest request,ModelAndView modelView,
-			OrderSearchParam searchParam,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
+			OrderSearchParam searchParam,RequestPage page) throws Exception {
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
-		SmartResponse<Object> chRes = opServ.getDatas("process_hist_order_mgr_list",params,searchParam,getStartNum(page),getPerPageSize());
+		SmartResponse<Object> chRes = opServ.getDatas("process_hist_order_mgr_list",params,searchParam, page.getStartNum(), page.getPageSize());
 		SmartResponse<DataClassify<Object>> smartResp = new SmartResponse<DataClassify<Object>>();
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		if(OP_SUCCESS.equals(chRes.getResult())) {
@@ -172,22 +161,13 @@ public class ProcessMgrController extends BaseFlowControler {
 		
 		String target = "#process-hist-order-tab";
 		refreshBtn = new RefreshBtn(searchUri, null, target);
-		pageParam = new PageParam(uri, target, page);
+		pageParam = new PageParam(uri, target, page.getPage(), page.getPageSize());
 		
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("target", target);
-		
-		/*modelMap.put("uri", uri);
-		modelMap.put("smartResp", smartResp);
-		modelMap.put("searchParam", searchParam);
-		//处理分页数字
-		List<String> pageNums = ShowPageNumHelper.showNumHandle(smartResp, page);
-		modelMap.put("pageNums", pageNums.size()>0?pageNums:null);
-		modelMap.put("target", "#process-hist-order-tab");
-		modelMap.put("page", page);*/
 		modelView.setViewName(VIEW_DIR+"/histOrderList");
 		return modelView;
 	}
@@ -317,16 +297,14 @@ public class ProcessMgrController extends BaseFlowControler {
 	 * @return
 	 */
 	@RequestMapping("/abnormal")
-	public ModelAndView abnormalOrderList(String processId, OrderSearchParam searchParam, Integer page) {
+	public ModelAndView abnormalOrderList(String processId, OrderSearchParam searchParam, RequestPage page) {
 		ModelAndView modelView = new ModelAndView();
 		Map<String,Object> params = new HashMap<String, Object>();
 		String[] orderIds = flowServ.getAbnormalOrderIds(processId);
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
 		SmartResponse<Object> chRes = new SmartResponse<Object>();
 		if(ArrayUtils.isNotEmpty(orderIds)) {
 			params.put("orderIds", orderIds);
-			chRes = opServ.getDatas("get_abnormal_order_list",params,searchParam,getStartNum(page),getPerPageSize());
+			chRes = opServ.getDatas("get_abnormal_order_list",params,searchParam,page.getStartNum(), page.getPageSize());
 		}
 		SmartResponse<DataClassify<Object>> smartResp = new SmartResponse<DataClassify<Object>>(); 
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
@@ -345,7 +323,7 @@ public class ProcessMgrController extends BaseFlowControler {
 		String paramStr = null;
 		paramStr = (null != searchParam)?searchParam.getParamToString():null;
 		String searchUri = uri+"?1=1"+(StringUtils.isNotEmpty(paramStr)?("&"+paramStr):"");
-		String refreshUri = searchUri+"&page="+page;
+		String refreshUri = searchUri+"&page="+page.getPage();
 		try {
 			refreshUri = URLEncoder.encode(refreshUri, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -358,7 +336,7 @@ public class ProcessMgrController extends BaseFlowControler {
 		modelMap.put("smartResp", smartResp);
 		modelView.setViewName(VIEW_DIR+"/abnormalOrderList");
 		//处理分页数字
-		List<String> pageNums = ShowPageNumHelper.showNumHandle(smartResp, page);
+		List<String> pageNums = ShowPageNumHelper.showNumHandle(smartResp, page.getPage());
 		modelMap.put("pageNums", pageNums.size()>0?pageNums:null);
 		modelMap.put("page", page);
 		return modelView;

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.plugins.ZTreeData;
@@ -18,6 +17,8 @@ import cn.com.smart.web.service.RoleMenuService;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.RefreshBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 菜单
@@ -95,7 +96,7 @@ public class MenuController extends BaseController {
 	@RequestMapping("/treeSelect")
 	public @ResponseBody SmartResponse<ZTreeData> treeSelect(String id) throws Exception {
 		SmartResponse<ZTreeData> smartResp = null;
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			smartResp = roleMenuServ.menuTree(id);
 		} else {
 			smartResp = roleMenuServ.menuTree();

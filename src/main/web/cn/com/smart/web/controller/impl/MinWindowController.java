@@ -9,16 +9,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNMinWindow;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.service.MinWinService;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 小窗口
@@ -37,17 +38,15 @@ public class MinWindowController extends BaseController {
 	private OPService opServ;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(ModelAndView modelView,Integer page) throws Exception {
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
-		SmartResponse<Object> smartResp = opServ.getDatas("minwin_mgr_list", getStartNum(page), getPerPageSize());
+	public ModelAndView list(ModelAndView modelView,RequestPage page) throws Exception {
+		SmartResponse<Object> smartResp = opServ.getDatas("minwin_mgr_list", page.getStartNum(), page.getPageSize());
 		
 		String uri = "minwin/list"; 
 		addBtn = new EditBtn("add","showPage/base_minwin_add", "minWin", "添加小窗口", "600");
 		editBtn = new EditBtn("edit","showPage/base_minwin_edit", "minWin", "修改小窗口", "600");
 		delBtn = new DelBtn("op/del.json", "minWin", "确定要删除选中的小窗口吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
-		pageParam = new PageParam(uri, null, page);
+		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -91,7 +90,7 @@ public class MinWindowController extends BaseController {
 	@RequestMapping("/view")
 	public @ResponseBody SmartResponse<Object> view(String id) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			smartResp = minWinServ.find(TNMinWindow.class, id);
 		}
 		return smartResp;

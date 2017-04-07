@@ -16,7 +16,7 @@
 							</div>
 						</div>
 						<div class="panel-body p-0">
-							<div class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height" style="padding: 0">
+							<div class="tab-content panel-tab-content bg-color-white" style="padding: 0">
 							  	<div role="tabpanel" class="tab-pane active" id="role-tab">
 							  	   <div class="cnoj-load-url" data-uri="role/simplist" ></div>
 								</div>
@@ -24,7 +24,7 @@
 								   <div class="cnoj-load-url" data-uri="user/simplist" ></div>
 								</div>
 								<div role="tabpanel" class="tab-pane" id="org-tab">
-							  	   <div class="cnoj-panel-org-tree" id="org-tree-auth" data-is-node-link="yes" data-is-default-load="no" data-redirect-uri="auth/orgHas" data-target="#has-auth-list" data-param-name="id" ></div>
+							  	   <div class="cnoj-panel-org-tree cnoj-auto-limit-height" id="org-tree-auth" data-is-node-link="yes" data-is-default-load="no" data-redirect-uri="auth/orgHas" data-target="#has-auth-list" data-param-name="id" ></div>
 								</div>
 								<div role="tabpanel" class="tab-pane" id="position-tab">
 								   <div class="cnoj-load-url" data-uri="position/simplist" ></div>
@@ -48,10 +48,16 @@
 	</div>
 	<script type="text/javascript">
 	  $(function(){
+		  var isResize = false;
 		  $("#config-auth-tabs").find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			  var id = $(e.target).attr("href");
-			  tableWrapListener($(id), false);
+			  var $tag = $(id);
+			  tableWrapListener($tag, isResize);
+			  limitHeightListener($tag, isResize);
 		  });
+		  $(window).resize(function(){
+			  isResize = true; 
+	      });
 	  });
 	</script>
 </div>
