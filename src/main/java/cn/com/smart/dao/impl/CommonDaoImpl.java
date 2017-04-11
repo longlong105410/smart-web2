@@ -19,13 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.bean.DateBean;
+import cn.com.smart.builder.SQLBuilder;
 import cn.com.smart.dao.ICommonDao;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.sqlmap.SQLVarParamFilter;
 import cn.com.smart.validate.ExecuteValidator;
 import cn.com.smart.validate.ValidateException;
 import cn.com.smart.validate.Validator;
-import cn.com.smart.web.builder.SQLBuilder;
 
 import com.mixsmart.exception.NullArgumentException;
 import com.mixsmart.utils.StringUtils;

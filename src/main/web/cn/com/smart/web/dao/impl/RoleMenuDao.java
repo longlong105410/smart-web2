@@ -13,10 +13,11 @@ import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.bean.entity.TNRoleMenu;
 import cn.com.smart.web.dao.IRoleMenuDao;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -25,8 +26,6 @@ import cn.com.smart.web.dao.IRoleMenuDao;
  */
 @Repository("roleMenuDao")
 public class RoleMenuDao extends BaseDaoImpl<TNRoleMenu> implements IRoleMenuDao {
-	
-	private static final long serialVersionUID = -6414558494311375912L;
 	
 	private SqlMapping sqlMap;
 	private Map<String,Object> params;
@@ -48,7 +47,7 @@ public class RoleMenuDao extends BaseDaoImpl<TNRoleMenu> implements IRoleMenuDao
 	public boolean save(String roleId,List<TNMenu> menus) throws DaoException  {
 		boolean is = false;
 		List<Serializable> ids = null;
-		if(!StringUtil.isEmpty(roleId) && null != menus && menus.size()>0) {
+		if(StringUtils.isNotEmpty(roleId) && null != menus && menus.size()>0) {
 			TNRoleMenu roleMenu = null;
 			Map<String,TNRoleMenu> roleMenuMaps = new HashMap<String, TNRoleMenu>();
 			for (TNMenu menu : menus) {
@@ -103,7 +102,7 @@ public class RoleMenuDao extends BaseDaoImpl<TNRoleMenu> implements IRoleMenuDao
 	@Override
 	public List<TNRoleMenu> queryByRole(String roleId) throws DaoException  {
 		List<TNRoleMenu> lists = null;
-		if(!StringUtil.isEmpty(roleId)) {
+		if(StringUtils.isNotEmpty(roleId)) {
 			String hql = "from "+TNRoleMenu.class.getName()+" t where t.roleId=:roleId";
 			Map<String,Object> param = new HashMap<String,Object>(1);
 			param.put("roleId", roleId);
@@ -122,11 +121,11 @@ public class RoleMenuDao extends BaseDaoImpl<TNRoleMenu> implements IRoleMenuDao
 	 */
 	public boolean deleteByRole(String roleId) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmpty(roleId)) {
+		if(StringUtils.isNotEmpty(roleId)) {
 			params = new HashMap<String, Object>(1);
 			params.put("roleId", roleId);
 			String delSql = sqlMap.getSQL("del_role_menu_by_role_id");
-			if(!StringUtil.isEmpty(delSql)) {
+			if(StringUtils.isNotEmpty(delSql)) {
 				String[] delSqls = delSql.split(";");
 				for (String sql : delSqls) {
 					executeSql(sql, params);
@@ -148,12 +147,12 @@ public class RoleMenuDao extends BaseDaoImpl<TNRoleMenu> implements IRoleMenuDao
 	 */
 	public boolean deleteByRoleMenu(String roleId,String menuId) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmpty(roleId) && !StringUtil.isEmpty(menuId)) {
+		if(StringUtils.isNotEmpty(roleId) && StringUtils.isNotEmpty(menuId)) {
 			params = new HashMap<String, Object>(1);
 			params.put("roleId", roleId);
 			params.put("menuId", menuId);
 			String delSql = sqlMap.getSQL("del_role_menu_by_id");
-			if(!StringUtil.isEmpty(delSql)) {
+			if(StringUtils.isNotEmpty(delSql)) {
 				String[] delSqls = delSql.split(";");
 				for (String sql : delSqls) {
 					executeSql(sql, params);
@@ -170,9 +169,9 @@ public class RoleMenuDao extends BaseDaoImpl<TNRoleMenu> implements IRoleMenuDao
 	@Override
 	public boolean isRoleMenuCombinExist(String roleId,String menuId) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmpty(roleId) && !StringUtil.isEmpty(menuId)) {
+		if(StringUtils.isNotEmpty(roleId) && StringUtils.isNotEmpty(menuId)) {
 			String sql = sqlMap.getSQL("check_role_menu_combin_exist");
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				params = new HashMap<String, Object>(2);
 				params.put("roleId", roleId);
 				params.put("menuId", menuId);

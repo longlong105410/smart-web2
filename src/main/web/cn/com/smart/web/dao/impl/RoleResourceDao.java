@@ -13,12 +13,13 @@ import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.ArrayUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.bean.entity.TNRoleResource;
 import cn.com.smart.web.dao.IRoleResourceDao;
+
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -47,7 +48,7 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 	 */
 	public boolean save(String roleId,List<TNResource> resources) throws DaoException {
 		List<Serializable> ids = null;
-		if(!StringUtil.isEmpty(roleId) && null != resources && resources.size()>0) {
+		if(StringUtils.isNotEmpty(roleId) && null != resources && resources.size()>0) {
 			List<TNRoleResource> roleResList = new ArrayList<TNRoleResource>();
 	  		TNRoleResource roleRes = null;
 			for (TNResource res : resources) {
@@ -74,7 +75,7 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 	 */
 	public boolean update(String roleId,List<TNResource> resources) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmpty(roleId) && null != resources && resources.size()>0) {
+		if(StringUtils.isNotEmpty(roleId) && null != resources && resources.size()>0) {
 			String hql = "update "+TNRoleResource.class.getName()+" t set t.opAuths=:opAuths where t.roleId=:roleId and t.resourceId=:resourceId";
 			List<Map<String, Object>> listMaps = new ArrayList<Map<String,Object>>(resources.size());
 			for (TNResource res : resources) {
@@ -96,7 +97,7 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 	@Override
 	public Map<String,List<TNOPAuth>> queryByRole(String roleId) throws DaoException {
 		Map<String,List<TNOPAuth>> resAuthMaps = null;
-		if(!StringUtil.isEmpty(roleId)) {
+		if(StringUtils.isNotEmpty(roleId)) {
 			params = new HashMap<String, Object>(1);
 			params.put("roleId", roleId);
 			List<TNRoleResource> roleResList = queryByField(params);
@@ -105,7 +106,7 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 				String[] authValueArray = null;
 				List<TNOPAuth> auths = null;
 				for (TNRoleResource roleRes : roleResList) {
-					if(!StringUtil.isEmpty(roleRes.getOpAuths())) {
+					if(StringUtils.isNotEmpty(roleRes.getOpAuths())) {
 						authValueArray = roleRes.getOpAuths().split(",");
 						auths = opAuthDao.queryAuths(authValueArray);
 					}//if
@@ -135,17 +136,17 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 			if(null != lists && lists.size()>0) {
 				for (TNRoleResource roleRes : lists) {
 					isDel = false;
-					if(!StringUtil.isEmpty(roleRes.getOpAuths())) {
+					if(StringUtils.isNotEmpty(roleRes.getOpAuths())) {
 						for (int i = 0; i < values.length; i++) {
-							if(!StringUtil.isEmpty(roleRes.getOpAuths()) 
-									&& ArrayUtil.isArrayContains(roleRes.getOpAuths(), values[i], ",")) {
+							if(StringUtils.isNotEmpty(roleRes.getOpAuths()) 
+									&& ArrayUtils.isArrayContains(roleRes.getOpAuths(), values[i], ",")) {
 								regex = ","+values[i]+",|"+values[i]+",|,"+values[i];
 								roleRes.setOpAuths(roleRes.getOpAuths().replaceAll(regex, ""));
 								isDel = true;
 							}
 						}//for
 						if(isDel) {
-							if(!StringUtil.isEmpty(roleRes.getOpAuths())) {
+							if(StringUtils.isNotEmpty(roleRes.getOpAuths())) {
 								roleRes.setOpAuths(roleRes.getOpAuths().replaceAll(",,", ""));
 							   if(roleRes.getOpAuths().length()>0 && roleRes.getOpAuths().lastIndexOf(",")>-1)
 								   roleRes.setOpAuths(roleRes.getOpAuths().substring(0,roleRes.getOpAuths().length()-1));
@@ -172,13 +173,13 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 	 */
 	public boolean updateAuth(String srcValue,String desValue) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmpty(srcValue) && !StringUtil.isEmpty(desValue)) {
+		if(StringUtils.isNotEmpty(srcValue) && StringUtils.isNotEmpty(desValue)) {
 			List<TNRoleResource> lists = findAll();
 			List<TNRoleResource> updateList = new ArrayList<TNRoleResource>();
 			if(null != lists && lists.size()>0) {
 				for (TNRoleResource roleRes : lists) {
-					if(!StringUtil.isEmpty(roleRes.getOpAuths())) {
-						if(ArrayUtil.isArrayContains(roleRes.getOpAuths(), srcValue, ",")) {
+					if(StringUtils.isNotEmpty(roleRes.getOpAuths())) {
+						if(ArrayUtils.isArrayContains(roleRes.getOpAuths(), srcValue, ",")) {
 							roleRes.setOpAuths(roleRes.getOpAuths().replaceAll(srcValue+",", desValue+","));
 						 	updateList.add(roleRes);
 						}
@@ -201,11 +202,11 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 	 */
 	public boolean deleteByRole(String roleId) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmpty(roleId)) {
+		if(StringUtils.isNotEmpty(roleId)) {
 			params = new HashMap<String, Object>(1);
 			params.put("roleId", roleId);
 			String delSql = sqlMap.getSQL("del_roleres_by_role");
-			if(!StringUtil.isEmpty(delSql)) {
+			if(StringUtils.isNotEmpty(delSql)) {
 				executeSql(delSql, params);
 				is = true;
 			}
@@ -218,7 +219,7 @@ public class RoleResourceDao extends BaseDaoImpl<TNRoleResource> implements IRol
 	@Override
 	public List<TNRoleResource> queryByUriRoles(String uri,List<String> roleIds) throws DaoException {
 		List<TNRoleResource> roleResList = null;
-		if(!StringUtil.isEmpty(uri) && null != roleIds && roleIds.size()>0) {
+		if(StringUtils.isNotEmpty(uri) && null != roleIds && roleIds.size()>0) {
 			String hql = "from "+TNRoleResource.class.getName()+" t where t.resourceId=(select id from "+TNResource.class.getName()+" where uri=:uri) and t.roleId in (:roleIds)";
 			params = new HashMap<String, Object>(2);
 			params.put("uri", uri);

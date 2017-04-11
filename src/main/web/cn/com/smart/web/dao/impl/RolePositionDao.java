@@ -9,8 +9,9 @@ import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNRolePosition;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -19,11 +20,6 @@ import cn.com.smart.web.bean.entity.TNRolePosition;
  */
 @Repository("rolePositionDao")
 public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8606756210224473246L;
 	
 	private SqlMapping sqlMap;
 	
@@ -35,9 +31,9 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 	public boolean delete(Map<String, Object> param) throws DaoException {
 		boolean is = false;
 		if(null != param && param.size()>0) {
-			String flag = StringUtil.handNull(param.get("flag"));
+			String flag = StringUtils.handNull(param.get("flag"));
 			String delSql = null;
-			if(StringUtil.isEmpty(flag)) {
+			if(StringUtils.isEmpty(flag)) {
 				delSql = sqlMap.getSQL("del_role_position");
 				
 			} else {
@@ -46,12 +42,12 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 					delSql = sqlMap.getSQL("del_position_role");
 				}
 			}
-			if(!StringUtil.isEmpty(delSql)) {
+			if(StringUtils.isNotEmpty(delSql)) {
 				//判断处理是否有逗号分割的多条数据组合
 				for (String key : param.keySet()) {
 					if(!param.get(key).getClass().isArray()) {
-						String value = StringUtil.handNull(param.get(key));
-						if(!StringUtil.isEmpty(value) && value.indexOf(",")>-1) {
+						String value = StringUtils.handNull(param.get(key));
+						if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
 							String[] values = value.split(",");
 							param.put(key, values);
 						}
@@ -73,9 +69,9 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 	 */
 	public boolean isPositionInRoleExist(String roleId,String[] positionIds) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmail(roleId) && null != positionIds && positionIds.length>0) {
+		if(StringUtils.isNotEmpty(roleId) && null != positionIds && positionIds.length>0) {
 			String sql = SQLResUtil.getBaseSqlMap().getSQL("check_position_in_role_exits");
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				Map<String,Object> param = new HashMap<String, Object>(2);
 				param.put("roleId", roleId);
 				param.put("positionIds", positionIds);
@@ -95,9 +91,9 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 	 */
 	public boolean isRoleInPositionExist(String positionId,String[] roleIds) throws DaoException {
 		boolean is = false;
-		if(!StringUtil.isEmail(positionId) && null != roleIds && roleIds.length>0) {
+		if(StringUtils.isNotEmpty(positionId) && null != roleIds && roleIds.length>0) {
 			String sql = SQLResUtil.getBaseSqlMap().getSQL("check_role_in_position_exits");
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				Map<String,Object> param = new HashMap<String, Object>(2);
 				param.put("positionId", positionId);
 				param.put("roleIds", roleIds);
