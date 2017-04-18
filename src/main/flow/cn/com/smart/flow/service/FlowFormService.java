@@ -28,6 +28,7 @@ import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.service.UserService;
 
 import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -275,7 +276,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	 */
 	public SmartResponse<String> saveFlowForm(SubmitFormData formData,String userId,String orgId,String title) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
-		log.info("保存流程表单关联数据信息...");
+		LoggerUtils.info(logger, "保存流程表单关联数据信息...");
 		if(null != formData && StringUtils.isNotEmpty(formData.getOrderId()) && 
 				StringUtils.isNotEmpty(formData.getFormDataId()) && 
 				StringUtils.isNotEmpty(formData.getFormId())) {
@@ -290,12 +291,12 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 			
 			SmartResponse<String> chRes = super.save(flowForm);
 			if(chRes.getResult().equals(IWebConstant.OP_SUCCESS)) {
-				log.info("保存流程表单关联数据信息[成功]...");
+				LoggerUtils.info(logger, "保存流程表单关联数据信息[成功]...");
 				smartResp.setResult(IWebConstant.OP_SUCCESS);
 				smartResp.setData(chRes.getData());
 				smartResp.setMsg(IWebConstant.OP_SUCCESS_MSG);
 			} else {
-				log.error("保存流程表单关联数据信息[失败]...");
+				LoggerUtils.error(logger, "保存流程表单关联数据信息[失败]...");
 			}
 			flowForm = null;
 		}
@@ -359,7 +360,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	 * 如果标题已经存在getResult()等于“1”；否则等于“-1”
 	 */
 	public SmartResponse<String> checkInsTitle(SubmitFormData submitFormData) {
-		log.info("正在检测流程实例标题是否已经存在");
+		LoggerUtils.info(logger, "正在检测流程实例标题是否已经存在");
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("流程实例标题检测失败");
 		if(null == submitFormData) return smartResp;
@@ -395,7 +396,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 				lists = null;
 			}
 		}
-		log.info(smartResp.getMsg());
+		LoggerUtils.info(logger, smartResp.getMsg());
 		return smartResp;
 	}
 	

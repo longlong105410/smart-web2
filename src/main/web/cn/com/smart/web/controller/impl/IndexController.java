@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNSubSystem;
 import cn.com.smart.web.bean.entity.TNVersion;
-import cn.com.smart.web.constant.enumdef.VersionType;
+import cn.com.smart.web.constant.enums.VersionType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.service.SubSystemService;
 import cn.com.smart.web.service.UserCustomService;

@@ -3,7 +3,8 @@ package cn.com.smart.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.com.smart.ISmart;
@@ -23,7 +24,11 @@ import cn.com.smart.web.helper.PageHelper;
  */
 public abstract class BaseServiceImpl implements IBaseService, ISmart {
 
-	protected static final Logger log = Logger.getLogger(BaseServiceImpl.class);
+	protected Logger logger;
+	
+	public BaseServiceImpl() {
+		logger = LoggerFactory.getLogger(getClass());
+	}
 	
 	@Autowired
 	private OPDao opDao;

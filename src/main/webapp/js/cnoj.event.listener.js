@@ -1061,6 +1061,9 @@ function inputTreeListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-input-tree-listener")) {
 			$element.addClass("cnoj-input-tree-listener");
 			var uri = $element.data("uri");
@@ -1132,6 +1135,9 @@ function inputOrgTreeListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-input-org-tree-listener")) {
 			$element.addClass("cnoj-input-org-tree-listener");
 			var isShowNode = $element.data("is-show-none");
@@ -2123,6 +2129,9 @@ function inputSelectListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-input-select-listener")) {
 			$element.addClass("cnoj-input-select-listener");
 			var uri = $element.data("uri");
@@ -2193,6 +2202,9 @@ function inputSelectRelateListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-input-select-relate-listener")) {
 			$element.addClass("cnoj-input-select-relate-listener");
 			var uri = $element.data("uri");
@@ -2255,6 +2267,9 @@ function autoCompleteListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-auto-complete-listener")) {
 			$element.addClass("cnoj-auto-complete-listener");
 			var uri = $element.data("uri");
@@ -2308,6 +2323,9 @@ function autoCompleteRelateListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-auto-complete-listener")) {
 			$element.addClass("cnoj-auto-complete-listener");
 			var uri = $element.data("uri");
@@ -2362,6 +2380,9 @@ function spinnerNumListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-num-spinner-listener")) {
 			$element.addClass("cnoj-num-spinner-listener");
 			var min = $element.data("min");
@@ -2912,6 +2933,9 @@ function richtextListener($elementWrap) {
 	 * @param $element
 	 */
 	function _handler($element) {
+		if($element.prop("disabled") || $element.hasClass("hide")) {
+			return;
+		}
 		if(!$element.hasClass("cnoj-richtext-listener")) {
 			$element.addClass("cnoj-richtext-listener");
 			var id = $element.attr("id");

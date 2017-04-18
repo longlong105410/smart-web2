@@ -58,7 +58,7 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 		SmartResponse<TNAttachment> smartResp = new SmartResponse<TNAttachment>();
 		if(null != atts && null != taskInfo) {
 			String userId = getUserInfoFromSession(session).getId();
-			TNAttachment att = fileUpload(atts.getInputStream(), atts.getContentType(), atts.getOriginalFilename(),atts.getSize() ,userId);
+			TNAttachment att = attUploadHandler.fileUpload(atts.getInputStream(), atts.getContentType(), atts.getOriginalFilename(),atts.getSize() ,userId);
 			if(null != att) {
 				SmartResponse<String> chRes = flowServ.saveAttachment(att, taskInfo);
 				if(OP_SUCCESS.equals(chRes.getResult())) {
@@ -68,7 +68,6 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 				} else {
 					log.error("文件上传失败");
 					flowServ.deleteAttachment(att.getId());
-					attServ = null;
 				}
 				chRes = null;
 			}

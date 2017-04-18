@@ -17,7 +17,7 @@ import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.service.FormService;
 import cn.com.smart.web.bean.RequestPage;
-import cn.com.smart.web.constant.enumdef.BtnPropType;
+import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.helper.JsonHelper;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;

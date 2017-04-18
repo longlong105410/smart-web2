@@ -7,7 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.com.smart.Smart;
@@ -38,7 +39,7 @@ import com.mixsmart.utils.StringUtils;
  */
 public abstract class BaseController extends Smart implements IBaseController {
 	
-	protected static final Logger log = Logger.getLogger(BaseController.class);
+	protected Logger log;
 	
 	protected static String baseDir = WEB_BASE_VIEW_DIR;
 	
@@ -67,6 +68,10 @@ public abstract class BaseController extends Smart implements IBaseController {
     
     @Autowired
 	protected RoleService roleServ;
+    
+    public BaseController() {
+    	log = LoggerFactory.getLogger(getClass());
+    }
     
     /**
 	 * 获取配置文件里面的根目录 <br />

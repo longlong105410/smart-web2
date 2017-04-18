@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 用户信息，用于在HttpSession中保存用户信息
  * @author lmq
- * @version 1.0 2015年8月27日
+ * @version 1.0
  * @since 1.0
  *
  */
@@ -18,6 +18,8 @@ public class UserInfo implements Serializable {
 	private static final long serialVersionUID = 5583539878283875891L;
 
 	private String id;
+	
+	private String loginId;
 	
 	private String username;
 	
@@ -31,6 +33,8 @@ public class UserInfo implements Serializable {
 	private String departmentId;
 	
 	private String deptName;
+	
+	private String seqDeptNames;
 	
 	/**
 	 * 岗位ID
@@ -267,6 +271,22 @@ public class UserInfo implements Serializable {
 	 */
 	public void setPositionName(String positionName) {
 		this.positionName = positionName;
+	}
+
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
+	public String getSeqDeptNames() {
+		return seqDeptNames;
+	}
+
+	public void setSeqDeptNames(String seqDeptNames) {
+		this.seqDeptNames = seqDeptNames;
 	}
 	
 	

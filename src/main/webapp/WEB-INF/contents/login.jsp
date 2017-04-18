@@ -19,11 +19,16 @@
      <![endif]-->
 <script type="text/javascript">
 $(document).ready(function(){
-        var msg = '${msg}';
-        if(msg != '') {
-        	utils.showMsg(msg+"！");
-        }
-   
+	var msg = '${msg}';
+    if(msg != '') {
+    	utils.showMsg(msg+"！");
+    }
+    var screenW = window.screen.width;
+    var screenH = window.screen.height;
+    //window.screen.deviceXDPI
+    $("#resolution").val(screenW+"x"+screenH);
+    $("#screen-width").val(screenW);
+    $("#screen-height").val(screenH);
    clickImgCode();
    listenerFocus();
 
@@ -95,44 +100,47 @@ function listenerFocus() {
     </div>
 	<div class="wrap">
 	   <div class="login">
-	   <div class="container">
-	                   <div class="login-main">
-	                           <div class="login-main-content">
-	                                <div class="login-title"><i class="fa fa-user fa-lg"></i> 用户登录</div>
-	                                <div class="login-content">
-	                                   <form  action="login" method="post" id="login-form">
-							                <div class="login-input">
-							                    <label>用户名：</label>
-												<input type="text" id="user-name" placeholder="请输入用户名" class="input-text" name="userName" value="${userName }" />
-											</div>
-							                <div class="login-input">
-							                    <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
-												<input type="password" id="pass-word" placeholder="请输入密码" name="password" class="input-text" value="${password }">
-											</div>
-											<div class="login-input">
-											    <label>验证码：</label>
-												<input type="text" id="code" placeholder="请输入验证码" name="code" class="input-text-code" value="${code }" >
-												<img alt="验证码" title="看不清，请点击刷新" id="imgCode" src="captcha" />
-											</div>
-											<div class="prompt-error p-t-5 p-l-20">${msg }</div>
-											<div class="login-btn-wrap p-t-10">
-											    <div style="width: 100px;">
-											      <button type="submit" class="login-btn">登录</button>
-											   </div>
-											</div>
-										</form>
-	                                </div>
-	                        </div>
-	                    </div>
-	        </div><!-- container -->
-	   </div>
-	</div><!-- wrap -->
+        <div class="container">
+            <div class="login-main">
+                <div class="login-main-content">
+                    <div class="login-title"><i class="fa fa-user fa-lg"></i> 用户登录</div>
+	                <div class="login-content">
+	                    <form action="login" method="post" id="login-form">
+                             <input type="hidden" name="resolution" id="resolution" />
+                             <input type="hidden" name="screenWidth" id="screen-width" />
+                             <input type="hidden" name="screenHeight" id="screen-height" />
+							 <div class="login-input">
+							    <label>用户名：</label>
+								<input type="text" id="user-name" placeholder="请输入用户名" class="input-text" name="userName" value="${userName }" />
+							 </div>
+							 <div class="login-input">
+							     <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+								 <input type="password" id="pass-word" placeholder="请输入密码" name="password" class="input-text" value="${password }">
+							 </div>
+							 <div class="login-input">
+								<label>验证码：</label>
+								<input type="text" id="code" placeholder="请输入验证码" name="code" class="input-text-code" value="${code }" >
+								<img alt="验证码" title="看不清，请点击刷新" id="imgCode" src="captcha" />
+							 </div>
+							 <div class="prompt-error p-t-5 p-l-20">${msg }</div>
+							 <div class="login-btn-wrap p-t-10">
+								<div style="width: 100px;">
+									<button type="submit" class="login-btn">登录</button>
+								</div>
+							 </div>
+						  </form>
+	                   </div>
+	               </div>
+	           </div>
+            </div><!-- container -->
+        </div>
+    </div><!-- wrap -->
 	
 	<div class="footer clear">
-		    <div class="container text-center">
-		          <p>${project.copyright }</p>
-	              <p>${project.contactInfo }</p>
-		       </div>
+	   <div class="container text-center">
+            <p>${project.copyright }</p>
+	        <p>${project.contactInfo }</p>
+	   </div>
 	</div>
 </body>
 </html>

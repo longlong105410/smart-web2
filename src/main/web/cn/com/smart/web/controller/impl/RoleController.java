@@ -20,7 +20,7 @@ import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.SubmitDataBean;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNRole;
-import cn.com.smart.web.constant.enumdef.SelectedEventType;
+import cn.com.smart.web.constant.enums.SelectedEventType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.ZTreeData;

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,7 @@ import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.service.impl.MgrServiceImpl;
 
 import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -74,35 +74,35 @@ public class FormTableService extends MgrServiceImpl<TCreateTable> {
 		}
 		try {
 			msg = "保存表信息";
-			log.debug(msg);
+			LoggerUtils.debug(logger, msg);
 			tableData.getTable().setUserId(userId);
 			//保存表信息
 			smartResp = super.save(tableData.getTable());
 			if(OP_SUCCESS.equals(smartResp.getResult())) {
-				log.debug(msg+"[成功]");
+				LoggerUtils.debug(logger, msg+"[成功]");
 				//与字段关联起来
 				for (TCreateTableField field : tableData.getFields()) {
 					field.setTableId(smartResp.getData());
 				}
 				msg = "保存字段信息";
-				log.debug("正在"+msg);
+				LoggerUtils.debug(logger, "正在"+msg);
 				
 				if(null != tableFieldDao.save(tableData.getFields())) {
-					log.debug(msg+"[成功]");
+					LoggerUtils.debug(logger, msg+"[成功]");
 					msg = "创建["+tableData.getTable().getTableName()+"]表";
-					log.debug("正在"+msg);
+					LoggerUtils.debug(logger, "正在"+msg);
 					getDao().executeSql(createSql);
-					log.debug(msg+"[成功]");
+					LoggerUtils.debug(logger, msg+"[成功]");
 					smartResp.setResult(OP_SUCCESS);
 					smartResp.setMsg("表创建成功");
 				} else {
-					log.error(msg+"[失败]");
+					LoggerUtils.error(logger, msg+"[失败]");
 				}
 			} else {
-				log.error(msg+"[失败]");
+				LoggerUtils.error(logger, msg+"[失败]");
 			}
 		} catch (DaoException e) {
-			log.error("创建表[异常]");
+			LoggerUtils.error(logger, "创建表[异常]");
 			e.printStackTrace();
 		} finally {
 			tableData = null;

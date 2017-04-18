@@ -19,13 +19,14 @@ import cn.com.smart.web.bean.entity.TNOrg;
 import cn.com.smart.web.bean.entity.TNRole;
 import cn.com.smart.web.bean.entity.TNRoleOrg;
 import cn.com.smart.web.cache.impl.OrgMemoryCache;
-import cn.com.smart.web.constant.enumdef.OrgType;
+import cn.com.smart.web.constant.enums.OrgType;
 import cn.com.smart.web.dao.impl.RoleDao;
 import cn.com.smart.web.dao.impl.RoleOrgDao;
 import cn.com.smart.web.plugins.OrgZTreeData;
 import cn.com.smart.web.plugins.ZTreeHelper;
 import cn.com.smart.web.utils.TreeUtil;
 
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -68,11 +69,11 @@ public class OrgService extends MgrServiceImpl<TNOrg> {
 				if(OP_SUCCESS.equals(smartResp.getResult())) {
 					TNRole role = roleDao.adminRole();
 					if(null != role) {
-						log.info("把添加的组织机构添加到管理员角色里面（数据权限）");
+						LoggerUtils.info(logger, "把添加的组织机构添加到管理员角色里面（数据权限）");
 						if(OP_SUCCESS.equals(roleServ.addOrg2Role(role.getId(), new String[]{bean.getId()}))) {
-							log.info("组织机构添加到管理员角色里面[成功]");
+							LoggerUtils.info(logger, "组织机构添加到管理员角色里面[成功]");
 						} else {
-							log.info("组织机构添加到管理员角色里面[失败]");
+							LoggerUtils.info(logger, "组织机构添加到管理员角色里面[失败]");
 						}
 					}
 					orgCache.refreshCache();

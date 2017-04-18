@@ -4,7 +4,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
 import cn.com.smart.web.bean.UserInfo;
-import cn.com.smart.web.constant.enumdef.BtnPropType;
+import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.DelBtn;
 

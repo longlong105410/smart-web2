@@ -127,6 +127,8 @@ var END_NODE_KEY = "end";
 						$this.prop("checked",true);
 					}
 				}
+			} else if(type == 'file') {
+				formAttHandler($this, value);
 			} else {
 				$this.val(value);
 			}
@@ -150,4 +152,66 @@ function listenerAttDel() {
 			});
 		}
 	});
+}
+
+
+/**
+ * 处理表单附件
+ * @param $element
+ * @param value
+ */
+function formAttHandler($element, value) {
+	var isDisabled = false;
+	if(utils.isNotEmpty(value)) {
+		$element.addClass("hidden");
+		$.get("process/attachment/info?id="+value, function(output){
+			var attInfos = null;
+			var elementId = $element.attr("id");
+			if(output.result == 1) {
+				attInfos = "<ul id='formatt_'"+elementId+">";
+				var len = output.datas.length;
+				var datas = output.datas;
+				for(var i=0; i<len; i++) {
+					attInfos += "<li class='att-item'><a href='download/att?id="+datas[i][0]+"' target='_blank'>"+datas[i][2]+"</a>（"+datas[i][3]+"）";
+					if(!isDisabled) {
+						attInfos += "<div class='form-att-op hidden'>操作：<a href='javascript:void(0)' data-input-id='"+elementId+"' onclick=deleteFormAtt(this,'"+datas[i][1]+"')><i class='fa fa-trash' aria-hidden='true'></i> 删除</a></div>";
+					}
+					attInfos +="</li>";
+				}
+				attInfos += "</ul>";
+				var $ul = $(attInfos);
+				$ul.find(".att-item").mouseover(function(){
+					$(this).find(".form-att-op").removeClass("hidden").width($(this).find("a").width());
+				}).mouseout(function(){
+					$(this).find(".form-att-op").addClass("hidden");
+				});
+				$element.parent().prepend($ul);
+			} else {
+				$element.removeClass("hidden");
+			}
+		});
+	}
+}
+
+/**
+ * 删除附件
+ */
+function deleteFormAtt(elementObj, id) {
+	if(utils.isNotEmpty(id)) {
+		var $li = $(elementObj).parents("li:eq(0)");
+		var $ul = $(elementObj).parents("ul:eq(0)");
+		var inputEleId = $(elementObj).data("input-id");
+		var formDataId = $("#form-data-id").val();
+		BootstrapDialogUtil.delDialog("附件",'flow/attachment/deleteForm?fieldId='+inputEleId+'&formDataId='+formDataId,id,function(){
+			$li.remove();
+			//判断是否还有附件
+			$li = $ul.find("li");
+			if($li.length == 0) {
+				$ul.parent().find("input").removeClass("hidden");
+			}
+			if(utils.isNotEmpty(flowAttUri)) {
+				loadUri("#edit-process-att-tab",flowAttUri,false);
+			}
+		});
+	}
 }

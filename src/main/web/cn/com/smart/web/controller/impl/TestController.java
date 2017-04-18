@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.utils.StringUtil;
-import cn.com.smart.web.constant.enumdef.BtnPropType;
+import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
 import cn.com.smart.web.helper.PageHelper;

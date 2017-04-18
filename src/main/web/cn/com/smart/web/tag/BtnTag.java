@@ -1,6 +1,6 @@
 package cn.com.smart.web.tag;
 
-import cn.com.smart.web.constant.enumdef.BtnPropType;
+import cn.com.smart.web.constant.enums.BtnPropType;
 
 /**
  * 自定义标签按钮基类

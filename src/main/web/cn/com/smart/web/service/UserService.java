@@ -21,7 +21,7 @@ import cn.com.smart.web.bean.entity.TNOrg;
 import cn.com.smart.web.bean.entity.TNPosition;
 import cn.com.smart.web.bean.entity.TNRoleUser;
 import cn.com.smart.web.bean.entity.TNUser;
-import cn.com.smart.web.constant.enumdef.OrgType;
+import cn.com.smart.web.constant.enums.OrgType;
 import cn.com.smart.web.dao.impl.MenuDao;
 import cn.com.smart.web.dao.impl.OrgDao;
 import cn.com.smart.web.dao.impl.PositionDao;
@@ -35,6 +35,7 @@ import cn.com.smart.web.helper.TreeCombinHelper;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.plugins.ZTreeHelper;
 
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -215,22 +216,29 @@ public class UserService extends MgrServiceImpl<TNUser> {
 					userInfo.setFullName(user.getFullName());
 					TNOrg org =  orgDao.find(user.getOrgId());
 					String deptName = null;
+					String seqDeptName = null;
 					if(null != org) {
-						if(OrgType.COMPANY.getValue().equals(org.getType())) {
+						deptName = org.getName();
+						seqDeptName = org.getSeqNames();
+						userInfo.setOrgId(org.getId());
+						if(OrgType.DEPARTMENT.getValue().equals(org.getType())) {
+							userInfo.setDepartmentId(org.getId());
+						}
+						/*if(OrgType.COMPANY.getValue().equals(org.getType())) {
 							userInfo.setOrgId(org.getId());
 						} else {
 							userInfo.setDepartmentId(org.getId());
 						}
-						deptName = org.getName();
-						if(StringUtils.isEmpty(userInfo.getOrgId())) {
-							SmartResponse<Object> smartResp2 = orgServ.find(TNOrg.class,user.getOrgId());
+						
+						if(StringUtils.isEmpty(userInfo.getOrgId()) && StringUtils.isNotEmpty(org.getParentId())) {
+							SmartResponse<Object> smartResp2 = orgServ.find(TNOrg.class,org.getParentId());
 							if(OP_SUCCESS.equals(smartResp2.getResult())) {
 								org = (TNOrg)smartResp2.getData();
 								userInfo.setOrgId(org.getId());
-								deptName = org.getName()+">>"+deptName;
+								seqDeptName = org.getName()+">>"+deptName;
 							}
 							smartResp2 = null;
-						}
+						}*/
 					} else {
 						userInfo.setOrgId(user.getOrgId());
 					}
@@ -243,6 +251,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 						position = null;
 					}
 					userInfo.setDeptName(deptName);
+					userInfo.setSeqDeptNames(seqDeptName);
 					userInfo.setMenuRoleIds(userDao.queryMenuRoleIds(user.getId()));
 					userInfo.setRoleIds(userDao.queryRoleIds(user.getId()));
 					userInfo.setOrgIds(userDao.queryOrgIds(user.getId()));
@@ -251,10 +260,10 @@ public class UserService extends MgrServiceImpl<TNUser> {
 					smartResp.setData(userInfo);
 					userInfo = null;
 				} else {
-					log.info("用户名或密码错误--输入用户名["+username+"]---");
+					LoggerUtils.info(logger, "用户名或密码错误--输入用户名["+username+"]---");
 				}
 			} else {
-				log.info("用户名或密码为空--");
+				LoggerUtils.info(logger, "用户名或密码为空--");
 			}
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage(),e.getCause());

@@ -165,9 +165,10 @@
 				<div id="flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height">
 					<div role="tabpanel" class="tab-pane active" id="process-form-tab">
 						<div class="form-prop">
-					       <form id="process-handle-form" method="post">
+					       <form id="process-handle-form" method="post" enctype="multipart/form-data">
 					           ${smartResp.data.parseHtml}
 					       </form>
+                           <iframe class="hidden" id="handle-form-iframe" name="handle-form-iframe" frameborder=0 width=0 height=0></iframe>
 					   </div>
 					</div>
 					<c:if test="${isAtt==1 }">
@@ -189,6 +190,11 @@
     	username:'${userInfo.fullName}',
     	deptName: '${userInfo.deptName}',
     	formData:'${output}'
+    });
+    richtextListener();
+    $("input[type='checkbox']").iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        increaseArea: '20%'
     });
    /*var $wrap = $("#process-handle-form").parents(".wrap-content:eq(0)");
    autoHeight();

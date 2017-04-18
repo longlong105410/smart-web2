@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.flow.ProcessContext;
 import cn.com.smart.flow.SnakerEngineFacets;
 import cn.com.smart.flow.SnakerHelper;
 import cn.com.smart.flow.bean.DataClassify;
@@ -67,6 +68,9 @@ public class ProcessController extends BaseFlowControler {
 	private ProcessFacade processFacade;
 	@Autowired
 	private FlowFormService flowFormServ;
+	
+	@Autowired
+	private ProcessContext processContext;
 	
 	
 	/**
@@ -186,11 +190,7 @@ public class ProcessController extends BaseFlowControler {
 				StringUtils.isNotEmpty(submitFormData.getFormId())) {
 			submitFormData.setFormState(0);
 			submitFormData.setParams(params);
-			try {
-			   smartResp = processFacade.completeTask(submitFormData,userInfo.getId(),userInfo.getDepartmentId());
-			} catch (Exception e) {
-				//e.printStackTrace();
-			}
+			smartResp = processContext.execute(submitFormData,userInfo.getId(),userInfo.getDepartmentId());
 		}
 		return smartResp;
 	}

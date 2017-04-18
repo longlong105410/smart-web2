@@ -33,6 +33,11 @@
     <link href="${pageContext.request.contextPath}/plugins/comet4j/message-push.css" rel="stylesheet">
 	<script src="${pageContext.request.contextPath}/plugins/comet4j/message-push.js"></script>
 	
+    <!-- echarts插件 -->
+    <script src="${pageContext.request.contextPath}/plugins/echarts/echarts.min.js"></script>
+    <script src="${pageContext.request.contextPath}/plugins/echarts/theme/shine.js"></script>
+    
+    
 	<!-- 打印 -->
 	<link href="${pageContext.request.contextPath}/plugins/printArea/css/jquery.printarea.css" rel="stylesheet"/>
 	<script src="${pageContext.request.contextPath}/plugins/printArea/js/jquery.printarea.js" type="text/javascript" ></script>
@@ -72,8 +77,8 @@
 	      		<div class="col-sm-5">
 	      		  <div class="user-info">
 	      		  	<i class="fa fa-user fa-lg"></i> &nbsp;<strong>${userInfo.fullName}</strong> &nbsp;
-		         <c:if test="${userInfo.deptName != null && userInfo.deptName != ''}"><span title="${userInfo.deptName }">【${userInfo.deptName }】</span></c:if>
-	      		  </div>
+		         <c:if test="${userInfo.seqDeptNames != null && userInfo.seqDeptNames != ''}"><span title="${userInfo.seqDeptNames }">【${userInfo.seqDeptNames }】</span></c:if>
+                  </div>
 	      		</div>
 	      		<div class="col-sm-5 center-text show-calendar">
 	      			<div class="text-bold"><i class="fa fa-calendar fa-lg"></i> &nbsp;<span id="show-date"></span></div>
@@ -90,7 +95,7 @@
              	<c:choose>
              		<c:when test="${fn:length(subSysList) == 1}">
              		   <c:forEach var="subSys" items="${subSysList }">
-             		   	   <li><a href="${subSys.url }" target="_blank">
+             		   	   <li><a class="sub-sys" href="${subSys.url }" target="_blank">
              		   	   <c:if test="${ not empty subSys.icon }">
              		   	   <i class="${subSys.icon }" aria-hidden="true"></i>
              		   	   </c:if>
@@ -142,6 +147,20 @@
 			 showMTag:"#show-minute",
 			 showSTag:"#show-seconds-twinkle"*/
 		 });
+		 
+		 var screenW = window.screen.width;
+         var screenH = window.screen.height;
+         var param = "resolution="+screenW+"x"+screenH+"&screenWidth="+screenW+"&screenHeight="+screenH;
+         $(".sub-sys").each(function(){
+             var $this = $(this);
+             var url = $this.attr("href");
+             if(url.indexOf("?")) {
+                 url = url+"&"+param;
+             } else {
+                 url = url+"?"+param;
+             }
+             $this.attr("href",url);
+         });
 	 });
 	 
 	 function autoHeaderWidth() {

@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 
 import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.bean.DateBean;
-import cn.com.smart.web.constant.enumdef.VersionType;
+import cn.com.smart.web.constant.enums.VersionType;
 
 import com.mixsmart.utils.StringUtils;
 

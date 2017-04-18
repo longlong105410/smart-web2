@@ -18,10 +18,13 @@ import org.springframework.web.servlet.view.RedirectView;
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.constant.IConstant;
 import cn.com.smart.web.bean.UserInfo;
+import cn.com.smart.web.bean.entity.TNLoginLog;
 import cn.com.smart.web.constant.IActionConstant;
+import cn.com.smart.web.constant.enums.LoginType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.dao.impl.UserDao;
 import cn.com.smart.web.helper.HttpRequestHelper;
+import cn.com.smart.web.service.LoginLogService;
 import cn.com.smart.web.service.UserService;
 import cn.com.smart.web.sso.bean.SSOUserInfo;
 
@@ -32,8 +35,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.security.SecurityUtils;
 import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.NetUtils;
 import com.mixsmart.utils.StringUtils;
+
+import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * 提供统一的登录验证访问
@@ -50,6 +56,8 @@ public class SSOContoller extends BaseController {
 	
 	@Autowired
 	private UserService userServ;
+	@Autowired
+	private LoginLogService loginLogServ;
 
 	/**
 	 * 验证单点登录请求
@@ -237,10 +245,11 @@ public class SSOContoller extends BaseController {
 	 */
 	@RequestMapping("/login")
 	@ResponseBody
-	public SmartResponse<String> login(HttpSession session, String result, String ssoResp) {
+	public SmartResponse<String> login(HttpServletRequest request, String result, String ssoResp) {
 		if(log.isInfoEnabled()) {
 			log.info("正在处理单点登录服务器返回来的信息；返回结果为[result:"+result+"]");
 		}
+		HttpSession session = request.getSession();
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("登录失败");
 		if(!YesNoType.YES.getStrValue().equals(result) || StringUtils.isEmpty(ssoResp)) {
@@ -251,7 +260,7 @@ public class SSOContoller extends BaseController {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}*/
-		if(checkLogin(session, ssoResp)) {
+		if(checkLogin(request, ssoResp)) {
 			String beforeUri = StringUtils.handNull(session.getAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI));
 			smartResp.setData(beforeUri);
 			smartResp.setResult(OP_SUCCESS);
@@ -270,13 +279,13 @@ public class SSOContoller extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/subLogin")
-	public ModelAndView subLogin(HttpSession session, String ssoResp) {
+	public ModelAndView subLogin(HttpServletRequest request, String ssoResp) {
 		if(log.isInfoEnabled()) {
 			log.info("请求登录子系统");
 		}
 		ModelAndView modelView = new ModelAndView();
 		RedirectView view =  null;
-		if(StringUtils.isNotEmpty(ssoResp) && checkLogin(session, ssoResp)) {
+		if(StringUtils.isNotEmpty(ssoResp) && checkLogin(request, ssoResp)) {
 			if(log.isInfoEnabled()) {
 				log.info("子系统登录[成功]...");
 			}
@@ -295,19 +304,49 @@ public class SSOContoller extends BaseController {
 	 * @param ssoResp
 	 * @return
 	 */
-	private boolean checkLogin(HttpSession session, String ssoResp) {
+	private boolean checkLogin(HttpServletRequest request, String ssoResp) {
 		boolean is = false;
+		HttpSession session = request.getSession();
+		String resolution = request.getParameter("resolution");
+		String screenWidth = request.getParameter("screenWidth");
+		String screenHeight = request.getParameter("screenHeight");
 		String ssoResult = SecurityUtils.desDecode(ssoResp, SSOUtils.getSecretKey());
+	
+		//记录登录日志
+		TNLoginLog loginLog = new TNLoginLog();
+		String userAgentStr = request.getHeader("User-Agent");
+		loginLog.setUserAgent(userAgentStr);
+		UserAgent userAgent = UserAgent.parseUserAgentString(userAgentStr);
+		loginLog.setBrowser(userAgent.getBrowser().getName());
+		loginLog.setBrowserVersion(userAgent.getBrowserVersion().getVersion());
+		loginLog.setOs(userAgent.getOperatingSystem().getName());
+		loginLog.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
+		loginLog.setIp(HttpRequestHelper.getIP(request));
+		loginLog.setState(YesNoType.NO.getValue());
+		loginLog.setResolution(resolution);
+		loginLog.setLoginType(LoginType.SINGLE.getName());
+		if(StringUtils.isNotEmpty(screenWidth) && StringUtils.isNum(screenWidth)) {
+			loginLog.setClientScreenWidth(Float.parseFloat(screenWidth));
+		}
+		if(StringUtils.isNotEmpty(screenHeight) && StringUtils.isNum(screenHeight)) {
+			loginLog.setClientScreenHeight(Float.parseFloat(screenHeight));
+		}
+		UserInfo userInfo = null;
+		String msg = "单点登录失败";
 		try {
 			SSOUserInfo ssoUserInfo = new ObjectMapper().readValue(ssoResult, SSOUserInfo.class);
 			if(null != ssoUserInfo) {
-				UserInfo userInfo = ssoUserInfo.convertUserInfo();
+				userInfo = ssoUserInfo.convertUserInfo();
 				UserDao userDao = (UserDao)userServ.getDao();
 				userInfo.setMenuRoleIds(userDao.queryMenuRoleIds(userInfo.getId()));
 				userInfo.setRoleIds(userDao.queryRoleIds(userInfo.getId()));
 				userInfo.setOrgIds(userDao.queryOrgIds(userInfo.getId()));
 				super.setUserInfo2Session(session, userInfo);
 				is = true;
+				loginLog.setState(YesNoType.YES.getValue());
+				loginLog.setUsername(userInfo.getUsername());
+				loginLog.setUserId(userInfo.getId());
+				msg = "单点登录成功";
 			}
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -315,6 +354,12 @@ public class SSOContoller extends BaseController {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		loginLog.setMsg(msg);
+		loginLogServ.save(loginLog);
+		LoggerUtils.debug(log, "保存单点登录日志成功");
+		if(null != userInfo) {
+			userInfo.setLoginId(loginLog.getId());
 		}
 		return is;
 	}

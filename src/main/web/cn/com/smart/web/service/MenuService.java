@@ -13,8 +13,6 @@ import cn.com.smart.exception.ServiceException;
 import cn.com.smart.helper.ObjectTreeHelper;
 import cn.com.smart.helper.TreeHelper;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.ListUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.bean.entity.TNRole;
 import cn.com.smart.web.cache.impl.MenuMemoryCache;
@@ -24,6 +22,10 @@ import cn.com.smart.web.dao.impl.ResourceDao;
 import cn.com.smart.web.dao.impl.RoleDao;
 import cn.com.smart.web.dao.impl.RoleMenuDao;
 import cn.com.smart.web.plugins.ZTreeData;
+
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -99,11 +101,11 @@ public class MenuService extends MgrServiceImpl<TNMenu> {
 					List<TNMenu> menuList = new ArrayList<TNMenu>();
 					menuList.add(menu);
 					if(null != role) {
-						log.info("把添加的菜单及权限添加到管理员角色里面");
+						LoggerUtils.info(logger, "把添加的菜单及权限添加到管理员角色里面");
 						if(roleMenuDao.save(role.getId(), menuList)) {
-							log.info("菜单添加到管理员角色里面[成功]");
+							LoggerUtils.info(logger, "菜单添加到管理员角色里面[成功]");
 						} else {
-							log.info("菜单添加到管理员角色里面[失败]");
+							LoggerUtils.info(logger, "菜单添加到管理员角色里面[失败]");
 						}
 						menuList = null;
 					}
@@ -132,18 +134,18 @@ public class MenuService extends MgrServiceImpl<TNMenu> {
 				//获取管理员角色
 				TNRole role = roleDao.adminRole();
 				if(null != role) {
-					log.info("把更新的菜单及权限更新到管理员角色里面");
+					LoggerUtils.info(logger, "把更新的菜单及权限更新到管理员角色里面");
 					if(roleMenuDao.deleteByRoleMenu(role.getId(),menu.getId())) {
 						List<TNMenu> menuList = new ArrayList<TNMenu>();
 						menuList.add(menu);
 						if(roleMenuDao.save(role.getId(), menuList)) {
-							log.info("菜单更新到管理员角色里面[成功]");
+							LoggerUtils.info(logger, "菜单更新到管理员角色里面[成功]");
 						} else {
-							log.info("菜单更新到管理员角色里面[成功]");
+							LoggerUtils.info(logger, "菜单更新到管理员角色里面[成功]");
 						}
 						menuList = null;
 				    }
-					log.info("菜单操作权限关联数据保存[成功]");
+					LoggerUtils.info(logger, "菜单操作权限关联数据保存[成功]");
 					menuCache.refreshCache();
 					roleMenuCache.refreshCache();
 			    }
@@ -192,7 +194,7 @@ public class MenuService extends MgrServiceImpl<TNMenu> {
 	public TNMenu getMenuById(String menuId,List<TNMenu> menus) throws ServiceException {
 		TNMenu menuTmp = null;
 		try {
-			if(null != menus && menus.size()>0 && !StringUtil.isEmpty(menuId)) {
+			if(null != menus && menus.size()>0 && StringUtils.isNotEmpty(menuId)) {
 				for (TNMenu menu : menus) {
 					if (menu.getId().equals(menuId)) {
 						menuTmp = menu;
@@ -286,7 +288,7 @@ public class MenuService extends MgrServiceImpl<TNMenu> {
 	public SmartResponse<TNMenu> getMenuTree(List<String> roleIds) throws ServiceException {
 		SmartResponse<TNMenu> smartResp = new SmartResponse<TNMenu>();
 		try {
-			if(ListUtil.isNotEmpty(roleIds)) {
+			if(CollectionUtils.isNotEmpty(roleIds)) {
 				List<TNMenu> menus = menuCache.queryMenus(roleIds);
 				if(null != menus && menus.size()>0) {
 					TreeHelper<TNMenu> treeHelper = new TreeHelper<TNMenu>();
@@ -319,7 +321,7 @@ public class MenuService extends MgrServiceImpl<TNMenu> {
 	public SmartResponse<ZTreeData> roleMenuTree(String roleId) throws ServiceException {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		try {
-			if(!StringUtil.isEmpty(roleId)) {
+			if(StringUtils.isNotEmpty(roleId)) {
 				List<String> roleIds = new ArrayList<String>(1);
 				roleIds.add(roleId);
 				List<TNMenu> menus = menuCache.queryMenus(roleIds);

@@ -1,5 +1,6 @@
 package cn.com.smart.web.controller.impl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,18 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.web.bean.UserInfo;
+import cn.com.smart.web.bean.entity.TNLoginLog;
 import cn.com.smart.web.constant.IActionConstant;
 import cn.com.smart.web.controller.base.BaseController;
+import cn.com.smart.web.helper.HttpRequestHelper;
+import cn.com.smart.web.service.LoginLogService;
 import cn.com.smart.web.service.UserService;
 
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
+
+import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * 登录
@@ -29,6 +37,8 @@ public class LoginController extends BaseController {
 
 	@Autowired
 	private UserService userServ;
+	@Autowired
+	private LoginLogService loginLogServ;
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public String index() throws Exception {
@@ -36,20 +46,48 @@ public class LoginController extends BaseController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView checkLogin(HttpSession session,ModelAndView model,
+	public ModelAndView checkLogin(HttpServletRequest request,ModelAndView model, 
 			String userName,String password,String code) throws Exception {
 		boolean is = false;
 		String msg = null;
+		HttpSession session = request.getSession();
+		String screenWidth = request.getParameter("screenWidth");
+		String screenHeight = request.getParameter("screenHeight");
+		String resolution = request.getParameter("resolution");
 		if(StringUtils.isNotEmpty(userName) 
 				&& StringUtils.isNotEmpty(password) 
 				&& StringUtils.isNotEmpty(code)) {
+			//记录登录日志
+			TNLoginLog loginLog = new TNLoginLog();
+			String userAgentStr = request.getHeader("User-Agent");
+			loginLog.setUserAgent(userAgentStr);
+			UserAgent userAgent = UserAgent.parseUserAgentString(userAgentStr);
+			loginLog.setBrowser(userAgent.getBrowser().getName());
+			loginLog.setBrowserVersion(userAgent.getBrowserVersion().getVersion());
+			loginLog.setOs(userAgent.getOperatingSystem().getName());
+			loginLog.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
+			loginLog.setIp(HttpRequestHelper.getIP(request));
+			loginLog.setState(YesNoType.NO.getValue());
+			loginLog.setResolution(resolution);
+			if(StringUtils.isNotEmpty(screenWidth) && StringUtils.isNum(screenWidth)) {
+				loginLog.setClientScreenWidth(Float.parseFloat(screenWidth));
+			}
+			if(StringUtils.isNotEmpty(screenHeight) && StringUtils.isNum(screenHeight)) {
+				loginLog.setClientScreenHeight(Float.parseFloat(screenHeight));
+			}
 			Object codeStr = session.getAttribute(SESSION_CAPTCHA_LOGIN);
+			UserInfo userInfo = null;
 			if(null != codeStr && StringUtils.isNotEmpty(codeStr.toString()) 
 					&& codeStr.toString().equalsIgnoreCase(code)) {
 				SmartResponse<UserInfo> smartResp = userServ.login(userName, password);
 				if(OP_SUCCESS.equals(smartResp.getResult())) {
-					setUserInfo2Session(session, smartResp.getData());
+					userInfo = smartResp.getData();
+					setUserInfo2Session(session, userInfo);
 					is = true;
+					loginLog.setState(YesNoType.YES.getValue());
+					loginLog.setUsername(userInfo.getUsername());
+					loginLog.setUserId(userInfo.getId());
+					msg = "登录成功 ";
 				} else {
 					msg = "用户名或密码输入错误";
 				}
@@ -57,10 +95,17 @@ public class LoginController extends BaseController {
 			} else {
 				msg = "验证码输入错误";
 			}
+			loginLog.setMsg(msg);
+			loginLogServ.save(loginLog);
+			LoggerUtils.debug(log, "保存登录日志成功");
+			LoggerUtils.debug(log, "登录结果："+msg);
+			if(null != userInfo) {
+				userInfo.setLoginId(loginLog.getId());
+			}
 		}
 		if(is) {
 			String beforeUri = StringUtils.handNull(session.getAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI));
-			log.info("登录前的URL--["+beforeUri+"]--");
+			LoggerUtils.debug(log, "登录前的URL--["+beforeUri+"]--");
 			if(StringUtils.isEmpty(beforeUri)) {
 				beforeUri = "/index";
 			} else {

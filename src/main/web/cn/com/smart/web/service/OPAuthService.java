@@ -22,6 +22,7 @@ import cn.com.smart.web.tag.bean.BaseBtn;
 
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -89,7 +90,7 @@ public class OPAuthService extends MgrServiceImpl<TNOPAuth> {
 			List<TNOPAuth> lists = authCache.queryAll();
 			//如果缓存中没有获取到数据，则从数据库中获取
 			if(lists == null) {
-				log.debug("缓存中未获取到[操作权限]数据");
+				LoggerUtils.debug(logger, "缓存中未获取到[操作权限]数据");
 				lists = findAll().getDatas();
 			}
 			if(null != lists && lists.size()>0) {
@@ -122,7 +123,7 @@ public class OPAuthService extends MgrServiceImpl<TNOPAuth> {
 				List<TNOPAuth> all = authCache.queryAll();
 				//如果缓存中没有获取到数据，则从数据库中获取
 				if(all == null) {
-					log.debug("缓存中未获取到[操作权限]数据");
+					LoggerUtils.debug(logger, "缓存中未获取到[操作权限]数据");
 					all = super.findAll().getDatas();
 				}
 				List<TNOPAuth> newOpAuths = new ArrayList<TNOPAuth>();

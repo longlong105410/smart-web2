@@ -60,6 +60,7 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('helpers');" class="btn btn-link">帮助</a></li>
 		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('tabs');" class="btn btn-link">选项卡</a></li>
 		                
+                        <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('file');" class="btn btn-link">上传文件</a></li>
 	               </ul>
 	           </div>
 	        </div>

@@ -133,7 +133,7 @@ var END_NODE_KEY = "end";
 				if(isShow) {
 					$('#myModal').modal('show');
 				}
-				exePorcessBack($(this),isShow);
+				exePorcessBack($this,$(this),isShow);
 				return false;
 			});
 			//提交按钮
@@ -193,7 +193,7 @@ var END_NODE_KEY = "end";
 					if(isShow) {
 						$('#myModal').modal('show');
 					}
-					exePorcessNext($(this),isShow);
+					exePorcessNext($this,$(this),isShow);
 				}
                 return false;
 			});
@@ -293,6 +293,8 @@ var END_NODE_KEY = "end";
 						$this.prop("checked",true);
 					}
 				}
+			} else if(type == 'file') {
+				formAttHandler($this, value);
 			} else {
 				$this.val(value);
 			}
@@ -324,10 +326,10 @@ function listenerAttDel() {
  * @param param
  * 
  */
-function submitTask(url,param) {
+function submitTask(formObj,url,param) {
 	var formPorcessInfo = $("#flow-process-form").serialize();
 	//流程表单信息
-	formPorcessInfo += "&"+$("#process-handle-form").serialize();
+	//formPorcessInfo += "&"+formObj.serialize();
 	if(!utils.isEmpty(param)) {
 		formPorcessInfo += "&"+param;
 	}
@@ -335,7 +337,44 @@ function submitTask(url,param) {
 	refreshUrl = utils.isEmpty(refreshUrl)?"process/todo":refreshUrl;
 	if(!utils.isEmpty(url)) {
 		utils.waitLoading("正在处理表单数据...");
-		$.post(url,formPorcessInfo,function(data){
+		if(url.indexOf("?")==-1) {
+			url +="?";
+		} else {
+			url +="&";
+		}
+		url += formPorcessInfo;
+		formObj.attr("action", url);
+		formObj.attr("target","handle-form-iframe");
+		formObj.submit(); //提交表单到iframe
+		$("#handle-form-iframe").load(function(){
+	    	utils.closeWaitLoading();
+	    	var result = $(this).contents().text();
+	    	if(utils.isNotEmpty(result)) {
+	    		var output = $.parseJSON(result);
+	    		utils.showMsg(output.msg);
+	    		if(output.result=='1') {
+					closeActivedTab();
+					var title = "我的待办";
+					if($('#main-tab').tabs('exists',"我的待办")) {
+						$('#main-tab').tabs('select',title);
+						var $panel = getActiveTabPanel();
+						var param = $panel.find(".panel-search form").serialize();
+						refreshUrl = refreshUrl+(refreshUrl.indexOf("?")>-1?"&":"?")+"1=1";
+						if(utils.isNotEmpty(param)) {
+							refreshUrl = refreshUrl + "&"+param;
+						}
+						var $page = $panel.find(".pagination");
+						if($page.length > 0 ) {
+							refreshUrl = refreshUrl+"&page="+$page.find("li.active").text();
+						}
+						reloadTab(refreshUrl);
+					}
+					loadingTodoData();
+				}
+	    	}
+		});
+		
+		/*$.post(url,formPorcessInfo,function(data){
 			utils.closeWaitLoading();
 			var output = data;
 			utils.showMsg(output.msg+"！");
@@ -358,7 +397,7 @@ function submitTask(url,param) {
 				}
 				loadingTodoData();
 			}
-		});
+		});*/
 	}
 }
 
@@ -367,7 +406,7 @@ function submitTask(url,param) {
  * @param objTag
  * @param isShow
  */
-function exePorcessBack(objTag,isShow) {
+function exePorcessBack(formObj,objTag,isShow) {
 	var $backLineRow = $("#select-back-line-row");
 	var $backProp = $("#node-decision-back-prop");
 	$backLineRow.find("input:first").prop("checked",true);
@@ -395,23 +434,24 @@ function exePorcessBack(objTag,isShow) {
 			if(isSubmit) {
 				$('#myModal').modal('hide');
 				$('#myModal').on('hidden.bs.modal', function (e) {
-					handleRequest(objTag,$backLineRow,"isBack=1");
+					handleRequest(formObj,objTag,$backLineRow,"isBack=1");
 				});
 			}
 			return false;
 		});
 	} else {
-		handleRequest(objTag,$backLineRow,"isBack=1");
+		handleRequest(formObj,objTag,$backLineRow,"isBack=1");
 	}
 }
 
 /**
  * 处理请求
+ * @param formObj
  * @param objTag
  * @param $lineRowTag
  * @param param
  */
-function handleRequest(objTag,$lineRowTag,param) {
+function handleRequest(formObj,objTag,$lineRowTag,param) {
 	var params = $lineRowTag.parents("form").serialize();
 	if(!utils.isEmpty(param)) 
 		params = params+"&"+param;
@@ -424,13 +464,13 @@ function handleRequest(objTag,$lineRowTag,param) {
 		if(utils.isNotEmpty(titleFieldId)) {
 			var name = $("#"+titleFieldId).data("label-name");
 			BootstrapDialogUtil.confirmDialog("该"+utils.handleNull(name)+"已经存在，是否继续提交？", function() {
-				submitTask(url,params);
+				submitTask(formObj,url,params);
 			});
 		} else {
-			submitTask(url,params);
+			submitTask(formObj,url,params);
 		}
 	} else {
-		submitTask(url,params);
+		submitTask(formObj,url,params);
 	}
 }
 
@@ -466,7 +506,7 @@ function checkInsTitle() {
  * @param objTag
  * @param isShow
  */
-function exePorcessNext(objTag,isShow) {
+function exePorcessNext(formObj,objTag,isShow) {
 	var $nextLineRow = $("#select-next-line-row");
 	var $nextProp = $("#node-decision-next-prop")
 	
@@ -518,7 +558,7 @@ function exePorcessNext(objTag,isShow) {
 				$('#myModal').modal('hide');
 				$('#myModal').on('hidden.bs.modal', function (e) {
 					$("#myModal").unbind('hidden.bs.modal');
-					handleRequest(objTag, $nextLineRow, param);
+					handleRequest(formObj,objTag, $nextLineRow, param);
 				});
 			}
 			return false;
@@ -527,7 +567,7 @@ function exePorcessNext(objTag,isShow) {
 		if(utils.isNotEmpty(checkedAssigners) && checkedAssigners != END_NODE_KEY) {
 			param = param+"&nextAssigners="+checkedAssigners;
 		}
-		handleRequest(objTag, $nextLineRow, param);
+		handleRequest(formObj,objTag, $nextLineRow, param);
 	}
 }
 
@@ -700,4 +740,67 @@ function isHandleNextAssigner($nextLineRow) {
 			}
 		}
 	});
+}
+
+/**
+ * 处理表单附件
+ * @param $element
+ * @param value
+ */
+function formAttHandler($element, value) {
+	var isDisabled = $element.prop("disabled");
+	if(utils.isNotEmpty(value)) {
+		$element.addClass("hidden");
+		$element.prop("disabled",true);
+		$.get("process/attachment/info?id="+value, function(output){
+			var attInfos = null;
+			var elementId = $element.attr("id");
+			if(output.result == 1) {
+				attInfos = "<ul id='formatt_'"+elementId+">";
+				var len = output.datas.length;
+				var datas = output.datas;
+				for(var i=0; i<len; i++) {
+					attInfos += "<li class='att-item'><a href='download/att?id="+datas[i][0]+"' target='_blank'>"+datas[i][2]+"</a>（"+datas[i][3]+"）";
+					if(!isDisabled) {
+						attInfos += "<div class='form-att-op hidden'>操作：<a href='javascript:void(0)' data-input-id='"+elementId+"' onclick=deleteFormAtt(this,'"+datas[i][1]+"')><i class='fa fa-trash' aria-hidden='true'></i> 删除</a></div>";
+					}
+					attInfos +="</li>";
+				}
+				attInfos += "</ul>";
+				var $ul = $(attInfos);
+				$ul.find(".att-item").mouseover(function(){
+					$(this).find(".form-att-op").removeClass("hidden").width($(this).find("a").width());
+				}).mouseout(function(){
+					$(this).find(".form-att-op").addClass("hidden");
+				});
+				$element.parent().prepend($ul);
+			} else {
+				$element.removeClass("hidden");
+				$element.prop("disabled",false);
+			}
+		});
+	}
+}
+
+/**
+ * 删除附件
+ */
+function deleteFormAtt(elementObj, id) {
+	if(utils.isNotEmpty(id)) {
+		var $li = $(elementObj).parents("li:eq(0)");
+		var $ul = $(elementObj).parents("ul:eq(0)");
+		var inputEleId = $(elementObj).data("input-id");
+		var formDataId = $("#form-data-id").val();
+		BootstrapDialogUtil.delDialog("附件",'flow/attachment/deleteForm?fieldId='+inputEleId+'&formDataId='+formDataId,id,function(){
+			$li.remove();
+			//判断是否还有附件
+			$li = $ul.find("li");
+			if($li.length == 0) {
+				$ul.parent().find("input").removeClass("hidden");
+			}
+			if(utils.isNotEmpty(flowAttUri)) {
+				loadUri("#process-att-tab",flowAttUri,false);
+			}
+		});
+	}
 }

@@ -43,6 +43,9 @@ response.flushBuffer();
     <!-- Bootstrap 开关（switch）控件 -->
     <link href="${pageContext.request.contextPath}/plugins/bootstrap-switch/css/bootstrapSwitch.css" rel="stylesheet" />
     <script src="${pageContext.request.contextPath}/plugins/bootstrap-switch/js/bootstrapSwitch.js" type="text/javascript"></script>
+    <!-- Bootstrap iCheck 插件 -->
+    <link href="${pageContext.request.contextPath}/plugins/icheck/skins/all.css" rel="stylesheet" />
+    <script src="${pageContext.request.contextPath}/plugins/icheck/icheck.min.js" type="text/javascript"></script>
     
     <!-- Font-Awesome -->
 	<link href="${pageContext.request.contextPath}/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" /> 

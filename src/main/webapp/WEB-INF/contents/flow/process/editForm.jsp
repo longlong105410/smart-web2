@@ -55,5 +55,6 @@
 	  var mainContentH = $(window).height() - 70;
 	  var flowFormContentH = mainContentH - 40 - 35;
 	  $("#edit-flow-form-panel-contents").height(flowFormContentH);
+	  richtextListener();
   });
 </script>

@@ -2,6 +2,7 @@ package cn.com.smart.web.interceptor;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,13 +19,20 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import cn.com.smart.init.config.InitSysConfig;
+import cn.com.smart.service.SmartContextService;
+import cn.com.smart.web.bean.UserInfo;
+import cn.com.smart.web.bean.entity.TNAccessLog;
 import cn.com.smart.web.constant.IActionConstant;
 import cn.com.smart.web.helper.HttpRequestHelper;
+import cn.com.smart.web.service.AccessLogService;
 import cn.com.smart.web.sso.SSOUtils;
 
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
+
+import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * 访问控制拦截
@@ -43,14 +51,17 @@ public class ACLInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object obj, Exception arg3)
 			throws Exception {
-		//System.out.println(obj.toString());
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response,
 			Object obj, ModelAndView modelAndView) throws Exception {
-		
 		String currentUri = HttpRequestHelper.getCurrentUri(request);
+		long startTime = (Long)request.getAttribute("startTime");
+		Date responseTime = new Date();
+		long endTime = responseTime.getTime();
+		long useTime = endTime - startTime;
+		LoggerUtils.debug(log, "请求["+currentUri+"]用时："+useTime+"毫秒");
 		if(!isRes(currentUri)) {
 			if(null != modelAndView) {
 				ModelMap modelMap = modelAndView.getModelMap();
@@ -58,6 +69,7 @@ public class ACLInterceptor implements HandlerInterceptor {
 				modelMap.put("currentUri", HttpRequestHelper.getCurrentUri(request));
 				modelMap.put("currentUriParam", HttpRequestHelper.getCurrentUriParam(request));
 				//请求参数添加到map里面
+				@SuppressWarnings("unchecked")
 				Map<String,String[]> curParamMaps = request.getParameterMap();
 				if(null != curParamMaps && curParamMaps.size()>0) {
 					Set<Map.Entry<String, String[]>> items = curParamMaps.entrySet();
@@ -80,6 +92,12 @@ public class ACLInterceptor implements HandlerInterceptor {
 					}
 				}
 			}
+			//更新访问日志；计算用时
+			String accessLogId = StringUtils.handNull(request.getAttribute("accessLogId"));
+			if(StringUtils.isNotEmpty(accessLogId)) {
+				AccessLogService accessLogServ = SmartContextService.find(AccessLogService.class);
+				accessLogServ.update(accessLogId, responseTime, useTime);
+			}
 		}
 	}
 
@@ -101,11 +119,16 @@ public class ACLInterceptor implements HandlerInterceptor {
 				return false;
 			}
 		}
+		String currentUri = HttpRequestHelper.getCurrentUri(request);
+		boolean isRes = isRes(currentUri);
 		boolean is = false;
+		TNAccessLog accessLog = null;
+		Date currentTime = new Date();
+		long startTime = currentTime.getTime();
+		request.setAttribute("startTime", startTime);
 		if(isLogin(request)) {
 			is = true;
 		} else {
-			String currentUri = HttpRequestHelper.getCurrentUri(request);
 			if(!isRes(currentUri)) {
 				if(!isExclude(currentUri)) {
 					HttpSession session = request.getSession();
@@ -132,7 +155,6 @@ public class ACLInterceptor implements HandlerInterceptor {
 						}
 						response.sendRedirect(ssoRequestUri);
 					} else {
-						//session.setAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI, currentUri);
 						String loginUri = "/login";
 						String contextPath = request.getContextPath();
 						if(StringUtils.isNotEmpty(contextPath) && !"/".equals(contextPath)) {
@@ -146,6 +168,48 @@ public class ACLInterceptor implements HandlerInterceptor {
 			} else {
 				is = true;
 			}
+		}
+		if(!isRes) {
+			String userAgentStr = request.getHeader("User-Agent");
+			//记录访问日志
+			accessLog = new TNAccessLog();
+			accessLog.setUserAgent(userAgentStr);
+			UserAgent userAgent = UserAgent.parseUserAgentString(userAgentStr);
+			accessLog.setBrowser(userAgent.getBrowser().getName());
+			accessLog.setBrowserVersion(userAgent.getBrowserVersion().getVersion());
+			accessLog.setOs(userAgent.getOperatingSystem().getName());
+			accessLog.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
+			accessLog.setIp(HttpRequestHelper.getIP(request));
+			accessLog.setUri(currentUri);
+			String url = HttpRequestHelper.getCurrentUriParam(request);
+			if(url.length() > 490) {
+				url = url.substring(0, 490);
+			}
+			accessLog.setUrl(url);
+			String param = request.getQueryString();
+			if(StringUtils.isNotEmpty(param)) {
+				param = URLDecoder.decode(param, "UTF-8");
+				if(param.length() > 490) {
+					param = param.substring(0, 490);
+				}
+			}
+			UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(request);
+			accessLog.setParam(param);
+			if(null != userInfo) {
+				accessLog.setUserId(userInfo.getId());
+				accessLog.setUsername(userInfo.getUsername());
+				accessLog.setLoginId(userInfo.getLoginId());
+			}
+			//如果不执行后续操作
+			if(!is) {
+				accessLog.setResponseTime(new Date());
+				accessLog.setUseTime(0L);
+			}
+			accessLog.setCreateTime(currentTime);
+			LoggerUtils.debug(log, "正在保存访问日志");
+			AccessLogService accessLogServ = SmartContextService.find(AccessLogService.class);
+			accessLogServ.save(accessLog);
+			request.setAttribute("accessLogId", accessLog.getId());
 		}
 		return is;
 	}

@@ -7,9 +7,10 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNAttachment;
 import cn.com.smart.web.dao.impl.AttachmentDao;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 附件  Service
@@ -31,7 +32,7 @@ public class AttachmentService extends MgrServiceImpl<TNAttachment> {
 	public SmartResponse<TNAttachment> findAtt(String id) throws ServiceException {
 		SmartResponse<TNAttachment> smartResp = new SmartResponse<TNAttachment>();
 		try {
-			if(!StringUtil.isEmpty(id)) {
+			if(StringUtils.isNotEmpty(id)) {
 				TNAttachment  att = attDao.find(id);
 				if(null != att) {
 					smartResp.setResult(OP_SUCCESS);
@@ -58,7 +59,7 @@ public class AttachmentService extends MgrServiceImpl<TNAttachment> {
 	public SmartResponse<String> delete(String id) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(id)) {
+			if(StringUtils.isNotEmpty(id)) {
 				if(attDao.delete(id)) {
 					smartResp.setResult(OP_SUCCESS);
 					smartResp.setMsg(OP_SUCCESS_MSG);

@@ -26,7 +26,7 @@ public class PicUploapController extends AttachmentUploadController {
 		SmartResponse<TNAttachment> smartResp = new SmartResponse<TNAttachment>();
 		if(null != file) {
 			String userId = getUserInfoFromSession(request).getId();
-			TNAttachment att = fileUpload(file.getInputStream(), file.getContentType(), file.getOriginalFilename(),file.getSize() ,userId);
+			TNAttachment att = attUploadHandler.fileUpload(file.getInputStream(), file.getContentType(), file.getOriginalFilename(),file.getSize() ,userId);
 			if(null != att) {
 				smartResp.setResult(OP_SUCCESS);
 				smartResp.setMsg(OP_SUCCESS_MSG);

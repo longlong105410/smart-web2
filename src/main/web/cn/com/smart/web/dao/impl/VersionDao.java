@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.web.bean.entity.TNVersion;
-import cn.com.smart.web.constant.enumdef.VersionType;
+import cn.com.smart.web.constant.enums.VersionType;
 
 import com.mixsmart.utils.CollectionUtils;
 

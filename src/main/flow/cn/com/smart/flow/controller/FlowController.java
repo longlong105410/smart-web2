@@ -33,7 +33,7 @@ import cn.com.smart.flow.filter.FlowSearchParam;
 import cn.com.smart.flow.service.FlowService;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
-import cn.com.smart.web.constant.enumdef.BtnPropType;
+import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.CustomBtn;

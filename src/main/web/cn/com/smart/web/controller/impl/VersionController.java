@@ -20,7 +20,7 @@ import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.VersionSearch;
 import cn.com.smart.web.bean.entity.TNVersion;
-import cn.com.smart.web.constant.enumdef.VersionType;
+import cn.com.smart.web.constant.enums.VersionType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.VersionService;

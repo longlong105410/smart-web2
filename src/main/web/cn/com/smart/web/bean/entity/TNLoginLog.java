@@ -8,41 +8,61 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.bean.DateBean;
+import cn.com.smart.web.constant.enums.LoginType;
+
+import com.mixsmart.enums.YesNoType;
 
 /**
  * 用户登录日志（实体Bean）
  * @author lmq
- * @version 1.0 2015年8月27日
+ * @version 1.0
  * @since 1.0
  *
  */
 @Entity
-@Table(name = "T_N_LOGIN_LOG")
+@Table(name = "t_n_login_log")
 public class TNLoginLog extends BaseBeanImpl implements DateBean {
 
-	// Fields
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8368756499304249621L;
+	
 	private String id;
+	
 	private String userId;
-	private String userName;
-	private String state;
+	
+	private String username;
+	
+	private Boolean state = YesNoType.NO.getValue();
+	
 	private String msg;
+	
 	private Date createTime;
+	
 	private String ip;
-	private String loginMode;
+	
+	private String deviceType;
+	
+	private String userAgent;
+	
+	private String browser;
+	
+	private String browserVersion;
+	
+	private String os;
+	
+	private String loginType = LoginType.NORMAL.getName();
 	
 	/**
-	 * 登陆模式为WEB
-	 * */
-	public static final String MODE_WEB = "web";
-
+	 * 分辨率
+	 */
+	private String resolution;
+	
+	private Float clientScreenWidth;
+	
+	private Float clientScreenHeight;
 
 	@Id
 	@Column(name = "id", length=50)
@@ -63,15 +83,6 @@ public class TNLoginLog extends BaseBeanImpl implements DateBean {
 		this.userId = userId;
 	}
 
-	@Column(name = "state", length=2)
-	public String getState() {
-		return this.state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
 	@Column(name = "msg",length=255)
 	public String getMsg() {
 		return this.msg;
@@ -79,16 +90,6 @@ public class TNLoginLog extends BaseBeanImpl implements DateBean {
 
 	public void setMsg(String msg) {
 		this.msg = msg;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "create_time",updatable=false)
-	public Date getCreateTime() {
-		return this.createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 	@Column(name = "ip",length=50)
@@ -100,29 +101,119 @@ public class TNLoginLog extends BaseBeanImpl implements DateBean {
 		this.ip = ip;
 	}
 
-	/**
-	 * 登录模式 <br />
-	 * 默认为：web登录模式
-	 * @return 返回登录模式
-	 */
-	@Column(name = "login_mode", length=127)
-	public String getLoginMode() {
-		return loginMode;
+	@Column(name="username", length=127)
+	public String getUsername() {
+		return username;
 	}
 
-	public void setLoginMode(String loginMode) {
-		this.loginMode = loginMode;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	@Column(name = "user_name", length=127)
-	public String getUserName() {
-		return userName;
+	@Column(name="state")
+	public Boolean getState() {
+		return state;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setState(Boolean state) {
+		this.state = state;
+	}
+
+	@Column(name="device_type", length=127)
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
+	}
+
+	@Column(name="user_agent", length=255)
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+
+	@Column(name="os", length=127)
+	public String getOs() {
+		return os;
+	}
+
+	public void setOs(String os) {
+		this.os = os;
+	}
+
+	@Column(name="browser", length=127)
+	public String getBrowser() {
+		return browser;
+	}
+
+	public void setBrowser(String browser) {
+		this.browser = browser;
+	}
+
+	@Column(name="browser_version", length=127)
+	public String getBrowserVersion() {
+		return browserVersion;
+	}
+
+	public void setBrowserVersion(String browserVersion) {
+		this.browserVersion = browserVersion;
 	}
 	
+	@Column(name="login_type", length=100, nullable=false)
+	public String getLoginType() {
+		return loginType;
+	}
+
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
+	}
 	
+	@Column(name="resolution", length=127)
+	public String getResolution() {
+		return resolution;
+	}
+
+	public void setResolution(String resolution) {
+		this.resolution = resolution;
+	}
+	
+	@Column(name="client_screen_width")
+	public Float getClientScreenWidth() {
+		return clientScreenWidth;
+	}
+
+	public void setClientScreenWidth(Float clientScreenWidth) {
+		this.clientScreenWidth = clientScreenWidth;
+	}
+
+	@Column(name="client_screen_height")
+	public Float getClientScreenHeight() {
+		return clientScreenHeight;
+	}
+
+	public void setClientScreenHeight(Float clientScreenHeight) {
+		this.clientScreenHeight = clientScreenHeight;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_time",updatable=false)
+	public Date getCreateTime() {
+		return this.createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	@Transient
+	@Override
+	public String getPrefix() {
+		return "L";
+	}
 
 }

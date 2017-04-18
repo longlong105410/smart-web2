@@ -17,7 +17,7 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNPosition;
-import cn.com.smart.web.constant.enumdef.SelectedEventType;
+import cn.com.smart.web.constant.enums.SelectedEventType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
 import cn.com.smart.web.helper.PageHelper;
