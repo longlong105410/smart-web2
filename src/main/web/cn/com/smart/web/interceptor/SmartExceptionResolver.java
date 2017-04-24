@@ -34,6 +34,9 @@ public class SmartExceptionResolver extends AbstractHandlerExceptionResolver {
 				e.printStackTrace();
 			}
 		}
+		if(null != msg && msg.startsWith("unexpected")) {
+			msg = "系统忙碌，请稍后重试";
+		}
 		modelView.getModelMap().put("msg", msg);
 		View view = new RedirectView("/exception/json", true, true, true);
 		modelView.setView(view);

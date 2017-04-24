@@ -188,4 +188,19 @@
 			select a.* from t_n_attachment a,t_flow_attachment fa where a.id=fa.attachment_id and fa.order_id=:orderId 
 		</sql>
 	</sqlUnit>
+    
+    
+    <!-- 获取附件通过流程实例ID -->
+    <sqlUnit name="get_attachment_by_taskkey">
+        <sql>
+            select a.* from t_n_attachment a,t_flow_attachment fa where a.id=fa.attachment_id and fa.order_id=:orderId and fa.task_key=:taskKey 
+        </sql>
+    </sqlUnit>
+    
+    <!-- 获取流程附件信息通过附件ID -->
+    <sqlUnit name="get_flow_att_infos_byid">
+        <sql>
+            select t.id as attId, fa.id as fattId,t.file_name,t.file_size,t.file_suffix,t.create_time from t_n_attachment t,t_flow_attachment fa where t.id=fa.attachment_id and t.id in(:ids)
+        </sql>
+    </sqlUnit>
 </sqlMap>

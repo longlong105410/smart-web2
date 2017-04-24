@@ -70,4 +70,25 @@
 	 		select * from t_create_table_field t where t.id in(:ids)
 	 	</sql>
 	 </sqlUnit>
+     
+     <!-- 根据字段ID获取表名称和字段名称 -->
+     <sqlUnit name="get_tablename_fieldname_byfieldid">
+        <sql>
+            select t.table_name,tf.field_name from t_create_table_field tf,t_create_table t where tf.table_id=t.id and tf.id=:fieldId
+        </sql>
+     </sqlUnit>
+     
+     <!-- 获取字段值 -->
+     <sqlUnit name="get_field_value">
+        <sql>
+            select ${fieldName} from ${tableName} where form_data_id=:formDataId
+        </sql>
+     </sqlUnit>
+     
+     <!-- 获取字段值 -->
+     <sqlUnit name="update_field_value">
+        <sql>
+            update ${tableName} set ${fieldName} where form_data_id=:formDataId
+        </sql>
+     </sqlUnit>
 </sqlMap>

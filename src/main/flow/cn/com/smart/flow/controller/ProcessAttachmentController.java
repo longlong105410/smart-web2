@@ -146,4 +146,54 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 		return modelView;
 	}
 	
+	/**
+	 * 获取附件信息通过附件ID
+	 * @param id 附件ID；多个附件ID直接用英文逗号分隔
+	 * @return
+	 */
+	@RequestMapping("/info")
+	@ResponseBody
+	public SmartResponse<Object> info(String id) {
+		SmartResponse<Object> smartResp = new SmartResponse<Object>();
+		if(StringUtils.isEmpty(id)) {
+			return smartResp;
+		}
+		String[] ids = id.split(MULTI_VALUE_SPLIT);
+		Map<String, Object> param = new HashMap<String, Object>(1);
+		param.put("ids", ids);
+		smartResp = opServ.getDatas("get_flow_att_infos_byid", param);
+		if(OP_SUCCESS.equals(smartResp.getResult())) {
+			List<Object> list = smartResp.getDatas();
+			//处理文件大小
+			for (Object obj : list) {
+				Object[] objs = (Object[])obj;
+				long fileSize = Long.parseLong(objs[3].toString());
+				objs[3] = StringUtils.fileSize(fileSize);
+			}
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 删除表单中的附件 
+	 * @param id 附件ID
+	 * @param fieldId 字段ID
+	 * @param formDataId 
+	 * @return
+	 */
+	@RequestMapping("/deleteForm")
+	@ResponseBody
+	public SmartResponse<String> deleteForm(String id, String fieldId, String formDataId, String attId) {
+		SmartResponse<String> smartResp = new SmartResponse<String>();
+		smartResp.setMsg("附件删除失败");
+		if(StringUtils.isEmpty(id)) {
+			return smartResp;
+		}
+		if(flowAttServ.getDao().delete(id)) {
+			flowAttServ.updateFormField(fieldId, formDataId, attId);
+			smartResp.setResult(OP_SUCCESS);
+			smartResp.setMsg("附件删除成功");
+		}
+		return smartResp;
+	}
 }

@@ -117,6 +117,8 @@ var END_NODE_KEY = "end";
 			});
 			//驳回按钮
 			$("#back-process").click(function(){
+				var $backBtn = $(this);
+				$backBtn.prop("disabled",true);
 				var $backLineRow = $("#select-back-line-row");
 				$(".task-submit-form,.is-suggest").hide();
 				$("#node-decision-back-prop").show();
@@ -133,11 +135,14 @@ var END_NODE_KEY = "end";
 				if(isShow) {
 					$('#myModal').modal('show');
 				}
+				$backBtn.prop("disabled",false);
 				exePorcessBack($this,$(this),isShow);
 				return false;
 			});
 			//提交按钮
 			$("#submit-process").click(function(){
+				var $submitBtn = $(this);
+				$submitBtn.prop("disabled",true);
 				//隐藏任务提交的表单及处理意见所在的元素，
 				//原因是：避免于点击驳回按钮时候的冲突(显示驳回时候的处理意见或显示驳回时的表单)
 				$(".task-submit-form,.is-suggest").hide();
@@ -193,7 +198,10 @@ var END_NODE_KEY = "end";
 					if(isShow) {
 						$('#myModal').modal('show');
 					}
+					$submitBtn.prop("disabled",false);
 					exePorcessNext($this,$(this),isShow);
+				} else {
+					$submitBtn.prop("disabled",false);
 				}
                 return false;
 			});
@@ -749,49 +757,74 @@ function isHandleNextAssigner($nextLineRow) {
  */
 function formAttHandler($element, value) {
 	var isDisabled = $element.prop("disabled");
+	var name = $element.attr("name");
+	var newName = name+"_file";
+	if(!isDisabled) {
+		var $eleClone = $element.clone();
+		$eleClone.attr("name", newName);
+		$eleClone.attr("id", newName);
+		$eleClone.removeClass("require");
+		$element.after($eleClone);
+		$element.attr("type","text");
+	}
 	if(utils.isNotEmpty(value)) {
 		$element.addClass("hidden");
-		$element.prop("disabled",true);
 		$.get("process/attachment/info?id="+value, function(output){
 			var attInfos = null;
 			var elementId = $element.attr("id");
+			var attIds = "";
 			if(output.result == 1) {
 				attInfos = "<ul id='formatt_'"+elementId+">";
 				var len = output.datas.length;
 				var datas = output.datas;
+				var fileType = null;
 				for(var i=0; i<len; i++) {
 					attInfos += "<li class='att-item'><a href='download/att?id="+datas[i][0]+"' target='_blank'>"+datas[i][2]+"</a>（"+datas[i][3]+"）";
-					if(!isDisabled) {
-						attInfos += "<div class='form-att-op hidden'>操作：<a href='javascript:void(0)' data-input-id='"+elementId+"' onclick=deleteFormAtt(this,'"+datas[i][1]+"')><i class='fa fa-trash' aria-hidden='true'></i> 删除</a></div>";
+					attInfos += "<ul class='form-att-op hidden list-inline'>操作：";
+					fileType = utils.handleNull(datas[i][4]);
+					if(utils.isNotEmpty(fileType)) {
+						fileType = fileType.toLowerCase();
 					}
-					attInfos +="</li>";
+					if(fileType == 'jpg' || fileType == 'gif' || fileType == 'png' || fileType == 'txt' || fileType == 'pdf') {
+						attInfos += "<li><a href='att/view?id="+datas[i][0]+"' target='_blank'>查看</a></li>";
+					}
+					attInfos += "<li><a href='download/att?id="+datas[i][0]+"' target='_blank'>下载</a></li>";
+					if(!isDisabled) {
+						attInfos += "<li><a href='javascript:void(0)' data-input-id='"+elementId+"' onclick=deleteFormAtt(this,'"+datas[i][1]+"','"+datas[i][0]+"')><i class='fa fa-trash' aria-hidden='true'></i> 删除</a></li>";
+					}
+					attInfos +="</ul></li>";
+					attIds += datas[i][0]+",";
 				}
 				attInfos += "</ul>";
 				var $ul = $(attInfos);
 				$ul.find(".att-item").mouseover(function(){
-					$(this).find(".form-att-op").removeClass("hidden").width($(this).find("a").width());
+					$(this).find(".form-att-op").removeClass("hidden").width();
 				}).mouseout(function(){
 					$(this).find(".form-att-op").addClass("hidden");
 				});
 				$element.parent().prepend($ul);
-			} else {
-				$element.removeClass("hidden");
-				$element.prop("disabled",false);
 			}
+			if(utils.isNotEmpty(attIds)) {
+				attIds = attIds.substring(0, attIds.length-1);
+			}
+			$element.val(attIds);
 		});
 	}
 }
 
 /**
  * 删除附件
+ * @param elementObj 元素对象
+ * @param id 流程附件ID
+ * @param attId 附件ID
  */
-function deleteFormAtt(elementObj, id) {
+function deleteFormAtt(elementObj, id, attId) {
 	if(utils.isNotEmpty(id)) {
 		var $li = $(elementObj).parents("li:eq(0)");
 		var $ul = $(elementObj).parents("ul:eq(0)");
 		var inputEleId = $(elementObj).data("input-id");
 		var formDataId = $("#form-data-id").val();
-		BootstrapDialogUtil.delDialog("附件",'flow/attachment/deleteForm?fieldId='+inputEleId+'&formDataId='+formDataId,id,function(){
+		BootstrapDialogUtil.delDialog("附件",'process/attachment/deleteForm?fieldId='+inputEleId+'&formDataId='+formDataId+"&attId="+attId,id,function(){
 			$li.remove();
 			//判断是否还有附件
 			$li = $ul.find("li");

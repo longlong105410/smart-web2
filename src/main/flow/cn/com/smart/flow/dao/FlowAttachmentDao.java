@@ -13,7 +13,6 @@ import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.entity.TFlowAttachment;
 import cn.com.smart.res.SQLResUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNAttachment;
 import cn.com.smart.web.dao.impl.AttachmentDao;
 
@@ -29,18 +28,13 @@ import com.mixsmart.utils.StringUtils;
 @Repository("flowAttDao")
 public class FlowAttachmentDao extends BaseDaoImpl<TFlowAttachment>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2108237713875783512L;
-	
 	@Autowired
 	private AttachmentDao attDao;
 
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
 		boolean is = false;
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			String[] ids = id.toString().split(",");
 			List<TFlowAttachment> lists = find(ids);
 			if(null != lists && lists.size()>0) {
@@ -71,6 +65,7 @@ public class FlowAttachmentDao extends BaseDaoImpl<TFlowAttachment>{
 	 * @param orderId 流程实例ID
 	 * @return 返回附件实体集合
 	 */
+	@SuppressWarnings("unchecked")
 	public List<TNAttachment> queryAttachmentByOrderId(String orderId) {
 		List<TNAttachment> atts = null;
 		if(StringUtils.isEmpty(orderId)) {
@@ -80,6 +75,35 @@ public class FlowAttachmentDao extends BaseDaoImpl<TFlowAttachment>{
 		if(StringUtils.isNotEmpty(sql)) {
 			Map<String, Object> param = new HashMap<String, Object>(1);
 			param.put("orderId", orderId);
+			try {
+				SQLQuery sqlQuery = (SQLQuery) super.getQuery(sql, param, true);
+				sqlQuery.addEntity(TNAttachment.class);
+				atts = sqlQuery.list();
+			} catch (Exception e) {
+				throw new DaoException(e);
+			}
+		}
+		return atts;
+	}
+	
+	
+	/**
+	 * 查询附件信息通过流程实例ID和任务KEY（任务名称）
+	 * @param orderId 流程实例ID
+	 * @param taskKey 任务KEY
+	 * @return 返回附件实体集合
+	 */
+	@SuppressWarnings("unchecked")
+	public List<TNAttachment> queryAttachment(String orderId, String taskKey) {
+		List<TNAttachment> atts = null;
+		if(StringUtils.isEmpty(orderId)) {
+			return atts;
+		}
+		String sql = SQLResUtil.getOpSqlMap().getSQL("get_attachment_by_taskkey");
+		if(StringUtils.isNotEmpty(sql)) {
+			Map<String, Object> param = new HashMap<String, Object>(1);
+			param.put("orderId", orderId);
+			param.put("taskKey", taskKey);
 			try {
 				SQLQuery sqlQuery = (SQLQuery) super.getQuery(sql, param, true);
 				sqlQuery.addEntity(TNAttachment.class);

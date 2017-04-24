@@ -132,6 +132,8 @@
 		or execution(* org.snaker.engine.core..*.*(..))" />
 	</aop:config>
 	<aop:aspectj-autoproxy proxy-target-class="true" />
+    <!-- 支持注解事物 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<!-- 定义用于执行定时任务的类(扫描任务定时器)-->
 	<bean id="scanProcess" class="cn.com.smart.flow.timer.ScanProcessTimer" />

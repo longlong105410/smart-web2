@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.smart.bean.BaseBean;
+import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.exception.DaoException;
 
 public interface ICommonDao {
@@ -73,6 +74,40 @@ public interface ICommonDao {
 	 */
 	public List<Object> queryObjSql(String sql,Map<String, Object> param,Integer start, Integer rows) throws DaoException;
  
+	/**
+     * 查询SQL
+     * @param sql
+     * @param entity 实体对象
+     * @return List<E> 返回entity参数指定的对象集合
+     * @throws DaoException
+     */
+	public <E> List<E> querySqlToEntity(String sql,Class<? extends BaseBeanImpl> entity) throws DaoException;
+	
+	
+	/**
+	 * 带参数的SQL查询
+	 * @param sql
+	 * @param param
+	 * @param entity 实体对象
+	 * @return List<E> 返回entity参数指定的对象集合
+	 * @throws DaoException
+	 */
+	public <E> List<E> querySqlToEntity(String sql,Map<String, Object> param,Class<? extends BaseBeanImpl> entity) throws DaoException;
+	
+	
+	/**
+	 * SQL查询(带分页)
+	 * @param sql
+	 * @param param
+	 * @param entity 实体对象
+	 * @param start 从第几条开始查询
+	 * @param rows 每页显示几条记录
+	 * @return List<E> 返回entity参数指定的对象集合
+	 * @throws DaoException
+	 */
+	public <E> List<E> querySqlToEntity(String sql,Map<String, Object> param,Class<? extends BaseBeanImpl> entity,Integer start, Integer rows) throws DaoException;
+ 
+	
 	/**
      * 直接执行sql语句进行统计
      * @param sql 

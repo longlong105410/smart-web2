@@ -61,8 +61,8 @@
 		    <table class="table table-bordered table-condensed">
 		        <thead>
 		           <tr class="ui-state-default">
-		              <th style="width: 30%">标题</th>
-		              <th class="no-wrap" style="width:120px">起草人</th>
+		              <th style="width: 30%"><div class="checkbox td-bs-checkbox"><label><input class="cnoj-checkbox-all cnoj-op-checkbox" data-target=".one-checkbox" value="" type="checkbox"> 标题</label></div></th>
+                      <th class="no-wrap" style="width:120px">起草人</th>
 		              <th class="no-wrap" style="width:100px">起草日期</th>
 		              <th class="no-wrap" style="width:150px">待处理节点</th>
 		              <th class="no-wrap" style="width:150px">待处理人</th>
@@ -84,9 +84,11 @@
 			                      <td colspan="${delAuth==1?'9':'8'}" class="tr-parent-tree-td"><span class='ui-icon ui-icon-triangle-1-s left'></span> ${orderClassify.name }</td>
 			                   </tr>
 			                   <c:forEach var="datas" items="${orderClassify.datas}">
-			                    <tr class="tr-tree tr-sub-tree ${orderClassify.id}" id="t-${datas[1]}">
-			                      <td class="tr-sub-tree-td">${datas[3] }</td>
-			                      <td>${datas[4] }</td>
+			                    <tr class="tr-selected tr-mutil-selected tr-tree tr-sub-tree ${orderClassify.id}" id="t-${datas[1]}">
+                                  <td class="tr-sub-tree-td">
+                                  <div class="checkbox td-bs-checkbox"><input type="checkbox" class="one-checkbox cnoj-op-checkbox" value="${datas[1]}" /> ${datas[3] }</div>
+                                  </td>
+                                  <td>${datas[4] }</td>
 			                      <td title="${datas[6] }">${fn:substring(datas[6],0,10)}</td>
 			                      
 			                      <c:choose>

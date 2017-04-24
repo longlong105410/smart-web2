@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.bean.TreeProp;
@@ -110,7 +112,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 		try {
 			if(null != user) {
 				String userName = user.getUsername()==null?"":user.getUsername();
-				if(!userDao.isExitsUsername(userName)){
+				if(userDao.isExistUsername(userName)){
 					smartResp.setResult(OP_FAIL);
 					smartResp.setMsg("该用户名已存在，不能在注册！");
 					return smartResp;
@@ -282,6 +284,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 	 * @return
 	 * @throws ServiceException
 	 */
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public SmartResponse<String> batchChangePwd(String userIds,String pwd,String confirmPwd) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {

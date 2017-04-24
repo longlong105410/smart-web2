@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.constant.IConstant;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.flow.IFlowConstant;
 import cn.com.smart.flow.IProcessExecuteAware;
@@ -375,12 +376,13 @@ public class ProcessFacade {
 		if(StringUtils.isEmpty(orderId)) {
 			return smartResp;
 		}
-		if(facets.deleteOrder(orderId)) {
-			//删除其他关联数据
-			flowFormDao.deleteAssocData(new String[]{orderId});
-			smartResp.setResult(IWebConstant.OP_SUCCESS);
-			smartResp.setMsg("流程实例删除成功");
+		String[] orderIds = orderId.split(IConstant.MULTI_VALUE_SPLIT);
+		for (int i = 0; i < orderIds.length; i++) {
+			facets.deleteOrder(orderIds[i]);
 		}
+		//删除其他关联数据
+		flowFormDao.deleteAssocData(orderIds);
+		smartResp.setResult(IWebConstant.OP_SUCCESS);
 		return smartResp;
 	}
 	

@@ -18,6 +18,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.com.smart.bean.BaseBean;
+import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.bean.DateBean;
 import cn.com.smart.builder.SQLBuilder;
 import cn.com.smart.dao.ICommonDao;
@@ -619,5 +620,73 @@ public class CommonDaoImpl implements ICommonDao {
 		if(null != toBeanClass && !(toBeanClass.isAssignableFrom(Object.class))) {
 			getAllFields(fields, toBeanClass);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E> List<E> querySqlToEntity(String sql, Class<? extends BaseBeanImpl> entity) throws DaoException {
+		List<E> list = null;
+		if(StringUtils.isEmpty(sql)) {
+	    	return null;
+	    }
+		try {
+			SQLQuery query = (SQLQuery)getQuery(sql, true);
+			query.addEntity(entity);
+			list = query.list();
+			log.info("通过SQL查询数据[成功]");
+		} catch (Exception e) {
+			log.info("通过SQL查询数据[失败]");
+			e.printStackTrace();
+			list = null;
+			throw new DaoException(e.getLocalizedMessage(), e.getCause());
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E> List<E> querySqlToEntity(String sql, Map<String, Object> param, Class<? extends BaseBeanImpl> entity) throws DaoException {
+		List<E> list = null;
+		if(StringUtils.isEmpty(sql)) {
+	    	return null;
+	    }
+		try {
+			SQLQuery query = (SQLQuery)getQuery(sql, param, true);
+			query.addEntity(entity);
+			list = query.list();
+			log.info("通过SQL查询数据[成功]");
+		} catch (Exception e) {
+			log.info("通过SQL查询数据[失败]");
+			e.printStackTrace();
+			list = null;
+			throw new DaoException(e.getLocalizedMessage(), e.getCause());
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E> List<E> querySqlToEntity(String sql, Map<String, Object> param, 
+			Class<? extends BaseBeanImpl> entity, Integer start, Integer rows) throws DaoException {
+		List<E> list = null;
+		if(StringUtils.isEmpty(sql)) {
+	    	return null;
+	    }
+		try {
+			SQLQuery query = (SQLQuery)getQuery(sql, param, true);
+			if(null != start && null != rows) {
+				query.setFirstResult(start);
+				query.setMaxResults(rows);
+			}
+			query.addEntity(entity);
+			list = query.list();
+			log.info("通过SQL查询数据[成功]");
+		} catch (Exception e) {
+			log.info("通过SQL查询数据[失败]");
+			e.printStackTrace();
+			list = null;
+			throw new DaoException(e.getLocalizedMessage(), e.getCause());
+		}
+		return list;
 	}
 }

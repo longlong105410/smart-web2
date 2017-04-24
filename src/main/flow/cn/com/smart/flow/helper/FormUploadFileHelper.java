@@ -14,6 +14,8 @@ import cn.com.smart.service.SmartContextService;
 import cn.com.smart.web.bean.entity.TNAttachment;
 import cn.com.smart.web.upload.AttachmentUploadHandler;
 
+import com.mixsmart.utils.StringUtils;
+
 /**
  * 表单上传文件助手
  * @author lmq  2017年4月12日
@@ -22,6 +24,11 @@ import cn.com.smart.web.upload.AttachmentUploadHandler;
  */
 public class FormUploadFileHelper {
 
+	/**
+	 * 附件字段后缀
+	 */
+	private static final String ATT_FIELD_SUFFIX = "_file";
+	
 	private MultipartHttpServletRequest multiRequest;
 	private Map<String, Object> formArgs;
 	private SubmitFormData submitFormData;
@@ -52,8 +59,20 @@ public class FormUploadFileHelper {
 		try {
 			for (Map.Entry<String,MultipartFile> set : sets) {
 				String id = upload(set.getValue());
-				if(null != id) {
-					formArgs.put(set.getKey(), id);
+				if(StringUtils.isNotEmpty(id)) {
+					String key = set.getKey();
+					if(key.endsWith(ATT_FIELD_SUFFIX)) {
+						String fieldId = key.substring(0, id.length() - (ATT_FIELD_SUFFIX.length()-1));
+						String value = StringUtils.handNull(formArgs.get(fieldId));
+						if(StringUtils.isNotEmpty(value)) {
+							value +=IConstant.MULTI_VALUE_SPLIT + id;
+						} else {
+							value = id;
+						}
+						formArgs.put(fieldId, value);
+					} else {
+						formArgs.put(key, id);
+					}
 				}
 			}
 		} catch (Exception ex) {

@@ -75,13 +75,13 @@ public class VersionDao extends BaseDaoImpl<TNVersion> {
 	public Long getVersionNum(VersionType versionType) {
 		Long versionNum = 0l;
 		if(null != versionType) {
-			String hql = "select max(numVersion) from "+TNVersion.class.getName()+" where type=:type";
+			String sql = "select * from t_n_version where type_=:type order by version_ desc limit 1";
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("type", versionType.getValue());
-			List<Object> objs = queryObjHql(hql, param);
-			if(CollectionUtils.isNotEmpty(objs) && null != objs.get(0)) {
-				if(null != objs.get(0)) {
-					versionNum = Long.parseLong(objs.get(0).toString());
+			List<TNVersion> versions = querySqlToEntity(sql, param, TNVersion.class);
+			if(CollectionUtils.isNotEmpty(versions)) {
+				if(null != versions.get(0)) {
+					versionNum = versions.get(0).getNumVersion();
 				}
 			}
 		}

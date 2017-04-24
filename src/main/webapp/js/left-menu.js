@@ -200,25 +200,23 @@ function menuTreeListener() {
 						$parent.removeClass("li-shrink");
 					});
 				}
-		} else if(!utils.isEmpty($parent.attr("class")) && 
-				utils.isContain($parent.attr("class"), "no-parent")) {
-			var uri = $this.data("uri");
-			if(!utils.isEmpty(uri) && utils.trim(uri) != '#') {
-				$("#menu-sub-nav .active").removeClass("active");
-				$parent.addClass("active");
-				if(uri.indexOf("mail")>=0)
-					openWin(uri, "邮箱管理");
-				else {
-					var title = $this.data("title");
-					var menuType = $this.data("menu-type");
-					if(!utils.isEmpty(menuType) && menuType=='flow_resource') 
-						openFlowTab(title,uri);
-					 else 
-						addTab(title,uri,false);
-				}
-				selectedMenuIndex = $this.data("index");
+		}
+		var uri = $this.data("uri");
+		if(!utils.isEmpty(uri) && utils.trim(uri) != '#') {
+			$("#menu-sub-nav .active").removeClass("active");
+			$parent.addClass("active");
+			if(uri.indexOf("mail")>=0)
+				openWin(uri, "邮箱管理");
+			else {
+				var title = $this.data("title");
+				var menuType = $this.data("menu-type");
+				if(!utils.isEmpty(menuType) && menuType=='flow_resource') 
+					openFlowTab(title,uri);
+				 else 
+					addTab(title,uri,false);
 			}
-		 }
+			selectedMenuIndex = $this.data("index");
+		}
 		return false;
 	});
 }

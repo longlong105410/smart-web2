@@ -156,7 +156,7 @@ public class ProcessMgrController extends BaseFlowControler {
 		String searchUri = uri+"?1=1"+(StringUtils.isNotEmpty(paramStr)?("&"+paramStr):"");
 		modelMap.put("searchUri", searchUri);
 		
-		String refreshUri = searchUri+"&page="+page;
+		String refreshUri = searchUri+"&page="+page.getPage();
 		refreshUri = URLEncoder.encode(refreshUri, "UTF-8");
 		
 		String target = "#process-hist-order-tab";

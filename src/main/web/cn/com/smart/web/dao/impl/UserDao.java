@@ -165,9 +165,9 @@ public class UserDao extends BaseDaoImpl<TNUser> {
 	/**
 	 * 检测用户名是否存在
 	 * @param username
-	 * @return
+	 * @return 如果用户已存在；返回：true；否则返回：false
 	 */
-	public boolean isExitsUsername(String  username) throws DaoException {
+	public boolean isExistUsername(String  username) throws DaoException {
 		boolean is = false;
 		if(StringUtils.isNotEmpty(username)) {
 			String sql = sqlMap.getSQL("is_user_exist");
