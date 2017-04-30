@@ -27,7 +27,7 @@
     pageContext.setAttribute("formEdit", formEdit);
 %>
 <div class="wrap-content-hist-order">
-    <div class="panel">
+    <div class="panel no-border">
         <div class="panel-search">
               <form class="form-inline search-param cnoj-entry-submit" id="search-form-hist-order" method="post" role="form" action="process/mgr/histOrderList" target="${target }">
                   <div class="form-group p-r-10">

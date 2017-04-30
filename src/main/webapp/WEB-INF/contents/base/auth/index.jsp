@@ -5,9 +5,9 @@
 		   <div class="col-sm-4 p-l-0 p-r-0">
 		      <div class="panel panel-default m-b-0">
 				    <div class="panel-tabs-wrap" id="config-auth-tabs">
-				         <div class="panel-heading p-0">
+				         <div class="panel-heading p-0 p-t-3">
 							<div class="panel-tabs-tab">
-								<ul class="nav nav-tabs ui-widget-header" role="tablist">
+								<ul class="nav nav-tabs" role="tablist">
 									<li class="active"><a href="#role-tab" role="presentation" data-toggle="tab">角色</a></li>
 									<li><a href="#user-tab" role="presentation" data-toggle="tab">用户</a></li>
 									<li><a href="#org-tab" role="presentation" data-toggle="tab">组织机构</a></li>
@@ -16,7 +16,7 @@
 							</div>
 						</div>
 						<div class="panel-body p-0">
-							<div class="tab-content panel-tab-content bg-color-white" style="padding: 0">
+							<div class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height" style="padding: 0">
 							  	<div role="tabpanel" class="tab-pane active" id="role-tab">
 							  	   <div class="cnoj-load-url" data-uri="role/simplist" ></div>
 								</div>
@@ -24,7 +24,7 @@
 								   <div class="cnoj-load-url" data-uri="user/simplist" ></div>
 								</div>
 								<div role="tabpanel" class="tab-pane" id="org-tab">
-							  	   <div class="cnoj-panel-org-tree cnoj-auto-limit-height" id="org-tree-auth" data-is-node-link="yes" data-is-default-load="no" data-redirect-uri="auth/orgHas" data-target="#has-auth-list" data-param-name="id" ></div>
+							  	   <div class="cnoj-panel-org-tree" id="org-tree-auth" data-is-node-link="yes" data-is-default-load="no" data-redirect-uri="auth/orgHas" data-target="#has-auth-list" data-param-name="id" ></div>
 								</div>
 								<div role="tabpanel" class="tab-pane" id="position-tab">
 								   <div class="cnoj-load-url" data-uri="position/simplist" ></div>

@@ -24,7 +24,7 @@
 			<body>
 			<c:choose>
 			   <c:when test="${smartResp.result != 1 }">
-			      <tr class="text-center"><td colspan="8">没有查询到相关附件！</td></tr>
+			      <tr class="text-center"><td colspan="7">没有查询到相关附件！</td></tr>
 			      <script type="text/javascript">
 				      var $attTabA = $("#process-att-tab-a");
 			          if($attTabA.find("span").hasClass("badge")) {
@@ -44,7 +44,7 @@
 				      <td class="text-center">${datas[5]}</td>
 				      <td class="text-center">${datas[6]}</td>
 				      <td class="text-center">
-				        <c:if test="${datas[7] == userInfo.id && (empty taskId || taskId == datas[8])}">
+				        <c:if test="${datas[7] == userInfo.id && empty datas[8]}">
 				             <span class="btn btn-danger btn-xs att-del">
 							     <i class="glyphicon glyphicon-trash"></i>
 							     <span>删除</span>

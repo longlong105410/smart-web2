@@ -11,7 +11,7 @@
 				   <li><a href="#role-position-tab" role="presentation" data-toggle="tab"> 职位列表</a></li>
 				</ul>
 		  	</div>
-		  	<div class="tab-content panel-tab-content bg-color-white p-0">
+		  	<div class="tab-content panel-tab-content bg-color-white p-0 cnoj-auto-limit-height">
 				<div role="tabpanel" class="tab-pane active" id="role-user-tab">
 				    <div class="cnoj-load-url" data-uri="role/userlist?id=${id }" ></div>
 				</div>

@@ -1469,7 +1469,6 @@ function tableWrapListener($elementWrap, isResize) {
 		});
 	} else {
 		$elementWrap.find(".cnoj-table-wrap").each(function(){
-			//return _handler($(this), isResize);
 			var $this = $(this);
 			//判断是否在bootstrap的tabs隐藏panel中；如果在则不处理
 			var $tabpanel = $this.parents(".tab-pane:eq(0)");
@@ -1493,11 +1492,16 @@ function tableWrapListener($elementWrap, isResize) {
 		var h = 0;
 		var $autoLimitHeiht = $tableWrap.parents(".cnoj-auto-limit-height:eq(0)");
 		if(utils.isExist($autoLimitHeiht)) {
+			limitHeightListener($elementWrap, false);
 			h = $autoLimitHeiht.height();
+			var $table = $tableWrap.find("table");
+			var borderWidth = parseInt($table.css("border-width"));
+			h = h - borderWidth * 2 - 1;
 		} else {
 			h = getMainHeight();
 			//去掉tabs高度
 			h = h - getTabHeaderHeight();
+			h = h - 10;
 		}
 		var $parentWrap = $tableWrap.parent();
 		var subtractHeight = $parentWrap.data("subtract-height");
@@ -1507,20 +1511,18 @@ function tableWrapListener($elementWrap, isResize) {
 		var panelHeadingHeight = 0;
 		var $panelHeading = $parentWrap.find(".panel-heading");
 		if(utils.isExist($panelHeading)) {
-			panelHeadingHeight = $panelHeading.data("height");
-			if(utils.isEmpty(panelHeadingHeight)) {
-				panelHeadingHeight = $panelHeading.outerHeight(true);
-				panelHeadingHeight = Math.ceil(panelHeadingHeight);
+			panelHeadingHeight = Math.ceil($panelHeading.outerHeight(true));
+			var panelHeadingDataH = $panelHeading.data("height");
+			if(panelHeadingHeight == 0 && utils.isNotEmpty(panelHeadingDataH)) {
+				panelHeadingHeight = panelHeadingDataH;
 			}
 		}
 		h = h - panelHeadingHeight;
 		var $panelFooter = $parentWrap.find(".panel-footer");
-		var panelFooterHeight = 0;
 		var panelFooterDataH = $panelFooter.data("height");
-		if(utils.isNotEmpty(panelFooterDataH)) {
+		var panelFooterHeight = Math.ceil($panelFooter.outerHeight(true));
+		if(panelFooterHeight == 0 && utils.isNotEmpty(panelFooterDataH)) {
 			panelFooterHeight = panelFooterDataH;
-		} else {
-			panelFooterHeight = $panelFooter.outerHeight(true);
 		}
 		panelFooterHeight = utils.isEmpty(panelFooterHeight)?0:panelFooterHeight;
 		h = h - panelFooterHeight;
@@ -1538,7 +1540,6 @@ function tableWrapListener($elementWrap, isResize) {
 		if($tableWrap.hasClass("table-body-scroll")) {
 			_separateTableHeaderAndBody($tableWrap, $panelFooter, h, isResize);
 		}
-		$parentWrap = null;
 	}
 	
 	/**
@@ -1583,13 +1584,10 @@ function tableWrapListener($elementWrap, isResize) {
 		 */
 		function __autoTableHeight($tableWrap, $tableTheader, $panelFooter, h) {
 			//$tableTheader = $tableWrap.prev().find(".table-theader");
-			var panelHeadingHeight = 0;
-			var panelHeadingDataH = $panelFooter.data("height");
-			if(utils.isNotEmpty(panelHeadingDataH)) {
+			var panelHeadingHeight = Math.ceil($tableTheader.parent().outerHeight(true));
+			var panelHeadingDataH = $tableTheader.data("height");
+			if(panelHeadingHeight == 0 && utils.isNotEmpty(panelHeadingDataH)) {
 				panelHeadingHeight = panelHeadingDataH;
-			} else {
-				panelHeadingHeight = $tableTheader.outerHeight(true);
-				panelHeadingHeight = Math.ceil(panelHeadingHeight);
 			}
 			panelHeadingHeight = utils.isEmpty(panelHeadingHeight)?0:panelHeadingHeight;
 			h = h - panelHeadingHeight;
@@ -1648,13 +1646,6 @@ function limitHeightListener($elementWrap, isResize) {
 			$element.addClass("cnoj-auto-limit-height-listener");
 			var h = getMainHeight();
 			var subtractHeight = $element.data("subtract-height");
-			/*if(!utils.isEmpty(subtractHeight)) {
-				h = h - getTabHeaderHeight() - subtractHeight;
-			} else {
-				var top = $element.position().top;
-				top = Math.ceil(top);
-				h = h - getTabHeaderHeight() - top - 8;
-			}*/
 			subtractHeight = utils.isEmpty(subtractHeight)?0:subtractHeight;
 			var top = $element.offset().top;
 			var mainTop = getMainTop();

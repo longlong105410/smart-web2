@@ -2,7 +2,7 @@
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/flow/js/flow.simple.tree.js"></script>
 <div class="wrap-content">
-	<div class="panel panel-default">
+	<div class="panel panel-default no-border">
 	    <div class="panel-body p-0 p-t-2 body-bg borer-top">
 	        <div class="panel-tabs-wrap" id="order-list-tabs">
 			<div class="panel-tabs-tab">

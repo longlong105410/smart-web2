@@ -36,23 +36,20 @@ public class SQLBuilder {
 		String select = "select";
 		String from = "from";
 		int selectPos = sql.indexOf(select+" ", 0);
-		if(selectPos == -1) {
-			selectPos = sql.indexOf(select.toUpperCase()+" ", 0);
-		}
+		int	selectUpPos = sql.indexOf(select.toUpperCase()+" ", 0);
+		selectPos = getValidValue(selectPos, selectUpPos);
+		
 		int fromPos = 0;
+		int fromUpPos = 0;
 		int keyLen = 6;
 		selectPos = selectPos + keyLen;
 		while(isLoop) {
 			fromPos = sql.indexOf(" "+from+" ", selectPos);
-			if(fromPos == -1) {
-				fromPos = sql.indexOf(" "+from.toUpperCase()+" ", selectPos);
-			}
+			fromUpPos = sql.indexOf(" "+from.toUpperCase()+" ", selectPos);
+			fromPos = getValidValue(fromPos, fromUpPos);
 			int selectPosTmp = sql.indexOf(select+" ", selectPos);
-			if(selectPosTmp == -1) {
-				selectPos = sql.indexOf(select.toUpperCase()+" ", selectPos);
-			} else {
-				selectPos = selectPosTmp;
-			}
+			selectUpPos = sql.indexOf(select.toUpperCase()+" ", selectPos);
+			selectPos = getValidValue(selectPosTmp, selectUpPos);
 			if(selectPos >-1 && selectPos < fromPos ) {
 				selectPos = fromPos + keyLen;
 			} else {
@@ -61,6 +58,24 @@ public class SQLBuilder {
 		}
 		countSqlBuilder.append(sql.substring(fromPos + keyLen, sql.length()));
 		return countSqlBuilder.toString();
+	}
+	
+	/**
+	 * 获取有效值
+	 * @param value1
+	 * @param value2
+	 * @return
+	 */
+	private static int getValidValue(int value1, int value2) {
+		if(value1 == -1) {
+			return value2;
+		} else if(value2 == -1) {
+			return value1;
+		} else if(value1 > -1 && value2 > -1) {
+			return (value1 < value2)?value1:value2;
+		} else {
+			return value1;
+		}
 	}
 	
 }

@@ -3,7 +3,7 @@
 <link href="${pageContext.request.contextPath}/plugins/form/css/form.table.css" rel="stylesheet" />
 <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/form/js/form.table.js"></script>
 <div class="wrap-content">
-	<div class="panel panel-default">
+	<div class="panel panel-default no-border">
 	    <div class="panel-search p-t-0">
               <form class="form-inline cnoj-entry-submit" id="search-form" method="post" role="form" action="form/table/list">
                   <div class="form-group p-r-10">

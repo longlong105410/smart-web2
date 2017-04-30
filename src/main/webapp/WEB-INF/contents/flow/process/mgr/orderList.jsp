@@ -34,7 +34,7 @@
     pageContext.setAttribute("formEdit", formEdit);
 %>
 <div class="wrap-content-order">
-    <div class="panel">
+    <div class="panel no-border">
         <div class="panel-search">
               <form class="form-inline search-param cnoj-entry-submit" id="search-form-order" method="post" role="form" action="process/mgr/orderList" target="${target }">
                   <div class="form-group p-r-10">

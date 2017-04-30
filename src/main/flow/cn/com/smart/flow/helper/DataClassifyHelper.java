@@ -9,7 +9,8 @@ import cn.com.smart.flow.bean.DataClassify;
 import cn.com.smart.flow.sort.ISortClassify;
 import cn.com.smart.flow.sort.SortClassifyBean;
 import cn.com.smart.flow.sort.SortClassifyFactory;
-import cn.com.smart.utils.StringUtil;
+
+import com.mixsmart.utils.StringUtils;
 
 /**
  * 数据分类助手
@@ -46,7 +47,7 @@ public class DataClassifyHelper {
 		List<SortClassifyBean<List<WorkItem>>> beans = sortClassify.getList();
 		for (SortClassifyBean<List<WorkItem>> bean : beans) {
 			todoClassify = new DataClassify<WorkItem>();
-			todoClassify.setId(StringUtil.createSerialNum());
+			todoClassify.setId(StringUtils.createSerialNum());
 			todoClassify.setName(bean.getName());
 			todoClassify.setDatas(bean.getEntity());
 			toDoClassifys.add(todoClassify);
@@ -85,7 +86,7 @@ public class DataClassifyHelper {
 		List<SortClassifyBean<List<Object>>> beans = sortClassify.getList();
 		for (SortClassifyBean<List<Object>> bean : beans) {
 			dataClassify = new DataClassify<Object>();
-			dataClassify.setId(StringUtil.createSerialNum());
+			dataClassify.setId(StringUtils.createSerialNum());
 			dataClassify.setName(bean.getName());
 			dataClassify.setDatas(bean.getEntity());
 			dataClassifys.add(dataClassify);

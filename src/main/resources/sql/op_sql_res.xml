@@ -172,7 +172,7 @@
     	<sql>
     		select v.id,v.version_,v.update_date,v.create_time,v.descr from t_n_version v where v.type_='pc' 
     		[ and v.version_ like '%:version%'] 
-    		order by v.version_ desc
+    		order by v.create_time desc
     	</sql>
     </sqlUnit>
     

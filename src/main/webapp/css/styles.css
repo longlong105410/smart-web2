@@ -200,3 +200,158 @@ h4.ui-widget-header {margin-bottom: 0;font-size: 12px;}
 th .td-bs-checkbox label {
     font-weight: 700;
 }
+
+/*
+ * Callouts
+ *
+ * Not quite alerts, but custom and helpful notes for folks reading the docs.
+ * Requires a base and modifier class.
+ */
+
+/* Common styles for all types */
+.bs-callout {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+}
+.bs-callout h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+.bs-callout code {
+  border-radius: 3px;
+}
+
+/* Tighten up space between multiple callouts */
+.bs-callout + .bs-callout {
+  margin-top: -5px;
+}
+
+/* Variations */
+.bs-callout-danger {
+  border-left-color: #ce4844;
+}
+.bs-callout-danger h4 {
+  color: #ce4844;
+}
+.bs-callout-warning {
+  border-left-color: #aa6708;
+}
+.bs-callout-warning h4 {
+  color: #aa6708;
+}
+.bs-callout-info {
+  border-left-color: #1b809e;
+}
+.bs-callout-info h4 {
+  color: #1b809e;
+}
+
+.bs-callout-primary {
+  border-left-color: #337ab7;
+}
+.bs-callout-primary h4 {
+  color: #337ab7;
+}
+
+/**********重新panel样式***********/
+.panel.panel-default {
+  background: white;
+  border-radius: 3px;
+}
+.dialog .panel {
+  -webkit-box-shadow: 1px 1px 0px #ffffff;
+  -moz-box-shadow: 1px 1px 0px #ffffff;
+  box-shadow: 1px 1px 0px #ffffff;
+}
+.panel.panel-default .panel-heading {
+  border-bottom: 1px solid #ccc;
+  border-left: none;
+  color: #333;
+  display: block;
+  margin-bottom: 0px;
+  text-shadow: none;
+  text-transform: none;
+  line-height: 1.5em;
+  background: #efefef;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #efefef), color-stop(1, #fafafa));
+  background: -ms-linear-gradient(bottom, #efefef, #fafafa);
+  background: -moz-linear-gradient(center bottom, #efefef 0%, #fafafa 100%);
+  background: -o-linear-gradient(bottom, #efefef, #fafafa);
+  filter: progid:dximagetransform.microsoft.gradient(startColorStr='#e3e3e3', EndColorStr='#ffffff');
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#fafafa',EndColorStr='#efefef')";
+  box-shadow: inset 0px 1px 1px white;
+}
+.panel.panel-default .panel-heading:not(.no-collapse):hover {
+  background: #efefef;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e2e2e2), color-stop(1, #fafafa));
+  background: -ms-linear-gradient(bottom, #e2e2e2, #fafafa);
+  background: -moz-linear-gradient(center bottom, #e2e2e2 0%, #fafafa 100%);
+  background: -o-linear-gradient(bottom, #e2e2e2, #fafafa);
+  filter: progid:dximagetransform.microsoft.gradient(startColorStr='#e3e3e3', EndColorStr='#ffffff');
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#fafafa',EndColorStr='#e2e2e2')";
+}
+.panel.panel-default .panel-heading .panel-icon {
+  border-right: 1px solid #AAA;
+  box-shadow: 1px 0px 1px #fff;
+  border-left: none;
+  text-align: center;
+  padding-left: 1em;
+  line-height: 2em;
+  margin-top: -0.25em;
+}
+.panel.panel-default .panel-heading .panel-icon a {
+  padding: 0em;
+}
+.panel.panel-default .panel-heading .panel-icon [class*="icon-"] {
+  padding: 0em 1em;
+  line-height: 1em;
+}
+.panel.panel-default .panel-heading .panel-icon.pull-right {
+  border-left: 1px solid #AAA;
+  border-right: none;
+  box-shadow: inset 1px 0px 1px #fff;
+}
+.panel.panel-default .panel-heading .label {
+  float: right;
+  line-height: 1.5em;
+  -webkit-box-shadow: 1px 1px 0px #ffffff;
+  -moz-box-shadow: 1px 1px 0px #ffffff;
+  box-shadow: 1px 1px 0px #ffffff;
+}
+
+p.panel-heading {
+  color: #505050;
+  display: block;
+  outline: none;
+}
+.label-warning {
+    background-color: #f0ad4e;
+}
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+.panel.panel-default .panel-heading .label {
+    float: right;
+    line-height: 1.5em;
+     -webkit-box-shadow: 1px 1px 0px #ffffff;
+    -moz-box-shadow: 1px 1px 0px #ffffff;
+     box-shadow: 1px 1px 0px #ffffff;
+}
+
+.tabs-panels>.panel {
+    border: none;
+}

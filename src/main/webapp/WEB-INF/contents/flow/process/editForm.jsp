@@ -2,6 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+
 <link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
 <link href="${ctx}/plugins/flow/css/flow.css" rel="stylesheet" />
 <script src="${ctx}/plugins/flow/js/flow.form.edit.js" type="text/javascript"></script>
@@ -10,6 +14,8 @@
    		<form id="edit-flow-process-form">
            <input type="hidden" name="formId" value="${formId}" />
            <input type="hidden" name="formDataId" value="${formDataId}" />
+           <input type="hidden" id="process-id" name="processId" value="${processId }" />
+           <input type="hidden" id="order-id" name="orderId" value="${orderId }" />
        </form>
        <div class="panel-tabs-wrap">
 			<div class="panel-heading p-0">
@@ -28,9 +34,10 @@
 						   <div class="update-btn-top text-right pull-right">
 					        <button type="button" class="edit-update-form btn btn-info btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保存</button>
 					       </div>
-					       <form id="edit-process-handle-form" method="post" action="process/updateForm">
+					       <form id="edit-process-handle-form" method="post" data-relate-arg-form="#edit-flow-process-form" target="edit-handle-form-iframe" action="process/updateForm">
 					           ${smartResp.data.parseHtml}
 					       </form>
+                           <iframe class="hidden" id="edit-handle-form-iframe" name="edit-handle-form-iframe" frameborder=0 width=0 height=0></iframe>
 					       <div class="update-btn-bottom text-center">
 					        <button type="button" class="edit-update-form btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保存</button>
 					       </div>

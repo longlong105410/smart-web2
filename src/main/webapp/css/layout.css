@@ -32,7 +32,8 @@ a:hover {color: #3b46d6;text-decoration: underline;}
 .layout-wrap:hover .op-btn {display: block;}
 .setting-layout-content .layout-view {display: none;}
 .setting-layout-content .layout-view.active {display: block;}
-.panel-tabs-tab .nav-tabs {padding-left: 10px;border-bottom:1px solid #b4deda;}
+.panel-tabs-tab .nav-tabs {padding-left: 10px;}
+.panel-heading .nav-tabs {border-bottom: none;}
 
 /*.panel-tabs-tab .nav-tabs li.active a {color: #000;}
 .panel-tabs-tab .nav-tabs li a {font-weight: 700;color: #333;}*/
@@ -47,4 +48,14 @@ table>tbody>tr.tr-asyn-loading>td {padding-left: 35px;}
 .cnoj-checkbox .checkbox, 
 .cnoj-checkbox .checkbox-inline {
 	margin-left: 15px;
+}
+
+.new-up .new {
+    position: absolute;
+    top: 0px;
+    right: -20px;
+    font-size: 0;
+    width: 40px;
+    height: 13px;
+    background: url("../images/new.png") no-repeat 0 0;
 }

@@ -22,6 +22,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
@@ -37,6 +39,7 @@ import cn.com.smart.flow.bean.entity.TFlowForm;
 import cn.com.smart.flow.ext.ExtProcess;
 import cn.com.smart.flow.ext.ExtProcessModel;
 import cn.com.smart.flow.ext.ExtTaskModel;
+import cn.com.smart.flow.helper.FormUploadFileHelper;
 import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.flow.service.FlowFormService;
 import cn.com.smart.flow.service.ProcessFacade;
@@ -186,6 +189,11 @@ public class ProcessController extends BaseFlowControler {
 		UserInfo userInfo = getUserInfoFromSession(request);
 		//处理参数
 		Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request));
+		//处理附件
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+		if(multipartResolver.isMultipart(request)) {
+			new FormUploadFileHelper((MultipartHttpServletRequest) request, params, submitFormData, userInfo.getId()).upload();
+		}
 		if(null != submitFormData && StringUtils.isNotEmpty(submitFormData.getProcessId()) && 
 				StringUtils.isNotEmpty(submitFormData.getFormId())) {
 			submitFormData.setFormState(0);
@@ -472,6 +480,8 @@ public class ProcessController extends BaseFlowControler {
 	        	chRes = null;
 	        	modelMap.put("output", output);
 	        	modelMap.put("formId", smartResp.getData().getId());
+	        	modelMap.put("processId", processId);
+	        	modelMap.put("orderId", orderId);
 			}
 		}
 		modelMap.put("smartResp", smartResp);
@@ -488,12 +498,24 @@ public class ProcessController extends BaseFlowControler {
 	 */
 	@RequestMapping(value="/updateForm",method=RequestMethod.POST)
 	@ResponseBody
-	public SmartResponse<String> updateForm(HttpServletRequest request,String formId, String formDataId){
+	public SmartResponse<String> updateForm(HttpServletRequest request,String processId, String orderId,
+			String formId, String formDataId){
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("表单数据更新失败");
 		if(StringUtils.isNotEmpty(formId) &&  StringUtils.isNotEmpty(formDataId)) {
 			UserInfo userInfo = getUserInfoFromSession(request);
 			Map<String, Object> datas = getRequestParamMap(request);
+			//处理附件
+			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+			if(multipartResolver.isMultipart(request)) {
+				SubmitFormData submitFormData = new SubmitFormData();
+				submitFormData.setFormDataId(formDataId);
+				submitFormData.setFormId(formId);
+				submitFormData.setOrderId(orderId);
+				submitFormData.setProcessId(processId);
+				submitFormData.setParams(datas);
+				new FormUploadFileHelper((MultipartHttpServletRequest) request, datas, submitFormData, userInfo.getId()).upload();
+			}
 			boolean is = flowFormServ.updateForm(datas, formId, formDataId, userInfo.getId(), YesNoType.NO.getIndex());
 			if(is) {
 				flowFormServ.updateInsTitle(datas, formDataId);

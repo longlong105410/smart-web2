@@ -38,29 +38,29 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
             <div class="panel panel-default">
 	           <div class="panel-heading ui-widget-header"><strong>表单控件</strong></div>
 	           <div class="panel-body">
-	               <ul class="nav nav-list">
-	                   <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('text');" class="btn btn-link">文本框</a></li>
-	                   <!--  
-	                   <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('textselect');" class="btn btn-link">文本下拉框</a></li>
-	                   <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('texttree');" class="btn btn-link">文本树</a></li>
-	                   <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('textdate');" class="btn btn-link">日期控件</a></li>
-	                   -->
+	               <ul class="nav nav-list form-designer-tools">
+	                   <li><button type="button" onclick="leipiFormDesign.exec('text');" class="btn btn-info btn-sm btn-block">文本框</button></li>
 	                   
-		               <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('textarea');" class="btn btn-link">文本域</a></li>
-		               <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('select');" class="btn btn-link">下拉框</a></li>
-		               <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('radios');" class="btn btn-link">单选框</a></li>
-		               <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('checkboxs');" class="btn btn-link">复选框</a></li>
+		               <li><button type="button" onclick="leipiFormDesign.exec('textarea');" class="btn btn-info btn-sm btn-block">文本域</button></li>
+		               <li><button type="button" onclick="leipiFormDesign.exec('select');" class="btn btn-info btn-sm btn-block">下拉框</button></li>
+		               <li><button type="button" onclick="leipiFormDesign.exec('radios');" class="btn btn-info btn-sm btn-block">单选框</button></li>
+		               <li><button type="button" onclick="leipiFormDesign.exec('checkboxs');" class="btn btn-info btn-sm btn-block">复选框</button></li>
 		                <!--  
 		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('macros');" class="btn btn-link">宏控件</a></li>
 		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('progressbar');" class="btn btn-link">进度条</a></li>
 		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('qrcode');" class="btn btn-link">二维码</a></li>
 		                -->
-		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('listctrl');" class="btn btn-link">列表控件</a></li>
-		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('button');" class="btn btn-link">按钮</a></li>
-		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('helpers');" class="btn btn-link">帮助</a></li>
-		                <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('tabs');" class="btn btn-link">选项卡</a></li>
+		                <li><button type="button" onclick="leipiFormDesign.exec('listctrl');" class="btn btn-info btn-sm btn-block">列表控件</button></li>
+		                <li><button type="button" onclick="leipiFormDesign.exec('button');" class="btn btn-info btn-sm btn-block">按钮</button></li>
+		                <li><button type="button" onclick="leipiFormDesign.exec('helpers');" class="btn btn-info btn-sm btn-block">帮助</button></li>
+		                <li class="new-up"><button type="button" onclick="leipiFormDesign.exec('tabs');" class="btn btn-info btn-sm btn-block">选项卡 <i class="new"></i></button></li>
 		                
-                        <li><a href="javascript:void(0);" onclick="leipiFormDesign.exec('file');" class="btn btn-link">上传文件</a></li>
+                        <li class="new-up"><button type="button" onclick="leipiFormDesign.exec('file');" class="btn btn-info btn-sm btn-block">上传文件 <i class="new"></i></button>
+                           <p class="help-block text-center small">单文件上传</p>
+                        </li>
+                        <li class="new-up"><button type="button" onclick="leipiFormDesign.exec('files');" class="btn btn-info btn-sm btn-block">上传文件插件 <i class="new"></i></button>
+                            <p class="help-block text-center small">支持多文件上传</p>
+                        </li>
 	               </ul>
 	           </div>
 	        </div>

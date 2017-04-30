@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>上传文件 </title>
+    <title>上传文件插件</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
@@ -21,7 +21,7 @@
 http://www.alt-tag.com/blog/2006/02/ie-dom-bugs/ */
 
 var rootPath = $("#root-path",parent.document).val();
-
+var formType = $("#form_type",parent.document).val();
 function createElement(type, name) {     
     var element = null;     
     try {        
@@ -33,7 +33,7 @@ function createElement(type, name) {
     } 
     return element;     
 }
-    </script>
+</script>
 </head>
 <body>
 <div class="content">
@@ -62,8 +62,8 @@ function createElement(type, name) {
     </tr>
     
     <tr>
-       <th><span>宽度(px)</span></th>
-       <td><input id="orgwidth" type="text" value="200" placeholder="auto"/></td>
+       <th><span>最大上传文件数</span></th>
+       <td><input type="text" id="maxfiles" value="5" /></td>
        <th><span>可见性</span></th>
        <td>
          <label class="checkbox inline"><input id="orghide" type="checkbox"/> 隐藏 </label>
@@ -80,16 +80,55 @@ function createElement(type, name) {
       <td><input id="relate_field_value" type="text"/></td>
     </tr>
     <tr>
+        <th>样式类型</th>
+        <td>
+            <select id="org_btn_style">
+                <option value="btn-default">默认</option>
+                <option value="btn-primary" style="background-color: #428bca;">主要</option>
+                <option value="btn-success" style="background-color: #449d44;">成功</option>
+                <option value="btn-info" style="background-color: #5bc0de;">信息</option>
+                <option value="btn-warning" style="background-color: #f0ad4e;">警告</option>
+                <option value="btn-danger" style="background-color: #d9534f;">危险</option>
+            </select>
+        </td>
+        <th>JS回调方法</th>
+        <td>
+            <input type="text" id="jscallback" value="showFormAttList" />
+        </td>
+    </tr>
+    <tr>
+        <th>单个文件大小</th>
+        <td>
+            <input type="text" id="filesize" value="10" /> MB
+            <p class="help-block" style="color: #737373;margin-bottom: 0;">为空表示不限制上传文件大小.</p>
+        </td>
+        <th>表单ID</th>
+        <td>
+            <input type="text" id="formid" value="" />
+            <p class="help-block" style="color: #737373;margin-bottom: 0;">上传文件时，需要提交的表单数据.</p>
+        </td>
+    </tr>
+    <tr>
+        <th><span>上传地址</span></th>
+        <td colspan="3"><input type="text" id="orguri" value="process/attachment/upload" /></td>
+    </tr>
+    <tr>
         <th>上传文件类型</th>
         <td colspan="3">
         <textarea rows="3" style="width: 95%" class="form-control" id="filetype">jpg,png,gif,doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar,txt</textarea>
-        <p class="help-block" style="color: #737373;">填写文件后缀，为空表示支持所有文件格式，多个文件类型之间用英文逗号分隔；如: jpg,docx,pdf.</p>
+        <p class="help-block" style="color: #737373;margin-bottom: 0;">填写文件后缀，为空表示支持所有文件格式，多个文件类型之间用英文逗号分隔；如: jpg,docx,pdf.</p>
+        </td>
+    </tr>
+    <tr>
+        <th>备注</th>
+        <td colspan="3">
+        <textarea rows="3" style="width: 95%" class="form-control" id="remarks"></textarea>
         </td>
     </tr>
    </table>
 </div>
 <script type="text/javascript">
-var oNode = null,thePlugins = 'file';
+var oNode = null,thePlugins = 'files';
 var tableDefValue = null,fieldDefValue = null;
 window.onload = function() {
 	var tableFieldId = null;
@@ -101,10 +140,16 @@ window.onload = function() {
 		gHidden=oNode.getAttribute('orghide'),
 		gRelateField = oNode.getAttribute('relate_field'),
 		gRelateFieldValue = oNode.getAttribute('relate_field_value'),
-		gBindTable = oNode.getAttribute('bind_table'),gBindField=oNode.getAttribute('bind_table_field'),
-		gWidth=oNode.getAttribute('orgwidth');
+		gBindTable = oNode.getAttribute('bind_table'),gBindField=oNode.getAttribute('bind_table_field');
         var gFileType = oNode.getAttribute('filetype');
-		
+        var orgBtnStyle = oNode.getAttribute('org_btn_style');
+        var maxFileNum = oNode.getAttribute('maxfiles');
+        var maxFileSize = oNode.getAttribute('filesize');
+        var remarks = oNode.getAttribute('remarks');
+        var jsCallback = oNode.getAttribute('jscallback');
+        var formId = oNode.getAttribute('formid');
+        var orgUri = oNode.getAttribute('orguri');
+        
         gTitle = gTitle==null ? '' : gTitle;
         tableDefValue = gBindTable==null?'':gBindTable;
         fieldDefValue = gBindField==null?'':gBindField;
@@ -118,9 +163,27 @@ window.onload = function() {
         if (gHidden == '1') {
             $G('orghide').checked = true;
         }
-        $G('orgwidth').value = gWidth;
+        $G('org_btn_style').value = orgBtnStyle;
+        if(utils.isNotEmpty(maxFileNum)) {
+            $G('maxfiles').value = maxFileNum;
+        }
+        if(utils.isNotEmpty(maxFileSize)) {
+            $G('filesize').value = maxFileSize;
+        }
+        if(utils.isNotEmpty(remarks)) {
+            $G('remarks').value = remarks;
+        }
+        if(utils.isNotEmpty(jsCallback)) {
+            $G('jscallback').value = jsCallback;
+        }
+        if(utils.isNotEmpty(formId)) {
+            $G('formid').value = formId;
+        }
+        if(utils.isNotEmpty(orgUri)) {
+            $G('orguri').value = orgUri;
+        }
     } 
-    utils.selectItem("#bind_table",rootPath+'/form/table/item.json',tableDefValue,function(val){
+    utils.selectItem("#bind_table",rootPath+'/form/table/item.json',tableDefValue,function(val) {
     	utils.selectCascadeItem("#bind_table_field", "#bind_table", rootPath+'/form/table/fields.json', "id", fieldDefValue, null);
 	});
 	//获取编辑器中的内容
@@ -128,7 +191,7 @@ window.onload = function() {
 	if(utils.isNotEmpty(ueditorContent)) {
 		var $uc = $(ueditorContent);
 		$("#relate_field .relate_field_option").remove();
-		$uc.find("select[leipiplugins=select]").each(function(){
+		$uc.find("select[leipiplugins=select]").each(function() {
 			var $this = $(this);
 			var pTableFieldId = $this.attr("bind_table_field");
 			var title = $this.attr("orgtitle");
@@ -162,8 +225,8 @@ dialog.onok = function (){
 	}
     if( !oNode ) {
         try {
-            oNode = createElement('input','leipiNewField');
-            oNode.setAttribute('type','file');
+            oNode = createElement('button','leipiNewField');
+            oNode.setAttribute('type','button');
             oNode.setAttribute('name','leipiNewField');
             oNode.setAttribute('leipiPlugins',thePlugins);
             setAttr(oNode);
@@ -188,26 +251,43 @@ dialog.onok = function (){
  */
 function setAttr(oNode) {
 	var gTitle=$G('orgtitle').value.replace(/\"/g,"&quot;");
-    var gWidth=$G('orgwidth').value;
     var bindTable = $G('bind_table').value;
     var bindTableField = $G('bind_table_field').value;
     var fileType = $G('filetype').value;
     var relateField = $G('relate_field').value;
     var gRelateFieldValue = $G('relate_field_value').value;
+    var orgBtnStyle = $G('org_btn_style').value;
+    var maxFileNum = $G('maxfiles').value;
+    var maxFileSize = $G('filesize').value;
+    
+    var remarks = $G('remarks').value;
+    var jsCallback = $G('jscallback').value;
+    var formId = $G('formid').value;
+    var orgUri = $G('orguri').value;
+    
 	oNode.setAttribute('title',gTitle);
     oNode.setAttribute('bind_table',bindTable);
     oNode.setAttribute('bind_table_field',bindTableField);
     oNode.setAttribute('filetype',fileType);
+    oNode.setAttribute('org_btn_style',orgBtnStyle);
+    oNode.setAttribute('maxfiles', maxFileNum);
+    oNode.setAttribute('filesize',maxFileSize);
+    oNode.setAttribute('remarks',remarks);
     
     oNode.setAttribute('id',bindTable+"-"+bindTableField);
     oNode.setAttribute('relate_field',utils.handleNull(relateField));
     oNode.setAttribute('relate_field_value',utils.handleNull(gRelateFieldValue));
+    oNode.setAttribute('formtype',formType);
+    oNode.setAttribute('jscallback',jsCallback);
+    oNode.setAttribute('formid',formId);
+    oNode.setAttribute('orguri',orgUri);
     
     if ($G('orghide').checked ) {
         oNode.setAttribute('orghide',1);
     } else {
         oNode.setAttribute('orghide',0);
     }
+    oNode.className = "btn btn-sm "+orgBtnStyle;
     if ($G('fieldrequire').checked ) {
         oNode.setAttribute('fieldrequire',1);
         var className = oNode.className;
@@ -225,13 +305,7 @@ function setAttr(oNode) {
         }
         oNode.className=className;
     }
-    if( gWidth != '' ) {
-        oNode.style.width = gWidth+ 'px';
-        oNode.setAttribute('orgwidth',gWidth );
-    } else {
-    	oNode.style.width = null;
-    	oNode.setAttribute('orgwidth', '');
-    }
+    oNode.innerHTML = "添加附件";
 }
 </script>
 </body>

@@ -27,9 +27,9 @@
 			   <div class="col-sm-10 p-l-0">
 			      <div class="panel panel-default m-b-0">
 					    <div class="panel-tabs-wrap">
-					       <div class="panel-heading p-0">
+					       <div class="panel-heading p-0 p-t-3">
 								<div class="panel-tabs-tab">
-									<ul class="nav nav-tabs ui-widget-header" role="tablist">
+									<ul class="nav nav-tabs" role="tablist">
 										<li class="active"><a href="#config-role-menu-tab" role="presentation" data-toggle="tab">菜单</a></li>
 										<li><a href="#config-role-res-tab" role="presentation" data-toggle="tab">资源</a></li>
 									</ul>

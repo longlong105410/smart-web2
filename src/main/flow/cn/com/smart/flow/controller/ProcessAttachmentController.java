@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.flow.bean.TaskInfo;
+import cn.com.smart.flow.service.FlowAttachmentService;
 import cn.com.smart.flow.service.FlowService;
 import cn.com.smart.init.config.InitSysConfig;
 import cn.com.smart.web.bean.UserInfo;
@@ -44,6 +45,8 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 	private FlowService flowServ;
 	@Autowired
 	private OPService opServ;
+	@Autowired
+	private FlowAttachmentService flowAttServ;
 	
 	/**
 	 * 上传附件

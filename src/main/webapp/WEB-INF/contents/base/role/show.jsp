@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <div class="wrap-content-dialog">
-     <div class="panel-tabs-wrap m-t-n5 body-bg">
+     <div class="panel-tabs-wrap m-n5 body-bg">
 		<div class="panel-tabs-tab p-t-3">
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#role-has-config-menu-tab" role="presentation" data-toggle="tab">菜单</a></li>

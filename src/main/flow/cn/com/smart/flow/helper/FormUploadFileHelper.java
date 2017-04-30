@@ -23,12 +23,12 @@ import com.mixsmart.utils.StringUtils;
  * @since 1.0
  */
 public class FormUploadFileHelper {
-
+	
 	/**
 	 * 附件字段后缀
 	 */
 	private static final String ATT_FIELD_SUFFIX = "_file";
-	
+
 	private MultipartHttpServletRequest multiRequest;
 	private Map<String, Object> formArgs;
 	private SubmitFormData submitFormData;

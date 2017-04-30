@@ -75,7 +75,7 @@ public class VersionDao extends BaseDaoImpl<TNVersion> {
 	public Long getVersionNum(VersionType versionType) {
 		Long versionNum = 0l;
 		if(null != versionType) {
-			String sql = "select * from t_n_version where type_=:type order by version_ desc limit 1";
+			String sql = "select * from t_n_version where type_=:type order by create_time desc limit 1";
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("type", versionType.getValue());
 			List<TNVersion> versions = querySqlToEntity(sql, param, TNVersion.class);

@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 	<!-- EasyUI 插件-->
-	<link href="${pageContext.request.contextPath}/plugins/easyui/themes/default/panel.css" rel="stylesheet" />
 	<link href="${pageContext.request.contextPath}/plugins/easyui/themes/default/tabs.css" rel="stylesheet" />
 	<link href="${pageContext.request.contextPath}/css/easyui-bootstrap.css" rel="stylesheet" />
 	<script src="${pageContext.request.contextPath}/plugins/easyui/plugins/jquery.parser.js" type="text/javascript"></script>

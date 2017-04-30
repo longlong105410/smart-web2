@@ -147,7 +147,7 @@
 	<!-- 定义时间间隔触发器 -->
 	<bean id="scanProcessTigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail" ref="scanProcessJob" />
-		<property name="startDelay" value="60000" /><!-- 调度工厂实例化后，经过1分钟开始执行调度 -->  
+		<property name="startDelay" value="300000" /><!-- 调度工厂实例化后，经过1分钟开始执行调度 -->  
 		<property name="repeatInterval" value="3600000" /><!-- 每一个小时调度一次 -->  
 	</bean>
 	<!-- 启动定时器 -->

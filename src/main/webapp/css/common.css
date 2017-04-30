@@ -115,3 +115,6 @@ tr.text-center td,tr.text-center th {text-align: center;}
 .text-inline .form-control-feedback {
 	top: -8px;
 }
+.no-border,.panel.no-border {
+    border: none;
+}

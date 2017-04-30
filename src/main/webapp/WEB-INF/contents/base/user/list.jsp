@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="cnoj" uri="/cnoj-tags" %>
 <div class="wrap-content">
-	<div class="panel panel-default">
+	<div class="panel panel-default no-border">
 	    <div class="panel-search">
               <form class="form-inline cnoj-entry-submit" id="search-form" method="post" role="form" action="user/list" target="#main-content">
                   <div class="form-group p-r-10">

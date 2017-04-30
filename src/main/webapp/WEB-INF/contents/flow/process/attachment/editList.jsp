@@ -16,13 +16,15 @@
 				   <th style="width: 100px;">大小</th>
 				   <th class="text-center" style="width: 130px;">上传时间</th>
 				   <th class="text-center" style="width: 130px;">上传人</th>
+                   <!--  
 				   <th class="text-center" style="width: 80px;">操作</th>
+                   -->
 				</tr>
 			</thead>
 			<body>
 			<c:choose>
 			   <c:when test="${smartResp.result != 1 }">
-			      <tr class="text-center"><td colspan="8">没有查询到相关附件！</td></tr>
+			      <tr class="text-center"><td colspan="6">没有查询到相关附件！</td></tr>
 			      <script type="text/javascript">
 				      var $attTabA = $("#edit-process-att-tab-a");
 			          if($attTabA.find("span").hasClass("badge")) {
@@ -41,12 +43,14 @@
 				      <td>${datas[3]}</td>
 				      <td class="text-center">${datas[5]}</td>
 				      <td class="text-center">${datas[6]}</td>
+                      <!--  
 				      <td class="text-center">
 				        <span class="btn btn-danger btn-xs att-del">
 						    <i class="glyphicon glyphicon-trash"></i>
 							<span>删除</span>
 					    </span>
 				      </td>
+                      -->
 				    </tr>
 			       </c:forEach>
 			       <script type="text/javascript">
@@ -88,7 +92,7 @@
 	          }
 	      });
       //上传文件
-      listenerAttDel();
+      //listenerAttDel();
    }
    
    function refreshList() {

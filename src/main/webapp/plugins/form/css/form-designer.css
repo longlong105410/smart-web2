@@ -11,3 +11,11 @@ body {
   box-sizing:content-box;
 }
 .form-horizontal .form-group {margin-left: 0;margin-right: 0;margin-bottom: 5px;}
+.help-block.small {
+    font-size: 10px; 
+    margin-top:0px;
+    margin-bottom: 0px; 
+}
+.form-designer-tools li {
+    padding: 5px;
+}

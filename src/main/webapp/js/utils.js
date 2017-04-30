@@ -1266,23 +1266,25 @@ utils.handleFormPrintLabel = function(element, $root) {
 	}
 	$element.find("input[type=text],select,textarea").each(function(){
 		var $obj = $(this);
-		var value = $obj.val();
-		if(utils.isNotEmpty(value)) {
-			value = utils.replaceAll(value,'\n','<br />');
-		}
-		//判断父元素是否有“hidden-print”类元素
-		var isParentHiddenPrint = false;
-		var $parent = $obj.parent();
-		if($parent.hasClass("hidden-print")) {
-			isParentHiddenPrint = true;
-		}
-		if(isParentHiddenPrint) {
-			$parent.next().html(value);
-		} else {
-			$obj.after("<span class='visible-print-inline'>"+value+"</span>");
-		}
-		if(!isParentHiddenPrint) {
-			$obj.wrap("<span class='hidden-print'></span>");
+		if(!$obj.hasClass("hidden")) {
+			var value = $obj.val();
+			if(utils.isNotEmpty(value)) {
+				value = utils.replaceAll(value,'\n','<br />');
+			}
+			//判断父元素是否有“hidden-print”类元素
+			var isParentHiddenPrint = false;
+			var $parent = $obj.parent();
+			if($parent.hasClass("hidden-print")) {
+				isParentHiddenPrint = true;
+			}
+			if(isParentHiddenPrint) {
+				$parent.next().html(value);
+			} else {
+				$obj.after("<span class='visible-print-inline'>"+value+"</span>");
+			}
+			if(!isParentHiddenPrint) {
+				$obj.wrap("<span class='hidden-print'></span>");
+			}
 		}
 	});
 }
