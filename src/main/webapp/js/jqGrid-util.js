@@ -43,7 +43,7 @@
 		} else {
 			jqGridH = HEADER_HEIGHT * 2 + FOOTER_HEIGHT;
 		} 
-		h = h - searchPanelHeight - jqGridH;
+		h = h - searchPanelHeight - jqGridH - 3;
 		var w = $("#main-content").width() - 5;
 		var rowNum = 15;
 		if(opts.autoRow) {
@@ -58,6 +58,7 @@
 			rowList: [10, rowNum, 20, 30, 40],
 			sortable:false
 		});
+		console.log(opts);
 		opts = $.extend(opts,setting);
 	 return $(this).jqGrid(opts);
 	}

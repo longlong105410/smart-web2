@@ -125,13 +125,14 @@ $(document).ready(function(){
 			}
       	}); 
 });
+/*
 function displayButtons(cellvalue, options, rowObject)
 {
     var edit = "<input style='' type='button' value='Edit' onclick=\"jQuery('#theGrid').editRow('" + options.rowId + "');\"  />", 
          save = "<input style='' type='button' value='Save' onclick=\"jQuery('#theGrid').saveRow('" + options.rowId + "');\"  />", 
          restore = "<input style='' type='button' value='Restore' onclick=\"jQuery('#theGrid').restoreRow('" + options.rowId + "');\" />";
     return edit+save+restore;
-}
+}*/
 </script>
 <table id="theGrid" class="cnoj-jq-grid"></table>
 <div id="gridPager"></div>

@@ -1498,10 +1498,17 @@ function tableWrapListener($elementWrap, isResize) {
 			var borderWidth = parseInt($table.css("border-width"));
 			h = h - borderWidth * 2 - 1;
 		} else {
-			h = getMainHeight();
-			//去掉tabs高度
-			h = h - getTabHeaderHeight();
-			h = h - 10;
+			//判断是否是弹出窗口中的表格
+			var $modalDialog = $tableWrap.parents(".bootstrap-dialog-message:eq(0)");
+			if(utils.isExist($modalDialog)) {
+				h = $(window).height();
+				h = h - 60 - 40 - 10;
+			} else {
+				h = getMainHeight();
+				//去掉tabs高度
+				h = h - getTabHeaderHeight();
+				h = h - 10;
+			}
 		}
 		var $parentWrap = $tableWrap.parent();
 		var subtractHeight = $parentWrap.data("subtract-height");

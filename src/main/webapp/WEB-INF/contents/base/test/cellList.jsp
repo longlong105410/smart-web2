@@ -23,7 +23,7 @@
               </form>
           </div>
 		<!-- table -->
-		<cnoj:table smartResp="${smartResp }" headers="用户名,姓名,单位,职位,状态,创建时间,操作,操作2" 
+		<cnoj:table smartResp="${smartResp }" headers="用户名,姓名,单位,职位,状态,创建时间,操作" 
 		  isCheckbox="1" isRowSelected="1" currentUri="${currentUri }" 
 		  addBtn="${addBtn }" editBtn="${editBtn }" refreshBtn="${refreshBtn }" 
 		  page="${pageParam }" customCells="${customCells }"
