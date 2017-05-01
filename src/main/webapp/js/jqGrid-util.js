@@ -58,7 +58,6 @@
 			rowList: [10, rowNum, 20, 30, 40],
 			sortable:false
 		});
-		console.log(opts);
 		opts = $.extend(opts,setting);
 	 return $(this).jqGrid(opts);
 	}
