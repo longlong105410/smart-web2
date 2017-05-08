@@ -284,6 +284,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 			flowForm.setFormId(formData.getFormId());
 			flowForm.setOrderId(formData.getOrderId());
 			flowForm.setProcessId(formData.getProcessId());
+			flowForm.setProcessName(formData.getProcessName());
 			flowForm.setFormDataId(formData.getFormDataId());
 			flowForm.setUserId(userId);
 			flowForm.setTitle(StringUtils.handNull(title));

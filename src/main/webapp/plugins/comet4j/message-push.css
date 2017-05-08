@@ -10,6 +10,7 @@
 	display: none;
 	/*-webkit-background-clip: content;*/
     box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+    z-index: 1000;
 }
 
 .message-push-wrap .panel-body {

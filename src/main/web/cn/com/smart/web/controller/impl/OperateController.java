@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.web.bean.AutoComplete;
+import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.ZTreeData;
 import cn.com.smart.web.service.OPService;
 
@@ -95,7 +95,7 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<String> moreParamDel(HttpServletRequest request,String busiName,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(StringUtils.isNotEmpty(busiName) && StringUtils.isNotEmpty(id)) {
-			Map<String,Object> paramMaps = getRequestParamMap(request);
+			Map<String,Object> paramMaps = getRequestParamMap(request, false);
 			paramMaps.remove("busiName");
 			BaseDaoImpl<?> dao = getBaseDao(busiName);
 			if(null != dao && dao.delete(paramMaps)) {
@@ -119,7 +119,7 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<String> execute(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String,Object> paramMaps = getRequestParamMap(request);
+			Map<String,Object> paramMaps = getRequestParamMap(request, false);
 			smartResp = opServ.execute(resId, paramMaps);
 		}
 		return smartResp;
@@ -141,7 +141,7 @@ public class OperateController extends BaseController {
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, false);
 			smartResp = opServ.execute(resId, params);
 			params = null;
 		}
@@ -163,7 +163,28 @@ public class OperateController extends BaseController {
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, false);
+			smartResp = opServ.getDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 查询数；支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @param paramName
+	 * @param paramValue
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/query/filter/{resId}")
+	public @ResponseBody SmartResponse<Object> queryFilter(HttpSession session,@PathVariable String resId,
+			String paramName,String paramValue) throws Exception {
+		SmartResponse<Object> smartResp = new SmartResponse<Object>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, true);
 			smartResp = opServ.getDatas(resId, params);
 			params = null;
 		}
@@ -178,11 +199,28 @@ public class OperateController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/queryReq/{resId}")
-	public @ResponseBody SmartResponse<Object> query(HttpServletRequest request,@PathVariable String resId) throws Exception {
+	public @ResponseBody SmartResponse<Object> queryReq(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getRequestParamMap(request);
-			params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
+			Map<String, Object> params = getRequestParamMap(request, false);
+			smartResp = opServ.getDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 查询数据(参数通过HttpServletRequest获取)；支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/queryReq/filter/{resId}")
+	public @ResponseBody SmartResponse<Object> queryReqFilter(HttpServletRequest request,@PathVariable String resId) throws Exception {
+		SmartResponse<Object> smartResp = new SmartResponse<Object>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getRequestParamMap(request, true);
 			smartResp = opServ.getDatas(resId, params);
 			params = null;
 		}
@@ -201,13 +239,33 @@ public class OperateController extends BaseController {
 	 */
 	@RequestMapping("/queryPage/{resId}")
 	public @ResponseBody SmartResponse<Object> queryPage(HttpSession session,@PathVariable String resId,
-			String paramName,String paramValue,Integer page) throws Exception {
+			String paramName,String paramValue, RequestPage page) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
-			smartResp = opServ.getDatas(resId, params,getStartNum(page), getPerPageSize());
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, false);
+			smartResp = opServ.getDatas(resId, params, page.getStartNum(), page.getPageSize());
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 查询数据(分页)；支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @param paramName
+	 * @param paramValue
+	 * @param page 
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/queryPage/filter/{resId}")
+	public @ResponseBody SmartResponse<Object> queryPageFilter(HttpSession session,@PathVariable String resId,
+			String paramName,String paramValue,RequestPage page) throws Exception {
+		SmartResponse<Object> smartResp = new SmartResponse<Object>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, true);
+			smartResp = opServ.getDatas(resId, params, page.getStartNum(), page.getPageSize());
 			params = null;
 		}
 		return smartResp;
@@ -222,19 +280,35 @@ public class OperateController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/queryReqPage/{resId}")
-	public @ResponseBody SmartResponse<Object> queryPage(HttpServletRequest request,@PathVariable String resId,Integer page) throws Exception {
+	public @ResponseBody SmartResponse<Object> queryReqPage(HttpServletRequest request,@PathVariable String resId,RequestPage page) throws Exception {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		page = null == page?1:page;
-		page = PageHelper.getPage(page);
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getRequestParamMap(request);
+			Map<String, Object> params = getRequestParamMap(request, false);
 			params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
-			smartResp = opServ.getDatas(resId, params,getStartNum(page), getPerPageSize());
+			smartResp = opServ.getDatas(resId, params, page.getStartNum(), page.getPageSize());
 			params = null;
 		}
 		return smartResp;
 	}
 	
+	/**
+	 * 查询数据(分页)(参数通过HttpServletRequest获取)；支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @param page
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/queryReqPage/filter/{resId}")
+	public @ResponseBody SmartResponse<Object> queryReqPageFilter(HttpServletRequest request,@PathVariable String resId,RequestPage page) throws Exception {
+		SmartResponse<Object> smartResp = new SmartResponse<Object>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getRequestParamMap(request, true);
+			smartResp = opServ.getDatas(resId, params, page.getStartNum(), page.getPageSize());
+			params = null;
+		}
+		return smartResp;
+	}
 	
 	/**
 	 * 查询树结构
@@ -249,7 +323,27 @@ public class OperateController extends BaseController {
 	public @ResponseBody SmartResponse<ZTreeData> queryTree(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getRequestParamMap(request);
+			Map<String, Object> params = getRequestParamMap(request, false);
+			smartResp = opServ.getZTreeDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 查询树结构；支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @param paramName
+	 * @param paramValue
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/queryTree/filter/{resId}")
+	public @ResponseBody SmartResponse<ZTreeData> queryTreeFilter(HttpServletRequest request,@PathVariable String resId) throws Exception {
+		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getRequestParamMap(request, true);
 			smartResp = opServ.getZTreeDatas(resId, params);
 			params = null;
 		}
@@ -271,7 +365,29 @@ public class OperateController extends BaseController {
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, false);
+			smartResp = opServ.getZTreeDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 查询树结构；支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @param paramName
+	 * @param paramValue
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/queryTreeReq/filter/{resId}")
+	@Deprecated
+	public @ResponseBody SmartResponse<ZTreeData> queryTreeFilter(HttpSession session,@PathVariable String resId,
+			String paramName,String paramValue) throws Exception {
+		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, true);
 			smartResp = opServ.getZTreeDatas(resId, params);
 			params = null;
 		}
@@ -283,7 +399,25 @@ public class OperateController extends BaseController {
 	public SmartResponse<ZTreeData> treeAsync(HttpServletRequest request,@PathVariable String resId) {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getRequestParamMap(request);
+			Map<String, Object> params = getRequestParamMap(request, false);
+			params.put("isAsync", true);
+			Object obj = params.get("id");
+			if(null != obj && obj.getClass().isArray()) {
+				Object[] objs = (Object[])obj;
+				params.put("id",objs[objs.length-1]);
+			}
+			smartResp = opServ.getZTreeDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	@RequestMapping("/treeAsync/filter/{resId}")
+	@ResponseBody
+	public SmartResponse<ZTreeData> treeAsyncFilter(HttpServletRequest request,@PathVariable String resId) {
+		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getRequestParamMap(request, true);
 			params.put("isAsync", true);
 			Object obj = params.get("id");
 			if(null != obj && obj.getClass().isArray()) {
@@ -311,13 +445,33 @@ public class OperateController extends BaseController {
 			String paramName,String paramValue) throws Exception {
 		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getParamMaps(session, paramName, paramValue);
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, false);
 			smartResp = opServ.getAutoCompleteDatas(resId, params);
 			params = null;
 		}
 		return smartResp;
 	}
 	
+	/**
+	 * 自动完成(输入提示)
+	 * @param session
+	 * @param resId
+	 * @param paramName
+	 * @param paramValue
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/autoComplete/filter/{resId}")
+	public @ResponseBody SmartResponse<AutoComplete> autoCompleteFilter(HttpSession session,@PathVariable String resId,
+			String paramName,String paramValue) throws Exception {
+		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getParamMaps(session, paramName, paramValue, true);
+			smartResp = opServ.getAutoCompleteDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
 	
 	/**
 	 * 自动完成(输入提示)
@@ -329,10 +483,30 @@ public class OperateController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/autoCompleteReq/{resId}")
-	public @ResponseBody SmartResponse<AutoComplete> autoComplete(HttpServletRequest request,@PathVariable String resId) throws Exception {
+	public @ResponseBody SmartResponse<AutoComplete> autoCompleteReq(HttpServletRequest request,@PathVariable String resId) throws Exception {
 		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = getRequestParamMap(request);
+			Map<String, Object> params = getRequestParamMap(request, false);
+			smartResp = opServ.getAutoCompleteDatas(resId, params);
+			params = null;
+		}
+		return smartResp;
+	}
+	
+	/**
+	 * 自动完成(输入提示) 支持按部门过滤
+	 * @param session
+	 * @param resId
+	 * @param paramName
+	 * @param paramValue
+	 * @return 返回JSON格式数据
+	 * @throws Exception
+	 */
+	@RequestMapping("/autoCompleteReq/filter/{resId}")
+	public @ResponseBody SmartResponse<AutoComplete> autoCompleteReqFilter(HttpServletRequest request,@PathVariable String resId) throws Exception {
+		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
+		if(StringUtils.isNotEmpty(resId)) {
+			Map<String, Object> params = getRequestParamMap(request, true);
 			smartResp = opServ.getAutoCompleteDatas(resId, params);
 			params = null;
 		}

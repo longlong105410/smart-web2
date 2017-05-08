@@ -198,6 +198,7 @@ function formAttHandler($element, value) {
 		$element.attr("type","text");
 	}
 	if(utils.isNotEmpty(value)) {
+		$element.attr("type","text");
 		$element.addClass("hidden");
 		attachmentListHandler(value, $element, isDisabled);
 	}

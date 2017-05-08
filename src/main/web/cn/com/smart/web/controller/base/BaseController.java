@@ -230,21 +230,32 @@ public abstract class BaseController extends Smart implements IBaseController {
      * 从当前的request请求中获取参数 <br />
      * 返回的map对象中包含了，组织机构ID集合（key为：orgIds）
      * @param request
+     * @param isOrgFilter 是否按部门过滤
      * @return 返回Map
      */
-	public Map<String,Object> getRequestParamMap(HttpServletRequest request) {
+	public Map<String,Object> getRequestParamMap(HttpServletRequest request, boolean isOrgFilter) {
 		Map<String,Object> paramMaps = new HashMap<String, Object>();
-		Map<String,String[]> curParamMaps = request.getParameterMap();
+		Map<String,Object> curParamMaps = request.getParameterMap();
 		if(null != curParamMaps && curParamMaps.size()>0) {
 			for (String key : curParamMaps.keySet()) {
-				String[] values = curParamMaps.get(key);
-				if(values.length<2)
-					paramMaps.put(key, values[0]); 
+				Object value = curParamMaps.get(key);
+				if(value.getClass().isArray()) {
+					Object[] objArray = (Object[]) value;
+					if(objArray.length < 2 ) {
+						paramMaps.put(key, objArray[0]); 
+					} else {
+						paramMaps.put(key, value);
+					}
+				}
 				else
-					paramMaps.put(key, values);
+					paramMaps.put(key, value);
 			}
 		}
-		paramMaps.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(request).getOrgIds()));
+		UserInfo userInfo = getUserInfoFromSession(request);
+		if(isOrgFilter) {
+			paramMaps.put("orgIds", StringUtils.list2Array(userInfo.getOrgIds()));
+			paramMaps.put("orgId", userInfo.getOrgId());
+		}
 		curParamMaps = null;
 		return paramMaps;
 	}
@@ -258,9 +269,10 @@ public abstract class BaseController extends Smart implements IBaseController {
 	 * 返回的map对象中包含了，组织机构ID集合（key为：orgIds）
 	 * @param paramName 名称集合（多个名称之间用逗号","分割）
 	 * @param paramValue 值集合（多个名称之间用逗号","分割）
+	 * @param isOrgFilter 是否按部门过滤
 	 * @return 返回处理后的Map
 	 */
-	protected Map<String,Object> getParamMaps(HttpSession session,String paramName,String paramValue) {
+	protected Map<String,Object> getParamMaps(HttpSession session,String paramName,String paramValue, boolean isOrgFilter) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		if(StringUtils.isNotEmpty(paramName) && StringUtils.isNotEmpty(paramValue)) {
 			String[] paramNames = paramName.split(",");
@@ -273,7 +285,11 @@ public abstract class BaseController extends Smart implements IBaseController {
 			paramNames = null;
 			paramValues = null;
 		}
-		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		UserInfo userInfo = getUserInfoFromSession(session);
+		if(isOrgFilter) {
+			params.put("orgIds", StringUtils.list2Array(userInfo.getOrgIds()));
+			params.put("orgId", userInfo.getOrgId());
+		}
 		return params;
 	}
 }

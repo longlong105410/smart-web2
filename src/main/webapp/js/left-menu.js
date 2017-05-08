@@ -424,4 +424,5 @@ function resizePanel(panel) {
 		});
 		panel.attr("uuid",uuid);
 	}
+	listPanelListener($(panel), true);
 }

@@ -26,6 +26,8 @@ public class TableFieldMap {
 	
 	private String tableFieldName;
 	
+	private String tableFieldRemark;
+	
 	private Object value;
 	
 	private List<Object> values;
@@ -95,6 +97,14 @@ public class TableFieldMap {
 
 	public void setValues(List<Object> values) {
 		this.values = values;
+	}
+
+	public String getTableFieldRemark() {
+		return tableFieldRemark;
+	}
+
+	public void setTableFieldRemark(String tableFieldRemark) {
+		this.tableFieldRemark = tableFieldRemark;
 	}
 	
 }

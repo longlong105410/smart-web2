@@ -164,16 +164,16 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     			}
     			htmlContent.append("</li>");
     			if(smartResp.getTotalPage()>1) {
-    				int showPageNum = 5;
+    				int showPageNum = 3;
     				int first = 1;
     				if(page.getPage()>=showPageNum) {
-    					first = page.getPage()-2;
+    					first = page.getPage()-1;
     				}
     				int last = 1;
     				if(smartResp.getTotalPage()>0) {
     					if(smartResp.getTotalPage()>showPageNum) {
     						if(page.getPage()>=showPageNum) {
-    							last = page.getPage()+2;
+    							last = page.getPage()+1;
     							last = last>smartResp.getTotalPage()?smartResp.getTotalPage():last;
     						} else {
     						   last = showPageNum;	

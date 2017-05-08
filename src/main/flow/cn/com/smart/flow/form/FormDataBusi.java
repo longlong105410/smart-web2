@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -113,12 +114,20 @@ public class FormDataBusi {
 			if(key.startsWith(FormPluginType.Listctrl.getValue())) { 
 				formData = new QueryFormData();
 				formData.setName(tfMaps.get(0).getTableId());
+				
+				formData.setFieldId(tfMaps.get(0).getTableFieldId());
+				formData.setFieldName(tfMaps.get(0).getTableFieldName());
+				formData.setFieldRemark(tfMaps.get(0).getTableFieldRemark());
+				
 				formData.setValueSize(1);
 				List<QueryFormData> subFormDatas = new ArrayList<QueryFormData>();
 				QueryFormData subFormData = null;
 				for (TableFieldMap tfMap : tfMaps) {
 					subFormData = new QueryFormData();
 					subFormData.setName(tfMap.getTableFieldId());
+					subFormData.setFieldId(tfMap.getTableFieldId());
+					subFormData.setFieldName(tfMap.getTableFieldName());
+					subFormData.setFieldRemark(tfMap.getTableFieldRemark());
 					subFormData.setValueSize(1);
 					if(null != tfMap.getValues() && tfMap.getValues().size()>0) {
 						List<Object> objs = new ArrayList<Object>();
@@ -142,6 +151,9 @@ public class FormDataBusi {
 				for (TableFieldMap tfMap : tfMaps) {
 					 formData = new QueryFormData();
 					 formData.setName(tfMap.getTableFieldId());
+					 formData.setFieldId(tfMap.getTableFieldId());
+					 formData.setFieldName(tfMap.getTableFieldName());
+					 formData.setFieldRemark(tfMap.getTableFieldRemark());
 					 if(null != tfMap.getValues() && tfMap.getValues().size()>0) {
 						 formData.setValue(tfMap.getValues());
 					 } else {
@@ -218,13 +230,121 @@ public class FormDataBusi {
 			for (String key : tableMaps.keySet()) { //key为表名
 				params = new HashMap<String, Object>();
 				tfList = tableMaps.get(key);
-				if(FormPluginType.Listctrl.getValue().equals(tfList.get(0).getPlugin())) {
-					//删除以前的数据
-					params.put("formDataId", formDataId);
-					opDao.executeSql("delete from "+key+" where form_data_id=:formDataId", params);
-					//插入新数据
-					insertData(key, tfList, userId, formState, formDataId);
-				} else if(this.isExistData(key,formDataId)){
+				TableFieldMap tableFieldMap = tfList.get(0);
+				if(FormPluginType.Listctrl.getValue().equals(tableFieldMap.getPlugin())) {
+					String tableId = tableFieldMap.getTableId();
+					String delParamName = tableId+"_del";
+					String changeParamName = tableId+"_change";
+					String idParamName = tableId+"_id";
+					String delId = StringUtils.handNull(datas.get(delParamName));
+					Object id = datas.get(idParamName);
+					String[] idArray = null;
+					if(null != id) {
+						if(id.getClass().isArray()) {
+							Object[] ids = (Object[])id;
+							idArray = new String[ids.length];
+							for (int i = 0; i < ids.length; i++) {
+								idArray[i] = StringUtils.handNull(ids[i]);
+							}
+						} else {
+							idArray = new String[]{StringUtils.handNull(id)};
+						}
+					}
+					//删除的
+					if(StringUtils.isNotEmpty(delId)) {
+						String deleteSql = "delete from "+key+" where id in(:ids)";
+						String[] delIdArray = delId.split(IWebConstant.MULTI_VALUE_SPLIT);
+						params.put("ids", delIdArray);
+						opDao.executeSql(deleteSql, params);
+					}
+					//更新
+					String changeId = StringUtils.handNull(datas.get(changeParamName));
+					if(StringUtils.isNotEmpty(changeId)) {
+						String[] changeIdArray = changeId.split(IWebConstant.MULTI_VALUE_SPLIT);
+						if(null != idArray) {
+							sqlBuild = new StringBuilder();
+							fieldBuild = new StringBuilder();
+							sqlBuild.append("update "+key+" set ");
+							for (int i = 1; i < tfList.size(); i++) {
+								fieldBuild.append(tfList.get(i).getTableFieldName()+"=:"+tfList.get(i).getTableFieldName()+",");
+							}
+							fieldBuild = fieldBuild.delete(fieldBuild.length()-1, fieldBuild.length());
+							sqlBuild.append(fieldBuild.toString()+" where id=:id");
+							List<Integer> indexs = new ArrayList<Integer>(changeIdArray.length);
+							List<Map<String, Object>> paramList = new ArrayList<Map<String,Object>>();
+							boolean isValueNull = true; //判断值是否都为空
+							Set<String> valueNullIds = new HashSet<String>(changeIdArray.length);
+							for (int i = 0; i < changeIdArray.length; i++) {
+								int index = Arrays.binarySearch(idArray, changeIdArray[i]);
+								isValueNull = true;
+								if(index > -1) {
+									indexs.add(index);
+									Map<String, Object> param = new HashMap<String, Object>();
+									for (int j = 1; j < tfList.size(); j++) {
+										TableFieldMap fieldMap = tfList.get(j);
+										if(null != fieldMap.getValue() && index == 0) {
+											param.put(fieldMap.getTableFieldName(), fieldMap.getValue());
+											if(StringUtils.isNotEmpty(StringUtils.handNull(fieldMap.getValue()))) {
+												isValueNull = isValueNull && false;
+											} else {
+												isValueNull = isValueNull && true;
+											}
+										} else {
+											if(null != fieldMap.getValues() && fieldMap.getValues().size() > index) {
+												Object value = fieldMap.getValues().get(index);
+												param.put(fieldMap.getTableFieldName(), value);
+												if(StringUtils.isNotEmpty(StringUtils.handNull(value))) {
+													isValueNull = isValueNull && false;
+												} else {
+													isValueNull = isValueNull && true;
+												}
+											}
+										}
+									} //for
+									param.put("id", changeIdArray[i]);
+									if (!isValueNull) 
+										paramList.add(param);
+									else {
+										valueNullIds.add(changeIdArray[i]);
+									}
+								}//if
+							}//for
+							//删除ID不为空，值全为空的记录
+							if(CollectionUtils.isNotEmpty(valueNullIds)) {
+								String deleteSql = "delete from "+key+" where id in(:ids)";
+								params.clear();
+								params.put("ids", valueNullIds.toArray());
+								opDao.executeSql(deleteSql, params);
+							}
+							if(CollectionUtils.isNotEmpty(paramList)) {
+								opDao.executeSql(sqlBuild.toString(), paramList);
+							}
+							if(CollectionUtils.isNotEmpty(indexs)) {
+								tfList = delFieldValue(tfList, indexs);
+							}
+						}//if
+					}
+					//插入
+					if(CollectionUtils.isNotEmpty(tfList)) {
+						TableFieldMap idFieldMap = tfList.get(0);
+						Object value = idFieldMap.getValue();
+						List<Integer> indexs = new ArrayList<Integer>();
+						if(null != value) {
+							indexs.add(0);
+						} else {
+							List<Object> list = idFieldMap.getValues();
+							for (int i = 0; i < list.size(); i++) {
+								if(StringUtils.isNotEmpty(StringUtils.handNull(list.get(i)))) 
+									indexs.add(i);
+							}
+						}
+						tfList = delFieldValue(tfList, indexs);
+						if(null != tfList && tfList.size() > 0) {
+							tfList.remove(0);
+							insertData(key, tfList, userId, formState, formDataId);
+						}
+					}
+				} else if(this.isExistData(key,formDataId)) {
 					fieldBuild = new StringBuilder();
 					sqlBuild = new StringBuilder();
 					sqlBuild.append("update "+key+" set ");
@@ -232,8 +352,8 @@ public class FormDataBusi {
 						if(null != tf.getValue()) {
 							fieldBuild.append(tf.getTableFieldName()+"=:"+tf.getTableFieldName()+",");
 							params.put(tf.getTableFieldName(), tf.getValue());
-						}
-					}
+						} //if
+					} //for
 					params.put("state", formState);
 					params.put("formDataId", formDataId);
 					sqlBuild.append(fieldBuild.toString()+"state=:state where form_data_id=:formDataId");
@@ -266,14 +386,25 @@ public class FormDataBusi {
 	private Map<String,List<TableFieldMap>> fieldClassifyToTable(List<TableFieldMap> tfMaps) {
 		Map<String,List<TableFieldMap>> tableMaps = new HashMap<String, List<TableFieldMap>>();
 		List<TableFieldMap> tfMapList = null;
+		List<TableFieldMap> newMapList = new ArrayList<TableFieldMap>();
 		for (TableFieldMap tfMap : tfMaps) {
 			tfMapList = tableMaps.get(tfMap.getTableName());
 			if(null == tfMapList) {
 				tfMapList = new ArrayList<TableFieldMap>();
+				TableFieldMap tmp = new TableFieldMap();
+				tmp.setId("");
+				tmp.setTableFieldId(tfMap.getTableId()+"_id");
+				tmp.setTableFieldName("id");
+				tmp.setTableId(tfMap.getTableId());
+				tmp.setTableName(tfMap.getTableName());
+				tmp.setPlugin(tfMap.getPlugin());
+				tfMapList.add(tmp);
+				newMapList.add(tmp);
 				tableMaps.put(tfMap.getTableName(), tfMapList);
 			}
 			tfMapList.add(tfMap);
 		}
+		tfMaps.addAll(newMapList);
 		return tableMaps.size()>0?tableMaps:null;
 	}
 	
@@ -404,7 +535,7 @@ public class FormDataBusi {
 	/**
 	 * 提交表单时，把表单数据赋值到tfMaps对象里面 <br />
 	 * 修改时间：2016年08月27日；<br />
-	 * 修改内容：支持一个字段多个情况，多值之间用英文逗号分隔
+	 * 修改内容：支持一个字段多个值的情况，多值之间用英文逗号分隔
 	 * @param datas
 	 * @param tfMaps
 	 * @return 返回结果为表名对应字段；如：key为表名,value为一个List表示该表中字段信息
@@ -420,7 +551,12 @@ public class FormDataBusi {
 						Object value = datas.get(tf.getTableFieldId());
 						if(FormPluginType.Listctrl.getValue().equals(tf.getPlugin())) {
 							 if(value.getClass().isArray()) {
-								 tf.setValues(Arrays.asList((Object[])value));
+								 Object[] array = (Object[])value;
+								 List<Object> values = new ArrayList<Object>(array.length);
+								 for (Object obj : array) {
+									 values.add(obj);
+								 }
+								 tf.setValues(values);
 							 } else {
 								 tf.setValue(value);
 							 }
@@ -435,15 +571,6 @@ public class FormDataBusi {
 						} else {
 							tf.setValue(value);
 						}
-						/*
-						 * 修改时间：2016年08月27日
-						 * if(value.getClass().isArray()) {
-							tf.setValues(Arrays.asList((Object[]) value));
-						} else if(FORM_TYPE_LISTCTRL.equals(tf.getPlugin())) {
-							tf.setValues(Arrays.asList(value));
-						} else {
-							tf.setValue(value);
-						}*/
 					}
 				}
 			}
@@ -474,6 +601,10 @@ public class FormDataBusi {
 		sqlBuild.append("insert into "+tableName);
 		int valueSize = 0;
 		boolean isValueEmpty = true;
+		TableFieldMap tableFieldMap = tfList.get(0);
+		if("id".equals(tableFieldMap.getTableFieldName())) {
+			tfList.remove(tableFieldMap);
+		}
 		for (TableFieldMap tf : tfList) {
 			if(null != tf.getValue() || (null != tf.getValues() && tf.getValues().size()>0)) {
 				fieldBuild.append(tf.getTableFieldName()+",");
@@ -569,5 +700,52 @@ public class FormDataBusi {
 			}
 		}
 		return is;
+	}
+	
+	/**
+	 * 删除字段值
+	 * @param tfList
+	 * @param indexs
+	 * @return
+	 */
+	private List<TableFieldMap> delFieldValue(List<TableFieldMap> tfList, List<Integer> indexs) {
+		if(CollectionUtils.isEmpty(tfList) || null == indexs || indexs.size() ==0) {
+			return tfList;
+		}
+		for (int i = 0; i < tfList.size(); i++) {
+			if(null == tfList.get(i)) {
+				break;
+			}
+			if(null == tfList.get(i).getValue() && CollectionUtils.isNotEmpty(tfList.get(i).getValues())) {
+				int count = 0;
+				for (Integer index : indexs) {
+					if(CollectionUtils.isNotEmpty(tfList.get(i).getValues())) {
+						tfList.get(i).getValues().remove(index.intValue() - count);
+					} else {
+						break;
+					}
+					count++;
+				}
+			} else {
+				if(indexs.size() == 1) {
+					tfList = null;
+					break;
+				}
+			}
+		}
+		boolean isNull = true;
+		if(CollectionUtils.isNotEmpty(tfList)) {
+			for (int i = 1; i < tfList.size(); i++) {
+				if(null != tfList.get(i) && CollectionUtils.isEmpty(tfList.get(i).getValues())) {
+					isNull = isNull && true;
+				} else {
+					isNull = isNull && false;
+				}
+			}
+		}
+		if(isNull) {
+			tfList = null;
+		}
+		return tfList;
 	}
 }

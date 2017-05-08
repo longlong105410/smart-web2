@@ -21,7 +21,6 @@ input[type="url"], input[type="search"], input[type="tel"], input[type="color"],
 	 
 }
 select {width: 180px;/*height:28px; line-height: 28px;*/padding-left: 3px;}
-#tbl select {width: 120px;}
 .radio input[type="radio"], .checkbox input[type="checkbox"] {
   float: left;
   margin-left: -15px;
@@ -33,6 +32,9 @@ input.span1 {width: 70px;}
 select[multiple] {height: 110px;}
 .input-medium {
   width: 120px;
+}
+.input-small {
+    width: 100px;
 }
 .input-default-value label{display: inline-block;margin:0 2px;}
 .input-default-value label input {margin:0;}

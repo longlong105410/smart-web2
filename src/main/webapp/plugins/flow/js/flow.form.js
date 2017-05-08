@@ -257,7 +257,7 @@ var END_NODE_KEY = "end";
 						   //处理控件列表
 						   $tableTag.find(".delrow").addClass("hide");
 						   var isListCtrlAdd = false;
-						   var isListCtrlDel = false;
+						   var isListCtrlDel = true;
 						   for (var j = 0; j < datas2.length; j++) {
 							   var index = 0;
 							   $tableTag.find("input[name='"+datas2[j].name+"'],select[name='"+datas2[j].name+"'],textarea[name='"+datas2[j].name+"'],#"+datas2[j].name).each(function(){
@@ -273,22 +273,27 @@ var END_NODE_KEY = "end";
 							   var fieldNames = setting.formFieldNames.split(",");
 							   var isTr = false;
 							   for(var k=0;k<fieldNames.length;k++) {
-								   if(fieldNames[k] == datas2[j].name) {isTr = true;break;}
+								   if(fieldNames[k] == datas2[j].name) {
+									   isTr = true;break;
+								   }
 							   }
 							   if(isTr) {
 								   isListCtrlAdd = true;
 							   }
-							   //isListCtrl = isListCtrl && isTr;
+							   if(datas2[j].name.endWith("_id")) {
+								   isTr = true;
+							   }
+							   isListCtrlDel = isListCtrlDel && isTr;
 						   }
 						   //判断是否可以操作listctrl
-						  //if(isListCtrl) {
-						      if(isListCtrlAdd) {
-						    	  $tableTag.find(".listctrl-add-row").show();
-						      }
-						      if(isListCtrlDel) {
-						    	  $tableTag.find(".delrow").removeClass("hide");
-						      }
-						 // }
+						   //当能填写或修改列表中的值时，则拥有添加行的权限
+						  if(isListCtrlAdd) {
+							  $tableTag.find(".listctrl-add-row").show();
+						  }
+						  //当所有字段都有修改权限时，则拥有删除行的权限
+						  if(isListCtrlDel) {
+							  $tableTag.find(".delrow:gt(0)").removeClass("hide");
+						  }
 					   } else {
 						   var index = 0;
 						   var name = datas[i].name;
@@ -794,8 +799,9 @@ function formAttHandler($element, value) {
 	var isDisabled = $element.prop("disabled");
 	var name = $element.attr("name");
 	var newName = name+"_file";
+	var $eleClone = null;
 	if(!isDisabled) {
-		var $eleClone = $element.clone();
+		$eleClone = $element.clone();
 		$eleClone.attr("name", newName);
 		$eleClone.attr("id", newName);
 		$element.removeClass("require");
@@ -803,8 +809,12 @@ function formAttHandler($element, value) {
 		$element.attr("type","text");
 	}
 	if(utils.isNotEmpty(value)) {
+		$element.attr("type","text");
 		$element.addClass("hidden");
 		attachmentListHandler(value, $element, isDisabled);
+		if(null != $eleClone) {
+			$eleClone.removeClass("require");
+		}
 	}
 }
 

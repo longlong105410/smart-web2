@@ -415,29 +415,34 @@ function formRequireListener($elementWrap) {
  * 链接监听,也可以是按钮或其他
  * @param $elementWrap 元素对象
  * class="cnoj-change-page" 该标识主要是用来标记分页，点击页面时触发的事件
- *   参数:必须 data-uri 分页uri
+ *    参数:必须 data-uri 分页uri
  *       可选 data-target 显示地方(一般为一个div层)
  *       data-search-panel-tag 搜索面板标识
  *   
  * class="cnoj-open-self" 点击时，指定的uri显示到当前"#main-content"里面
- *   参数：必须 data-uri 显示uri
+ *    参数：必须 data-uri 显示uri
  *        可选 data-target 显示地方(一般为一个div层)
  *        
  * class="cnoj-open-blank" 点击时，会弹出一个新窗口（弹出窗口）;  
  *    参数： 必须 data-uri 弹出页面的uri
  *         可选 data-title 弹出窗口的标题;data-width 弹出窗口的宽度
+ *
+ * class="cnoj-open-tabs" 点击时，指定的uri在新的tab中打开
+ *    参数：必须 data-uri 显示uri
+ *           data-title tabs的名称
  *         
  */
 function hrefListener($elementWrap) {
-	changePageListner($elementWrap);
-	openSelfListner($elementWrap);
+	changePageListener($elementWrap);
+	openSelfListener($elementWrap);
 	openBlankListener($elementWrap);
+	openTabsListener($elementWrap);
 	
 	/**
 	 * 改变页面监听
 	 * @param $elementWrap
 	 */
-	function changePageListner($elementWrap) {
+	function changePageListener($elementWrap) {
 		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
 			$(".cnoj-change-page").each(function(){
 				_handler($(this));
@@ -503,7 +508,7 @@ function hrefListener($elementWrap) {
 	 * open-self 事件监听
 	 * @param $elementWrap
 	 */
-	function openSelfListner($elementWrap) {
+	function openSelfListener($elementWrap) {
 		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
 			$(".cnoj-open-self").each(function(){
 				_handler($(this));
@@ -587,6 +592,9 @@ function hrefListener($elementWrap) {
 			var uri = $this.data("uri");
 	        var title = $this.data("title");
 	        var w = $this.data("width");
+	        if(utils.isEmpty(uri)) {
+	        	uri = $this.attr("href");
+	        }
 	        if(!utils.isEmpty(uri)) {
 	          if(utils.isEmpty(w)) {
 	        	  w = $(window).width()-50;
@@ -596,6 +604,54 @@ function hrefListener($elementWrap) {
 						initEvent(dialog.getModal());
 					}, 200);
 			  });
+	        }
+		}
+	}
+	
+	/**
+	 * open-tabs 监听
+	 * @param $elementWrap
+	 */
+	function openTabsListener($elementWrap) {
+		if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+			$(".cnoj-open-tabs").each(function(){
+				_handler($(this));
+			});
+		} else {
+			$elementWrap.find(".cnoj-open-tabs").each(function(){
+				_handler($(this));
+			});
+		}
+
+		/**
+		 * 处理元素超链接打开一个tabs
+		 * @param $element
+		 */
+		function _handler($element) {
+			if(!$element.hasClass("cnoj-open-tabs-listener")) {
+				$element.addClass("cnoj-open-tabs-listener");
+				$element.click(function(event) {
+					_clickElement(event, $(this));
+					return false;
+				});
+			}
+		}
+		
+		/**
+		 * 点击元素处理方法
+		 * @param event
+		 * @param $this
+		 */
+		function _clickElement(event, $this) {
+			var uri = $this.data("uri");
+	        var title = $this.data("title");
+	        if(utils.isEmpty(uri)) {
+	        	uri = $this.attr("href");
+	        }
+	        if(!utils.isEmpty(uri) && utils.isNotEmpty(title)) {
+	        	openTab(title, uri, true);
+	        } else {
+	        	alert("uri或title属性不能为空");
 	        }
 		}
 	}
@@ -2932,11 +2988,14 @@ function richtextListener($elementWrap) {
 	 */
 	function _handler($element) {
 		if($element.prop("disabled") || $element.hasClass("hide")) {
-			return;
+			return false;
 		}
 		if(!$element.hasClass("cnoj-richtext-listener")) {
 			$element.addClass("cnoj-richtext-listener");
 			var id = $element.attr("id");
+			if(utils.isEmpty(id)) {
+				return false;
+			}
 			UE.delEditor(id);
 			UE.getEditor(id,{
 				toolbars: [[
@@ -2953,6 +3012,62 @@ function richtextListener($elementWrap) {
 		}
 	}
 }
+
+/**
+ * 列表面板监听<br />
+ * @param $elementWrap
+ * @param isResize 
+ * 标识 <br />
+ *   class="cnoj-list-panel" <br />
+ *   参数  <br />
+ *     无
+ */
+function listPanelListener($elementWrap, isResize) {
+	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
+		$(".cnoj-list-panel").each(function(){
+			_handler($(this), isResize);
+		});
+	} else {
+		$elementWrap.find(".cnoj-list-panel").each(function(){
+			_handler($(this), isResize);
+		});
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $element
+	 * @param isResize
+	 */
+	function _handler($element, isResize) {
+		if(isResize) {
+			_handleElement($element);
+		} else {
+			if(!$element.hasClass("cnoj-list-panel-listener")) {
+				$element.addClass("cnoj-list-panel-listener");
+				_handleElement($element);
+			}
+		}
+	}
+	
+	/**
+	 * 处理元素
+	 * @param $this
+	 */
+	function _handleElement($this) {
+		var $panelBody = $this.parents(".panel-body:eq(0)");
+    	var $rowTitleWrap = $this.find(".row-title-wrap");
+    	var $listColBody = $this.find(".list-col-body");
+    	var $listBodyWrap = $this.find(".list-col-body-wrap");
+    	var h = $panelBody.height() - $rowTitleWrap.outerHeight(true);
+    	$listColBody.height(h);
+    	var bwH = $listBodyWrap.height();
+    	if(bwH>h) {
+    		var scrollW = $rowTitleWrap.width() - $listBodyWrap.width();
+    		var w = $rowTitleWrap.width() - scrollW;
+    		$rowTitleWrap.find(".title-row").width(w);
+    	}
+	}
+} 
 
 /**
  * 初始化
@@ -2996,6 +3111,7 @@ function initEvent($elementWrap) {
 	handleEntrySubmit($elementWrap);
 	
 	changePageSizeListener($elementWrap);
+	listPanelListener($elementWrap, false);
 }
 
 function inputPluginEvent($elementWrap) {

@@ -42,6 +42,7 @@ public class ListctrlParser implements IFormParser {
 		String fieldName = StringUtils.handNull(dataMap.get("bind_table_field"));
 		String name = StringUtils.handNull(dataMap.get("bind_table"));
 		String tableWidth = StringUtils.handNull(dataMap.get("tablewidth"));
+		String remarks = StringUtils.handNull(dataMap.get("remarks"));
 		if(StringUtils.isEmpty(tableWidth)) {
 			tableWidth = "100%";
 		}
@@ -54,6 +55,7 @@ public class ListctrlParser implements IFormParser {
 		String[] fieldNames = fieldName.split("`");
 		String[] fieldRequires = fieldRequire.split("`");
 		String[] fieldHides = fieldHide.split("`");
+		String[] remarksArray = remarks.split("`");
 		
 		if(pluginTypes.length<titles.length) {
 			String[] tmps = pluginTypes;
@@ -91,6 +93,14 @@ public class ListctrlParser implements IFormParser {
 			}
 		}
 		
+		if(remarksArray.length<titles.length) {
+			String[] tmps = remarksArray;
+			remarksArray = Arrays.copyOf(tmps,titles.length);
+			for (int i = tmps.length; i < titles.length; i++) {
+				remarksArray[i] = "";
+			}
+		}
+		
 		StringBuilder strBuild = new StringBuilder();
 		
 		strBuild.append("<script type=\"text/javascript\">\r\n var addRows=1;\r\n function tbAddRow(dname) {addRows++;\r\n");
@@ -101,7 +111,8 @@ public class ListctrlParser implements IFormParser {
 		strBuild.append("   //去除模板标记 \r\n   "); 
 		strBuild.append("   $addTr.removeClass(\"template\");$addTr.attr(\"id\",\"row\"+addRows);\r\n ");
 		strBuild.append("   //修改内部元素 \r\n ");
-		strBuild.append("   $addTr.find(\".delrow\").removeClass(\"hide\");\r\n $addTr.find(\"input[type=hidden]\").remove();");
+		strBuild.append("   $addTr.find(\".delrow\").removeClass(\"hide\");\r\n");
+		//strBuild.append("$addTr.find(\"input[type=hidden]\").remove();");
 		strBuild.append("   $addTr.find(\"input,textarea\").each(function(){\r\n");
 		strBuild.append(" var id = $(this).attr(\"id\");id = id.replace('row-','row'+addRows+'-');$(this).attr(\"id\",id);$(this).val('');\r\n");
 		strBuild.append(" $(this).removeClass('cnoj-auto-complete-relate-listener cnoj-input-tree-listener cnoj-input-select-relate-listener cnoj-input-org-tree-listener");
@@ -128,17 +139,40 @@ public class ListctrlParser implements IFormParser {
         strBuild.append("  var oTable = document.getElementById(sTbid);\r\n");
         strBuild.append("  while(obj.tagName !=\"TR\") {\r\n");
         strBuild.append("     obj = obj.parentNode;\r\n}\r\n");
+        strBuild.append("     var id = $(obj).find('.id-value').val();\r\n");
+        strBuild.append(" if(utils.isNotEmpty(id)){ var delValue = $(oTable).find('.del-value').val();\r\n");
+        strBuild.append(" if(utils.isNotEmpty(delValue)){delValue = delValue+','+id;} else {delValue=id;}\r\n");
+        strBuild.append(" $(oTable).find('.del-value').val(delValue);} \r\n");
         strBuild.append("  oTable.deleteRow(obj.rowIndex);\r\n}\r\n");
+        
+        strBuild.append(" /*监听修改情况tr*/\r\n");
+        strBuild.append(" function changeValue(obj){");
+        strBuild.append(" var $table = $(obj).parents(\"table:eq(0)\"); var id =$(obj).parents(\"tr:eq(0)\").find(\".id-value\").val(); ");
+        strBuild.append(" if(utils.isNotEmpty(id)){ var changeValue = $table.find('.change-value').val(); var isset=false \r\n");
+        strBuild.append(" if(utils.isNotEmpty(changeValue)){if(changeValue.indexOf(id) == -1){changeValue = changeValue+','+id;isset=true}} else {changeValue=id;isset=true}\r\n");
+        strBuild.append(" if(isset){$table.find('.change-value').val(changeValue); }}\r\n");
+        strBuild.append(" };\r\n");
         strBuild.append("</script>");
         
         StringBuilder thBuild = new StringBuilder(),tbBuild = new StringBuilder(),tfTdBuild = new StringBuilder();
         int isNum = 0,tdNum = 0;
         String require = "";
         String tdEndTag = "</td>";
+        thBuild.append("<th class=\"hidden\">");
+        thBuild.append("<input type=\"hidden\" class=\"del-value\" name=\""+name+"_del\" />");
+        thBuild.append("<input type=\"hidden\" class=\"change-value\" name=\""+name+"_change\" />");
+        thBuild.append("</th>");
+        tbBuild.append("<td class=\"hidden\">");
+        tbBuild.append("<input type=\"hidden\" class=\"id-value\" id=\"row-"+name+"-0\" name=\""+name+"_id\" />");
+        tbBuild.append("</td>");
         for (int i=0;i<titles.length;i++) {
         	tdNum++;
         	if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
-        		thBuild.append("<td>"+titles[i]+"</td>");
+        		thBuild.append("<td>"+titles[i]);
+        		if(StringUtils.isNotEmpty(remarksArray[i])) {
+        			thBuild.append("<p class=\"help-block\" style=\"margin:0;padding:0\">"+StringUtils.handNull(remarksArray[i])+"</p>");
+        		}
+        		thBuild.append("</td>");
         	}
 			if(YesNoType.YES.getStrValue().equals(fieldRequires[i])) {
 				require = " require";
@@ -149,23 +183,23 @@ public class ListctrlParser implements IFormParser {
 			if("text".equals(colTypes[i])) {
 				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
 					if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
-						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 					} else {
-						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 					}
 				} else {
 					if(tbBuild.toString().endsWith(tdEndTag)) {
 						tbBuild.delete(tbBuild.length() - tdEndTag.length(), tbBuild.length());
-						tbBuild.append("<input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+						tbBuild.append("<input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 					}
 				}
 			} else if("textarea".equals(colTypes[i])) {
 				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
-					tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+					tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
 				} else {
 					if(tbBuild.toString().endsWith(tdEndTag)) {
 						tbBuild.delete(tbBuild.length() - tdEndTag.length(), tbBuild.length());
-						tbBuild.append("<textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" class=\"form-control hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+						tbBuild.append("<textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
 					}
 				}
 			}

@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
     <meta name="generator" content="www.leipi.org" />
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="leipi.style.css">
     <script type="text/javascript" src="../dialogs/internal.js"></script>
     <script type="text/javascript" src="./jquery-1.7.2.min.js"></script>
@@ -55,7 +55,7 @@ function createElement(type, name)
     </thead>
    </table>
    
-    <table class="table table-striped table-bordered table-condensed"  id="tbl">
+    <table class="table table-striped table-bordered table-condensed" id="tbl">
        <thead>
           <tr>
             <th> <span>序号</span> </th>
@@ -69,6 +69,7 @@ function createElement(type, name)
             <th><span>插件</span></th>
             <th><span>数据来源</span></th>
             <th><span>默认值</span></th>
+            <th>标题备注</th>
             <th>必填</th>
             <th>隐藏</th>
            </tr>
@@ -76,15 +77,15 @@ function createElement(type, name)
          <tbody id="tbl1">
                     <tr>
                         <td><span class="badge">1</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_1" type="text" class="input-medium" /></td>
+                        <td title="Tab键切换输入框"> <input id="item_1" type="text" class="input-small" /></td>
                         <td>
-                          <select id="bind_table_field_1" class="bind_table_field require">
+                          <select id="bind_table_field_1" class="bind_table_field require input-small">
                           	   <option class="" value="">无</option>
 				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
 				          </select>
                         </td>
                         <td title="Tab键切换输入框">
-                            <select id="coltype_1" class="input-medium">
+                            <select id="coltype_1" class="input-small">
                                 <option value="text">单行输入框</option>
                                 <option value="textarea">多行输入框</option>
                                 <!-- <option value="int">数值</option> -->
@@ -95,7 +96,7 @@ function createElement(type, name)
                         <td title="Tab键切换输入框"> <label> <input type="checkbox" id="sum_1" class="csum" value="1"> </label> </td>
                          -->
                          <td title="Tab键切换输入框">
-                           <select id="plugin_type_1" class="input-medium pluin_type">
+                           <select id="plugin_type_1" class="input-small pluin_type">
                                   <option value="">无</option>
 					              <option value="cnoj-input-tree">树形</option>
 					              <option value="cnoj-auto-complete">自动完成</option>
@@ -108,9 +109,10 @@ function createElement(type, name)
                             </select>
                          </td>
                         <td title="Tab键切换输入框">
-                            <input id="plugin_uri_1"  type="text" class="input-medium plugin_uri"/>
+                            <input id="plugin_uri_1"  type="text" class="input-small plugin_uri"/>
                         </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_1" type="text" class="input-medium"/></td>
+                        <td title="Tab键切换输入框"><input id="colvalue_1" type="text" class="input-small"/></td>
+                        <td><input id="remarks_1" type="text" class="input-small"/></td>
                         <td>
                         	<div class="checkbox">
 							  <label>
@@ -129,21 +131,21 @@ function createElement(type, name)
 
                     <tr>
                         <td><span class="badge">2</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_2" type="text" class="input-medium"> </td>
+                        <td title="Tab键切换输入框"> <input id="item_2" type="text" class="input-small"> </td>
                         <td>
-                          <select id="bind_table_field_2" class="bind_table_field require">
+                          <select id="bind_table_field_2" class="bind_table_field require input-small">
                               <option class="" value="">无</option>
 				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
 				          </select>
                         </td>
                         <td title="Tab键切换输入框">
-                            <select id="coltype_2" class="input-medium">
+                            <select id="coltype_2" class="input-small">
                                 <option value="text">单行输入框</option>
                                 <option value="textarea">多行输入框</option>
                             </select>
                         </td>
                         <td title="Tab键切换输入框">
-                           <select id="plugin_type_2" class="input-medium pluin_type">
+                           <select id="plugin_type_2" class="input-small pluin_type">
                                   <option value="">无</option>
 					              <option value="cnoj-input-tree">树形</option>
 					              <option value="cnoj-auto-complete">自动完成</option>
@@ -156,9 +158,10 @@ function createElement(type, name)
                             </select>
                          </td>
                         <td title="Tab键切换输入框">
-                            <input id="plugin_uri_2"  type="text" class="input-medium plugin_uri"/>
+                            <input id="plugin_uri_2"  type="text" class="input-small plugin_uri"/>
                         </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_2"  type="text" class="input-medium"/></td>
+                        <td title="Tab键切换输入框"><input id="colvalue_2"  type="text" class="input-small"/></td>
+                        <td><input id="remarks_2" type="text" class="input-small"/></td>
                         <td>
                           <div class="checkbox">
 							  <label>
@@ -177,21 +180,21 @@ function createElement(type, name)
                     
                     <tr>
                         <td><span class="badge">3</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_3" type="text" class="input-medium"> </td>
+                        <td title="Tab键切换输入框"> <input id="item_3" type="text" class="input-small"> </td>
                         <td>
-                          <select id="bind_table_field_3" class="bind_table_field require">
+                          <select id="bind_table_field_3" class="bind_table_field require input-small">
                                <option class="" value="">无</option>
 				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
 				          </select>
                         </td>
                         <td title="Tab键切换输入框">
-                            <select id="coltype_3" class="input-medium">
+                            <select id="coltype_3" class="input-small">
                                 <option value="text">单行输入框</option>
                                 <option value="textarea">多行输入框</option>
                             </select>
                         </td>
                        <td title="Tab键切换输入框">
-                           <select id="plugin_type_3" class="input-medium pluin_type">
+                           <select id="plugin_type_3" class="input-small pluin_type">
                                   <option value="">无</option>
 					              <option value="cnoj-input-tree">树形</option>
 					              <option value="cnoj-auto-complete">自动完成</option>
@@ -204,9 +207,10 @@ function createElement(type, name)
                             </select>
                          </td>
                         <td title="Tab键切换输入框">
-                            <input id="plugin_uri_3"  type="text" class="input-medium plugin_uri"/>
+                            <input id="plugin_uri_3"  type="text" class="input-small plugin_uri"/>
                         </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_3"  type="text" class="input-medium"/></td>
+                        <td title="Tab键切换输入框"><input id="colvalue_3"  type="text" class="input-small"/></td>
+                        <td><input id="remarks_3" type="text" class="input-small"/></td>
                         <td> 
                            <div class="checkbox">
 							  <label>
@@ -224,22 +228,22 @@ function createElement(type, name)
                     </tr>
                     <tr>
                         <td><span class="badge">4</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_4" type="text" class="input-medium"> </td>
+                        <td title="Tab键切换输入框"> <input id="item_4" type="text" class="input-small"> </td>
                         <td>
-                          <select id="bind_table_field_4" class="bind_table_field require">
+                          <select id="bind_table_field_4" class="bind_table_field require input-small">
                                <option class="" value="">无</option>
 				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
 				          </select>
                         </td>
                         <td title="Tab键切换输入框">
-                            <select id="coltype_4" class="input-medium">
+                            <select id="coltype_4" class="input-small">
                                 <option value="text">单行输入框</option>
                                 <option value="textarea">多行输入框</option>
                                 
                             </select>
                         </td>
                         <td title="Tab键切换输入框">
-                           <select id="plugin_type_4" class="input-medium pluin_type">
+                           <select id="plugin_type_4" class="input-small pluin_type">
                                   <option value="">无</option>
 					              <option value="cnoj-input-tree">树形</option>
 					              <option value="cnoj-auto-complete">自动完成</option>
@@ -252,9 +256,10 @@ function createElement(type, name)
                             </select>
                          </td>
                         <td title="Tab键切换输入框">
-                            <input id="plugin_uri_4"  type="text" class="input-medium plugin_uri"/>
+                            <input id="plugin_uri_4"  type="text" class="input-small plugin_uri"/>
                         </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_4"  type="text" class="input-medium"/></td>
+                        <td title="Tab键切换输入框"><input id="colvalue_4"  type="text" class="input-small"/></td>
+                        <td><input id="remarks_4" type="text" class="input-small"/></td>
                         <td> 
                            <div class="checkbox">
 							  <label>
@@ -270,24 +275,24 @@ function createElement(type, name)
 							</div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row-clone">
                         <td><span class="badge">5</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_5" type="text" class="input-medium"> </td>
+                        <td title="Tab键切换输入框"> <input id="item_5" type="text" class="input-small"> </td>
                         <td>
-                          <select id="bind_table_field_5" class="bind_table_field require">
+                          <select id="bind_table_field_5" class="bind_table_field require input-small">
                            	   <option class="" value="">无</option>
 				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
 				          </select>
                         </td>
                         <td title="Tab键切换输入框">
-                            <select id="coltype_5" class="input-medium">
+                            <select id="coltype_5" class="input-small">
                                 <option value="text">单行输入框</option>
                                 <option value="textarea">多行输入框</option>
                                 
                             </select>
                         </td>
                         <td title="Tab键切换输入框">
-                           <select id="plugin_type_5" class="input-medium pluin_type">
+                           <select id="plugin_type_5" class="input-small pluin_type">
                                   <option value="">无</option>
 					              <option value="cnoj-input-tree">树形</option>
 					              <option value="cnoj-auto-complete">自动完成</option>
@@ -300,9 +305,10 @@ function createElement(type, name)
                             </select>
                          </td>
                         <td title="Tab键切换输入框">
-                            <input id="plugin_uri_5"  type="text" class="input-medium plugin_uri"/>
+                            <input id="plugin_uri_5"  type="text" class="input-small plugin_uri"/>
                         </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_5"  type="text" class="input-medium"/></td>
+                        <td title="Tab键切换输入框"><input id="colvalue_5"  type="text" class="input-small"/></td>
+                        <td><input id="remarks_5" type="text" class="input-small"/></td>
                         <td> 
                            <div class="checkbox">
 							  <label>
@@ -318,152 +324,6 @@ function createElement(type, name)
 							</div>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td><span class="badge">6</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_6" type="text" class="input-medium"> </td>
-                        <td>
-                          <select id="bind_table_field_6" class="bind_table_field require">
-                               <option class="" value="">无</option>
-				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
-				          </select>
-                        </td>
-                        <td title="Tab键切换输入框">
-                            <select id="coltype_6" class="input-medium">
-                                <option value="text">单行输入框</option>
-                                <option value="textarea">多行输入框</option>
-                                
-                            </select>
-                        </td>
-                       <td title="Tab键切换输入框">
-                           <select id="plugin_type_6" class="input-medium pluin_type">
-                                  <option value="">无</option>
-					              <option value="cnoj-input-tree">树形</option>
-					              <option value="cnoj-auto-complete">自动完成</option>
-					              <option value="cnoj-auto-complete-relate">自动完成关联</option>
-					              <option value="cnoj-input-select">下拉框</option>
-					              <option value="cnoj-input-select-relate">下拉框关联</option>
-					              <option value="cnoj-datetime">日期时间</option>
-					              <option value="cnoj-date">日期</option>
-					              <option value="cnoj-time">时间</option>
-                            </select>
-                         </td>
-                        <td title="Tab键切换输入框">
-                            <input id="plugin_uri_6"  type="text" class="input-medium plugin_uri"/>
-                        </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_6"  type="text" class="input-medium"/></td>
-                        <td> 
-                           <div class="checkbox">
-							  <label>
-							    <input type="checkbox" id="field_require_6" value="1">
-							  </label>
-							</div>
-						</td>
-						<td>
-                        	<div class="checkbox">
-							  <label>
-							    <input type="checkbox" id="field_hide_6" value="1">
-							  </label>
-							</div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="badge">7</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_7" type="text" class="input-medium"> </td>
-                        <td>
-                          <select id="bind_table_field_7" class="bind_table_field require">
-                               <option class="" value="">无</option>
-				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
-				          </select>
-                        </td>
-                        <td title="Tab键切换输入框">
-                            <select id="coltype_7" class="input-medium ">
-                                <option value="text">单行输入框</option>
-                                <option value="textarea">多行输入框</option>
-                                
-                            </select>
-                        </td>
-                       <td title="Tab键切换输入框">
-                           <select id="plugin_type_7" class="input-medium pluin_type">
-                                  <option value="">无</option>
-					              <option value="cnoj-input-tree">树形</option>
-					              <option value="cnoj-auto-complete">自动完成</option>
-					              <option value="cnoj-auto-complete-relate">自动完成关联</option>
-					              <option value="cnoj-input-select">下拉框</option>
-					              <option value="cnoj-input-select-relate">下拉框关联</option>
-					              <option value="cnoj-datetime">日期时间</option>
-					              <option value="cnoj-date">日期</option>
-					              <option value="cnoj-time">时间</option>
-                            </select>
-                         </td>
-                        <td title="Tab键切换输入框">
-                            <input id="plugin_uri_7"  type="text" class="input-medium plugin_uri"/>
-                        </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_7"  type="text" class="input-medium"/></td>
-                        <td> 
-                           <div class="checkbox">
-							  <label>
-							    <input type="checkbox" id="field_require_7" value="1">
-							  </label>
-							</div>
-						</td>
-						<td>
-                        	<div class="checkbox">
-							  <label>
-							    <input type="checkbox" id="field_hide_7" value="1">
-							  </label>
-							</div>
-                        </td>
-                    </tr>
-                    <tr class="row-clone">
-                        <td><span class="badge">8</span></td>
-                        <td title="Tab键切换输入框"> <input id="item_8" type="text" class="input-medium"> </td>
-                        <td>
-                          <select id="bind_table_field_8" class="bind_table_field require">
-                          	   <option class="" value="">无</option>
-				               <option class="cnoj-dyn-opt" value="">正在加载数据</option>
-				          </select>
-                        </td>
-                        <td title="Tab键切换输入框">
-                            <select id="coltype_8" class="input-medium">
-                                <option value="text">单行输入框</option>
-                                <option value="textarea">多行输入框</option>
-                                
-                            </select>
-                        </td>
-                        <td title="Tab键切换输入框">
-                           <select id="plugin_type_8" class="input-medium pluin_type">
-                                  <option value="">无</option>
-					              <option value="cnoj-input-tree">树形</option>
-					              <option value="cnoj-auto-complete">自动完成</option>
-					              <option value="cnoj-auto-complete-relate">自动完成关联</option>
-					              <option value="cnoj-input-select">下拉框</option>
-					              <option value="cnoj-input-select-relate">下拉框关联</option>
-					              <option value="cnoj-datetime">日期时间</option>
-					              <option value="cnoj-date">日期</option>
-					              <option value="cnoj-time">时间</option>
-                            </select>
-                         </td>
-                        <td title="Tab键切换输入框">
-                            <input id="plugin_uri_8"  type="text" class="input-medium plugin_uri"/>
-                        </td>
-                        <td title="Tab键切换输入框"><input id="colvalue_8"  type="text" class="input-medium"/></td>
-                        <td> 
-                           <div class="checkbox">
-							  <label>
-							    <input type="checkbox" id="field_require_8" value="1">
-							  </label>
-							</div>
-						</td>
-						<td>
-                        	<div class="checkbox">
-							  <label>
-							    <input type="checkbox" id="field_hide_8" value="1">
-							  </label>
-							</div>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
             <div class="text-center">
@@ -473,7 +333,7 @@ function createElement(type, name)
 </div>
 <script type="text/javascript">
 var oNode = null,thePlugins = 'listctrl';
-var rows_count = 8;
+var rows_count = 5;
 var defaultRows = rows_count;
 var adefaultDatatype = ['text','textarea','int','calc'];
 var tableDefValue = null,fieldDefValue = null;
@@ -503,6 +363,7 @@ window.onload = function() {
                 gColValue = oNode.getAttribute('orgcolvalue'),
                 gBindField = oNode.getAttribute('bind_table_field'),
                 gFieldRequire = oNode.getAttribute('fieldrequire'),
+                gRemarks = oNode.getAttribute('remarks'),
                 gFieldHide = oNode.getAttribute('fieldhide');
         var aTitle = gTitle.split('`'),
                 aColType = gColType ? gColType.split('`') : null,
@@ -514,6 +375,8 @@ window.onload = function() {
         gPluginUri = gPluginUri ? gPluginUri.split('`')  :null;
         gFieldRequire = gFieldRequire ? gFieldRequire.split('`') : null;
         gFieldHide = gFieldHide ? gFieldHide.split('`') : null;
+        if(null != gRemarks) 
+            gRemarks = gRemarks ? gRemarks.split('`') : null;
                
         var gTableWidth =  oNode.getAttribute('tablewidth');
         var gBindTable = oNode.getAttribute('bind_table');
@@ -538,7 +401,8 @@ window.onload = function() {
             gBindField = 'bind_table_field_'+(i+1),
             sFieldRequire = 'field_require_'+(i+1),
             sFieldHide = 'field_hide_'+(i+1),
-            sColValue = 'colvalue_' + (i + 1);
+            sColValue = 'colvalue_' + (i + 1),
+            sRemark = 'remarks_'+(i+1);
             
             $G(sItem).value = aTitle[i];
             if(null != gPluginType && typeof(gPluginType[i]) !== 'undefined') {
@@ -567,8 +431,10 @@ window.onload = function() {
                 }
             }
             $G(gBindField).value = aBindField[i];
+            if(null != gRemarks && typeof(gRemarks[i]) !== 'undefined') {
+             $G(sRemark).value = gRemarks[i];
+            }
         }
-
     }
     //合计，强制选择 int
     /*$(".csum").click(function(){
@@ -634,7 +500,7 @@ dialog.onok = function (){
         return false;
     }
     var gTitle = '',gColType = '' ,gUnitValue='' ,gSum = '' ,gColValue = '' ,gBindField='',
-    gPluginType = '',gPluginUri = '',nCount = 0,gFieldRequire = '',gFieldHide = '';
+    gPluginType = '',gPluginUri = '',nCount = 0,gFieldRequire = '',gFieldHide = '', gRemarks='';
     for (var i = 1;i <= rows_count; i ++ ) {
         var oItem  = $G( "item_" + i ) ,
         /*oSum = $G( 'sum_'+i ) ,  oUnit = $G( 'unit_' + i),*/
@@ -643,7 +509,9 @@ dialog.onok = function (){
         oColType = $G('coltype_' + i) ,
         oFieldRequire = $G('field_require_'+i),
         oFieldHide = $G('field_hide_'+i),
-        oColValue = $G('colvalue_' + i) ,oBindField=$G('bind_table_field_'+i);
+        oColValue = $G('colvalue_' + i) ,
+        oBindField=$G('bind_table_field_'+i),
+        oRemarks = $G('remarks_'+i);
         if ( oItem.value != '') {
             if(gTitle.indexOf(oItem.value+ '`') !== -1 ) {
                 continue;//重复
@@ -661,6 +529,7 @@ dialog.onok = function (){
             gBindField += oBindField.value+'`';
             gPluginType += oPluginType.value+'`';
             gPluginUri += oPluginUri.value+'`';
+            gRemarks += oRemarks.value + '`';
             if(oFieldRequire.checked) {
             	gFieldRequire += '1`';
             } else {
@@ -687,35 +556,15 @@ dialog.onok = function (){
         alert("表头项目不能为空");
         return false;
     }
-
     if( !oNode ) {
-
         try {
             oNode = createElement('input','leipiNewField');
-            oNode.setAttribute('leipiPlugins',thePlugins );
             oNode.setAttribute('type','text');
-            oNode.setAttribute('value','{列表控件}');
             oNode.setAttribute('readonly','readonly');
-            oNode.setAttribute('title',gName);
-            oNode.setAttribute('tablewidth',gTableWidth);
-            oNode.setAttribute('orgtitle',gTitle);
-            oNode.setAttribute('orgcoltype',gColType);
-            //oNode.setAttribute('orgunit',gUnitValue);
-            //oNode.setAttribute('orgsum',gSum);
             
-            oNode.setAttribute('fieldrequire',gFieldRequire);
-            oNode.setAttribute('fieldhide',gFieldHide);
-            oNode.setAttribute('plugintype',gPluginType);
-            oNode.setAttribute('pluginuri',gPluginUri);
+            setAttri(oNode,thePlugins,gName,gTableWidth,gTitle,gColType,gFieldRequire,
+            gFieldHide,gPluginType,gPluginUri,gColValue,gBindTable,gBindField,gRemarks,gWidth);
             
-            oNode.setAttribute('orgcolvalue',gColValue);
-            oNode.setAttribute('bind_table',gBindTable);
-            oNode.setAttribute('bind_table_field',gBindField);
-           
-            if( gWidth != '' ) {
-                oNode.style.width = gWidth;
-            }
-            oNode.setAttribute('orgwidth',gWidth );
             editor.execCommand('insertHtml',oNode.outerHTML);
             return true ;
         } catch (e) {
@@ -729,32 +578,43 @@ dialog.onok = function (){
     } else {
         //修改
         oNode.setAttribute('name','leipiNewField');
-        oNode.setAttribute('leipiPlugins',thePlugins );
-        oNode.setAttribute('title',gName);
-        oNode.setAttribute('tablewidth', gTableWidth);
-        oNode.setAttribute('orgtitle',gTitle);
-        oNode.setAttribute('orgcoltype',gColType);
-       /* oNode.setAttribute('orgunit',gUnitValue);
-        oNode.setAttribute('orgsum',gSum);*/
-        oNode.setAttribute('plugintype',gPluginType);
-        oNode.setAttribute('pluginuri',gPluginUri);
-        oNode.setAttribute('fieldrequire',gFieldRequire);
-        oNode.setAttribute('fieldhide',gFieldHide);
-        
-        oNode.setAttribute('orgcolvalue',gColValue);
-        oNode.setAttribute('bind_table',gBindTable);
-        oNode.setAttribute('bind_table_field',gBindField);
-        
-        if( gWidth != '' ) {
-            oNode.style.width = gWidth;
-        }else
-        {
-            oNode.style.width = '';
-        }
-        oNode.setAttribute('orgwidth',gWidth );
+        setAttri(oNode,thePlugins,gName,gTableWidth,gTitle,gColType,gFieldRequire,
+        gFieldHide,gPluginType,gPluginUri,gColValue,gBindTable,gBindField,gRemarks,gWidth);
         delete UE.plugins[thePlugins].editdom; //使用后清空这个对象，变回新增模式
     }
 };
+
+/**
+  * 设置属性
+  */
+function setAttri(oNode,thePlugins,gName,gTableWidth,gTitle,gColType,gFieldRequire,
+gFieldHide,gPluginType,gPluginUri,gColValue,gBindTable,gBindField,gRemarks,gWidth) {
+     oNode.setAttribute('leipiPlugins',thePlugins );
+     oNode.setAttribute('value','{'+gName+'}');
+     oNode.setAttribute('title',gName);
+     oNode.setAttribute('tablewidth',gTableWidth);
+     oNode.setAttribute('orgtitle',gTitle);
+     oNode.setAttribute('orgcoltype',gColType);
+     //oNode.setAttribute('orgunit',gUnitValue);
+     //oNode.setAttribute('orgsum',gSum);
+            
+     oNode.setAttribute('fieldrequire',gFieldRequire);
+     oNode.setAttribute('fieldhide',gFieldHide);
+     oNode.setAttribute('plugintype',gPluginType);
+     oNode.setAttribute('pluginuri',gPluginUri);
+            
+     oNode.setAttribute('orgcolvalue',gColValue);
+     oNode.setAttribute('bind_table',gBindTable);
+     oNode.setAttribute('bind_table_field',gBindField);
+     oNode.setAttribute('remarks',gRemarks);
+           
+     if( gWidth != '' ) {
+        oNode.style.width = gWidth;
+     } else {
+        oNode.style.width = '';
+     }
+     oNode.setAttribute('orgwidth',gWidth );
+}
 </script>
 </body>
 </html>

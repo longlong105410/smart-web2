@@ -49,6 +49,11 @@ public class TFlowForm extends BaseBeanImpl implements DateBean {
 	private String processId;
 	
 	/**
+	 * 流程名称
+	 */
+	private String processName;
+	
+	/**
 	 * 流程实例ID
 	 */
 	private String orderId;
@@ -202,6 +207,15 @@ public class TFlowForm extends BaseBeanImpl implements DateBean {
 
 	public void setProgress(Float progress) {
 		this.progress = progress;
+	}
+
+	@Column(name="process_name", length=255)
+	public String getProcessName() {
+		return processName;
+	}
+
+	public void setProcessName(String processName) {
+		this.processName = processName;
 	}
 	
 }

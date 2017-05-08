@@ -208,7 +208,7 @@ public class FormTableController extends BaseController {
 		if(StringUtils.isNotEmpty(paramName) && StringUtils.isNotEmpty(paramValue)) {
 			param.put(paramName, paramValue);
 		} else {
-			param = super.getRequestParamMap(request);
+			param = super.getRequestParamMap(request, false);
 		}
 		smartResp = opServ.getDatas("table_fields",param);
 		if(OP_SUCCESS.equals(smartResp.getResult())) {

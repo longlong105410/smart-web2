@@ -14,6 +14,12 @@ public class QueryFormData {
 
 	private String name;
 	
+	private String fieldId;
+	
+	private String fieldName;
+	
+	private String fieldRemark;
+	
 	private Object value;
 	
 	private int valueSize;
@@ -50,6 +56,30 @@ public class QueryFormData {
 
 	public void setValueSize(int valueSize) {
 		this.valueSize = valueSize;
+	}
+
+	public String getFieldId() {
+		return fieldId;
+	}
+
+	public void setFieldId(String fieldId) {
+		this.fieldId = fieldId;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	public String getFieldRemark() {
+		return fieldRemark;
+	}
+
+	public void setFieldRemark(String fieldRemark) {
+		this.fieldRemark = fieldRemark;
 	}
 	
 	

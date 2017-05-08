@@ -135,6 +135,8 @@
    </div><!-- header -->
 <div class="wrap-main p-t-3">
 	 <script type="text/javascript">
+	//设置ueditor所在路径
+     window.UEDITOR_HOME_URL = '${pageContext.request.contextPath}/plugins/ueditor/';
 	 $(document).ready(function(){
 		 autoHeaderWidth();
 		 $(window).resize(function(){

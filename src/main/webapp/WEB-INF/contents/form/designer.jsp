@@ -322,14 +322,16 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 	    /*type  =  save 保存设计 versions 保存版本  close关闭 */
 	    fnCheckForm : function ( type ) {
 	    	if(!$("#form-prop").validateForm({callback:function(event,obj){
-	    		if ($(event.target).closest("#form-prop").length > 0) {
-	    			if(!utils.isEmpty(obj)) {
-	    				$(obj).popover('destroy');
-	    				obj = null;
-	    			}
-	    			if($(event.target).hasClass("form-control")) {
-	    				$(event.target).parent().removeClass("has-error");
-	    			}
+	    		if(utils.isNotEmpty(event.target)) {
+	    			if ($(event.target).closest("#form-prop").length > 0) {
+	                    if(!utils.isEmpty(obj)) {
+	                        $(obj).popover('destroy');
+	                        obj = null;
+	                    }
+	                    if($(event.target).hasClass("form-control")) {
+	                        $(event.target).parent().removeClass("has-error");
+	                    }
+	                }
 	    		}
 	    	}})) {
 	    		return false;

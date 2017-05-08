@@ -44,7 +44,7 @@ public class JqGridController extends BaseController {
 		Integer page = gridRequest.getPage();
 		JqGridData jgGridData = new JqGridData();
 		SmartResponse<JqGridData> smartResp = new SmartResponse<JqGridData>();
-		Map<String, Object> params = super.getRequestParamMap(request);
+		Map<String, Object> params = super.getRequestParamMap(request, false);
 		if(StringUtils.isNotEmpty(resId)) {
 			params.remove("orgIds");
 			smartResp = jqGridServ.queryPage(resId, params, page, getStartNum(page), getPerPageSize(rows));
@@ -71,7 +71,7 @@ public class JqGridController extends BaseController {
 		JqGridData jgGridData = new JqGridData();
 		SmartResponse<JqGridData> smartResp = new SmartResponse<JqGridData>();
 		if(StringUtils.isNotEmpty(resId)) {
-			Map<String, Object> params = super.getRequestParamMap(request);
+			Map<String, Object> params = super.getRequestParamMap(request, true);
 			smartResp = jqGridServ.queryPage(resId, params, page, getStartNum(page), getPerPageSize(rows));
 			if(OP_SUCCESS.equals(smartResp.getResult())) {
 				jgGridData = (JqGridData)smartResp.getData();

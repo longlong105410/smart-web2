@@ -253,6 +253,9 @@ public class ProcessFacade {
 					&& StringUtils.isEmpty(submitFormData.getProcessId())) {
 				Process process = facets.getEngine().process().getProcessByName(submitFormData.getProcessName());
 				submitFormData.setProcessId(process.getId());
+			} else if(StringUtils.isNotEmpty(submitFormData.getProcessId()) && StringUtils.isEmpty(submitFormData.getProcessName())){
+				Process process = facets.getEngine().process().getProcessById(submitFormData.getProcessId());
+				submitFormData.setProcessName(process.getName());
 			}
 			String formDataId = submitFormData.getFormDataId();
 			Map<String,Object> params = submitFormData.getParams();

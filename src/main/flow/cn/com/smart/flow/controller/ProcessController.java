@@ -95,9 +95,12 @@ public class ProcessController extends BaseFlowControler {
 		}
 		UserInfo userInfo = getUserInfoFromSession(request);
 		//当流程名称不为空时，通过流程名称获取流程Id（获取最新的流程）
-		if(StringUtils.isNotEmpty(taskInfo.getProcessName())) {
+		if(StringUtils.isNotEmpty(taskInfo.getProcessName()) && StringUtils.isEmpty(taskInfo.getProcessId())) {
 			Process process = facets.getEngine().process().getProcessByName(taskInfo.getProcessName());
 			taskInfo.setProcessId(process.getId());
+		} else if(StringUtils.isNotEmpty(taskInfo.getProcessId()) && StringUtils.isEmpty(taskInfo.getProcessName())){
+			Process process = facets.getEngine().process().getProcessById(taskInfo.getProcessId());
+			taskInfo.setProcessName(process.getName());
 		}
 	    //获取流程表单：如表单生成的HTML源码
 	    SmartResponse<TForm> smartResp = processFacade.getForm(taskInfo.getProcessId());
@@ -167,7 +170,7 @@ public class ProcessController extends BaseFlowControler {
 				submitFormData.setFormState(1);
 			}
 			UserInfo userInfo = getUserInfoFromSession(request);
-			submitFormData.setParams(getRequestParamMap(request));
+			submitFormData.setParams(getRequestParamMap(request, false));
 			smartResp = processFacade.saveOrUpdateForm(submitFormData,userInfo.getId());
 			submitFormData = null;
 		}
@@ -188,7 +191,7 @@ public class ProcessController extends BaseFlowControler {
 		smartResp.setMsg("任务处理失败");
 		UserInfo userInfo = getUserInfoFromSession(request);
 		//处理参数
-		Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request));
+		Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request, false));
 		//处理附件
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		if(multipartResolver.isMultipart(request)) {
@@ -221,7 +224,7 @@ public class ProcessController extends BaseFlowControler {
 		ModelAndView modelView = new ModelAndView();
 		queryFilter = (null == queryFilter ? new QueryFilter():queryFilter);
 		String uri = "process/todo";
-		queryFilter.setParam(super.getRequestParamMap(request));
+		queryFilter.setParam(super.getRequestParamMap(request, false));
 		page.setPageSize(getPerPageSize());
 		facets.getEngine().query().getWorkItems(page, queryFilter.orderBy(" t.create_time").order("desc").setOperators(getGroups(request)));
 		ModelMap modelMap = modelView.getModelMap();
@@ -441,7 +444,7 @@ public class ProcessController extends BaseFlowControler {
 	public SmartResponse<String> checkInsTitle(HttpServletRequest request,SubmitFormData submitFormData) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		//处理参数
-		Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request));
+		Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request, false));
 		if(null != submitFormData && StringUtils.isNotEmpty(submitFormData.getProcessId()) && 
 				StringUtils.isNotEmpty(submitFormData.getFormId())) {
 			submitFormData.setParams(params);
@@ -504,7 +507,7 @@ public class ProcessController extends BaseFlowControler {
 		smartResp.setMsg("表单数据更新失败");
 		if(StringUtils.isNotEmpty(formId) &&  StringUtils.isNotEmpty(formDataId)) {
 			UserInfo userInfo = getUserInfoFromSession(request);
-			Map<String, Object> datas = getRequestParamMap(request);
+			Map<String, Object> datas = getRequestParamMap(request, false);
 			//处理附件
 			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 			if(multipartResolver.isMultipart(request)) {

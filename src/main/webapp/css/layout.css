@@ -33,7 +33,7 @@ a:hover {color: #3b46d6;text-decoration: underline;}
 .setting-layout-content .layout-view {display: none;}
 .setting-layout-content .layout-view.active {display: block;}
 .panel-tabs-tab .nav-tabs {padding-left: 10px;}
-.panel-heading .nav-tabs {border-bottom: none;}
+.panel-default .panel-heading .nav-tabs {border-bottom: none;}
 
 /*.panel-tabs-tab .nav-tabs li.active a {color: #000;}
 .panel-tabs-tab .nav-tabs li a {font-weight: 700;color: #333;}*/
@@ -58,4 +58,45 @@ table>tbody>tr.tr-asyn-loading>td {padding-left: 35px;}
     width: 40px;
     height: 13px;
     background: url("../images/new.png") no-repeat 0 0;
+}
+
+/****************非表格列表样式*************/
+.title-row {
+    font-weight: 500;
+}
+.div-table-wrap .list-row .col-sm-3,.div-table-wrap .list-row .col-sm-2,
+.div-table-wrap .list-row .col-sm-1,.div-table-wrap .list-row .col-sm-4,
+.div-table-wrap .list-row .col-sm-5,.div-table-wrap .list-row .col-sm-6,
+.div-table-wrap .list-row .col-sm-7,.div-table-wrap .list-row .col-sm-8,
+.div-table-wrap .list-row .col-sm-9,.div-table-wrap .list-row .col-sm-10,
+.div-table-wrap .list-row .col-sm-11,.div-table-wrap .list-row .col-sm-12 {
+    border-right: 1px solid #eee;
+}
+.list-row {
+    padding: 0;
+}
+.list-row div{
+    padding: 5px; 
+}
+.th-title {
+    width: 100px;
+    background: #fafafa;
+    text-align: right;
+}
+
+.index-panel-body {
+    overflow: auto;
+    padding: 0;
+}
+.index-panel {
+    padding: 0 15px;
+}
+.list-col-body {
+    overflow: auto;
+}
+.list-content-wrap .row {
+    margin: 0;
+}
+.row-title-wrap {
+    background: #fafafa;
 }

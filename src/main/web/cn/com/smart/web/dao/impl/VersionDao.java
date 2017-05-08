@@ -179,7 +179,7 @@ public class VersionDao extends BaseDaoImpl<TNVersion> {
 	public List<TNVersion> getVersion(VersionType versionType, int limit) {
 		List<TNVersion> versions = null;
 		if(null != versionType) {
-			String hql = " from "+TNVersion.class.getName()+" where type=:type order by numVersion desc";
+			String hql = " from "+TNVersion.class.getName()+" where type=:type order by createTime desc";
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("type", versionType.getValue());
 			versions = queryHql(hql, param, 0, limit);
