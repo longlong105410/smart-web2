@@ -28,7 +28,7 @@
 			            <table class="table table-bordered table-condensed table-sm">
 			               <thead>
 			                  <tr class="ui-state-default" style="border: none;">
-			                     <td style="width: 35px;">序号</td>
+			                     <td style="width: 40px;">序号</td>
 			                     <td style="width: 180px;">字段名称</td>
 			                     <td style="width: 150px;">数据类型</td>
 			                     <td style="width: 150px;">长度/设置</td>
@@ -48,7 +48,7 @@
 				                    <c:otherwise>
 				                        <c:forEach var="field" items="${table.fields }" varStatus="st" >
 				                            <tr>
-				                               <td class="seq-num text-right" style="width: 35px;">${st.index+1 }</td>
+				                               <td class="seq-num text-right" style="width: 40px;">${st.index+1 }</td>
 						                       <td style="width: 180px;">${field.fieldName }</td>
 						                       <td style="width: 150px;">${field.dataFormat }</td>
 						                       <td style="width: 150px;">${field.length }</td>

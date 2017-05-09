@@ -32,7 +32,7 @@
 			            <table class="table table-bordered table-condensed table-sm">
 			               <thead>
 			                  <tr class="ui-state-default" style="border: none;">
-			                     <td style="width: 35px;">序号</td>
+			                     <td style="width: 40px;">序号</td>
 			                     <td style="width: 180px;">字段名称</td>
 			                     <td style="width: 150px;">数据类型</td>
 			                     <td style="width: 150px;">长度/设置</td>
