@@ -17,8 +17,9 @@
 }
 
 .table-condensed>thead>tr>th,.table-condensed>thead>tr>th.th-checkbox.text-center, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td {
-	padding: 4px;
+	padding: 5px;
 }
+
 
 
 /*.table-condensed>tbody>tr>th {color:#2779aa;}*/
@@ -33,7 +34,7 @@
 .table .ui-state-default {border: none;border-top: 1px solid #aed0ea;}
 .panel-footer.ui-state-default {border: none;font-weight:normal;border-top: 1px solid #aed0ea;}
 .popover {max-width: 100%;}
-.form-control {width: 95%;padding: 6px 6px;display: inline-block;height: 32px;}
+.form-control {width: 95%;padding: 6px 6px;display: inline-block;}
 .form-control.input-sm {padding: 3px 3px;}
 .form-horizontal .has-feedback .form-control-feedback {right: 38px;}
 .panel-footer {padding: 5px 15px;}

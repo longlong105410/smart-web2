@@ -57,7 +57,7 @@
 				  </div>
               </form>
         </div>
-		<div class="cnoj-auto-limit-height" id="order-list" data-subtract-height="30">
+		<div class="cnoj-auto-limit-height" id="order-list" data-subtract-height="35">
 		    <table class="table table-bordered table-condensed">
 		        <thead>
 		           <tr class="ui-state-default">

@@ -10,6 +10,7 @@ var END_NODE_KEY = "end";
 			formFieldNames:null,
 			username:null,
 			deptName:null,
+			isToLabel: false,
 			callback:null
 	    };
 		var setting = $.extend(true,defaultOptions,options);
@@ -42,6 +43,9 @@ var END_NODE_KEY = "end";
 			richtextListener();
 			$parent.find(">.cnoj-loading").remove();
 			$this.removeClass("v-hidden");
+			if(setting.isToLabel) {
+				formValueToLabel($this);
+			}
 		}, 100);
 		
 		/**
@@ -958,3 +962,43 @@ function showFormAttList(datas, $element) {
 		attachmentListHandler(attId, $inputEle, false);
 	}
 } 
+
+/**
+ * 表单值转换为label
+ * @param $element
+ * @returns {Boolean}
+ */
+function formValueToLabel($element) {
+	if(utils.isEmpty($element)) {
+		return false;
+	}
+	$element.find("input[type=text],select,textarea").each(function(){
+		var $obj = $(this);
+        var tagName = $obj.prop("tagName").toLowerCase();
+        if(!$obj.hasClass("hidden") && !$obj.hasClass("hide")) {
+            var value = $obj.val();
+            if(utils.isNotEmpty(value)) {
+                value = utils.replaceAll(value,'\n','<br />');
+            }
+            if(tagName == 'select') {
+            	value = $obj.find("option:selected").text();
+            } else if(tagName == 'input' && ($obj.attr("type") == 'checkbox' || $obj.attr("type") == 'radio')) {
+            	if($obj.prop("checked")) {
+            		$obj.addClass("hidden");
+            		return;
+            	} else {
+            		$obj.parent().addClass("hidden");
+            		return;
+            	}
+            }
+            var width = $obj.width();
+            $obj.addClass("hidden");
+            var $parent = $obj.parents(".list-ctrl:eq(0)");
+            if($parent.length == 0)
+            	$obj.after("<span style='border-bottom:1px solid #ccc;display:inline-block;width:"+width+"px'>"+value+"</span>");
+            else {
+            	$obj.after("<span>"+value+"</span>");
+            }
+        }
+    });
+}

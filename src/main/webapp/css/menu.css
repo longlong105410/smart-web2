@@ -22,15 +22,6 @@ ul.menu-ul>li.menu-li>a, #menu-nav a {/*color: #313131;*/color:#1e62b5;}
 .li-expand>ul {display: block;border-bottom: #b0ddda solid 1px;/*border-top: #b0ddda solid 1px;*/}
 .li-shrink>ul {display: none;}
 #menu-sub-nav .layer-1 ul {background-color: #ffffff;}
-/*#menu-sub-nav .layer-1>a {padding-left: 25px;}
-#menu-sub-nav .layer-2>a{padding-left: 40px;}
-#menu-sub-nav .layer-3>a{padding-left: 50px;}
-#menu-sub-nav .layer-4>a{padding-left: 60px;}
-#menu-sub-nav .layer-5>a{padding-left: 70px;}
-#menu-sub-nav .layer-6>a{padding-left: 80px;}
-#menu-sub-nav .layer-7>a{padding-left: 90px;}
-#menu-sub-nav .layer-8>a{padding-left: 100px;}
-#menu-sub-nav .layer-9>a{padding-left: 110px;}*/
 #menu-sub-nav .layer-1>a {padding-left: 33px;background-color: #ffffff;color: #428bca;/*background-color: #f8f8f5;*/}
 #menu-sub-nav .layer-1.li-shrink>a,#menu-sub-nav .layer-1.li-expand>a {
 	padding-left: 15px;
@@ -67,6 +58,9 @@ ul.menu-ul>li.menu-li>a, #menu-nav a {/*color: #313131;*/color:#1e62b5;}
 #menu-sub-nav .layer-9.li-shrink>a,#menu-sub-nav .layer-9.li-expand>a {
 	padding-left: 90px;
 }
-#menu-sub-nav .menu-ul>.menu-li ul li a:hover,#menu-sub-nav .menu-ul>.menu-li ul li:active a {
+#menu-sub-nav .menu-ul>.menu-li ul li a:hover {
+    background-color: #f0f0f0;
+}
+#menu-sub-nav .menu-ul>.menu-li ul li.active>a {
 	background-color: #f9f9f9;
 }

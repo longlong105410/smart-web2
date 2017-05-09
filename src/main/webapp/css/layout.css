@@ -39,8 +39,8 @@ a:hover {color: #3b46d6;text-decoration: underline;}
 .panel-tabs-tab .nav-tabs li a {font-weight: 700;color: #333;}*/
 table>tbody>tr.tr-asyn-loading>td {padding-left: 35px;}
 
-.normal-fieldset fieldset {padding:5px 0 15px 10px;border: 1px solid #aaa;border-radius:5px;font-size: 12px;}
-.normal-fieldset legend {font-weight: 700;font-size: 12px;}
+.normal-fieldset fieldset {padding:5px 0 15px 10px;border: 1px solid #aaa;border-radius:5px;font-size: 13px;}
+.normal-fieldset legend {font-weight: 700;font-size: 13px;}
 .logo-img {display: inline-block;max-width: 40px;max-height: 40px;}
 
 .cnoj-checkbox .radio, 

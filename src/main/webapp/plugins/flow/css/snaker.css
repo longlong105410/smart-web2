@@ -26,7 +26,7 @@
 #task { background-repeat: no-repeat; background-position: center;}
 #state { background-repeat: no-repeat; background-position: center;}
 
-#properties { position:fixed;/*position: absolute;*/ top: 10px; right: 10px; width: 350px;}
+#properties { position:fixed;/*position: absolute;*/ top: 10px; right: 10px; width: 400px;}
 #properties .panel { margin-bottom: 5px;}
 #properties_handle { margin-top:1px; align:center; text-align:left; }
 /*#properties_handle .panel-heading { padding: 5px 15px; font-weight: normal; }*/
@@ -34,7 +34,7 @@
 #properties .panel-body {padding-top: 1px;}
 
 #flow-prop-tabs.nav>li>a { padding: 6px 10px; }
-.properties_all { padding-top: 3px; height: 300px; overflow-y: auto; padding-left: 5px;padding-right: 0;}
+.properties_all { padding-top: 3px; height: 350px; overflow-y: auto; padding-left: 5px;padding-right: 0;}
 .properties_all .form-group { margin-bottom: 5px; margin-right: 0;}
 .properties_all .col-sm-3 { padding-right: 5px; }
 .properties_all .col-sm-9 { padding-left:0; padding-right: 0px; }
@@ -58,8 +58,8 @@
 	height: 370px;
 }
 
-#properties fieldset {padding:5px 0 15px 10px;border: 1px solid #aaa;border-radius:5px;font-size: 12px;}
-#properties legend {font-weight: 700;color: #2779aa;font-size: 12px;}
+#properties fieldset {padding:5px 0 15px 10px;border: 1px solid #aaa;border-radius:5px;font-size: 13px;}
+#properties legend {font-weight: 700;color: #2779aa;font-size: 13px;}
 #properties fieldset label {font-weight: normal;}
 #properties fieldset .col-sm-4 {padding-left: 0px;}
 #properties .panel-tabs-tab .nav-tabs {padding-left: 2px;}

@@ -70,7 +70,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     		if(isAutoHeight == 0) {
     			dataHeight = "data-height='34'";
     		}
-    		htmlContent.append("<div class='panel-footer ui-state-default panel-footer-page' "+dataHeight+">");
+    		htmlContent.append("<div class='panel-footer panel-footer-page' "+dataHeight+">");
     		int count = 0;
     		String btnStyleFlag = null, pageStyleFlag = null, infoStyleFlag = null;
     		if(null != addBtn || null != editBtn || null != delBtn || null != refreshBtn 
@@ -78,7 +78,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     			count++;
     			List<String> btnList = new ArrayList<String>();
     			btnStyleFlag = "${btnListStyle}";
-    			htmlContent.append("<div class='btn-list' "+StringUtils.handNull(btnStyleFlag)+"><div class='btn-group btn-group-sm cnoj-op-btn-list'>");
+    			htmlContent.append("<div class='btn-list' "+StringUtils.handNull(btnStyleFlag)+"><div class='btn-group cnoj-op-btn-list'>");
     			String btnHtml = null;
     			if(null != addBtn && (!addBtn.getIsAuth() || authServ.isAuth(currentUri, addBtn, userInfo.getRoleIds()))) {
     				if(StringUtils.isEmpty(addBtn.getSelectedType()))
@@ -156,7 +156,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
         		}
     			pageStyleFlag = "${btnPageStyle}";
     			htmlContent.append("<div class='btn-page' "+StringUtils.handNull(pageStyleFlag)+">");
-    			htmlContent.append("<div class='page'><ul class='pagination pagination-sm'><li class='"+(page.getPage()==1?"disabled":"")+"'>");
+    			htmlContent.append("<div class='page'><ul class='pagination'><li class='"+(page.getPage()==1?"disabled":"")+"'>");
     			if(page.getPage() == 1) {
     				htmlContent.append("<a href='javascript:void(0)' "+searchPanel+" class='pre-page'>&laquo;</a>");
     			} else {
@@ -196,7 +196,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     				htmlContent.append("<a href='#' data-uri='"+pageUri+(page.getPage()+1)+"' "+searchPanel+" class='cnoj-change-page next-page' data-target='"+StringUtils.handNull(page.getTarget())+"'>&raquo;</a>");
     			}
     			htmlContent.append("</li>");
-    			htmlContent.append("<li>&nbsp;到<input class='form-control input-sm goto-page-input' name='page' value='' />页<button data-uri='"+pageUri+"' class='btn btn-default btn-xs cnoj-goto-page' "+searchPanel+" data-target='"+StringUtils.handNull(page.getTarget())+"'>确定</button></li>");
+    			htmlContent.append("<li>&nbsp;到<input class='form-control btn-sm goto-page-input' name='page' value='' />页<button data-uri='"+pageUri+"' class='btn btn-default btn-sm cnoj-goto-page' "+searchPanel+" data-target='"+StringUtils.handNull(page.getTarget())+"'>确定</button></li>");
     			htmlContent.append("</ul>");
     			htmlContent.append("</div>");
     			htmlContent.append("</div>");

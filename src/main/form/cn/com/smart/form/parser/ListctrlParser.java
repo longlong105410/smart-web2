@@ -168,11 +168,11 @@ public class ListctrlParser implements IFormParser {
         for (int i=0;i<titles.length;i++) {
         	tdNum++;
         	if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
-        		thBuild.append("<td>"+titles[i]);
+        		thBuild.append("<th>"+titles[i]);
         		if(StringUtils.isNotEmpty(remarksArray[i])) {
         			thBuild.append("<p class=\"help-block\" style=\"margin:0;padding:0\">"+StringUtils.handNull(remarksArray[i])+"</p>");
         		}
-        		thBuild.append("</td>");
+        		thBuild.append("</th>");
         	}
 			if(YesNoType.YES.getStrValue().equals(fieldRequires[i])) {
 				require = " require";
@@ -206,7 +206,7 @@ public class ListctrlParser implements IFormParser {
 			tfTdBuild.append("<td></td>");
 		}
         strBuild.append("<table id=\""+name+"_table\" cellspacing=\"0\" class=\"list-ctrl table table-bordered table-condensed\" style=\"width:"+tableWidth+"\">");
-        strBuild.append("<thead><tr><th colspan=\""+(tdNum+1)+"\"><div class=\"col-sm-6 p-l-5 listctrl-title\">"+dataMap.get("title")+"</div> <div class=\"col-sm-6 p-r-5 text-right\">");
+        strBuild.append("<thead><tr style=\"background-color: #f5f5f5;\"><th colspan=\""+(tdNum+1)+"\"><div class=\"col-sm-6 p-l-5 listctrl-title\">"+dataMap.get("title")+"</div> <div class=\"col-sm-6 p-r-5 text-right\">");
         strBuild.append("<button class=\"btn btn-sm btn-success listctrl-add-row hidden-print \" type=\"button\" onclick=\"tbAddRow('"+name+"')\">添加一行</button>");
         strBuild.append("</div></th></tr><tr><tr>"+thBuild.toString()+"<th><span class=\"hidden-print\">操作</span></th></tr></thead>");
 		
