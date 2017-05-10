@@ -26,29 +26,44 @@
 ---“sysconfig.properties”系统配置文件；需要修改“root.dir”属性，设置为系统上传文件时用来存放的根目录 <br/>
 ----系统管理员用户名为：admin；密码为：123456 <br/>
 
-[演示地址](http://39.108.2.10:8080)
--------
-地址：http://39.108.2.10:8080 <br/>
-用户名：test1；密码：123456
-
 系统截图
 =========
 ---------
 >1.首页
 ![首页](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0001.png)
-![修改密码](![](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0008.png))
+>>1.1 修改密码 
+![修改密码](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0008.png)
+
 >2.资源管理
+>>2.1资源管理列表
 ![资源管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0002.png)
+>>2.2 添加资源
 ![添加资源](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0009.png)
+
 >3.菜单管理
+>>3.1菜单管理列表
 ![菜单管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0003.png)
+>>3.2添加菜单
+![菜单管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0010.png)
+
 >4.权限管理
+>>权限管理分配
 ![权限管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0004.png)
+
 >5.流程管理
+>>5.1 流程设计器
 ![流程设计器](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0005.png)
+>>5.2 流程实例管理
 ![流程实例管理](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0006.png)
+
 >6.表单管理
+>>6.1表单设计器
 ![表单设计器](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0007.png)
+
+[演示地址](http://39.108.2.10:8080)
+-------
+地址：http://39.108.2.10:8080 <br/>
+用户名：test1；密码：123456
 
 技术交流
 ========
