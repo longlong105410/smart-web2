@@ -25,9 +25,14 @@ public class SQLVarParamFilter {
 	
 	private Map<String,Object> params; 
 	
+	@SuppressWarnings("unchecked")
 	public SQLVarParamFilter(String sql,Map<String,Object> params) {
 		this.sql = sql;
-		this.params = params;
+		if(null != params && params.size()>0) {
+			if(params instanceof HashMap) {
+				this.params = (Map<String, Object>) ((HashMap<String, Object>)params).clone();
+			}
+		}
 		initParamBySql();
 	}
 

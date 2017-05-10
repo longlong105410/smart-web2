@@ -30,3 +30,27 @@
 -------
 地址：http://39.108.2.10:8080 <br/>
 用户名：test1；密码：123456
+
+系统截图
+=========
+---------
+>1.首页
+![首页](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0001.png)
+![修改密码](![](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0008.png))
+>2.资源管理
+![资源管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0002.png)
+![添加资源](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0009.png)
+>3.菜单管理
+![菜单管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0003.png)
+>4.权限管理
+![权限管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0004.png)
+>5.流程管理
+![流程设计器](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0005.png)
+![流程实例管理](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0006.png)
+>6.表单管理
+![表单设计器](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0007.png)
+
+技术交流
+========
+--------
+QQ群：554013695

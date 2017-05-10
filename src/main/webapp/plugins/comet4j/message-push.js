@@ -62,7 +62,7 @@
 			this.createContent(idTag, datas);
 			this.closeListener(idTag);
 			$messagePushWrap.slideDown("fast",function(){
-				$messagePushWrap.draggable({containment: "#main-content",cursor: "move",scroll: false });
+				$messagePushWrap.draggable({handle: '.panel-heading', containment: "#main-content",cursor: "move",scroll: false });
 			});
 			if(typeof(this.options.remindCallback) == 'function') {
 				this.options.remindCallback(id, title, datas);
