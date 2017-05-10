@@ -31,33 +31,24 @@
 ---------
  1.首页
 ![首页](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0001.png)
-   修改密码 
 ![修改密码](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0008.png)
-<br />
- 2.资源管理
- 2.1资源管理列表
+ <br />
+ 2.资源管理 <br />
 ![资源管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0002.png)
- 2.2 添加资源
 ![添加资源](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0009.png)
 <br />
- 3.菜单管理
- 3.1菜单管理列表
+ 3.菜单管理 <br />
 ![菜单管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0003.png)
- 3.2添加菜单
 ![菜单管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0010.png)
  <br />
  4.权限管理
- 4.1权限管理分配
 ![权限管理列表](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0004.png)
  <br />
  5.流程管理
- 5.1 流程设计器
 ![流程设计器](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0005.png)
- 5.2 流程实例管理
 ![流程实例管理](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0006.png)
  <br />
  6.表单管理
- 6.1表单设计器
 ![表单设计器](https://git.oschina.net/bcworld/smart-web2/raw/master/screenshot/0007.png)
 
 [演示地址](http://39.108.2.10:8080)
