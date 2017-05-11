@@ -383,11 +383,11 @@ function checkboxListener($elementWrap) {
  */
 function formRequireListener($elementWrap) {
 	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
-		$("input[type=text].require,select.require,textarea.require").each(function(){
+		$("input[type=text].require,input[type=file].require,select.require,textarea.require").each(function(){
 			_handler($(this));
 		});
 	} else {
-		$elementWrap.find("input[type=text].require,select.require,textarea.require").each(function(){
+		$elementWrap.find("input[type=text].require,input[type=file].require,select.require,textarea.require").each(function(){
 			_handler($(this));
 		});
 	}
@@ -1665,11 +1665,31 @@ function tableWrapListener($elementWrap, isResize) {
 		 */
 		function __autoTableWidth($tableWrap, $tableTheader, $table) {
 			var panelW =  $tableWrap.parent().width();
-			var tableWidth = panelW - utils.getScrollWidth();
+			var tableWidth = panelW - utils.getScrollWidth();			
 			if(tableWidth > 0) {
 				$tableTheader.width(tableWidth);
 				$tableWrap.width(tableWidth);
 			}
+			if(!__autoScrollTableWidth($tableWrap, panelW)) {
+				setTimeout(function() {
+					__autoScrollTableWidth($tableWrap, panelW);
+				}, 10);
+			}
+		}
+		
+		/**
+		 * 自动设置有滚动条的表格宽度
+		 * @param $tableWrap
+		 * @return {Boolean} 
+		 */
+		function __autoScrollTableWidth($tableWrap, panelW) {
+			var w = $tableWrap.width();
+			var tableW = $tableWrap.find("table").width();
+			if(w - tableW > 2) {
+				$tableWrap.width(panelW - 2);
+				return true;
+			}
+			return false;
 		}
 	}
 }

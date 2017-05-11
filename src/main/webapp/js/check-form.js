@@ -157,22 +157,34 @@
 			}
 		});
 		if(!result) {
-			var top = $availableElement.offset().top;
-			//console.log($availableElement.prop("tagName")+","+top+","+$availableElement.attr("name"));
-			var $panel = $(this).parents(".panel-tab-content:eq(0)");
-			if(!utils.isExist($panel)) {
-				$panel = $("body");
-			} else {
-				top = top - $panel.offset().top;
+			var $tabPane = $currentNode.parents(".tab-pane:eq(0)");
+			if(utils.isExist($tabPane)) {
+				var is = $tabPane.hasClass("active");
+				if(!is) {
+					var id = $tabPane.attr("id");
+					var aId = id.replace("tab-","");
+					var $a = $("#"+aId);
+					$a.tab('show');
+				}
 			}
-			top = (top>40)?(top-50):top;
-			if(top != 0) {
-				$panel.animate({scrollTop: top}, 300);
-				setTimeout(function() {
+			var offset = $availableElement.offset();
+			if(typeof(offset) != 'undefined') {
+				var top = offset.top;
+				var $panel = $(this).parents(".panel-tab-content:eq(0)");
+				if(!utils.isExist($panel)) {
+					$panel = $("body");
+				} else {
+					top = top - $panel.offset().top;
+				}
+				top = (top>40)?(top-50):top;
+				if(top != 0) {
+					$panel.animate({scrollTop: top}, 300);
+					setTimeout(function() {
+						popoverTmp.popover('show');
+					}, 310);
+				} else {
 					popoverTmp.popover('show');
-				}, 310);
-			} else {
-				popoverTmp.popover('show');
+				}
 			}
 		}
 		$(document).click(function(event){

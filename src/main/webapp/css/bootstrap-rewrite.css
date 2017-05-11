@@ -34,6 +34,7 @@
 .table .ui-state-default {border: none;border-top: 1px solid #aed0ea;}
 .panel-footer.ui-state-default {border: none;font-weight:normal;border-top: 1px solid #aed0ea;}
 .popover {max-width: 100%;}
+input[type=file] { display: inline-block;}
 .form-control {width: 95%;padding: 6px 6px;display: inline-block;}
 .form-control.input-sm {padding: 3px 3px;}
 .form-horizontal .has-feedback .form-control-feedback {right: 38px;}
