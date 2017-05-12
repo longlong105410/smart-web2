@@ -323,7 +323,7 @@ public class ProcessFacade {
 							flowAttServ.updateAtt(submitFormData,userId);
 						}
 						smartResp.setResult(IWebConstant.OP_SUCCESS);
-						smartResp.setMsg(IWebConstant.OP_SUCCESS_MSG);
+						smartResp.setMsg("流程提交成功");
 						isSuccess = true;
 					} else {
 						submitFormData.setFormState(1);

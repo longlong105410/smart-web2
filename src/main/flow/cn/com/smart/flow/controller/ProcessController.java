@@ -1,10 +1,12 @@
 package cn.com.smart.flow.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.snaker.engine.access.Page;
@@ -49,6 +51,8 @@ import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
@@ -181,12 +185,12 @@ public class ProcessController extends BaseFlowControler {
 	/**
 	 * 提交任务
 	 * @param request
+	 * @param response
 	 * @param submitFormData
 	 * @return
 	 */
 	@RequestMapping(value="/submitTask",method=RequestMethod.POST)
-	@ResponseBody
-	public SmartResponse<String> submitTask(HttpServletRequest request,SubmitFormData submitFormData) throws Exception {
+	public void submitTask(HttpServletRequest request, HttpServletResponse response, SubmitFormData submitFormData) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("任务处理失败");
 		UserInfo userInfo = getUserInfoFromSession(request);
@@ -203,7 +207,10 @@ public class ProcessController extends BaseFlowControler {
 			submitFormData.setParams(params);
 			smartResp = processContext.execute(submitFormData,userInfo.getId(),userInfo.getDepartmentId());
 		}
-		return smartResp;
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/plain;charset=UTF-8");
+		ObjectMapper objMapper = new ObjectMapper();
+		response.getWriter().print(objMapper.writeValueAsString(smartResp));
 	}
 	
 	
@@ -497,12 +504,11 @@ public class ProcessController extends BaseFlowControler {
 	 * @param request
 	 * @param formId
 	 * @param formDataId
-	 * @return
+	 * @param response
 	 */
 	@RequestMapping(value="/updateForm",method=RequestMethod.POST)
-	@ResponseBody
-	public SmartResponse<String> updateForm(HttpServletRequest request,String processId, String orderId,
-			String formId, String formDataId){
+	public void updateForm(HttpServletRequest request, HttpServletResponse response,
+			String processId, String orderId, String formId, String formDataId){
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("表单数据更新失败");
 		if(StringUtils.isNotEmpty(formId) &&  StringUtils.isNotEmpty(formDataId)) {
@@ -526,7 +532,19 @@ public class ProcessController extends BaseFlowControler {
 				smartResp.setMsg("表单数据更新成功");
 			} 
 		}
-		return smartResp;
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/plain;charset=UTF-8");
+		ObjectMapper objMapper = new ObjectMapper();
+		try {
+			response.getWriter().print(objMapper.writeValueAsString(smartResp));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
