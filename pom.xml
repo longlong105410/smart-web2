@@ -248,7 +248,7 @@
 		<artifactId>snaker-core</artifactId>
 		<version>1.6.4</version>
 		<scope>system</scope>
-		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/snaker-core-1.6.4.jar</systemPath>
+		<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/snaker-core-1.6.5.jar</systemPath>
 	</dependency>
 	<dependency>
 		<groupId>com.mixsmart</groupId>
