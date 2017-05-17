@@ -220,7 +220,7 @@
 							var $inputSelectPanel = $(this).parents(".input-select-panel:eq(0)");
 							var hiddenInputId = $inputSelectPanel.data("target-inputid");
 							var $hiddenInput = $("#"+hiddenInputId);
-							var $input = utils.findPrevTag($hiddenInput,"input");
+							var $input = $hiddenInput.parent().find("input[type=text]:eq(0)");
 							$hiddenInput.val($(this).data("value"));
 							if($input != null) {
 								$input.val($(this).text());

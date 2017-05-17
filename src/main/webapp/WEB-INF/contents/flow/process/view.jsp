@@ -39,7 +39,7 @@
 			},state));
 		
 		function setProcessName(processName) {
-			$(".wrap-content-dialog").parents(".modal-dialog:eq(0)").find(".bootstrap-dialog-title").html("查看【"+processName+"】流程图");
+			$("#snakerflow-view").parents(".modal-dialog:eq(0)").find(".bootstrap-dialog-title").html("查看【"+processName+"】流程图");
 		}
 	});
   </script>

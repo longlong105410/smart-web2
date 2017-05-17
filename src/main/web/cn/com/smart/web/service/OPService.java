@@ -8,14 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.constant.IConstant;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.helper.ObjectHelper;
 import cn.com.smart.helper.ObjectTreeHelper;
+import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.service.impl.BaseServiceImpl;
 import cn.com.smart.web.bean.AutoComplete;
-import cn.com.smart.web.constant.IWebConstant;
 import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.ZTreeData;
 import cn.com.smart.web.plugins.service.ZTreeService;
@@ -29,7 +30,7 @@ import com.mixsmart.utils.StringUtils;
  *
  */
 @Service("opServ")
-public class OPService extends BaseServiceImpl implements IWebConstant {
+public class OPService extends BaseServiceImpl implements IOPService, IConstant {
 	
 	@Autowired
 	private ObjectTreeHelper treeHelper;
@@ -548,8 +549,9 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 			if(StringUtils.isNotEmpty(resId)) {
 				//判断处理是否有逗号分割的多条数据组合
 				for (String key : params.keySet()) {
-					if(!params.get(key).getClass().isArray()) {
-						String value = StringUtils.handNull(params.get(key));
+					Object objValue = params.get(key);
+					if(null != objValue && objValue.getClass().isArray()) {
+						String value = StringUtils.handNull(objValue);
 						if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
 							String[] values = value.split(",");
 							params.put(key, values);
@@ -588,5 +590,21 @@ public class OPService extends BaseServiceImpl implements IWebConstant {
 			smartRes.setTotalNum(lists.size());
 		}
 		return smartRes;
+	}
+	
+	@Override
+	public SmartResponse<Long> count(String resId, Map<String, Object> params) {
+		SmartResponse<Long> smartResp = new SmartResponse<Long>();
+		if(StringUtils.isEmpty(resId)) {
+			return smartResp;
+		}
+		String sql = SQLResUtil.getOpSqlMap().getSQL(resId);
+		if(StringUtils.isNotEmpty(sql)) {
+			long num = getOPDao().exeCountSql(sql, params);
+			smartResp.setResult(OP_SUCCESS);
+			smartResp.setData(num);
+			smartResp.setMsg(OP_SUCCESS_MSG);
+		}
+		return smartResp;
 	}
 }

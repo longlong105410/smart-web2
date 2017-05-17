@@ -203,4 +203,11 @@
             select t.id as attId, fa.id as fattId,t.file_name,t.file_size,t.file_suffix,t.create_time from t_n_attachment t,t_flow_attachment fa where t.id=fa.attachment_id and t.id in(:ids)
         </sql>
     </sqlUnit>
+    
+    <!-- 获取流程显示名称 -->
+    <sqlUnit name="get_flow_displayname">
+        <sql>
+            SELECT p.display_name FROM t_flow_form t,t_wf_process p where t.form_data_id=:formDataId and t.process_id=p.id
+        </sql>
+    </sqlUnit>
 </sqlMap>

@@ -189,6 +189,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	 */
 	public String getInsTitle(SubmitFormData submitFormData,String userId, String processName) {
 		String insTitle = null;
+		LoggerUtils.debug(logger, "提交参数长度："+submitFormData.getParams());
 		if(null == submitFormData || StringUtils.isEmpty(userId)) return insTitle;
 		insTitle = getTitleFormParams(submitFormData.getParams(), submitFormData.getFormId(), processName);
 		if(StringUtils.isEmpty(insTitle)) {
@@ -207,6 +208,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	private String getTitleFormParams(Map<String, Object> datas, String formId, String processName) {
 		String title = null;
 		if(null == datas || datas.size() == 0 || StringUtils.isEmpty(formId)) {
+			LoggerUtils.error(logger, "表单提交的数据为空");
 			return title;
 		}
 		//获取流程实例标题对应的字段ID
@@ -224,6 +226,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 			if(StringUtils.isNotEmpty(title)) {
 				title = processName + title;
 			} else {
+				LoggerUtils.info(logger, "标题获取失败");
 				title = null;
 			}
 		}
@@ -437,11 +440,17 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		TFlowForm flowForm = flowForms.get(0);
 		title = getTitleFormParams(datas, flowForm.getFormId(), null);
 		if(StringUtils.isNotEmpty(title)) {
-			String oldTitle = flowForm.getTitle();
-			if(StringUtils.isNotEmpty(oldTitle) && oldTitle.contains("-")) {
-				String[] titleArray = oldTitle.split("-");
-				title = titleArray[0]+"-"+title;
+			String displayName = "";
+			String sql = SQLResUtil.getOpSqlMap().getSQL("get_flow_displayname");
+			if(StringUtils.isNotEmpty(sql)) {
+				param.clear();
+				param.put("formDataId", formDataId);
+				List<Object> objList = getDao().queryObjSql(sql, param);
+				if(CollectionUtils.isNotEmpty(objList)) {
+					displayName = StringUtils.handNull(objList.get(0));
+				}
 			}
+			title = displayName+"-"+title;
 			is = this.updateInsTitle(flowForm.getOrderId(), title);
 		}
 		return is;

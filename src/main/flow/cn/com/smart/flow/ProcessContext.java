@@ -10,6 +10,7 @@ import cn.com.smart.flow.bean.SubmitFormData;
 import cn.com.smart.flow.service.ProcessFacade;
 import cn.com.smart.service.SmartContextService;
 
+import com.mixsmart.utils.ArrayUtils;
 import com.mixsmart.utils.CollectionUtils;
 
 /**
@@ -42,7 +43,10 @@ public class ProcessContext {
 		SmartResponse<String> smartResp = pf.completeTask(submitFormData, userId, orgId);
 		if(CollectionUtils.isNotEmpty(taskAfters)) {
 			for (ITaskAfterAware taskAfter : taskAfters) {
-				taskAfter.execute(submitFormData);
+				if((null == taskAfter.getProcessName() || ArrayUtils.isArrayContains(taskAfter.getProcessName(), submitFormData.getProcessName())) && 
+					(null == taskAfter.getNodeName() || ArrayUtils.isArrayContains(taskAfter.getNodeName(), submitFormData.getTaskKey()))) {
+					taskAfter.execute(submitFormData);
+				}
 			}
 		}
 		return smartResp;

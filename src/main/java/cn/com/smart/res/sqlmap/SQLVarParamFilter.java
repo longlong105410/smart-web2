@@ -185,7 +185,8 @@ public class SQLVarParamFilter {
 			
 			for (String key : sets) {
 				//String regex = "'(%?.?[^[:"+key+"']]+.?%?)'";
-				String regex = "'(%?[^[:"+key+"']]+?%?)'";
+				//String regex = "'(%?[^[:"+key+"']]+?%?)'";
+				String regex = "('%:"+key+"%'?)";
 				pattern = Pattern.compile(regex);
 				matcher = pattern.matcher(sql);
 				int count = 0;

@@ -154,6 +154,19 @@ var END_NODE_KEY = "end";
 				if(typeof(tagName) != 'undefined' && tagName == 'div' && $this.hasClass("file-upload")) {
 					formAttPluginHandler($this, value);
 				} else {
+					if(utils.isNotEmpty(value)) {
+						if($this.hasClass('cnoj-datetime')) {
+							if(utils.isNotEmpty(value)) {
+								value = value.substr(0,19);
+							}
+						} else if($this.hasClass('cnoj-date')) {
+							if(utils.isNotEmpty(value)) {
+								value = value.substr(0,10);
+							}
+						} else if($this.hasClass('cnoj-time')) {
+							value = value.substr(11,19);
+						}
+					}
 					$this.val(value);
 				}
 			}

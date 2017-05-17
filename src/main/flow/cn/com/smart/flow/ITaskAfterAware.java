@@ -17,4 +17,16 @@ public interface ITaskAfterAware {
 	 */
 	void execute(SubmitFormData submitFormData);
 	
+	/**
+	 * 流程名称数组（如果设置了流程名称，则实现了该接口的实现类，则只处理指定流程）
+	 * @return 返回流程名称
+	 */
+	String[] getProcessName();
+	
+	/**
+	 * 节点名称数组（即：流程设计器上显示的节点名称）
+	 * @return
+	 */
+	String[] getNodeName();
+	
 }

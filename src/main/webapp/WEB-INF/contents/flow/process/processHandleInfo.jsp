@@ -7,12 +7,12 @@
 		    <table class="table table-striped table-bordered table-condensed">
 		        <thead>
 		           <tr data-height="36">
-		              <th style="width: 30%">环节</th>
-		              <th style="width:120px">到达时间</th>
+		              <th style="width: 20%">环节</th>
+		              <th style="width:150px">到达时间</th>
 		              <th style="width:120px">处理人</th>
-		              <th style="width: 30%">处理意见</th>
-		              <th style="width:120px">领取时间</th>
-		              <th style="width:120px">完成时间</th>
+		              <th style="width: 20%">处理意见</th>
+		              <th style="width:150px">领取时间</th>
+		              <th style="width:150px">完成时间</th>
 		           </tr>
 		        </thead>
 		        <tbody>
@@ -23,12 +23,12 @@
 		               <c:otherwise>
 		                   <c:forEach var="datas" items="${smartResp.datas }" varStatus="st" >
 			                   <tr id="t-${datas.id}">
-			                     <td style="width: 30%">${datas.displayName }</td>
-			                     <td style="width:120px">${datas.createTime }</td>
+			                     <td style="width: 20%">${datas.displayName }</td>
+			                     <td style="width:150px">${datas.createTime }</td>
 			                     <td style="width:120px">${datas.operator }</td>
-			                     <td style="width: 30%">${datas.variable }</td>
-			                     <td style="width:120px">${datas.takeTime }</td>
-			                     <td style="width:120px">${datas.finishTime }</td>
+			                     <td style="width: 20%">${datas.variable }</td>
+			                     <td style="width:150px">${datas.takeTime }</td>
+			                     <td style="width:150px">${datas.finishTime }</td>
 			                   </tr>
 		                   </c:forEach>
 		               </c:otherwise>

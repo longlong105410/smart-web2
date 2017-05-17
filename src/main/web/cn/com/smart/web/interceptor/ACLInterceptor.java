@@ -180,6 +180,7 @@ public class ACLInterceptor implements HandlerInterceptor {
 			accessLog.setOs(userAgent.getOperatingSystem().getName());
 			accessLog.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
 			accessLog.setIp(HttpRequestHelper.getIP(request));
+			accessLog.setRequestMethod(request.getMethod());
 			accessLog.setUri(currentUri);
 			String url = HttpRequestHelper.getCurrentUriParam(request);
 			if(url.length() > 490) {

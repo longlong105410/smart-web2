@@ -22,7 +22,6 @@
 	  messagePush.init();
   });
 </script>
-	 </div><!-- content -->
-	</div>
+	 </div><!-- wrap-main -->
   </body>
 </html>

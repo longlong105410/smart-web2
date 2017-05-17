@@ -125,23 +125,31 @@ var END_NODE_KEY = "end";
 			$("#save-form").click(function() {  //保存表单
 				var $saveBtn = $(this);
 				$saveBtn.prop("disabled",true);
-				if($this.validateForm()) {
-					var formPorcessInnfo = $("#flow-process-form").serialize();//流程信息
-					formPorcessInnfo += "&"+$this.serialize();//流程表单信息
-					var uri = $(this).data("uri");
-					if(!utils.isEmpty(uri)) {
-						utils.waitLoading("正在处理表单数据...");
-						$.post(uri,formPorcessInnfo,function(data){
-							utils.closeWaitLoading();
-					    	var output = data;
-							utils.showMsg(output.msg+"！");
-							if(output.result=='1') 
-								$("#form-data-id").val(output.data);
-							$saveBtn.prop("disabled",false);
-						});
+				var formPorcessInfo = $("#flow-process-form").serialize();//流程信息
+				var uri = $(this).data("uri");
+				if(!utils.isEmpty(uri)) {
+					utils.waitLoading("正在保存数据...");
+					if(uri.indexOf("?")==-1) {
+						uri +="?";
 					} else {
-						$saveBtn.prop("disabled",false);
+						uri +="&";
 					}
+					uri += formPorcessInfo;
+					$this.attr("action", uri);
+					$this.attr("target","handle-form-iframe");
+					$this.submit(); //提交表单到iframe
+					$("#handle-form-iframe").load(function(){
+					    utils.closeWaitLoading();
+					    var result = $(this).contents().text();
+					    if(utils.isNotEmpty(result)) {
+					    	var output = $.parseJSON(result);
+					    	utils.showMsg(output.msg);
+					    	if(output.result=='1') {
+					    		$("#form-data-id").val(output.data);
+					    	}
+					    }
+					    $saveBtn.prop("disabled",false);
+					});
 				} else {
 					$saveBtn.prop("disabled",false);
 				}
@@ -347,6 +355,19 @@ var END_NODE_KEY = "end";
 				if(typeof(tagName) != 'undefined' && tagName == 'div' && $this.hasClass("file-upload")) {
 					formAttPluginHandler($this, value);
 				} else {
+					if(utils.isNotEmpty(value)) {
+						if($this.hasClass('cnoj-datetime')) {
+							if(utils.isNotEmpty(value)) {
+								value = value.substr(0,19);
+							}
+						} else if($this.hasClass('cnoj-date')) {
+							if(utils.isNotEmpty(value)) {
+								value = value.substr(0,10);
+							}
+						} else if($this.hasClass('cnoj-time')) {
+							value = value.substr(11,19);
+						}
+					}
 					$this.val(value);
 				}
 			}
@@ -993,8 +1014,11 @@ function formValueToLabel($element) {
             }
             var width = $obj.width();
             $obj.addClass("hidden");
-            var $parent = $obj.parents(".list-ctrl:eq(0)");
-            if($parent.length == 0)
+            var $td = $obj.parents("td:eq(0)");
+            var tbColor = $td.css("border-color");
+            if($td.length==0 || utils.isNotEmpty(tbColor) && 
+            		(tbColor.toLowerCase() == '#fff' || tbColor.toLowerCase() == '#ffffff' 
+            			|| tbColor.toLowerCase() == 'rgb(255, 255, 255)'))
             	$obj.after("<span style='border-bottom:1px solid #ccc;display:inline-block;width:"+width+"px'>"+value+"</span>");
             else {
             	$obj.after("<span>"+value+"</span>");

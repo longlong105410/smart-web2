@@ -26,6 +26,9 @@
 		var $availableElement = null;
 		$this.find("input,select,textarea").each(function(){
 			$currentNode = $(this);
+			if($currentNode.prop("readonly") || $currentNode.prop("disabled") || $currentNode.hasClass("hide")) {
+				return true;
+		    }
 			if(result) {
 				var isRequire = $currentNode.hasClass("require");
 				var tagName = $currentNode.prop("tagName").toLowerCase();

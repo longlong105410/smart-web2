@@ -65,6 +65,11 @@ public class TNAccessLog extends BaseBeanImpl implements DateBean {
 	 * 单位：毫秒
 	 */
 	private Long useTime;
+	
+	/**
+	 * 请求方法：如：post；get等
+	 */
+	private String requestMethod;
 
 	@Id
 	@Column(name="id", length=50)
@@ -211,6 +216,15 @@ public class TNAccessLog extends BaseBeanImpl implements DateBean {
 
 	public void setUseTime(Long useTime) {
 		this.useTime = useTime;
+	}
+	
+	@Column(name="request_method", length=100)
+	public String getRequestMethod() {
+		return requestMethod;
+	}
+
+	public void setRequestMethod(String requestMethod) {
+		this.requestMethod = requestMethod;
 	}
 
 	@Transient

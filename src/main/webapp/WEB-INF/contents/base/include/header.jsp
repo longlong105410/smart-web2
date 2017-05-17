@@ -40,7 +40,8 @@
 	<!-- 打印 -->
 	<link href="${pageContext.request.contextPath}/plugins/printArea/css/jquery.printarea.css" rel="stylesheet"/>
 	<script src="${pageContext.request.contextPath}/plugins/printArea/js/jquery.printarea.js" type="text/javascript" ></script>
-	
+	<link href="${pageContext.request.contextPath}/css/print.css" rel="stylesheet" />
+   
    <!--[if lt IE 9]>
     <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/html5shiv.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/respond.min.js"></script>

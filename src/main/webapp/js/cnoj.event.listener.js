@@ -2006,6 +2006,9 @@ function selectListener($elementWrap) {
 			var isNull = $element.data("is-null");
 			isNull = (isNull == 'yes'?true:false);
 			var defaultValue = $element.data("default-value");
+			if(utils.isEmpty(defaultValue)) {
+				defaultValue = $element.attr("value");
+			}
 			var editEnable = $element.data("edit-enable");
 			var isEditEnable = (utils.isEmpty(editEnable) || editEnable == 1) ? true : false;
 			if(isNull) {
@@ -2904,11 +2907,13 @@ function printListener($elementWrap) {
 		var target = $this.data("target");
 		if (utils.isNotEmpty(target)) {
 			utils.handleFormPrintLabel(target, $elementWrap);
+			var $target = null;
 			if(utils.isNotEmpty($elementWrap) && !utils.isExist($elementWrap)) {
-				$elementWrap.find(target).printArea();
+				$target = $elementWrap.find(target);
 			} else {
-				$(target).printArea();
+				$target = $(target);
 			}
+			$target.printArea();
 		}
 	}
 }

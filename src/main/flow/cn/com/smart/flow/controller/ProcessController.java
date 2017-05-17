@@ -55,6 +55,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -160,13 +161,13 @@ public class ProcessController extends BaseFlowControler {
 	/**
 	 * 保存表单数据
 	 * @param request
+	 * @param response
 	 * @param submitFormData
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/saveForm",method=RequestMethod.POST)
-	@ResponseBody
-	public SmartResponse<String> saveForm(HttpServletRequest request,SubmitFormData submitFormData) throws Exception {
+	public void saveForm(HttpServletRequest request, HttpServletResponse response, SubmitFormData submitFormData) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != submitFormData && StringUtils.isNotEmpty(submitFormData.getProcessId()) && 
 				StringUtils.isNotEmpty(submitFormData.getFormId())) {
@@ -175,10 +176,18 @@ public class ProcessController extends BaseFlowControler {
 			}
 			UserInfo userInfo = getUserInfoFromSession(request);
 			submitFormData.setParams(getRequestParamMap(request, false));
+			//处理附件
+			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+			if(multipartResolver.isMultipart(request)) {
+				new FormUploadFileHelper((MultipartHttpServletRequest) request, submitFormData.getParams(), submitFormData, userInfo.getId()).upload();
+			}
 			smartResp = processFacade.saveOrUpdateForm(submitFormData,userInfo.getId());
 			submitFormData = null;
 		}
-		return smartResp;
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/plain;charset=UTF-8");
+		ObjectMapper objMapper = new ObjectMapper();
+		response.getWriter().print(objMapper.writeValueAsString(smartResp));
 	}
 	
 	
@@ -196,6 +205,8 @@ public class ProcessController extends BaseFlowControler {
 		UserInfo userInfo = getUserInfoFromSession(request);
 		//处理参数
 		Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request, false));
+		LoggerUtils.debug(log, "提交参数长度："+params.size());
+		LoggerUtils.debug(log, "提交参数内容："+JsonHelper.toJson(params));
 		//处理附件
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		if(multipartResolver.isMultipart(request)) {

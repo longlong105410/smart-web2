@@ -120,6 +120,7 @@
 			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="check*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="count*" propagation="REQUIRED" read-only="true" />
 
 		</tx:attributes>
 	</tx:advice>
