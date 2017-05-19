@@ -2,8 +2,11 @@ package cn.com.smart.filter.bean;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
+
+import cn.com.smart.filter.HandleFilterParam;
 
 import com.mixsmart.utils.StringUtils;
 
@@ -28,6 +31,8 @@ public class FilterParam implements IFilterParam {
 	
 	//过滤数据权限用
 	protected String[] orgIds;
+	
+	protected String orgId;
 
 	public String getId() {
 		return id;
@@ -83,6 +88,9 @@ public class FilterParam implements IFilterParam {
 		if(StringUtils.isNotEmpty(type)) {
 			paramBuff.append("&"+varName+"type="+type);
 		}
+		if(StringUtils.isNotEmpty(orgId)) {
+			paramBuff.append("&"+varName+"orgId="+orgId);
+		}
 		String paramStr = paramBuff.toString();
 		if(StringUtils.isNotEmpty(paramStr) && paramStr.startsWith("&")) {
 			paramStr = paramStr.substring(1);
@@ -98,6 +106,11 @@ public class FilterParam implements IFilterParam {
 	@Deprecated
 	public String getParamToString() {
 		return getParamToString(null);
+	}
+	
+	@Override
+	public Map<String, Object> toMap() {
+		return new HandleFilterParam(this).getParams();
 	}
 
 	public String[] getRoleIds() {
@@ -122,6 +135,14 @@ public class FilterParam implements IFilterParam {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 }
 

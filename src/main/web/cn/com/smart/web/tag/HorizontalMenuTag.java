@@ -122,21 +122,6 @@ public class HorizontalMenuTag extends BaseTag {
 	 */
 	private List<TNMenu> getSubMenus(TNMenu menu) {
 		List<TNMenu> subMenus = new ArrayList<TNMenu>();
-	/*	Stack<TNMenu> ids = new Stack<TNMenu>();
-		ids.push(menu);
-		int count=0;
-		while(!ids.isEmpty()) {
-			menu = ids.pop();
-			if(count>0) {
-				subMenus.add(menu);
-			}
-			for(TNMenu menuTmp : menus) {
-				if(menuTmp.getParentId().equals(menu.getId())) {
-					ids.push(menuTmp);
-				}
-			}
-			count++;
-		}*/
 		TreeHelper<TNMenu> menuHelper = new TreeHelper<TNMenu>();
 		try {
 			subMenus = menuHelper.outPutTree(menus, menu, false);

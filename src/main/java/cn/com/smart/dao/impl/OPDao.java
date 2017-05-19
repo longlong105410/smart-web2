@@ -225,13 +225,18 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	public Long count(String resId) throws DaoException{
 		long total = 0;
 		if(StringUtils.isNotEmpty(resId)) {
-			String sql = sqlMap.getSQL(resId);
-			if(StringUtils.isNotEmpty(sql)) {
-				total = super.countSql(sql);
+			//先判断是否有用户自定义的统计语句
+			String countSql = getCountSql(resId);
+			if(StringUtils.isNotEmpty(countSql)) {
+				total = super.exeCountSql(countSql);
 			} else {
-				throw new DaoException("SQL语句为空--["+resId+"]值为空");
+				String sql = sqlMap.getSQL(resId);
+				if(StringUtils.isNotEmpty(sql)) {
+					total = super.countSql(sql);
+				} else {
+					throw new DaoException("SQL语句为空--["+resId+"]值为空");
+				}
 			}
-			sql = null;
 		}
 		return total;
 	}
@@ -241,13 +246,17 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	public Long count(String resId,Map<String,Object> params) throws DaoException {
 		long total = 0;
 		if(StringUtils.isNotEmpty(resId)) {
-			String sql = sqlMap.getSQL(resId);
-			if(StringUtils.isNotEmpty(sql)) {
-				total = super.countSql(sql, params);
+			String countSql = getCountSql(resId);
+			if(StringUtils.isNotEmpty(countSql)) {
+				total = super.exeCountSql(countSql, params);
 			} else {
-				throw new DaoException("SQL语句为空--["+resId+"]值为空");
+				String sql = sqlMap.getSQL(resId);
+				if(StringUtils.isNotEmpty(sql)) {
+					total = super.countSql(sql, params);
+				} else {
+					throw new DaoException("SQL语句为空--["+resId+"]值为空");
+				}
 			}
-			sql = null;
 		}
 		return total;
 	}
@@ -326,5 +335,15 @@ public class OPDao extends BaseDaoImpl<NullEntity> {
 	}
 	
 	
-	
+	/**
+	 * 根据resId获取用户自定义的统计SQL语句；
+	 * 用户自定义的统计语句的名称为resId下划线加count；
+	 * 如：resId名称为：user_list；则对应的统计语句的名称为：user_list_count
+	 * @param resId 资源ID
+	 * @return 返回自定义的统计SQL语句
+	 */
+	private String getCountSql(String resId) {
+		String countResId = resId+"_count";
+		return sqlMap.getSQL(countResId);
+	}
 }

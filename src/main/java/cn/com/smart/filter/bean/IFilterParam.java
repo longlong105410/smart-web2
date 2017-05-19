@@ -1,5 +1,7 @@
 package cn.com.smart.filter.bean;
 
+import java.util.Map;
+
 /**
  * 参数过滤接口
  * @author lmq
@@ -15,5 +17,10 @@ public interface IFilterParam {
 	 * @return String
 	 */
 	public String getParamToString(String varName);
-	
+
+	/**
+	 * 转换为Map
+	 * @return
+	 */
+	public Map<String, Object> toMap();
 }

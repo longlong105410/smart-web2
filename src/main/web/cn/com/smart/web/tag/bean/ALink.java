@@ -1,5 +1,7 @@
 package cn.com.smart.web.tag.bean;
 
+import cn.com.smart.web.constant.enums.PageOpenStyle;
+
 /**
  * 超链接设置
  * @author lmq
@@ -35,11 +37,16 @@ public class ALink {
 	 * class表示的属性
 	 * 如：cnoj-open-blank,cnoj-open-slef等
 	 */
-	private String classTarget="cnoj-open-blank";
+	private String classTarget = PageOpenStyle.OPEN_BLANK.getValue();
 	
 	private String dialogWidth = "600";
 	
 	private String dialogTitle="信息";
+	
+	/**
+	 * 单元格回调接口
+	 */
+	private ICustomCellCallback cellCallback;
 
 	public ALink() {
 	}
@@ -48,6 +55,13 @@ public class ALink {
 		this.uri = uri;
 		this.dialogWidth = dialogWidth;
 		this.dialogTitle = dialogTitle;
+	}
+	
+	public ALink(String uri,String dialogWidth, String dialogTitle,ICustomCellCallback cellCallback) {
+		this.uri = uri;
+		this.dialogWidth = dialogWidth;
+		this.dialogTitle = dialogTitle;
+		this.cellCallback = cellCallback;
 	}
 
 	public String getUri() {
@@ -94,8 +108,19 @@ public class ALink {
 		return classTarget;
 	}
 
+	/**
+	 * 改为 {@link #setClassTarget(PageOpenStyle)} 方法
+	 * @param classTarget
+	 */
+	@Deprecated
 	public void setClassTarget(String classTarget) {
 		this.classTarget = classTarget;
+	}
+	
+	public void setClassTarget(PageOpenStyle pageOpenStyle) {
+		if(null != pageOpenStyle) {
+			this.classTarget = pageOpenStyle.getValue();
+		}
 	}
 
 	public String getDialogWidth() {
@@ -112,6 +137,14 @@ public class ALink {
 
 	public void setDialogTitle(String dialogTitle) {
 		this.dialogTitle = dialogTitle;
+	}
+
+	public ICustomCellCallback getCellCallback() {
+		return cellCallback;
+	}
+
+	public void setCellCallback(ICustomCellCallback cellCallback) {
+		this.cellCallback = cellCallback;
 	}
 	
 }

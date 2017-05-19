@@ -95,6 +95,7 @@ public class TableItemTag extends TableTag {
 	    						           "data-selected-target='"+StringUtils.handNull(selectedEventProp.getTarget())+"' "+
 	    			                       "data-selected-varname='"+StringUtils.handNull(selectedEventProp.getVarParamName())+"'";
 	    			}
+	    			int row = 0;
 	    			for (Object obj : objs) {
 						Object[] objArray = (Object[])obj;
 						if(isRowSelected == 1){
@@ -119,8 +120,13 @@ public class TableItemTag extends TableTag {
 								for (ALink alink : alinks) {
 									int postion = Integer.parseInt(alink.getLinkPostion());
 									if(count == postion) {
-										a = getALinkContent(alink, objArray);
-										a = "<a "+a+">"+StringUtils.handNull(objArray[i])+"</a>";
+										if(null != alink.getCellCallback()) {
+											a = alink.getCellCallback().callback(objArray, row, count, objArray[i]);
+										} 
+										if(null == a) {
+											a = getALinkContent(alink, objArray);
+											a = "<a "+a+">"+StringUtils.handNull(objArray[i])+"</a>";
+										}
 										break;
 									}
 								}
@@ -132,6 +138,7 @@ public class TableItemTag extends TableTag {
 							count++;
 						}
 						out.println("</tr>");
+						row++;
 					}
 	    		}
 	    		out.println("</tbody></table></div>");

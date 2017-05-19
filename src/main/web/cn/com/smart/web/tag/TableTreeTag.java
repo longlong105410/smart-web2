@@ -12,7 +12,7 @@ public class TableTreeTag extends AbstractTableTreeTag {
 	private static final long serialVersionUID = -8947261853934909356L;
 	
 	@Override
-	protected String getHtml(Boolean isParent,Object[] objArray,int layer, String defaultValue, int startIndex, int cols) {
+	protected String getHtml(Boolean isParent,Object[] objArray, int row, int layer, String defaultValue, int startIndex, int cols) {
 		StringBuffer strBuff = new StringBuffer();
 		String classOpTree = null;
 		if(isExpand==1) {
@@ -22,7 +22,7 @@ public class TableTreeTag extends AbstractTableTreeTag {
 		}
 		strBuff.append("<tr id='t-"+StringUtils.handNull(objArray[0])+"' class='tr-tree "+classOpTree+" t-tree-layer"+layer+" t-"+StringUtils.handNull(objArray[1])+"' parentid='t-"+StringUtils.handNull(objArray[1])+"'>");
 		int count = 0;
-		String a = getTdContent(objArray, defaultValue, count, startIndex);
+		String a = getTdContent(objArray, row, defaultValue, count, startIndex);
 		String tdOpData =  "";
 		String uiIconOpData = "";
 		if(isParent) {
@@ -43,10 +43,10 @@ public class TableTreeTag extends AbstractTableTreeTag {
 			if(count > cols) {
 				break;
 			}
-			a = getTdContent(objArray, StringUtils.handNull(objArray[i]), count, i);
+			a = getTdContent(objArray, row, StringUtils.handNull(objArray[i]), count, i);
 			strBuff.append("<td "+(StringUtils.isEmpty(getTdClass(count))?"":"class='"+getTdClass(count)+"'")+" "+super.getTdWidthStyle(thWidth,count)+">"+a+"</td>");
 		}
-		strBuff.append(super.handleLastCustomCell(objArray, count, tdStyles, thWidth));
+		strBuff.append(super.handleLastCustomCell(objArray, row, count, tdStyles, thWidth));
 		strBuff.append("</tr>");
 		return strBuff.toString();
 	}

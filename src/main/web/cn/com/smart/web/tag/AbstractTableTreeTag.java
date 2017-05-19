@@ -64,6 +64,7 @@ public abstract class AbstractTableTreeTag extends TableTag {
     			out.println("<tr><td colspan='"+cols+"' class='text-center'>"+smartResp.getMsg()+"</td></tr>");
     		} else {
     			List<Object> objs = smartResp.getDatas();
+    			int row = 0;
     			for (Object obj : objs) {
 					Object[] objArray = (Object[]) obj;
 					
@@ -79,9 +80,9 @@ public abstract class AbstractTableTreeTag extends TableTag {
 						cols1Value = StringUtils.handNull(objArray[3]);
 						startIndex = 4;
 					}
-					out.println(getHtml(isParent(StringUtils.handNull(objArray[3]), objs), objArray, 
+					out.println(getHtml(isParent(StringUtils.handNull(objArray[3]), objs), objArray, row,
 							countLayer(StringUtils.handNull(objArray[1]), objs), cols1Value, startIndex, cols));
-					
+					row++;
 				}//for
     		}//else
     		out.println("</tbody></table></div>");
@@ -152,11 +153,16 @@ public abstract class AbstractTableTreeTag extends TableTag {
 	
 	/**
 	 * 生成HTML代码 
-	 * @param objArray　数组
-	 * @param layer　层级
+	 * @param isParent
+	 * @param objArray 数组
+	 * @param row
+	 * @param layer 层级
+	 * @param defaultValue
+	 * @param startIndex
+	 * @param cols
 	 * @return 返回生成的HTML代码
 	 */
-	protected abstract String getHtml(Boolean isParent,Object[] objArray,int layer, String defaultValue, int startIndex, int cols);
+	protected abstract String getHtml(Boolean isParent,Object[] objArray,int row,int layer, String defaultValue, int startIndex, int cols);
 	
 	/**
 	 * 获取表格DIV标记

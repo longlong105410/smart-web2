@@ -225,6 +225,9 @@ public class TableTag extends AbstractPanelFooterTag {
     	int cols = headers.split(",").length;
     	int colCount = cols;
     	tdStyles = handleStylesClass(cols);
+    	if(isId == 0) {
+			colCount--;
+		}
     	if(null != thWidth) {
     		try {
     			out.println("<tbody>");
@@ -235,6 +238,7 @@ public class TableTag extends AbstractPanelFooterTag {
 	    			out.println("<tr><td colspan='"+cols+"' class='text-center'>"+smartResp.getMsg()+"</td></tr>");
 	    		} else {
 	    			List<Object> objs = smartResp.getDatas();
+	    			int row = 0;
 	    			for (Object obj : objs) {
 						Object[] objArray = (Object[])obj;
 						if(isRowSelected==1 && isCheckbox==1) {
@@ -260,12 +264,13 @@ public class TableTag extends AbstractPanelFooterTag {
 								continue;
 							}
 							String tdContent = StringUtils.handNull(objArray[i]);
-							String a = getTdContent(objArray, tdContent, count, i);
+							String a = getTdContent(objArray, row, tdContent, count, i);
 							out.println("<td "+(StringUtils.isEmpty(tdStyle)?"":"class='"+tdStyle+"'")+" "+getTdWidthStyle(thWidth, count)+">"+a+"</td>");
 							count++;
 						} 
-						out.println(handleLastCustomCell(objArray, count, tdStyles, thWidth));
+						out.println(handleLastCustomCell(objArray, row, count, tdStyles, thWidth));
 						out.println("</tr>");
+						row++;
 					}
 	    		}
 	    		out.println("</tbody></table></div>");
@@ -283,14 +288,19 @@ public class TableTag extends AbstractPanelFooterTag {
 	 * @param tdWidths
 	 * @return
 	 */
-	protected String handleLastCustomCell(Object[] objArray, int count, String[] tdStyles, String[] tdWidths) {
+	protected String handleLastCustomCell(Object[] objArray, int row, int count, String[] tdStyles, String[] tdWidths) {
 		StringBuilder cellBuilder = null;
 		//如果有自定义单元格，则进行处理 
 		if(CollectionUtils.isNotEmpty(customCells)) {
 			cellBuilder = new StringBuilder();
 			for (TableCustomCell customCell : customCells) {
 				if(customCell.getPosition() > (objArray.length-1) && customCell.getPosition() <= count) {
-					String tdContent = (null == customCell.getCellCallback())?customCell.replaceContent(objArray):customCell.getCellCallback().callback(objArray, count, null);
+					String tdContent = null;
+					if(null != customCell.getCellCallback()) {
+						tdContent = customCell.getCellCallback().callback(objArray, row, count, null);
+					} else {
+						tdContent = customCell.replaceContent(objArray);
+					}
 					cellBuilder.append("<td "+(StringUtils.isEmpty(getTdStyle(tdStyles, count))?"":"class='"+getTdStyle(tdStyles, count)+"'")+" "+getTdWidthStyle(tdWidths, count)+">"+tdContent+"</td>");
 					count++;
 				}
@@ -329,19 +339,24 @@ public class TableTag extends AbstractPanelFooterTag {
 	 * @param i
 	 * @return
 	 */
-	protected String getTdContent(Object[] objArray, String defaultValue, int count, int i) {
+	protected String getTdContent(Object[] objArray, int row, String defaultValue, int count, int i) {
 		String a = null;
 		//如果有自定义单元格，则替换对应单元格中的内容
 		TableCustomCell cell = getCell(i);
 		if(null != cell) {
-			defaultValue = (null == cell.getCellCallback())?cell.replaceContent(objArray):cell.getCellCallback().callback(objArray, count, objArray[i]);
+			defaultValue = (null == cell.getCellCallback())?cell.replaceContent(objArray):cell.getCellCallback().callback(objArray, row, count, objArray[i]);
 		}
 		if(null != alinks && alinks.size()>0) {
 			for (ALink alink : alinks) {
 				int postion = Integer.parseInt(alink.getLinkPostion());
 				if(i == postion) {
-					a = getALinkContent(alink, objArray);
-					a = "<a "+a+">"+defaultValue+"</a>";
+					if(null != alink.getCellCallback()) {
+						a = alink.getCellCallback().callback(objArray, row, count, defaultValue);
+					} 
+					if(null == a) {
+						a = getALinkContent(alink, objArray);
+						a = "<a "+a+">"+defaultValue+"</a>";
+					}
 					break;
 				}
 			}

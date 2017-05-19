@@ -25,6 +25,10 @@
 ---修改配置文件“jdbc.properties”，改成对应数据库的用户名和密码 <br/>
 ---“sysconfig.properties”系统配置文件；需要修改“root.dir”属性，设置为系统上传文件时用来存放的根目录 <br/>
 ----系统管理员用户名为：admin；密码为：123456 <br/>
+---环境：
+   1.jdk要求1.7及以上；<br />
+   2.tomcat6或tomcat7 <br />
+   3.eclipse版本4.4以上
 
 系统截图
 =========
