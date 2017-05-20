@@ -55,24 +55,6 @@ public class TreeHelper<T extends BaseTree> {
 				childStack.addAll(getChild(ts, tt));
 				count++;
 			}
-			
-			/*if(isSelf) {
-				//获取父节点
-				Stack<T> parentStack = new Stack<T>();
-				count = 0;
-				parentStack.push(t);
-				while (!parentStack.isEmpty()) {
-					T tt = parentStack.pop();
-					if (count>0) {
-						trees.add(0,tt);
-					}
-					T tmp = getParent(ts, tt);
-					if(null != tmp) {
-						parentStack.add(tmp);
-					}
-					count++;
-				}
-			}*/
 		}
 		return trees;
 	}

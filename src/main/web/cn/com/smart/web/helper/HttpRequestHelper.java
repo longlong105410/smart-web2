@@ -6,11 +6,14 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.com.smart.constant.IConstant;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.IActionConstant;
 
+import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -18,7 +21,9 @@ import com.mixsmart.utils.StringUtils;
  * @author lmq
  *
  */
-public class HttpRequestHelper extends BaseWebHelper {
+public class HttpRequestHelper {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HttpRequestHelper.class);
 
 	/**
 	 * 获取当前URI(不含参数)
@@ -26,8 +31,14 @@ public class HttpRequestHelper extends BaseWebHelper {
 	 * @return
 	 */
 	public static String getCurrentUri(HttpServletRequest request) {
-		String currentUri = request.getRequestURI().replaceAll(request.getContextPath()+"/", "");
-		log.debug("当前请求的URI为:"+currentUri);
+		String currentUri = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		if(StringUtils.isNotEmpty(contextPath)) {
+			currentUri = currentUri.replace(request.getContextPath()+"/", "");
+		} else {
+			currentUri = currentUri.substring(1, currentUri.length());
+		}
+		LoggerUtils.debug(logger, "当前请求的URI为:"+currentUri);
 		return currentUri;
 	}
 	
@@ -38,8 +49,8 @@ public class HttpRequestHelper extends BaseWebHelper {
 	 * @return
 	 */
 	public static String getCurrentUriParam(HttpServletRequest request) {
-		String currentUri = request.getRequestURI().replaceAll(request.getContextPath()+"/", "");
-		if(!StringUtil.isEmpty(request.getQueryString())) {
+		String currentUri = getCurrentUri(request);
+		if(StringUtils.isNotEmpty(request.getQueryString())) {
 			currentUri +="?"+request.getQueryString();
 		}
 		try {
@@ -47,7 +58,7 @@ public class HttpRequestHelper extends BaseWebHelper {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		log.debug("当前请求的URI为:"+currentUri);
+		LoggerUtils.debug(logger, "当前请求的URI为:"+currentUri);
 		return currentUri;
 	}
 	
