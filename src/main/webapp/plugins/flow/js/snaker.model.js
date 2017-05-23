@@ -71,7 +71,7 @@ $.extend(true,snakerflow.config.tools.states,{
 					assigneeDisplay: {name:'assigneeDisplay', tabs:{id:'base-prop',name:'基本属性'}, isRequire:true, glyphicon:'glyphicon-user', label: '参与者', value:'', editor: function(){return new snakerflow.editors.assigneeEditor('选择参与者','assignee');}},
 					/*ccperson: {name:'ccperson',  value:''},
 					ccpersonDisplay: {name:'ccpersonDisplay', tabs:{id:'base-prop',name:'基本属性'}, label: '抄送人', value:'', glyphicon:'glyphicon-user', editor: function(){return new snakerflow.editors.assigneeEditor('选择抄送人','ccperson');}},*/
-					taskType: {name:'taskType', tabs:{id:'base-prop',name:'基本属性'}, label : '任务类型', value:'', editor: function(){return new snakerflow.editors.selectEditor([{name:'主办任务',value:'Major'}/*,{name:'协办任务',value:'Aidant'}*/]);}},
+					taskType: {name:'taskType', tabs:{id:'base-prop',name:'基本属性'}, label : '任务类型', value:'', editor: function(){return new snakerflow.editors.selectEditor([{name:'主办任务',value:'Major'},{name:'协办任务',value:'Aidant'}]);}},
 					performType: {name:'performType', tabs:{id:'base-prop',name:'基本属性'}, label : '参与类型', value:'', editor: function(){return new snakerflow.editors.selectEditor([{name:'普通参与',value:'ANY'},{name:'会签参与',value:'ALL'}]);}},
 					
 					isExeAssigner: {name:'isExeAssigner', tabs:{id:'input-strategy-prop',name:'输入策略'}, label : '是否选人', value:'', editor: function(){return new snakerflow.editors.onCheckEditor("是否选人", utils.YES_OR_NO.NO);}},
