@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.smart.bean.BaseBeanImpl;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -50,14 +51,14 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <E> E find(Class<E> claszp,Serializable id) throws DaoException {
+	public <E> E find(Class<E> clazz,Serializable id) throws DaoException {
 		E t = null;
-		if(null == claszp || null == id || StringUtils.isEmpty(id.toString())) {
+		if(null == clazz || null == id || StringUtils.isEmpty(id.toString())) {
 	    	return t;
 	    }
 		log.info("通过主键ID["+id+"]查询数据");
 		try {
-			 t = (E) getSession().get(claszp, id);
+			 t = (E) getSession().get(clazz, id);
 		    log.info("通过主键ID["+id+"]查询数据[成功]");
 		} catch (Exception e) {
 			log.info("通过主键ID["+id+"]查询数据[失败]");
@@ -81,7 +82,6 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 				Map<String, Object> param = new HashMap<String, Object>(1);
 				param.put("idArray", idArray);
 				lists = queryHql(hql,param);
-				param = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,7 +103,6 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 				Map<String, Object> param = new HashMap<String, Object>(1);
 				param.put("idArray", idArray);
 				lists = queryObjHql(hql,param);
-				param = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,7 +116,7 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	public T find(String hql, Map<String, Object> param) throws DaoException {
 		T t = null;
 		if(StringUtils.isEmpty(hql)) {
-	    	return null;
+	    	return t;
 	    }
 		try {
 			Query query = getQuery(hql, param, false);
@@ -126,46 +125,30 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 		} catch (Exception e) {
 			log.info("查询数据HQL["+hql+"]--失败--");
 			e.printStackTrace();
-			t = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			param = null;
 		}
 		return t;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public List<T> findAll() throws DaoException {
-		List<T> lists = null;
-		log.info("获取表中的所有数据");
-		try {
-			lists = (List<T >) getQuery(" from "+clazz.getName(),false).list();
-		    log.info("获取表中的所有数据[成功]");
-		} catch (Exception e) {
-			log.info("获取表中的所有数据[失败]");
-			e.printStackTrace();
-			lists = null;
-			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		}
-		return lists;
+		return this.findAll(getClazz());
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> findAll(Class<?> claszp) throws DaoException {
+	public List<T> findAll(Class<?> clazz) throws DaoException {
 		List<T> lists = null;
-		if(null == claszp) {
+		if(null == clazz) {
 	    	return lists;
 	    }
 		log.info("获取表中的所有数据");
 		try {
-			lists = (List<T>) getQuery(" from "+claszp.getName(),false).list();
+			lists = (List<T>) getQuery(" from "+clazz.getName(),false).list();
 		    log.info("获取表中的所有数据[成功]");
 		} catch (Exception e) {
 			log.info("获取表中的所有数据[失败]");
 			e.printStackTrace();
-			lists = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return lists;
@@ -173,19 +156,18 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Object> findObjAll(Class<?> claszp) throws DaoException {
+	public List<Object> findObjAll(Class<?> clazz) throws DaoException {
 		List<Object> lists = null;
-		if(null == claszp) {
+		if(null == clazz) {
 	    	return lists;
 	    }
 		log.info("获取表中的所有数据");
 		try {
-			lists = (List<Object>) getQuery(" from "+claszp.getName(), false).list();
+			lists = (List<Object>) getQuery(" from "+clazz.getName(), false).list();
 		    log.info("获取表中的所有数据[成功]");
 		} catch (Exception e) {
 			log.info("获取表中的所有数据[失败]");
 			e.printStackTrace();
-			lists = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return lists;
@@ -193,40 +175,31 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	
 	@Override
 	public List<T> queryByField(Map<String, Object> param) throws DaoException {
-		List<T> list = null;
 		String hql = combinHQL(param);
 		log.info("通过HQL查询数据["+hql+"]");
-		list = queryHql(hql, param);
-		hql = null;
-		param = null;
+		List<T> list = queryHql(hql, param);
 		return list;
 	}
 	
 	@Override
 	public List<T> queryByField(Map<String, Object> param,String orderBy) throws DaoException {
-		List<T> list = null;
 		String hql = combinHQL(param);
 		if(StringUtils.isNotEmpty(orderBy)) {
 			hql += " order by "+orderBy;
 		}
 		log.info("通过HQL查询数据["+hql+"]");
-		list = queryHql(hql, param);
-		hql = null;
-		param = null;
+		List<T> list = queryHql(hql, param);
 		return list;
 	}
 	
 	@Override
 	public List<T> queryByField(Map<String, Object> param, int start, int rows,String orderBy) throws DaoException {
-		List<T> list = null;
 		String hql = combinHQL(param);
 		if(StringUtils.isNotEmpty(orderBy)) {
 			hql += " order by "+orderBy;
 		}
 		log.info("通过HQL查询数据["+hql+"]");
-		list = queryHql(hql, param, start, rows);
-		hql = null;
-		param = null;
+		List<T> list = queryHql(hql, param, start, rows);
 		return list;
 	}
 	
@@ -239,31 +212,13 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	public List<T> queryHql(String hql, Map<String, Object> param) throws DaoException {
 		return queryHql(hql, param, null, null);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public List<T> queryHql(String hql,Map<String, Object> param,Integer start,Integer rows) throws DaoException {
-		List<T> list = null;
 		if(StringUtils.isEmpty(hql)) {
-	    	return list;
+	    	return null;
 	    }
-		try {
-			Query query = getQuery(hql, param, false);
-			if(null != start && null != rows) {
-				query.setFirstResult(start);
-				query.setMaxResults(rows);
-			}
-			list = query.list();
-			log.info("通过HQL查询数据[成功]");
-		} catch (Exception e) {
-			log.info("通过HQL查询数据[失败]");
-			e.printStackTrace();
-			list = null;
-			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			param = null;
-		}
-		return list;
+		return getList(hql,param, false, start, rows);
 	}
 	
 	@Override
@@ -276,30 +231,12 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 		return queryObjHql(hql, param, null, null);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> queryObjHql(String hql,Map<String, Object> param,Integer start,Integer rows) throws DaoException {
-		List<Object> list = null;
 		if(StringUtils.isEmpty(hql)) {
-	    	return list;
+	    	return null;
 	    }
-		try {
-			Query query = getQuery(hql, param, false);
-			if(null != start && null != rows) {
-				query.setFirstResult(start);
-				query.setMaxResults(rows);
-			}
-			list = query.list();
-			log.info("通过HQL查询数据[成功]");
-		} catch (Exception e) {
-			log.info("通过HQL查询数据[失败]");
-			e.printStackTrace();
-			list = null;
-			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			param = null;
-		}
-		return list;
+		return getList(hql, param, false, start, rows);
 	}
 	
 	@Override
@@ -311,32 +248,27 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	public List<T> querySql(String sql, Map<String, Object> param) throws DaoException {
 		return querySql(sql, param, null, null);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public List<T> querySql(String sql, Map<String, Object> param,Integer start, Integer rows) throws DaoException {
-		List<T> list = null;
-		if(StringUtils.isEmpty(sql)) {
-	    	return null;
-	    }
+		if (StringUtils.isEmpty(sql)) {
+			return null;
+		}
 		try {
-			SQLQuery query = (SQLQuery)getQuery(sql, param, true);
-			if(null != start && null != rows) {
+			SQLQuery query = (SQLQuery) getQuery(sql, param, true);
+			if (null != start && null != rows) {
 				query.setFirstResult(start);
 				query.setMaxResults(rows);
 			}
-			query.addEntity(clazz);
-			list = query.list();
+			query.addEntity(getClazz());
+			List<T> list = query.list();
 			log.info("通过SQL查询数据[成功]");
+			return list;
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			param = null;
 		}
-		return list;
 	}
 
 	@Override
@@ -367,8 +299,6 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 			log.info("统计数据HQL["+hql+"]--[异常]--["+e.getMessage()+"]");
 			e.printStackTrace();
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			param = null;
 		}
 		return total;
 	}
@@ -383,19 +313,56 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 		hqlBuilder.append("from "+clazz.getName()+" ");
 		if(null != param && param.size()>0) {
 			hqlBuilder.append(" where ");
-			int count = 0;
-			for (String key : param.keySet()) {
-				if(count > 0) {
-					hqlBuilder.append(" and ");
-				}
-				if(null != param.get(key) && param.get(key).getClass().isArray()) {
-					hqlBuilder.append(key+" in (:"+key+")");
-				} else {
-					hqlBuilder.append(key+"=:"+key);
-				}
-				count++;
-			}
+			buildWhere(hqlBuilder, param);
 		}//end if
 		return hqlBuilder.toString();
+	}
+
+	/**
+	 * 获取列表
+	 * @param statement 语句
+	 * @param param 参数
+	 * @param isSql 是否SQL语句
+	 * @param start 开始位置
+	 * @param rows 显示长度
+	 * @param <E> 返回类型
+	 * @return 返回列表
+	 */
+	private <E> List<E> getList(String statement, Map<String, Object> param, boolean isSql, Integer start, Integer rows) {
+		try {
+			Query query = getQuery(statement, param, isSql);
+			if(null != start && null != rows) {
+				query.setFirstResult(start);
+				query.setMaxResults(rows);
+			}
+			List<E> list = query.list();
+			log.info("通过HQL查询数据[成功]");
+			return list;
+		} catch (Exception e) {
+			log.info("通过HQL查询数据[失败]");
+			e.printStackTrace();
+			throw new DaoException(e.getLocalizedMessage(), e.getCause());
+		}
+	}
+
+
+	/**
+	 * 参数组合成HQL条件
+	 * @param hqlBuilder StringBuilder对象
+	 * @param param 参数
+	 */
+	protected void buildWhere(StringBuilder hqlBuilder, Map<String, Object> param) {
+		int count = 0;
+		for (String key : param.keySet()) {
+			if(count > 0) {
+				hqlBuilder.append(" and ");
+			}
+			if(null != param.get(key) && param.get(key).getClass().isArray()) {
+				hqlBuilder.append(key+" in (:"+key+")");
+			} else {
+				hqlBuilder.append(key+"=:"+key);
+			}
+			count++;
+		}
 	}
 }

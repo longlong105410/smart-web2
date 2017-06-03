@@ -41,18 +41,14 @@ public abstract class DeleteDaoImpl<T extends BaseBean> extends QueryDaoImpl<T> 
 		} catch (Exception e) {
 			log.info("删除数据ID["+o.getId()+"][失败]");
 			e.printStackTrace();
-			is = false;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			o = null;
 		}
 		return is;
 	}
 	
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
-		boolean is = false;
-		is = delete(id,"id");
+		boolean is = delete(id,"id");
 		return is;
 	}
 	
@@ -72,10 +68,7 @@ public abstract class DeleteDaoImpl<T extends BaseBean> extends QueryDaoImpl<T> 
 		} catch (Exception e) {
 			log.info("批量删除数据[失败]");
 			e.printStackTrace();
-			is = false;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			list = null;
 		}
 		return is;
 	}
@@ -100,8 +93,6 @@ public abstract class DeleteDaoImpl<T extends BaseBean> extends QueryDaoImpl<T> 
 				if(executeHql(delHql,param)>0) {
 					is = true;
 				}
-				param = null;
-				ids = null;
 			}
 		}
 		return is;
@@ -111,23 +102,10 @@ public abstract class DeleteDaoImpl<T extends BaseBean> extends QueryDaoImpl<T> 
 	public boolean deleteByField(Map<String, Object> param) throws DaoException {
 		boolean is = false;
 		if(null != param && param.size()>0) {
-			StringBuffer hqlBuffer = new StringBuffer();
-			hqlBuffer.append("delete from "+clazz.getName()+" where ");
-			int count = 0;
-			for (String key : param.keySet()) {
-				if(count > 0) {
-					hqlBuffer.append(" and ");
-				}
-				if(null != param.get(key) && param.get(key).getClass().isArray()) {
-					hqlBuffer.append(key+" in (:"+key+")");
-				} else {
-					hqlBuffer.append(key+"=:"+key);
-				}
-				count++;
-			}
-			is = executeHql(hqlBuffer.toString(), param)>0?true:false;
-			hqlBuffer = null;
-			param = null;
+			StringBuilder hqlBuilder = new StringBuilder();
+			hqlBuilder.append("delete from "+clazz.getName()+" where ");
+			super.buildWhere(hqlBuilder, param);
+			is = executeHql(hqlBuilder.toString(), param)>0?true:false;
 		}
 		return is;
 	}

@@ -1,5 +1,5 @@
 /**
- * 扩张ueditor插件
+ * 扩展ueditor插件
  */
 UE.mixFormUrl = 'mix-form';
 /**

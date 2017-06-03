@@ -51,13 +51,10 @@ public class CommonDaoImpl implements ICommonDao {
 				SQLQuery query = (SQLQuery)getQuery(sql, param, true);
 				Object obj = query.uniqueResult();
 				total = Long.parseLong(obj.toString());
-				obj = null;
 			} catch (Exception e) {
 				log.info("统计数据SQL["+sql+"]--[异常]--["+e.getMessage()+"]");
 				e.printStackTrace();
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
-			} finally {
-				param = null;
 			}
 		}
 		return total;
@@ -104,8 +101,6 @@ public class CommonDaoImpl implements ICommonDao {
 				log.info("执行SQL["+sql+"]--[异常]--["+e.getMessage()+"]");
 				e.printStackTrace();
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		    } finally {
-		    	param = null;
 		    }
 		}
 		return result;
@@ -128,8 +123,6 @@ public class CommonDaoImpl implements ICommonDao {
 			log.info("执行SQL["+sql+"]--[异常]--["+e.getMessage()+"]");
 			e.printStackTrace();
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-	    } finally {
-	    	params = null;
 	    }
 		return result;
 	}
@@ -162,8 +155,6 @@ public class CommonDaoImpl implements ICommonDao {
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
 			}
 			result = res>0?true:false;
-			sqls = null;
-			param = null;
 		}
 		return result;
 	}
@@ -202,8 +193,6 @@ public class CommonDaoImpl implements ICommonDao {
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
 			}
 			result = res>0?true:false;
-			sqls = null;
-			params = null;
 		}
 		return result;
 	}
@@ -242,14 +231,11 @@ public class CommonDaoImpl implements ICommonDao {
 				}
 			} catch (ValidateException e1) {
 				log.info("验证数据失败---["+e1.getMessage()+"]--");
-				id = null;
 				e1.getStackTrace();
 				throw new DaoException(e1.getMessage(),e1.getCause());
 			} catch (Exception e) {
 				e.getStackTrace();
 				throw new DaoException(e.getMessage(),e.getCause());
-			} finally {
-				validator = null;
 			}
 		}
 		return id;
@@ -303,19 +289,13 @@ public class CommonDaoImpl implements ICommonDao {
 				}
 			} catch (ValidateException e) {
 				log.info("验证数据失败---["+e.getMessage()+"]--");
-				is = false;
-				ids = null;
 				log.info("数据保存[失败]...");
 				e.getStackTrace();
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
 			}catch (Exception e) {
-				is = false;
-				ids = null;
 				log.info("数据保存[失败]...");
 				e.printStackTrace();
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
-			} finally {
-				validator = null;
 			}
 		}
 		return ids;
@@ -353,8 +333,6 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		}finally {
-			validator = null;
 		}
 		return is;
 	}
@@ -386,17 +364,13 @@ public class CommonDaoImpl implements ICommonDao {
 				}
 			} catch (ValidateException e) {
 				log.info("验证数据失败---["+e.getMessage()+"]--");
-				is = false;
 				log.info("数据更新[失败]...");
 				e.printStackTrace();
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
 			}catch (Exception e) {
-				is = false;
 				log.info("数据更新[失败]...");
 				e.printStackTrace();
 				throw new DaoException(e.getLocalizedMessage(), e.getCause());
-			} finally {
-				validator = null;
 			}
 		}
 		return is;
@@ -423,7 +397,6 @@ public class CommonDaoImpl implements ICommonDao {
 		SQLVarParamFilter sqlVarFilter = new SQLVarParamFilter(statement, param);
 		statement = sqlVarFilter.filter();
 		param = sqlVarFilter.getParams();
-		sqlVarFilter = null;
 		query = isSql?(getSession().createSQLQuery(statement)):(getSession().createQuery(statement));
 		if(null != param) 
 			query.setProperties(param);
@@ -478,10 +451,7 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
-		} finally {
-			param = null;
 		}
 		return list;
 	}
@@ -495,7 +465,6 @@ public class CommonDaoImpl implements ICommonDao {
 	public Long countSql(String sql) throws DaoException {
 		long total = 0;
 		if(StringUtils.isNotEmpty(sql)) {
-			//sql = "select count(*) from ("+sql+") t";
 			String countSql = SQLBuilder.countSQL(sql);
 			if(StringUtils.isEmpty(countSql)) {
 				throw new NullArgumentException("统计SQL语句为空");
@@ -520,7 +489,6 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return list;
@@ -541,7 +509,6 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return list;
@@ -567,7 +534,6 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return list;
@@ -637,7 +603,6 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return list;
@@ -658,7 +623,6 @@ public class CommonDaoImpl implements ICommonDao {
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
 		return list;
@@ -668,25 +632,23 @@ public class CommonDaoImpl implements ICommonDao {
 	@Override
 	public <E> List<E> querySqlToEntity(String sql, Map<String, Object> param, 
 			Class<? extends BaseBeanImpl> entity, Integer start, Integer rows) throws DaoException {
-		List<E> list = null;
-		if(StringUtils.isEmpty(sql)) {
-	    	return null;
-	    }
+		if (StringUtils.isEmpty(sql)) {
+			return null;
+		}
 		try {
-			SQLQuery query = (SQLQuery)getQuery(sql, param, true);
-			if(null != start && null != rows) {
+			SQLQuery query = (SQLQuery) getQuery(sql, param, true);
+			if (null != start && null != rows) {
 				query.setFirstResult(start);
 				query.setMaxResults(rows);
 			}
 			query.addEntity(entity);
-			list = query.list();
+			List<E> list = query.list();
 			log.info("通过SQL查询数据[成功]");
+			return list;
 		} catch (Exception e) {
 			log.info("通过SQL查询数据[失败]");
 			e.printStackTrace();
-			list = null;
 			throw new DaoException(e.getLocalizedMessage(), e.getCause());
 		}
-		return list;
 	}
 }
