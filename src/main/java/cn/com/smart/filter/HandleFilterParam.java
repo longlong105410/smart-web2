@@ -1,6 +1,9 @@
 package cn.com.smart.filter;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -38,36 +41,30 @@ public class HandleFilterParam {
 	 * 解析参数
 	 * @param clasz
 	 */
-	protected void parseParam(Class<?> clasz) {
-		if(null != clasz) {
-			Field[] fields = clasz.getDeclaredFields();
-			if(null != fields && fields.length > 0) {
-				try {
-					for(Field field : fields) {
-						if(field.getModifiers() == Modifier.PRIVATE || field.getModifiers() == Modifier.PROTECTED || field.getModifiers() == Modifier.PUBLIC) {
-							String fieldName = field.getName();
-							String methodName = "get"+ StringUtils.firstToUppercase(fieldName);
-							Method method = clasz.getDeclaredMethod(methodName);
-							if(null != method) {
-								Object value = method.invoke(searchParam);
-								if(null != value && StringUtils.isNotEmpty(value.toString())) {
-									params.put(fieldName, value);
-								}
-							}
-							method = null;
-						}
+	protected void parseParam(Class<?> clazz) {
+		Field[] fields = clazz.getDeclaredFields();
+		if(fields.length > 0) {
+			try {
+				for (int i = 0; i < fields.length; i++) {
+					PropertyDescriptor propertyDesc = new PropertyDescriptor(fields[i].getName(), clazz);
+					Method method = propertyDesc.getReadMethod();
+					Object value = method.invoke(this.searchParam);
+					if(null != value && StringUtils.isNotEmpty(value.toString())) {
+						params.put(fields[i].getName(), value);
 					}
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
+			} catch (IntrospectionException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
-			Class<?> superClasz = clasz.getSuperclass();
-			if (null != superClasz) {
-				parseParam(superClasz);
+			Class<?> superClazz = clazz.getSuperclass();
+			if (null != superClazz) {
+				parseParam(superClazz);
 			}
 		}
 	}

@@ -1,5 +1,8 @@
 package cn.com.smart.validate;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
@@ -21,8 +24,8 @@ public class ExecuteValidator implements Validator {
 	private static final Logger log = Logger.getLogger(ExecuteValidator.class);
 
 	private Object obj;
-	
-    private Method[] methods;
+
+    private Field[] fields;
 	
 	public ExecuteValidator(Object obj) {
 		this.obj = obj;
@@ -31,113 +34,106 @@ public class ExecuteValidator implements Validator {
 	
 	public void init() {
 		if(null != obj) {
-			this.methods = obj.getClass().getDeclaredMethods();
+			fields = obj.getClass().getDeclaredFields();
 		}
 	}
 	
 	@Override
 	public boolean validate() throws ValidateException {
 		boolean is = true;
-		if(methods.length>0) {
-			for (Method m : methods) {
-				if(m.getName().startsWith("get")) {
-					try { 
-						Object value = m.invoke(obj, new Object[]{});
-						Validate v = m.getAnnotation(Validate.class);
-					    if(null != v) {
-					    	//判断字段是否可为空
-					    	if(v.nullable()) {
-					    		is = is && true;
-					    	} else {
-								if(null != value && StringUtils.isNotEmpty(value.toString())) {
-									is = is && true;
-								} else {
-									is = is && false;
-								}
-					    	}
-					    	//只验证字符数据类型，其他数据类型不验证
-					    	if(is && (value instanceof String) && 
-					    			null != value && 
-					    			StringUtils.isNotEmpty(value.toString())) {
-					    		
-					    		//验证长度
-					    		String len = v.length();
-					    		if(StringUtils.isNotEmpty(len)) {
-					    			is =  is && checkLength(value.toString(), len,m.getName());
-					    		}
-					    		//验证数据值范围
-					    		String valueArea = v.valueArea();
-					    		if(StringUtils.isNotEmpty(valueArea)) {
-					    			is = is && checkValueArea(value.toString(),valueArea,m.getName());
-					    		}
-					    		if(!is) break;
-					    		//验证正则表达式
-					    		String regexExpr = v.regexExpr();
-					    		if(StringUtils.isNotEmpty(regexExpr)) {
-					    			try {
-						    			Pattern p = Pattern.compile(regexExpr);
-						    			Matcher mt = p.matcher(value.toString());
-						    			is = is && mt.matches();
-						    			if(!is) {
-						    				log.error("["+m.getName()+"]表达式匹配失败");
-						    			}
-					    			} catch (Exception e) {
-										e.printStackTrace();
-										is = false;
-										throw new ValidateException("["+m.getName()+"] Validate.regexExpr属性配置错误[正则表达式错误]");
-									}
-					    		}
-					    		if(!is) break;
-					    		//验证数据格式
-					    		String formatType = v.dataFormatType();
-					    		if(StringUtils.isNotEmpty(formatType)) {
-					    			is = is && checkDataFormat(value.toString(),formatType,m.getName());
-					    		}
-					    		
-					    		if(!is) break;
-					    		//判断是否配置了自定义验证类
-					    		String className = v.className();
-					    		if(StringUtils.isNotEmpty(className)) {
-					    			//执行自定义验证类
-									Class<?> cstClass = Class.forName(className);
-									if(cstClass.isAssignableFrom(Validator.class)) {
-										CustomValidator cv = (CustomValidator)cstClass.newInstance();
-										cv.setObj(obj);
-										cv.setValue(value);
-										is = is && cv.validate();
-										if(!is) {
-											log.error("["+m.getName()+"]自定义类验证失败");
-						    			}
-									}
-					    		}
-					    	} else {
-					    		break;
-					    	}
-					    }//if
-					}catch (IllegalArgumentException e) {
-						is = false;
-						e.printStackTrace();
-						throw new ValidateException(e.getMessage());
-					} catch (IllegalAccessException e) {
-						is = false;
-						e.printStackTrace();
-						throw new ValidateException(e.getMessage());
-					} catch (InvocationTargetException e) {
-						is = false;
-						e.printStackTrace();
-						throw new ValidateException(e.getMessage());
-					} catch (ClassNotFoundException e) {
-						is = false;
-						e.printStackTrace();
-						throw new ValidateException(e.getMessage());
-					}  catch (InstantiationException e) {
-						is = false;
-						e.printStackTrace();
-						throw new ValidateException(e.getMessage());
+		if(fields.length == 0) {
+			return is;
+		}
+		for (Field field : fields) {
+			try {
+				PropertyDescriptor propertyDesc = new PropertyDescriptor(field.getName(), obj.getClass());
+				Method m = propertyDesc.getReadMethod();
+				Object value = m.invoke(obj, new Object[]{});
+				Validate v = m.getAnnotation(Validate.class);
+				if(null == v) {
+					continue;
+				}
+				//判断字段是否可为空
+				if (v.nullable()) {
+					is = is && true;
+				} else {
+					if (null != value && StringUtils.isNotEmpty(value.toString())) {
+						is = is && true;
+					} else {
+						is = is && false;
 					}
-				}//if[get]
-			}//for
-		}//if
+				}
+				if (!(is && (value instanceof String) && null != value && StringUtils.isNotEmpty(value.toString()))) {
+					break;
+				}
+				//验证长度
+				String len = v.length();
+				if (StringUtils.isNotEmpty(len)) {
+					is = is && checkLength(value.toString(), len, m.getName());
+				}
+				//验证数据值范围
+				String valueArea = v.valueArea();
+				if (StringUtils.isNotEmpty(valueArea)) {
+					is = is && checkValueArea(value.toString(), valueArea, m.getName());
+				}
+				if (!is) break;
+				//验证正则表达式
+				String regexExpr = v.regexExpr();
+				if (StringUtils.isNotEmpty(regexExpr)) {
+					try {
+						Pattern p = Pattern.compile(regexExpr);
+						Matcher mt = p.matcher(value.toString());
+						is = is && mt.matches();
+						if (!is) {
+							log.error("[" + m.getName() + "]表达式匹配失败");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new ValidateException("[" + m.getName() + "] Validate.regexExpr属性配置错误[正则表达式错误]");
+					}
+				}
+				if (!is) break;
+				//验证数据格式
+				String formatType = v.dataFormatType();
+				if (StringUtils.isNotEmpty(formatType)) {
+					is = is && checkDataFormat(value.toString(), formatType, m.getName());
+				}
+				if (!is) break;
+				//判断是否配置了自定义验证类
+				String className = v.className();
+				if (StringUtils.isNotEmpty(className)) {
+					//执行自定义验证类
+					Class<?> cstClass = Class.forName(className);
+					if (cstClass.isAssignableFrom(Validator.class)) {
+						CustomValidator cv = (CustomValidator) cstClass.newInstance();
+						cv.setObj(obj);
+						cv.setValue(value);
+						is = is && cv.validate();
+						if (!is) {
+							log.error("[" + m.getName() + "]自定义类验证失败");
+						}
+					}
+				}
+			}catch (IllegalArgumentException e) {
+				e.printStackTrace();
+				throw new ValidateException(e.getMessage());
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				throw new ValidateException(e.getMessage());
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+				throw new ValidateException(e.getMessage());
+			} catch (IntrospectionException e){
+				e.printStackTrace();
+				throw new ValidateException(e.getMessage());
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				throw new ValidateException(e.getMessage());
+			}  catch (InstantiationException e) {
+				e.printStackTrace();
+				throw new ValidateException(e.getMessage());
+			}
+		}//for
 		return is;
 	}
 	
@@ -160,7 +156,6 @@ public class ExecuteValidator implements Validator {
 					long l = Long.parseLong(lenStr.trim());
 					is = (valueLen == l);
 				} else {
-					is = false;
 					throw new ValidateException("["+methodName+"]Validate.length属性配置错误");
 				}
 				if(is) {
@@ -176,22 +171,18 @@ public class ExecuteValidator implements Validator {
 					if(startLen<=endLen) {
 					    is = (valueLen >= startLen && valueLen<=endLen);
 					} else {
-						is = false;
 						throw new ValidateException("["+methodName+"]Validate.length属性配置错误");
 					}
 				} else {
-					is = false;
 					throw new ValidateException("["+methodName+"]Validate.length属性配置错误");
 				}
 			} else {
-				is = false;
 				throw new ValidateException("["+methodName+"]Validate.length属性配置错误");
 			}
 		} else {
 			if(StringUtils.isNum(len.trim())) {
 				is = is && (valueLen == Long.parseLong(len.trim()));
 			} else {
-				is = false;
 				throw new ValidateException("["+methodName+"]Validate.length属性配置错误");
 			}
 		}
@@ -224,7 +215,6 @@ public class ExecuteValidator implements Validator {
 		} else if(DataFormatType.ID_CARD.equals(dataFormatType)) {
 			IdCardValidator iv = new IdCardValidator();
 			is = is && iv.isValidatedAllIdcard(value);
-			iv = null;
 			if(!is) {
 				log.error("["+methodName+"]--["+DataFormatType.ID_CARD+"]数据格式验证失败");
 			}
