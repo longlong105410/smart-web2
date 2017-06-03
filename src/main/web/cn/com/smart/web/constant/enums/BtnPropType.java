@@ -1,7 +1,5 @@
 package cn.com.smart.web.constant.enums;
 
-import cn.com.smart.constant.enumdef.EnumInterface;
-
 /**
  * 自定义按钮类型，常量定义
  * @author lmq
@@ -11,7 +9,7 @@ import cn.com.smart.constant.enumdef.EnumInterface;
  */
 public interface BtnPropType {
 
-	enum SelectType implements EnumInterface {
+	enum SelectType {
 		/**
 		 * 不选择数据
 		 */
@@ -31,7 +29,6 @@ public interface BtnPropType {
 			this.value = value;
 		}
 		
-		@Override
 		public String getValue(int index) {
 			String valueTmp = null;
 			for (SelectType selectType : SelectType.values()) {
@@ -58,7 +55,7 @@ public interface BtnPropType {
 	}
 	
 	
-	enum OpenStyle implements EnumInterface {
+	enum OpenStyle {
 		/**
 		 * 弹出框
 		 */
@@ -84,7 +81,6 @@ public interface BtnPropType {
 			this.value = value;
 		}
 		
-		@Override
 		public String getValue(int index) {
 			String valueTmp = null;
 			for (OpenStyle openStyle : OpenStyle.values()) {

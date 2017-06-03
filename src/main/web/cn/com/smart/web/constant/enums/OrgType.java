@@ -1,7 +1,5 @@
 package cn.com.smart.web.constant.enums;
 
-import cn.com.smart.constant.enumdef.EnumInterface;
-
 /**
  * 组织机构类型 <br />
  * COMPANY(1,"company") --- 公司 <br />
@@ -12,7 +10,7 @@ import cn.com.smart.constant.enumdef.EnumInterface;
  * @since 1.0
  *
  */
-public enum OrgType implements EnumInterface {
+public enum OrgType {
 	
 	COMPANY(1,"company"),DEPARTMENT(2,"department");
 	
@@ -24,7 +22,6 @@ public enum OrgType implements EnumInterface {
 		this.value = value;
 	}
 	
-	@Override
 	public String getValue(int index) {
 		String valueTmp = null;
 		for (OrgType orgType : OrgType.values()) {

@@ -1,13 +1,11 @@
 package cn.com.smart.web.constant.enums;
 
-import cn.com.smart.constant.enumdef.EnumInterface;
-
 /**
  * 选择事件触发类型
  * @author lmq
  *
  */
-public enum SelectedEventType implements EnumInterface {
+public enum SelectedEventType {
 	OPEN_TO_TARGET(1,"open_to_target");
 	private int index;
 	private String value;
@@ -17,7 +15,6 @@ public enum SelectedEventType implements EnumInterface {
 		this.value = value;
 	}
 	
-	@Override
 	public String getValue(int index) {
 		String valueTmp = null;
 		for (SelectedEventType selectedEventType : SelectedEventType.values()) {
@@ -44,7 +41,6 @@ public enum SelectedEventType implements EnumInterface {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
 	
 	
 }
