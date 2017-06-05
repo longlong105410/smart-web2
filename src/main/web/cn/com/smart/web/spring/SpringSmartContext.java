@@ -71,7 +71,12 @@ public class SpringSmartContext implements ISmartContext {
 		
 		return applicationContext.getBean(name, clazz);
 	}
-	
+
+	@Override
+	public Object findByName(String name) {
+		return applicationContext.getBean(name);
+	}
+
 	/**
 	 * 错误提示
 	 */

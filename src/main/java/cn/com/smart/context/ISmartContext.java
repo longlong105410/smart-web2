@@ -53,5 +53,11 @@ public interface ISmartContext {
 	 * @return T
 	 */
 	public <T> T findByName(String name,Class<T> clazz);
-	
+
+	/**
+	 * 根据名称获取服务实例
+	 * @param name
+	 * @return 返回实现类
+	 */
+	public Object findByName(String name);
 }

@@ -88,6 +88,13 @@ public class SmartContextService {
 	public static <T> T findByName(String name, Class<T> clazz) {
 		return context.findByName(name, clazz);
 	}
-	
-	
+
+	/**
+	 * 根据名称获取实例对象
+	 * @param name
+	 * @return
+	 */
+	public static Object findByName(String name) {
+		return context.findByName(name);
+	}
 }
