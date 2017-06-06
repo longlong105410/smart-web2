@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.smart.flow.SnakerEngineFacets;
+import cn.com.smart.flow.bean.TaskInfo;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.snaker.engine.entity.Order;
+import org.snaker.engine.entity.Process;
 import org.snaker.engine.model.EndModel;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.TaskModel;
@@ -368,5 +371,21 @@ public class ProcessHelper {
 		jumpNodeInfo.setIsSelectAssigner(isSelectAssigner.getIndex());
 		jumpNodeInfo.setSelectStyle(selectStyle);
 		jumpNodeInfos.add(jumpNodeInfo);
+	}
+
+	/**
+	 * 根据参数初始化流程名称或ID；
+	 * 当流程名称不为空时，通过流程名称获取流程Id（获取最新的流程）
+	 * @param facets
+	 * @param taskInfo
+	 */
+	public static void initProcessNameOrId(SnakerEngineFacets facets, TaskInfo taskInfo) {
+		if(StringUtils.isNotEmpty(taskInfo.getProcessName()) && StringUtils.isEmpty(taskInfo.getProcessId())) {
+			Process process = facets.getEngine().process().getProcessByName(taskInfo.getProcessName());
+			taskInfo.setProcessId(process.getId());
+		} else if(StringUtils.isNotEmpty(taskInfo.getProcessId()) && StringUtils.isEmpty(taskInfo.getProcessName())){
+			Process process = facets.getEngine().process().getProcessById(taskInfo.getProcessId());
+			taskInfo.setProcessName(process.getName());
+		}
 	}
 }

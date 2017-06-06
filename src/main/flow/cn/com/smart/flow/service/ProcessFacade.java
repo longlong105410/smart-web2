@@ -121,25 +121,12 @@ public class ProcessFacade {
 				nameValMap.setOther(YesNoType.YES.getStrValue());
 			}
 			if(IFlowConstant.FLOW_PATH_TYPE_BACK.equals(tm.getType())) {
-				if(null == tmp) {
-					backLines.add(nameValMap);
-				} else if(tm.getSortNum()<tmp.getSortNum()) {
-					backLines.add(0, nameValMap);
-				} else {
-					backLines.add(nameValMap);
-				}
+				addOutputLine(backLines, tmp, tm, nameValMap);
 			} else {
-				if(null == tmp) {
-					normalLines.add(nameValMap);
-				} else if(tm.getSortNum()<tmp.getSortNum()) {
-					normalLines.add(0, nameValMap);
-				} else {
-					normalLines.add(nameValMap);
-				}
+				addOutputLine(normalLines, tmp, tm, nameValMap);
 			}
 			tmp = tm;
 		}
-		nameValMap = null;
 		classify.setBackLines((backLines.size()<1?null:backLines));
 		classify.setNormalLines((normalLines.size()<1?null:normalLines));
 		return classify;
@@ -248,15 +235,7 @@ public class ProcessFacade {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("任务处理失败");
 		try {
-			//如果流程名不为空，流程ID为空时，通过流程名称获取该流程名称对应最新版本的流程ID
-			if(StringUtils.isNotEmpty(submitFormData.getProcessName()) 
-					&& StringUtils.isEmpty(submitFormData.getProcessId())) {
-				Process process = facets.getEngine().process().getProcessByName(submitFormData.getProcessName());
-				submitFormData.setProcessId(process.getId());
-			} else if(StringUtils.isNotEmpty(submitFormData.getProcessId()) && StringUtils.isEmpty(submitFormData.getProcessName())){
-				Process process = facets.getEngine().process().getProcessById(submitFormData.getProcessId());
-				submitFormData.setProcessName(process.getName());
-			}
+			ProcessHelper.initProcessNameOrId(facets, submitFormData);
 			String formDataId = submitFormData.getFormDataId();
 			Map<String,Object> params = submitFormData.getParams();
 			smartResp = saveOrUpdateForm(submitFormData,userId);
@@ -417,7 +396,6 @@ public class ProcessFacade {
 			}
 			smartResp.setDatas(histTasks);
 		}
-		histTasks = null;
  		return smartResp;
 	}
 	
@@ -659,6 +637,22 @@ public class ProcessFacade {
 		}
 		return lists;
 	}
-	
+
+	/**
+	 * 添加流程出口（有两种类型的出口，一种是驳回的，一种正常流转的）
+	 * @param outputs
+	 * @param tmp
+	 * @param tm
+	 * @param nameValMap
+	 */
+	private void addOutputLine(List<NameValueMap> outputs, TransitionModel tmp,TransitionModel tm, NameValueMap nameValMap) {
+		if(null == tmp) {
+			outputs.add(nameValMap);
+		} else if(tm.getSortNum()<tmp.getSortNum()) {
+			outputs.add(0, nameValMap);
+		} else {
+			outputs.add(nameValMap);
+		}
+	}
 	
 }

@@ -51,11 +51,6 @@ public class ACLInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object obj, Exception arg3)
 			throws Exception {
-	}
-
-	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response,
-			Object obj, ModelAndView modelAndView) throws Exception {
 		String currentUri = HttpRequestHelper.getCurrentUri(request);
 		long startTime = (Long)request.getAttribute("startTime");
 		Date responseTime = new Date();
@@ -63,40 +58,50 @@ public class ACLInterceptor implements HandlerInterceptor {
 		long useTime = endTime - startTime;
 		LoggerUtils.debug(log, "请求["+currentUri+"]用时："+useTime+"毫秒");
 		if(!isRes(currentUri)) {
-			if(null != modelAndView) {
-				ModelMap modelMap = modelAndView.getModelMap();
-				modelMap.put("project", InitSysConfig.getInstance().getProjectInfo());
-				modelMap.put("currentUri", HttpRequestHelper.getCurrentUri(request));
-				modelMap.put("currentUriParam", HttpRequestHelper.getCurrentUriParam(request));
-				//请求参数添加到map里面
-				@SuppressWarnings("unchecked")
-				Map<String,String[]> curParamMaps = request.getParameterMap();
-				if(null != curParamMaps && curParamMaps.size()>0) {
-					Set<Map.Entry<String, String[]>> items = curParamMaps.entrySet();
-					for (Map.Entry<String, String[]> item : items) {
-						if(item.getValue().length<2) {
-							String value = item.getValue()[0];
-							if(StringUtils.isNotEmpty(value) && value.startsWith("%")) {
-								value = URLDecoder.decode(value, "UTF-8");
-							}
-							if(value.length()<100 && !modelMap.containsKey(item.getKey())) {
-								modelMap.put(item.getKey(), value);
-							}
-						}
-					}
-				} //if;
-				RedirectView redirectView = ((RedirectView)modelAndView.getView());
-				if(null == redirectView || !redirectView.isRedirectView()) {
-					if(isLogin(request)) {
-						modelMap.put("userInfo", HttpRequestHelper.getUserInfoFromSession(request));
-					}
-				}
-			}
 			//更新访问日志；计算用时
 			String accessLogId = StringUtils.handNull(request.getAttribute("accessLogId"));
 			if(StringUtils.isNotEmpty(accessLogId)) {
 				AccessLogService accessLogServ = SmartContextService.find(AccessLogService.class);
 				accessLogServ.update(accessLogId, responseTime, useTime);
+			}
+			response.setHeader("Cache-Control","no-cache");
+			response.setHeader("Pragrma","no-cache");
+			response.setDateHeader("Expires",-1);
+		}
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response,
+			Object obj, ModelAndView modelAndView) throws Exception {
+		String currentUri = HttpRequestHelper.getCurrentUri(request);
+		if(isRes(currentUri) || null == modelAndView) {
+			return;
+		}
+		ModelMap modelMap = modelAndView.getModelMap();
+		modelMap.put("project", InitSysConfig.getInstance().getProjectInfo());
+		modelMap.put("currentUri", HttpRequestHelper.getCurrentUri(request));
+		modelMap.put("currentUriParam", HttpRequestHelper.getCurrentUriParam(request));
+		//请求参数添加到map里面
+		@SuppressWarnings("unchecked")
+		Map<String,String[]> curParamMaps = request.getParameterMap();
+		if(null != curParamMaps && curParamMaps.size()>0) {
+			Set<Map.Entry<String, String[]>> items = curParamMaps.entrySet();
+			for (Map.Entry<String, String[]> item : items) {
+				if(item.getValue().length<2) {
+					String value = item.getValue()[0];
+					if(StringUtils.isNotEmpty(value) && value.startsWith("%")) {
+						value = URLDecoder.decode(value, "UTF-8");
+					}
+					if(value.length()<100 && !modelMap.containsKey(item.getKey())) {
+						modelMap.put(item.getKey(), value);
+					}
+				}
+			}
+		} //if;
+		RedirectView redirectView = ((RedirectView)modelAndView.getView());
+		if(null == redirectView || !redirectView.isRedirectView()) {
+			if(isLogin(request)) {
+				modelMap.put("userInfo", HttpRequestHelper.getUserInfoFromSession(request));
 			}
 		}
 	}

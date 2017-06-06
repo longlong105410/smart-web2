@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
-import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.WorkItem;
 import org.snaker.engine.helper.AssertHelper;
@@ -99,14 +98,7 @@ public class ProcessController extends BaseFlowControler {
 			return modelView;
 		}
 		UserInfo userInfo = getUserInfoFromSession(request);
-		//当流程名称不为空时，通过流程名称获取流程Id（获取最新的流程）
-		if(StringUtils.isNotEmpty(taskInfo.getProcessName()) && StringUtils.isEmpty(taskInfo.getProcessId())) {
-			Process process = facets.getEngine().process().getProcessByName(taskInfo.getProcessName());
-			taskInfo.setProcessId(process.getId());
-		} else if(StringUtils.isNotEmpty(taskInfo.getProcessId()) && StringUtils.isEmpty(taskInfo.getProcessName())){
-			Process process = facets.getEngine().process().getProcessById(taskInfo.getProcessId());
-			taskInfo.setProcessName(process.getName());
-		}
+		ProcessHelper.initProcessNameOrId(facets, taskInfo);
 	    //获取流程表单：如表单生成的HTML源码
 	    SmartResponse<TForm> smartResp = processFacade.getForm(taskInfo.getProcessId());
 	    modelMap.put("smartResp", smartResp);
