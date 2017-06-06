@@ -5,6 +5,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,9 @@ public class ExecuteValidator implements Validator {
 			return is;
 		}
 		for (Field field : fields) {
+			if(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+				continue;
+			}
 			try {
 				PropertyDescriptor propertyDesc = new PropertyDescriptor(field.getName(), obj.getClass());
 				Method m = propertyDesc.getReadMethod();
