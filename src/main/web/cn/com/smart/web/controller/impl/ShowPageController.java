@@ -20,9 +20,19 @@ import com.mixsmart.utils.StringUtils;
 @RequestMapping("/showPage")
 public class ShowPageController extends BaseController {
 
+	/**
+	 * 显示页面
+	 * @param pagePath 页面路径（目录之间用下划线“_”分隔）
+	 * @param id ID
+	 * @param busiName 业务名称（不建议使用）
+	 * @param op 操作标识（如：add、edit等，也不建议使用）
+	 * @return 返回页面视图
+	 * @throws Exception
+	 */
 	@RequestMapping("/{pagePath}")
-	public ModelAndView index(ModelAndView modelView,@PathVariable String pagePath,
+	public ModelAndView index(@PathVariable String pagePath,
 			String id,String busiName,String op) throws Exception {
+		ModelAndView modelView = new ModelAndView();
 		if(StringUtils.isNotEmpty(pagePath)) {
 			String[] params = pagePath.split("_");
 			if(params.length>0) {

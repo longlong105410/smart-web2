@@ -171,7 +171,7 @@ public class OperateController extends BaseController {
 	}
 	
 	/**
-	 * 查询数；支持按部门过滤
+	 * 查询数据；支持按部门过滤
 	 * @param session
 	 * @param resId
 	 * @param paramName
