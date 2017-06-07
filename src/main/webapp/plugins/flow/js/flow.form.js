@@ -932,7 +932,9 @@ function deleteFormAtt(elementObj, id, attId) {
 			//判断是否还有附件
 			$li = $ul.find("li");
 			if($li.length == 0) {
-				$ul.parent().find("input").removeClass("hidden");
+                var $inputFile = $ul.parent().find("input:eq(0)");
+                $inputFile.val("");
+				//$ul.parent().find("input").removeClass("hidden");
 			}
 			if(utils.isNotEmpty(flowAttUri)) {
 				loadUri("#process-att-tab",flowAttUri,false);
