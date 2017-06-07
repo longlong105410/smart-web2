@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.smart.flow.service.FlowFormService;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +35,10 @@ import cn.com.smart.utils.StringUtil;
 @Component
 public class UpdateProcessProgress implements IProcessExecuteAware {
 
+	private static final Logger logger = LoggerFactory.getLogger(UpdateProcessProgress.class);
+
 	@Autowired
-	private FlowFormDao flowFormDao;
+	private FlowFormService flowFormServ;
 	@Autowired
 	private FlowProcessDao flowProcessDao;
 	@Autowired
@@ -42,30 +50,28 @@ public class UpdateProcessProgress implements IProcessExecuteAware {
 		Map<String,Object> param = new HashMap<String, Object>();
 		param.put("processId", formData.getProcessId());
 		List<TFlowProcess> processList = flowProcessDao.queryByField(param);
-		if(ListUtil.isNotEmpty(processList)) {
+		if(CollectionUtils.isNotEmpty(processList)) {
 			TFlowProcess process = processList.get(0);
 			param.clear();
-			if(StringUtil.isNotEmpty(formData.getOrderId())) {
+			if(StringUtils.isNotEmpty(formData.getOrderId())) {
 				param.put("orderId", formData.getOrderId());
-				List<TFlowForm> flowForms = flowFormDao.queryByField(param);
-				if(ListUtil.isNotEmpty(flowForms)) {
-					TFlowForm flowForm = flowForms.get(0);
-					flowForm.setTotalNodeNum(process.getTotalNodeNum());
-					int position = countCurrentPosition(process.getNodeNameCollection(), formData.getTaskName());
-					flowForm.setExecuteNodeNum(position);
-					float rate = 0f;
-					if(position == 0) {
-						rate = 0;
-					} else if(process.getTotalNodeNum() == position) {
-						rate = 100;
-					} else {
-						DecimalFormat decimalFormater = new DecimalFormat("#.00");
-						double tmp = (position/(double)process.getTotalNodeNum())*100;
-						rate = Float.parseFloat(decimalFormater.format(tmp));
-					}
-					flowForm.setProgress(rate);
-					flowFormDao.update(flowForm);
+				param.put("totalNodeNum", process.getTotalNodeNum());
+				int position = countCurrentPosition(process.getNodeNameCollection(), formData.getTaskName());
+				param.put("executeNodeNum", position);
+				float rate = 0f;
+				if(position == 0) {
+					rate = 0;
+				} else if(process.getTotalNodeNum() == position) {
+					rate = 100;
+				} else {
+					DecimalFormat decimalFormater = new DecimalFormat("#.00");
+					double tmp = (position/(double)process.getTotalNodeNum())*100;
+					rate = Float.parseFloat(decimalFormater.format(tmp));
 				}
+				param.put("progress", rate);
+				LoggerUtils.info(logger,"正在更新流程表单信息...");
+				flowFormServ.execute("update_flow_form_info", param);
+				LoggerUtils.info(logger,"更新流程表单信息[成功].");
 			}
 		}
 	}

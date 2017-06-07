@@ -210,4 +210,11 @@
             SELECT p.display_name FROM t_flow_form t,t_wf_process p where t.form_data_id=:formDataId and t.process_id=p.id
         </sql>
     </sqlUnit>
+
+	<!-- 更新流程表单信息 -->
+	<sqlUnit name="update_flow_form_info">
+		<sql>
+			update t_flow_form set total_node_num=:totalNodeNum,execute_node_num=:executeNodeNum,progress=:progress where order_id=:orderId
+		</sql>
+	</sqlUnit>
 </sqlMap>

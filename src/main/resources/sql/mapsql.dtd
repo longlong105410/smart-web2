@@ -1,4 +1,4 @@
-  <!ELEMENT sqlMap (sqlUnit,include)*>
+  <!ELEMENT sqlMap (sqlUnit|include)*>
   <!ELEMENT sqlUnit (sql)>
   <!ELEMENT include EMPTY>
   <!ATTLIST sqlUnit name ID #IMPLIED>
