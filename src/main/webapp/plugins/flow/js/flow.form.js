@@ -356,17 +356,20 @@ var END_NODE_KEY = "end";
 					formAttPluginHandler($this, value);
 				} else {
 					if(utils.isNotEmpty(value)) {
-						if($this.hasClass('cnoj-datetime')) {
-							if(utils.isNotEmpty(value)) {
-								value = value.substr(0,19);
-							}
-						} else if($this.hasClass('cnoj-date')) {
-							if(utils.isNotEmpty(value)) {
-								value = value.substr(0,10);
-							}
-						} else if($this.hasClass('cnoj-time')) {
-							value = value.substr(11,19);
-						}
+                        if($this.hasClass('cnoj-datetime')) {
+                            if(utils.isNotEmpty(value)) {
+                                if(value.endWith(".0"))
+                                    value = value.substr(0,19);
+                            }
+                        } else if($this.hasClass('cnoj-date')) {
+                            if(utils.isNotEmpty(value)) {
+                                if(value.length>10)
+                                    value = value.substr(0,11);
+                            }
+                        } else if($this.hasClass('cnoj-time')) {
+                            if(value.length>=19)
+                                value = value.substr(11,19);
+                        }
 					}
 					$this.val(value);
 				}
