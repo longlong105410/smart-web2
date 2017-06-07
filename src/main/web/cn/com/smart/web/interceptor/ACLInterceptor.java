@@ -181,7 +181,8 @@ public class ACLInterceptor implements HandlerInterceptor {
 			accessLog.setUserAgent(userAgentStr);
 			UserAgent userAgent = UserAgent.parseUserAgentString(userAgentStr);
 			accessLog.setBrowser(userAgent.getBrowser().getName());
-			accessLog.setBrowserVersion(userAgent.getBrowserVersion().getVersion());
+			if(null != userAgent.getBrowserVersion())
+				accessLog.setBrowserVersion(userAgent.getBrowserVersion().getVersion());
 			accessLog.setOs(userAgent.getOperatingSystem().getName());
 			accessLog.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
 			accessLog.setIp(HttpRequestHelper.getIP(request));
