@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.smart.form.interceptor.SubmitFormContext;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Process;
@@ -175,12 +176,18 @@ public class ProcessFacade {
 				smartResp.setData(id);
 			}
 		} else {
-			if(flowFormServ.updateForm(data.getParams(), data.getFormId(), data.getFormDataId(),userId,data.getFormState())){
+			boolean is = SubmitFormContext.getInstance().before(data.getFormId(), data.getFormDataId(), data.getParams(), userId);
+			if(is && flowFormServ.updateForm(data.getParams(), data.getFormId(), data.getFormDataId(),userId,data.getFormState())){
 				smartResp.setResult(IWebConstant.OP_SUCCESS);
 				smartResp.setMsg("表单数据保存成功");
 				smartResp.setData(data.getFormDataId());
 			}
 		}
+		YesNoType state = YesNoType.NO;
+		if(IWebConstant.OP_SUCCESS.equals(smartResp.getResult())) {
+			state = YesNoType.YES;
+		}
+		SubmitFormContext.getInstance().after(state, data.getFormId(), data.getFormDataId(), data.getParams(), userId);
 		return smartResp;
 	}
 	

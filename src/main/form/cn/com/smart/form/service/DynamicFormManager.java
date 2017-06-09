@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mixsmart.enums.YesNoType;
 import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -82,6 +83,9 @@ public class DynamicFormManager {
                     nameMap.put(entry.getKey(), field.getTableFieldId());
                     fieldIds.add(tableFieldId);
                 }
+                YesNoType yesNo = YesNoType.getObjByStrValue(StringUtils.handNull(fieldInfo.get("islog")));
+                yesNo = (null == yesNo)?YesNoType.NO : yesNo;
+                field.setIsLog(yesNo.getIndex());
             }
         }//for
         entity.setFieldNum(entity.getFieldNum() + fields.size());

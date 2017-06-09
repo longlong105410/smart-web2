@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.com.smart.form.interceptor.SubmitFormContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -182,6 +183,10 @@ public class FormDataBusi {
 	 */
 	public String saveForm(Map<String,Object> datas,String formId,String userId,Integer formState) {
 		String formDataId = StringUtils.createSerialNum();
+		//表单保存前拦截
+		boolean is = SubmitFormContext.getInstance().before(formId, formDataId, datas, userId);
+		if (!is)
+			return null;
 		List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);
 		if(null == tfMaps || tfMaps.size()<1) {
 			return null;

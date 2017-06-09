@@ -100,10 +100,10 @@ public class CreateTableHelper {
 				String num1 = null;
 				String num2 = null;
 				if(values.length==2) {
-					num1 = Double.parseDouble(values[1])>11?"11":values[1];
-					num2 = Double.parseDouble(values[2])>3?"3":values[2];
+					num1 = Double.parseDouble(values[0])>11?"11":values[0];
+					num2 = Double.parseDouble(values[1])>3?"3":values[1];
 				} else {
-					num1 = Double.parseDouble(values[1])>11?"11":values[1];
+					num1 = Double.parseDouble(values[0])>11?"11":values[0];
 					num2 = "3";
 				}
 				fieldBuf.append(num1+","+num2);

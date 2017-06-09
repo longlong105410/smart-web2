@@ -285,6 +285,12 @@ function fnSetAttribute( element, attName, attValue ) {
           </select>
        </td>
     </tr>
+        <tr>
+            <th><span>记录日志</span></th>
+            <td colspan="3">
+                <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
+            </td>
+        </tr>
   
     <tr class="cus-item">
         <th rowspan="2">
@@ -338,6 +344,7 @@ window.onload = function() {
         var gFromData = oNode.getAttribute('from_data'),
         gFormControlField = oNode.getAttribute('form_control_field'),
         gDataValue = oNode.getAttribute('data_value');
+        var gIsLog = oNode.getAttribute('is_log');
         //为了兼容以前的版本
         if(utils.isEmpty(gFromData)) {
         	gFromData = oNode.getAttribute('from-data');
@@ -364,6 +371,11 @@ window.onload = function() {
         	 $G('item_dynamic_load').checked = true;
         } else {
         	$G('item_dynamic_load').checked = false;
+        }
+        if(gIsLog == '1') {
+            $G('is-log').checked = true;
+        } else {
+            $G('is-log').checked = false;
         }
         if(isFlowForm) {
         	var gFlow=oNode.getAttribute('fieldflow');
@@ -554,7 +566,11 @@ function setAttr(oNode) {
 	     return false;
 	}
     var gWidth=$G('orgwidth').value;
-
+    if($G('is-log').checked) {
+        oNode.setAttribute('is_log',1);
+    } else {
+        oNode.setAttribute('is_log',0);
+    }
     if(isFlowForm) {
     	if ($G('fieldflow').checked ) {
             oNode.setAttribute('fieldflow',1);

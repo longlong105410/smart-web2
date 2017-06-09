@@ -5,24 +5,26 @@
   SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy");
   String year = dateFormater.format(new Date());
 %>
-   <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet" />
-   <link href="${pageContext.request.contextPath}/css/common.css" rel="stylesheet" type="text/css" />
-   <!--[if lt IE 9]>
+    <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/css/common.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.cookie.js"></script>
+<!--[if lt IE 9]>
     <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/html5shiv.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/respond.min.js"></script>
     <![endif]-->
     
     <!--[if lte IE 6]>
-	  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/bootstrap/css/bootstrap-ie6.css">
-	  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/bootstrap/css/ie.css">
-      <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/bootstrap-ie.js"></script>
-     <![endif]-->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/bootstrap/css/bootstrap-ie6.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/bootstrap/css/ie.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/bootstrap-ie.js"></script>
+    <![endif]-->
 <script type="text/javascript">
 $(document).ready(function(){
 	var msg = '${msg}';
     if(msg != '') {
     	utils.showMsg(msg+"！");
     }
+    initCookieValue();
     var screenW = window.screen.width;
     var screenH = window.screen.height;
     //window.screen.deviceXDPI
@@ -49,6 +51,15 @@ $(document).ready(function(){
 			$("#code").focus();
 			return false;
 		}
+        if($("#remember-me").prop("checked")) {
+            $.cookie('rmbuser',true,7);
+            $.cookie('username',userName, 7);
+            $.cookie('password',password,7);
+        } else {
+            $.cookie('rmbuser',false, -1);
+            $.cookie('username','', -1);
+            $.cookie('password','',-1);
+        }
 		utils.waitLoading("正在登录...");
 		return true;
 	});
@@ -82,6 +93,21 @@ function listenerFocus() {
 			$(this).addClass("input-text");
 		}
 	});
+}
+
+function initCookieValue() {
+    var username = $.cookie('username');
+    var rmbuser = $.cookie('rmbuser');
+    var password = $.cookie('password');
+    if(utils.isNotEmpty(username)) {
+        $("#user-name").val(username);
+    }
+    if(utils.isNotEmpty(password)) {
+        $("#pass-word").val(password);
+    }
+    if(rmbuser) {
+        $("#remember-me").prop("checked",true);
+    }
 }
 </script>
 </head>
@@ -122,8 +148,16 @@ function listenerFocus() {
 								<input type="text" id="code" placeholder="请输入验证码" name="code" class="input-text-code" value="${code }" >
 								<img alt="验证码" title="看不清，请点击刷新" id="imgCode" src="captcha" />
 							 </div>
-							 <div class="prompt-error p-t-5 p-l-20">${msg }</div>
-							 <div class="login-btn-wrap p-t-10">
+
+                            <div class="login-input" style="padding-bottom: 5px;padding-left: 50px;">
+                                <div class="checkbox m-t-5 m-b-5" style="font-size: 12px;">
+                                    <label>
+                                        <input type="checkbox" id="remember-me"> 记住用户名和密码
+                                    </label>
+                                </div>
+                            </div>
+
+							 <div class="login-btn-wrap">
 								<div style="width: 100px;">
 									<button type="submit" class="login-btn">登录</button>
 								</div>

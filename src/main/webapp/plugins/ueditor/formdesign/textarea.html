@@ -78,9 +78,13 @@
     </tr>
     <tr>
       <th><span>可见性</span></th>
-       <td colspan="3">
+       <td>
          <label class="checkbox inline"><input id="orghide" type="checkbox"/> 隐藏 </label>
        </td>
+        <th><span>记录日志</span></th>
+        <td>
+            <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
+        </td>
     </tr>
     <tr>
         <th><span>默认值</span></th>
@@ -106,7 +110,7 @@ window.onload = function() {
         gRelateField = oNode.getAttribute('relate_field'),
 		gRelateFieldValue = oNode.getAttribute('relate_field_value'),
         gBindTable = oNode.getAttribute('bind_table'),gBindField=oNode.getAttribute('bind_table_field');
-        
+        var gIsLog = oNode.getAttribute('is_log');
         gValue = gValue==null ? '' : gValue;
         gTitle = gTitle==null ? '' : gTitle;
         
@@ -133,6 +137,9 @@ window.onload = function() {
         }
         if (gHidden == '1') {
             $G('orghide').checked = true;
+        }
+        if(gIsLog == '1') {
+            $G('is-log').checked = true;
         }
         $G('orgwidth').value = gWidth;
         $G('orgheight').value = gHeight;
@@ -230,6 +237,11 @@ dialog.onok = function (){
 		    } else {
 		    	html += ' orghide = 0';
 		    }
+            if($G('is-log').checked) {
+                html += 'is_log = 1';
+            } else {
+                html += 'is_log = 0';
+            }
             html += ' relate_field="'+relateField+'" relate_field_value="'+gRelateFieldValue+'"';
             html += ' bind_table="'+bindTable+'" bind_table_field="'+bindTableField+'"';
             
@@ -267,6 +279,11 @@ dialog.onok = function (){
 	    } else {
 	        oNode.setAttribute('orghide',0);
 	    }
+        if($G('is-log').checked) {
+            oNode.setAttribute('is_log',1);
+        } else {
+            oNode.setAttribute('is_log',0);
+        }
         if(isFlowForm) {
 	        if ( $G('fieldflow').checked ) {
 	            oNode.setAttribute('fieldflow',1);

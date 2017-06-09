@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import cn.com.smart.bean.BaseBeanImpl;
+import com.mixsmart.enums.YesNoType;
 
 /**
  * 表单字段属性
@@ -36,13 +37,19 @@ public class TFormField extends BaseBeanImpl {
 	private String type;
 	
 	private String flow;
-	
+
+	/**
+	 * 表单字段的修改是否记录日志；
+	 * 默认为不记录日志
+	 */
+	private Integer isLog = YesNoType.NO.getIndex();
+
 	/**
 	 * 是否为流程实例标题
 	 * 1--是
 	 * 0--否
 	 */
-	private String isInsTitle="0";
+	private String isInsTitle = YesNoType.NO.getStrValue();
 
 	@Id
 	@Column(name="id",length=50)
@@ -115,6 +122,18 @@ public class TFormField extends BaseBeanImpl {
 
 	public void setTableFieldId(String tableFieldId) {
 		this.tableFieldId = tableFieldId;
+	}
+
+	@Column(name="is_log")
+	public Integer getIsLog() {
+		if(null == isLog) {
+			isLog = YesNoType.NO.getIndex();
+		}
+		return isLog;
+	}
+
+	public void setIsLog(Integer isLog) {
+		this.isLog = isLog;
 	}
 
 	@Column(name="is_institle",length=10)

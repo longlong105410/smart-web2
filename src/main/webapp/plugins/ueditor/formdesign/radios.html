@@ -239,11 +239,15 @@ function fnParseOptions(gName,gChecked) {
       </tr>
       <tr>
        <th><span>动态加载</span></th>
-       <td colspan="3">
+       <td>
        		<label class="checkbox inline">
 			  <input type="checkbox" id="item_dynamic_load" checked="checked" /> 是
 			</label>
        </td>
+          <th><span>记录日志</span></th>
+          <td>
+              <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
+          </td>
       </tr>
    
     <tr>
@@ -286,6 +290,7 @@ window.onload = function() {
         dynamicLoad = oNode.getAttribute('dynamicload'),
         gBindTable = oNode.getAttribute('bind_table'),gBindField=oNode.getAttribute('bind_table_field');
         var gFromData = oNode.getAttribute('from_data'),gDataValue = oNode.getAttribute('data_value');
+        var gIsLog = oNode.getAttribute('is_log');
         //为了兼容以前的版本
         if(utils.isEmpty(gFromData)) {
         	gFromData = oNode.getAttribute('from-data');
@@ -299,8 +304,7 @@ window.onload = function() {
         $G('data-value').value = gDataValue;
         $G('bind_table').value = gBindTable;
         $G('bind_table_field').value = gBindField;
-        
-        
+
         tableDefValue = gBindTable;
         fieldDefValue = gBindField;
         if (gRequrie == '1') {
@@ -310,6 +314,11 @@ window.onload = function() {
         	 $G('item_dynamic_load').checked = true;
         } else {
         	$G('item_dynamic_load').checked = false;
+        }
+        if(gIsLog == '1') {
+            $G('is-log').checked = true;
+        } else {
+            $G('is-log').checked = false;
         }
         var gName=oNode.getAttribute('fieldname');
         if(isFlowForm) {
@@ -444,7 +453,11 @@ dialog.onok = function() {
     if ($G('fieldrequire').checked ) {
     	fieldrequire = 1;
 	}
-    
+	var isLog = 0;
+    if($G('is-log').checked) {
+        isLog = 1;
+    }
+
     if(fromData=='dict') {
 	   dataValue = $("#data-value").next().val();
 	   if(utils.isEmpty(dataValue)) {
@@ -475,7 +488,7 @@ dialog.onok = function() {
             //{|- -|}使用边界，防止用户删除了span标签
             var html = '{|-<span leipiplugins="radios" fieldname="'+gName+'" orgchecked="'+gChecked+
             '" title="'+gTitle+'" orgtitle="'+gTitle+'" from_data="'+fromData+'" data_value="'+utils.handleNull(dataValue)+
-            '" data_uri="'+utils.handleNull(fromDataUri)+'" dynamicLoad="'+dynamicLoad+'" fieldrequire="'+fieldrequire+'" bind_table="'+bindTable+'" bind_table_field="'+bindTableField+'" name="leipiNewField" fieldflow="' + gFlow + '">';
+            '" data_uri="'+utils.handleNull(fromDataUri)+'" is_log="'+isLog+'" dynamicLoad="'+dynamicLoad+'" fieldrequire="'+fieldrequire+'" bind_table="'+bindTable+'" bind_table_field="'+bindTableField+'" name="leipiNewField" fieldflow="' + gFlow + '">';
                 html +=options;
                 html +='</span>-|}';
             editor.execCommand('insertHtml',html);
@@ -495,7 +508,7 @@ dialog.onok = function() {
         if(isFlowForm) {
         	oNode.setAttribute('fieldflow',gFlow);
         }
-        oNode.setAttribute('fieldname',gName)
+        oNode.setAttribute('fieldname',gName);
         oNode.setAttribute('bind_table',bindTable );
         oNode.setAttribute('bind_table_field',bindTableField);
         oNode.setAttribute('orgtitle',gTitle );
@@ -505,6 +518,7 @@ dialog.onok = function() {
 	    oNode.setAttribute('data_uri',utils.handleNull(fromDataUri));
         oNode.setAttribute('fieldrequire',fieldrequire);
         oNode.setAttribute('dynamicload',dynamicLoad);
+        oNode.setAttribute('is_log',isLog);
         oNode.innerHTML = fnParseOptions(gName,gChecked);
         delete UE.plugins[thePlugins].editdom; 
         return true;

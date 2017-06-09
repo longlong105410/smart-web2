@@ -79,6 +79,12 @@ function createElement(type, name) {
       <th>关联值</th>
       <td><input id="relate_field_value" type="text"/></td>
     </tr>
+     <tr>
+         <th><span>记录日志</span></th>
+         <td colspan="3">
+             <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
+         </td>
+     </tr>
     <tr>
         <th>上传文件类型</th>
         <td colspan="3">
@@ -104,7 +110,8 @@ window.onload = function() {
 		gBindTable = oNode.getAttribute('bind_table'),gBindField=oNode.getAttribute('bind_table_field'),
 		gWidth=oNode.getAttribute('orgwidth');
         var gFileType = oNode.getAttribute('filetype');
-		
+        var gIsLog = oNode.getAttribute('is_log');
+
         gTitle = gTitle==null ? '' : gTitle;
         tableDefValue = gBindTable==null?'':gBindTable;
         fieldDefValue = gBindField==null?'':gBindField;
@@ -117,6 +124,9 @@ window.onload = function() {
         }
         if (gHidden == '1') {
             $G('orghide').checked = true;
+        }
+        if(gIsLog == '1') {
+            $G('is-log').checked = true;
         }
         $G('orgwidth').value = gWidth;
     } 
@@ -231,6 +241,11 @@ function setAttr(oNode) {
     } else {
     	oNode.style.width = null;
     	oNode.setAttribute('orgwidth', '');
+    }
+    if($G('is-log').checked) {
+        oNode.setAttribute('is_log',1);
+    } else {
+        oNode.setAttribute('is_log',0);
     }
 }
 </script>

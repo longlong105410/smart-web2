@@ -112,6 +112,12 @@ function createElement(type, name) {
         <th><span>上传地址</span></th>
         <td colspan="3"><input type="text" id="orguri" value="process/attachment/upload" /></td>
     </tr>
+        <tr>
+            <th><span>记录日志</span></th>
+            <td colspan="3">
+                <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
+            </td>
+        </tr>
     <tr>
         <th>上传文件类型</th>
         <td colspan="3">
@@ -149,7 +155,8 @@ window.onload = function() {
         var jsCallback = oNode.getAttribute('jscallback');
         var formId = oNode.getAttribute('formid');
         var orgUri = oNode.getAttribute('orguri');
-        
+        var gIsLog = oNode.getAttribute('is_log');
+
         gTitle = gTitle==null ? '' : gTitle;
         tableDefValue = gBindTable==null?'':gBindTable;
         fieldDefValue = gBindField==null?'':gBindField;
@@ -181,6 +188,9 @@ window.onload = function() {
         }
         if(utils.isNotEmpty(orgUri)) {
             $G('orguri').value = orgUri;
+        }
+        if(gIsLog == '1') {
+            $G('is-log').checked = true;
         }
     } 
     utils.selectItem("#bind_table",rootPath+'/form/table/item.json',tableDefValue,function(val) {
@@ -304,6 +314,11 @@ function setAttr(oNode) {
         	className = className.replace(" require", "");
         }
         oNode.className=className;
+    }
+    if($G('is-log').checked) {
+        oNode.setAttribute('is_log',1);
+    } else {
+        oNode.setAttribute('is_log',0);
     }
     oNode.innerHTML = "添加附件";
 }

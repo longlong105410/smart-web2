@@ -1,8 +1,14 @@
 package cn.com.smart.form.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.smart.form.bean.LogFieldInfo;
+import cn.com.smart.res.SQLResUtil;
+import cn.com.smart.web.constant.IWebConstant;
+import com.mixsmart.exception.NullArgumentException;
+import com.mixsmart.utils.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +29,13 @@ import com.mixsmart.utils.StringUtils;
  *
  */
 @Service
-public class FormService extends MgrServiceImpl<TForm> {
+public class FormService extends MgrServiceImpl<TForm> implements IFormService {
 	
 	@Autowired
 	private DynamicFormManager formManager;
-	
-	/**
-	 * 解析表单
-	 * @param form
-	 * @param dataMap
-	 * @return
-	 */
+
 	@SuppressWarnings("unchecked")
+	@Override
 	public SmartResponse<String> parseForm(TForm form,Map<String,Object> dataMap) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null == form || null == dataMap || dataMap.size()<1) {
@@ -75,5 +76,29 @@ public class FormService extends MgrServiceImpl<TForm> {
 		}
 		return smartResp;
 	}
-	
+
+	@Override
+	public List<Object> queryFieldValue(String[] fieldNames, String tableName, String formDataId) {
+		if(null == fieldNames || fieldNames.length == 0
+				|| StringUtils.isEmpty(tableName) || StringUtils.isEmpty(formDataId)) {
+			throw new NullArgumentException();
+		}
+		String sql = SQLResUtil.getOpSqlMap().getSQL("get_field_value");
+		StringUtils.isAssert(sql,"[get_field_value]SQL语句为空");
+		String fieldNameStr = ArrayUtils.arrayToString(fieldNames, IWebConstant.MULTI_VALUE_SPLIT);
+		sql = sql.replace("${fieldName}", fieldNameStr);
+		sql = sql.replace("${tableName}",tableName);
+		Map<String, Object> param = new HashMap<String, Object>(1);
+		param.put("formDataId", formDataId);
+		return getDao().queryObjSql(sql, param);
+	}
+
+	@Override
+	public List<LogFieldInfo> getLogFieldInfo(String formId) {
+		String sql = SQLResUtil.getOpSqlMap().getSQL("log_field_info");
+		StringUtils.isAssert(sql,"获取到的[log_field_info]SQL语句为空");
+		Map<String, Object> param = new HashMap<String, Object>(1);
+		param.put("formId", formId);
+		return getDao().querySqlToBean(sql, param, LogFieldInfo.class);
+	}
 }

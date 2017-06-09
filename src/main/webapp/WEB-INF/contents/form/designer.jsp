@@ -227,6 +227,7 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 		                    arr['bindField'] = attr_arr_all['bind_table_field'];
 		                    arr['institle'] = attr_arr_all['institle'];
 		                    arr['orghide'] = attr_arr_all['orghide'];
+                            arr['islog'] = attr_arr_all['is_log'];
 	                        add_fields[option['name']] = arr;
 	                        isParse = true;
 		                    //add_fields[name] = arr;
@@ -300,6 +301,7 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 	                    arr['orgtitle'] = attr_arr_all['orgtitle'];
 	                    arr['institle'] = attr_arr_all['institle'];
 	                    arr['orghide'] = attr_arr_all['orghide'];
+                        arr['islog'] = attr_arr_all['is_log'];
 	                    //alert(JSON.stringify(attr_arr_all));
 	                    add_fields[arr['name']] = arr;
 	                }
