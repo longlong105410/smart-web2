@@ -2,15 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/ueditor.all.js"></script>
-<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
-	
 <link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
 <link href="${ctx}/plugins/flow/css/flow.css" rel="stylesheet" />
-<script src="${ctx}/plugins/form/js/form.prop.listener.js" type="text/javascript"></script>
-<script src="${ctx}/plugins/flow/js/flow.form.js" type="text/javascript"></script>
-<script src="${ctx}/js/flow.form.js" type="text/javascript"></script>
 <div class="wrap-content">
     <input type="hidden" id="refresh-url" value="${refreshUrl }" />
     <div class="modal fade bootstrap-dialog type-primary size-normal" id="myModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -184,6 +177,17 @@
 	  </div><!-- panel-tabs-wrap -->
    </div>
 </div>
+<script type="text/javascript">
+    if(typeof(UE) == 'undefined') {
+        var $wrap = $("#myModal").parent();
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.config.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.all.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/lang/zh-cn/zh-cn.js"><\/script>');
+    }
+</script>
+<script src="${ctx}/plugins/form/js/form.prop.listener.js" type="text/javascript"></script>
+<script src="${ctx}/plugins/flow/js/flow.form.js" type="text/javascript"></script>
+<script src="${ctx}/js/flow.form.js" type="text/javascript"></script>
 <script type="text/javascript">
     $("#process-handle-form").flowForm({
     	formFieldNames:'${taskModel.formPropIds}',

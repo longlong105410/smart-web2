@@ -2,13 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.all.js"></script>
-<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
-
 <link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
 <link href="${ctx}/plugins/flow/css/flow.css" rel="stylesheet" />
-<script src="${ctx}/plugins/flow/js/flow.form.edit.js" type="text/javascript"></script>
+
 <div class="wrap-content m-n5">
    <div class="flow-form-contents">
    		<form id="edit-flow-process-form">
@@ -54,6 +50,15 @@
 	  </div><!-- panel-tabs-wrap -->
    </div>
 </div>
+<script type="text/javascript">
+    if(typeof(UE) == 'undefined') {
+        var $wrap = $("#edit-flow-process-form").parent().parent();
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.config.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.all.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/lang/zh-cn/zh-cn.js"><\/script>');
+    }
+</script>
+<script src="${ctx}/plugins/flow/js/flow.form.edit.js" type="text/javascript"></script>
 <script type="text/javascript">
   $(function(){
 	  $("#edit-process-handle-form").flowForm({

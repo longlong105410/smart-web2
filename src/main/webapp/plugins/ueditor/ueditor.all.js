@@ -25375,6 +25375,8 @@ UE.ui = baidu.editor.ui = {};
             var pop = allPopups[i];
             if (!pop.isHidden()) {
                 if (pop.queryAutoHide(el) !== false) {
+                    //TODO lmq 新增IF
+                    if(null != pop.className)
                     if(evt&&/scroll/ig.test(evt.type)&&pop.className=="edui-wordpastepop")   return;
                     pop.hide();
                 }
@@ -27303,7 +27305,9 @@ UE.ui = baidu.editor.ui = {};
             }
         },
         reset: function (){
-            this.getDom('content').innerHTML = this.getContentHtml();
+            //TODO lmq 判断innerHTML是否为空
+            if(null != this.getDom('content'))
+                this.getDom('content').innerHTML = this.getContentHtml();
             this.fireEvent('dialogafterreset');
         },
         _show: function (){
@@ -27771,6 +27775,8 @@ UE.ui = baidu.editor.ui = {};
             });
         },
         setContent: function(content){
+            //TODO lmq 判断innerHTML不为空
+            if(null != this.getDom('content'))
             this.getDom('content').innerHTML = content;
         },
         setType: function(type){

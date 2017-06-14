@@ -53,15 +53,9 @@ public class SelectParser implements IFormParser {
 			}
 		default:
 			if(!StringUtils.isEmpty(content)) {
-				/*StringBuilder strBuild = new StringBuilder();
-				strBuild.append("<select name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" ");
-				strBuild.append(" class=\""+dataMap.get("class")+" \"");
-				strBuild.append(" style=\""+dataMap.get("style")+"\"></select>");
-				content = strBuild.toString();*/
-				
 				content = content.replaceAll("<select([^>].*?)>", "<select class=\""+dataMap.get("class")+" "+StringUtils.handNull(fcfClassName)+"\" name=\"111\" >");
 				content = content.replaceAll("(leipiplugins=\".*?\")|(field.*?=\".*?\")|(org.*?=\".*?\")|(from.*?=\".*?\")|(bind_.*?=\".*?\")", "");
-				content = content.replaceAll("name=\".*?\"", "name=\""+dataMap.get("bind_table_field")+"\" id=\""+dataMap.get("bind_table_field")+"\" style=\""+dataMap.get("style")+"\"");
+				content = content.replaceAll("name=\".*?\"", "name=\""+dataMap.get("bind_table_field")+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\"" + dataMap.get("title") + "\" style=\""+dataMap.get("style")+"\"");
 			}
 			break;
 		}

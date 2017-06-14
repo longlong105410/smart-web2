@@ -30,7 +30,8 @@ var BootstrapDialog = null;
             onshow: null,
             onhide: null,
             callback:null,
-            autodestroy: true
+            autodestroy: true,
+            isCloseBtn:true
         };
         this.indexedButtons = {};
         this.realized = false;
@@ -363,8 +364,10 @@ var BootstrapDialog = null;
             // title
             $container.append(this.createTitleContent());
 
-            // Close button
-            $container.append(this.createCloseButton());
+            if(this.options.isCloseBtn) {
+                // Close button
+                $container.append(this.createCloseButton());
+            }
 
             return $container;
         },

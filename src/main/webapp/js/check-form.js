@@ -82,7 +82,7 @@
 				}
 				var value = utils.handleNull($(this).val());
 				if(isRequire && !$(this).prop("disabled")) {
-					if(value == '') {
+					if(utils.isEmpty(value)) {
 	                    if($($(this).hasClass("form-control"))) {
 	                    	$(this).parent().addClass("has-error");
 						}

@@ -52,13 +52,13 @@ $(document).ready(function(){
 			return false;
 		}
         if($("#remember-me").prop("checked")) {
-            $.cookie('rmbuser',true,7);
-            $.cookie('username',userName, 7);
-            $.cookie('password',password,7);
+            $.cookie('rmbuser', true, {expires:7});
+            $.cookie('username',userName, {expires:7});
+            $.cookie('password',password, {expires:7});
         } else {
-            $.cookie('rmbuser',false, -1);
-            $.cookie('username','', -1);
-            $.cookie('password','',-1);
+            $.cookie('rmbuser',false, {expires:-1});
+            $.cookie('username','', {expires:-1});
+            $.cookie('password','',{expires:-1});
         }
 		utils.waitLoading("正在登录...");
 		return true;

@@ -79,6 +79,7 @@ function createElement(type, name) {
                 <option value="text">普通文本</option>
                 <option value="email">邮箱地址</option>
                 <option value="integer">整数</option>
+                <option value="num">数字（包含小数和整型）</option>
                 <option value="decimal">小数</option>
                 <option value="ip">IP地址</option>
                 <option value="phone">手机号码</option>
@@ -130,13 +131,9 @@ function createElement(type, name) {
        <th><span>宽度(px)</span></th>
        <td><input id="orgwidth" type="text" value="200" placeholder="auto"/></td>
        <th><span>可见性</span></th>
-       <td>
+       <td colspan="3">
          <label class="checkbox inline"><input id="orghide" type="checkbox"/> 隐藏 </label>
        </td>
-        <th><span>记录日志</span></th>
-        <td>
-            <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
-        </td>
     </tr>
     <tr>
       <th>关联字段</th>
@@ -154,7 +151,7 @@ function createElement(type, name) {
             <td>
                 <label class="checkbox inline"><input id="is-log" type="checkbox"/> 是 </label>
             </td>
-            <th><span>标题</span></th>
+            <th><span>流程实例标题</span></th>
             <td colspan="3">
                 <label class="checkbox inline"><input id="institle" type="checkbox"/> 是</label>
             </td>

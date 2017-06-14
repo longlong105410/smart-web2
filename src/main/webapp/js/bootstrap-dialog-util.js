@@ -15,14 +15,22 @@ var BootstrapDialogUtil = function() {
  * @param bgColor
  * @param isFooter
  * @param callback 页面加载成功后执行回调函数
+ * @param closable 是否有能力关闭
+ * @param isCloseBtn 是否有关闭按钮
  */
-BootstrapDialogUtil.loadUriDialog = function(title,uri,popWidth,bgColor,isFooter,callback) {
+BootstrapDialogUtil.loadUriDialog = function(title,uri,popWidth,bgColor,isFooter,callback, closable, isCloseBtn) {
 	if(isNaN(popWidth) || typeof(popWidth) === 'undefined' || popWidth == null) {
 		popWidth = 600;
 	}
 	if(typeof(isFooter) === 'undefined') {
 		isFooter = false;
 	}
+    if(typeof(closable) === 'undefined') {
+        closable = true;
+    }
+    if(typeof(isCloseBtn) === 'undefined') {
+        isCloseBtn = true;
+    }
 	$.ajax({
 		 url: uri,global: false,type: "POST",dataType: "html",async:false,
 	     success: function(msg){
@@ -39,7 +47,9 @@ BootstrapDialogUtil.loadUriDialog = function(title,uri,popWidth,bgColor,isFooter
 	 					$(html).find(".bootstrap-dialog-footer").parent().removeClass("not-modal-footer");
 	 				return msg;
 	 			},
-	 			callback:callback
+	 			callback:callback,
+                 closable:closable,
+                 isCloseBtn: isCloseBtn
 	 		});
 	       
 	     }
@@ -83,13 +93,19 @@ BootstrapDialogUtil.dialog = function(title,id,popWidth,bgColor,isFooter) {
  * @param isFooter
  * @param callback
  */
-BootstrapDialogUtil.dialogContent = function(title,contents,popWidth,bgColor,isFooter,callback) {
+BootstrapDialogUtil.dialogContent = function(title,contents,popWidth,bgColor,isFooter,callback, closable, isCloseBtn) {
 	if(isNaN(popWidth) || typeof(popWidth) === 'undefined' || popWidth == null) {
 		popWidth = 600;
 	}
-	if(typeof(isFooter) === 'undefined') {
-		isFooter = false;
-	}
+    if(typeof(closable) === 'undefined') {
+        closable = true;
+    }
+    if(typeof(isFooter) === 'undefined') {
+        isFooter = false;
+    }
+    if(typeof(isCloseBtn) === 'undefined') {
+        isCloseBtn = true;
+    }
     var dialogInstance = null;
 	BootstrapDialog.show({
 	 	title:title,draggable: true,width:popWidth,backgroundColor:bgColor,
@@ -101,7 +117,9 @@ BootstrapDialogUtil.dialogContent = function(title,contents,popWidth,bgColor,isF
 	 		else 
 	 			$(html).find(".bootstrap-dialog-footer").parent().removeClass("not-modal-footer");
 	 		return contents;
-	 	}
+	 	},
+        closable:closable,
+        isCloseBtn:isCloseBtn
 	 });
 	 if(typeof(callback) !== 'undefined' && null != callback && typeof(callback) === 'function') {
   	   callback(dialogInstance);

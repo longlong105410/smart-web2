@@ -32,26 +32,32 @@
             selectListener($this);
             formRequireListener($this);
             $(".field-type").off('change');
-			$(".field-type").on('change',function () {
-				var value = $(this).val();
-				var $tr = $(this).closest("tr");
-				var $fieldLen = $tr.find(".field-length");
+            _fieldTypeListner();
+		});
+        _fieldTypeListner();
+
+        function _fieldTypeListner() {
+            $(".field-type").on('change',function () {
+                var value = $(this).val();
+                var $tr = $(this).closest("tr");
+                var $fieldLen = $tr.find(".field-length");
                 $fieldLen.prop("disabled", false);
-				$fieldLen.attr('regexp',null);
-				switch (value) {
-					case 'numeric':
-                        $fieldLen.attr('data-regexp','/\\d+,\\d+/');
-						break;
-					case 'text':
-					case 'longtext':
-					case 'datetime':
+                $fieldLen.attr('regexp',null);
+                switch (value) {
+                    case 'numeric':
+                        $fieldLen.attr('data-regexp','/\d+,\d+/');
+                        break;
+                    case 'text':
+                    case 'longtext':
+                    case 'datetime':
+                        $fieldLen.val("");
                         $fieldLen.prop("disabled", true);
                         break;
-					default:
-						break;
-				}
+                    default:
+                        break;
+                }
             });
-		});
+        }
 		
 		//删除字段
 		$(".close").click(function(){

@@ -71,15 +71,21 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
     </form>
   </div><!--end row-->
 </div>
-<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/ueditor.all.js"></script>
-<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    if(typeof(UE) == 'undefined') {
+        var $wrap = $("#form-designer").parent();
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/ueditor.config.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/ueditor.all.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/lang/zh-cn/zh-cn.js"><\/script>');
+    }
+</script>
 <script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/formdesign/leipi.formdesign.v4.js"></script>
 <script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/plugins/ueditor/mix-form/mix-form.js"></script>
 
 <script type="text/javascript">
    var tmplH = $("#form-prop").parent().outerHeight(true);
    var autoHeight = getMainHeight() - tmplH - 55 - 45;
+   UE.delEditor('formEditor');
    var formDesingerEditor = UE.getEditor('formEditor',{
 	   toolleipi : true,//是否显示，设计器的 toolbars
 	    textarea: 'design_content',
@@ -107,6 +113,7 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 	    //autoClearinitialContent:true,
 	    //关闭字数统计
 	    wordCount:false,
+        enableAutoSave: false,
 	    //关闭elementPath
 	    elementPathEnabled:false,
 	    //默认的编辑区域高度

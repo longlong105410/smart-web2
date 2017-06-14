@@ -93,17 +93,23 @@ public class CreateTableHelper {
 		} else if(DATA_FORMAT_NUMERIC.equals(field.getDataFormat())) {
 			fieldBuf.append(" "+field.getDataFormat()+"(");
 			if(!StringUtils.isCheckRegex(field.getLength(),"\\d+,\\d+") || StringUtils.isEmpty(field.getLength())) {
-				fieldBuf.append("5,3");
-				field.setLength("5,3");
+				fieldBuf.append("8,3");
+				field.setLength("8,3");
 			} else {
 				String[] values = field.getLength().split(",");
 				String num1 = null;
 				String num2 = null;
 				if(values.length==2) {
-					num1 = Double.parseDouble(values[0])>11?"11":values[0];
-					num2 = Double.parseDouble(values[1])>3?"3":values[1];
+					int n1 = Integer.parseInt(values[0]);
+					int n2 = Integer.parseInt(values[1]);
+					n1 = n1 > 50 ? 50 : n1;
+					n2 = n2 > 10 ? 10 : n2;
+					num1 = String.valueOf(n1);
+					num2 = String.valueOf(n2);
 				} else {
-					num1 = Double.parseDouble(values[0])>11?"11":values[0];
+					int n1 = Integer.parseInt(values[1]);
+					n1 = n1 > 50 ? 50 : n1;
+					num1 = String.valueOf(n1);
 					num2 = "3";
 				}
 				fieldBuf.append(num1+","+num2);

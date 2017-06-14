@@ -60,12 +60,19 @@
 				                  </td>
 				                 <td style="width: 150px;">
 					                  <div class="col-sm-12 p-l-0 p-r-0">
-					                  <select class="cnoj-select form-control input-sm" data-uri="dict/item/TABLE_FIELD_DATA_FORMAT.json" style="width: 140px;" data-default-value="${field.dataFormat }" name="fields[${st.index }].dataFormat" ></select>
+					                  <select class="cnoj-select form-control field-type input-sm" data-uri="dict/item/TABLE_FIELD_DATA_FORMAT.json" style="width: 140px;" data-default-value="${field.dataFormat }" name="fields[${st.index }].dataFormat" ></select>
 					                  </div>
 				                  </td>
 				                 <td style="width: 150px;">
 				                    <div class="col-sm-12 p-l-0 p-r-0">
-				                     <input type="text" class="cnoj-num-spinner form-control input-sm" data-format="num" data-step="1" value="${field.length }" name="fields[${st.index }].length" />
+										<c:choose>
+											<c:when test="${fn:indexOf(field.length,\",\")>-1}">
+												<input type="text" class="field-length form-control input-sm" data-regexp="/\d+,\d+/" value="${field.length }" name="fields[${st.index }].length" />
+											</c:when>
+											<c:otherwise>
+												<input type="text" class="field-length form-control input-sm" data-format="num" value="${field.length }" name="fields[${st.index }].length" />
+											</c:otherwise>
+										</c:choose>
 				                    </div>
 				                 </td>
 				                 <td>
