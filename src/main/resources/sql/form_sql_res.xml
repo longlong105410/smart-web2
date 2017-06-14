@@ -85,10 +85,20 @@
         </sql>
      </sqlUnit>
      
-     <!-- 获取字段值 -->
+     <!-- 更新字段值 -->
      <sqlUnit name="update_field_value">
         <sql>
             update ${tableName} set ${fieldName} where form_data_id=:formDataId
         </sql>
      </sqlUnit>
+
+	<!--获取需要记录日志的字段信息-->
+	<sqlUnit name="log_field_info">
+		<sql>
+			SELECT ff.table_id as tableId,ct.table_name as tableName,ctf.field_name as tableFieldName,
+			ff.table_field_id as tableFieldId,ff.plugins
+			FROM t_form_field ff,t_create_table ct,t_create_table_field ctf
+			where ff.table_id=ct.id and ff.table_field_id=ctf.id and ff.is_log=1 and ff.form_id=:formId
+		</sql>
+	</sqlUnit>
 </sqlMap>
