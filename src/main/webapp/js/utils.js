@@ -1353,3 +1353,13 @@ utils.closeWebPage = function() {
 		window.close();
 	}
 }
+
+/**
+ * 判斷是否是IE浏览器
+ */
+utils.isIE = function() {
+	if (!!window.ActiveXObject || "ActiveXObject" in window)
+		return true;
+	else
+		return false;
+}

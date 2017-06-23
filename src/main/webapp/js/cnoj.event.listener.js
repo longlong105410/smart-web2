@@ -2913,7 +2913,20 @@ function printListener($elementWrap) {
 			} else {
 				$target = $(target);
 			}
-			$target.printArea();
+			var options = {};
+			if(utils.isIE()) {
+				var popHt = $target.outerHeight(true);
+		   		var popWd = $target.outerWidth(true);
+		   		options = {
+		   			mode:'popup',
+		   			popHt: popHt,
+		            popWd: popWd,
+		            popClose: true,
+		            popX: 10,
+		            popY: 10
+		   		};
+			}
+			$target.printArea(options);
 		}
 	}
 }

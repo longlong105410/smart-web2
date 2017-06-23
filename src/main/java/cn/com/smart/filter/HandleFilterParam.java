@@ -46,6 +46,9 @@ public class HandleFilterParam {
 		if(fields.length > 0) {
 			try {
 				for (int i = 0; i < fields.length; i++) {
+				    if(Modifier.isStatic(fields[i].getModifiers()) || Modifier.isFinal(fields[i].getModifiers())) {
+		                continue;
+		            }
 					PropertyDescriptor propertyDesc = new PropertyDescriptor(fields[i].getName(), clazz);
 					Method method = propertyDesc.getReadMethod();
 					Object value = method.invoke(this.searchParam);

@@ -113,8 +113,6 @@ public class SQLVarParamFilter {
 		List<String> options = null;
 		if(StringUtils.isNotEmpty(sql)) {
 			options = new ArrayList<String>();
-			//String regex = "(?<=\\[)[^\\[\\]]+(?=\\])";
-			//String regex = "\\[([^\\]]+)\\]";
 			String regex = "(?<=\\[)[^\\[]+(?=\\])";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(sql);
@@ -137,7 +135,7 @@ public class SQLVarParamFilter {
 		List<String> hasSqls = new ArrayList<String>();
 		for (String option : options) {
 			for (String varParam : varParams) {
-				if(option.contains(":"+varParam)) {
+				if(option.matches(".*?:"+varParam+"[\\s*|\\]|%|']*?")) {
 					hasSqls.add(option);
 				}
 			}
@@ -184,8 +182,6 @@ public class SQLVarParamFilter {
 			boolean isMatcher = false;
 			
 			for (String key : sets) {
-				//String regex = "'(%?.?[^[:"+key+"']]+.?%?)'";
-				//String regex = "'(%?[^[:"+key+"']]+?%?)'";
 				String regex = "('%?:"+key+"%?')";
 				pattern = Pattern.compile(regex);
 				matcher = pattern.matcher(sql);
