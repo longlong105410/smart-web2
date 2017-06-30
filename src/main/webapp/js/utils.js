@@ -1355,7 +1355,8 @@ utils.closeWebPage = function() {
 }
 
 /**
- * 判斷是否是IE浏览器
+ * 判断是否是IE浏览器
+ * 是IE浏览器，则返回：true；否则返回：false
  */
 utils.isIE = function() {
 	if (!!window.ActiveXObject || "ActiveXObject" in window)
