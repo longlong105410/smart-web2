@@ -135,7 +135,8 @@ public class SQLVarParamFilter {
 		List<String> hasSqls = new ArrayList<String>();
 		for (String option : options) {
 			for (String varParam : varParams) {
-				if(option.matches(".*?:"+varParam+"[\\s*|\\]|%|']*?")) {
+				//if(option.matches(".*?:"+varParam+"[\\s*|\\]|%|']*?")) {
+			    if(option.matches(".*:\\b"+varParam+"\\b.*?")) {
 					hasSqls.add(option);
 				}
 			}
