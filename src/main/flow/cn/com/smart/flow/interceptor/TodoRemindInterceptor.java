@@ -55,7 +55,7 @@ public class TodoRemindInterceptor implements SnakerInterceptor {
 			return;
 		}
 		List<Task> tasks = execution.getTasks();
-		//如果上一节点是开始节点；则提醒
+		//如果上一节点是开始节点；则不提醒
 		if(START_NODE.equals(tasks.get(0).getParentTaskId())) {
 			return;
 		}
