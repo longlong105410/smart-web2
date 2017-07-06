@@ -179,7 +179,7 @@ public class ListctrlParser implements IFormParser {
 			} else {
 				require = "";
 			}
-			pluginTypes[i] += pluginTypes[i]+require;
+			pluginTypes[i] = pluginTypes[i]+require;
 			if("text".equals(colTypes[i])) {
 				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
 					if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
