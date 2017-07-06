@@ -37,6 +37,7 @@ import cn.com.smart.web.helper.TreeCombinHelper;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.plugins.ZTreeHelper;
 
+import com.mixsmart.security.SecurityUtils;
 import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
@@ -117,7 +118,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 					smartResp.setMsg("该用户名已存在，不能在注册！");
 					return smartResp;
 				}
-				user.setPassword(EncryptAlg.MD5(user.getPassword()));
+				user.setPassword(SecurityUtils.md5(user.getPassword()));
 				Serializable  id = userDao.save(user);
 				if(null != id) {
 					smartResp.setResult(OP_SUCCESS);
@@ -209,7 +210,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 		SmartResponse<UserInfo> smartResp = new SmartResponse<UserInfo>();
 		try {
 			if(StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
-				String md5Pwd = EncryptAlg.MD5(password);
+				String md5Pwd = SecurityUtils.md5(password);
 				TNUser user = userDao.queryLogin(username, md5Pwd);
 				if(null != user) {
 					UserInfo userInfo = new UserInfo();
@@ -291,7 +292,7 @@ public class UserService extends MgrServiceImpl<TNUser> {
 			if(StringUtils.isNotEmpty(userIds) && StringUtils.isNotEmpty(pwd) && StringUtils.isNotEmpty(confirmPwd)) {
 				if(pwd.equals(confirmPwd)) {
 					String[] userIdArray = userIds.split(",");
-					pwd = EncryptAlg.MD5(pwd);
+					pwd = SecurityUtils.md5(pwd);
 					if(userDao.batchChangePwd(userIdArray, pwd)) {
 						smartResp.setResult(OP_SUCCESS);
 						smartResp.setMsg("密码修改成功");
@@ -328,9 +329,9 @@ public class UserService extends MgrServiceImpl<TNUser> {
 				if(newPwd.equals(confirmNewPwd)) {
 					TNUser user = userDao.find(userId);
 					if(null != user) {
-						String md5Pwd = EncryptAlg.MD5(oldPwd);
+						String md5Pwd = SecurityUtils.md5(oldPwd);
 						if(user.getPassword().equals(md5Pwd)) {
-							String md5NewPwd = EncryptAlg.MD5(newPwd);
+							String md5NewPwd = SecurityUtils.md5(newPwd);
 							if(userDao.changePwd(userId, md5NewPwd)) {
 								smartResp.setResult(OP_SUCCESS);
 								smartResp.setMsg("密码修改成功");

@@ -14,6 +14,7 @@ import javax.crypto.spec.PBEParameterSpec;
  * @version 1.0
  * @since 1.0
  */
+@Deprecated
 public class PBECoder extends Coder {
 	/**
      * 支持以下任意一种算法

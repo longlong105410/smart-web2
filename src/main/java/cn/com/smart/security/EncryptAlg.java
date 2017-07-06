@@ -7,10 +7,11 @@ import org.apache.commons.codec.binary.Base64;
 import com.mixsmart.utils.StringUtils;
 
 /**
- * 加密算法
+ * 加密算法；该类已过时；请使用{@link com.mixsmart.security.SecurityUtils} 类代替
  * @author lmq
  *
  */
+@Deprecated
 public class EncryptAlg {
 
 	/**

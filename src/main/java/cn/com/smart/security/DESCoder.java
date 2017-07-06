@@ -26,6 +26,7 @@ import javax.crypto.spec.DESKeySpec;
  * @version 1.0
  * @since 1.0
  */
+@Deprecated
 public abstract class DESCoder extends Coder{
 
 	/**

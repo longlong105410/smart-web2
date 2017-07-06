@@ -22,6 +22,7 @@ import javax.crypto.Cipher;
  * @version 1.0
  * @since 1.0
  */
+@Deprecated
 public abstract class RSACoder extends Coder{
 
 	public static final String KEY_ALGORITHM = "RSA";
