@@ -15,8 +15,6 @@ public class DelBtn extends BaseBtn {
 	
 	protected String callback;
 	
-	protected String selectedType;
-	
 	public DelBtn() {
 		this.id="del";
 	}

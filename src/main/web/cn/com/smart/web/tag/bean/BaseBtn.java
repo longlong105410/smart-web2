@@ -2,6 +2,8 @@ package cn.com.smart.web.tag.bean;
 
 import com.mixsmart.enums.YesNoType;
 
+import cn.com.smart.web.constant.enums.BtnPropType;
+
 
 /**
  * 操作按钮基类
@@ -19,12 +21,19 @@ public class BaseBtn {
 	
 	protected String uri;
 	
+	@Deprecated
 	protected String busi;
 	
 	protected String btnStyle="btn-default";
 	
 	protected String name;
 	
+	/**
+     * 选择类型
+     * none-selected -- 不用选中数据
+     * one-selected -- 只能选中一条数据
+     * multi-selected -- 多选（一条或一条以上）
+     */
 	protected String selectedType;
 	
 	/**
@@ -56,10 +65,12 @@ public class BaseBtn {
 		this.uri = uri;
 	}
 
+	@Deprecated
 	public String getBusi() {
 		return busi;
 	}
 
+	@Deprecated
 	public void setBusi(String busi) {
 		this.busi = busi;
 	}

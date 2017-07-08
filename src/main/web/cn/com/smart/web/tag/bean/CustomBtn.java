@@ -20,17 +20,11 @@ public class CustomBtn extends BaseBtn {
 	
 	protected String paramName = "id";
 	
-	
-	/**
-	 * 选择类型
-	 * none-selected -- 不用选中数据(默认)
-	 * one-selected -- 只能选中一条数据
-	 * multi-selected -- 多选（一条或一条以上）
-	 */
-	protected String selectedType = BtnPropType.SelectType.NONE.getValue();
-	
 	protected String openStyle = BtnPropType.OpenStyle.OPEN_POP.getValue();
 	
+	/**
+	 * 点击按钮时，先执行的js方法名称
+	 */
 	protected String beforeCheck;
 	
 	public CustomBtn(String id,String title,String name,String uri) {
@@ -38,6 +32,7 @@ public class CustomBtn extends BaseBtn {
 		this.title = StringUtils.isEmpty(title)?name:title;
 		this.name = name;
 		this.uri = uri;
+		this.selectedType = BtnPropType.SelectType.NONE.getValue();
 	}
 	
 	public CustomBtn(String id,String title,String name,String uri,String btnIcon) {
@@ -46,6 +41,7 @@ public class CustomBtn extends BaseBtn {
 		this.name = name;
 		this.uri = uri;
 		this.btnIcon = btnIcon;
+		this.selectedType = BtnPropType.SelectType.NONE.getValue();
 	}
 	
 	public CustomBtn(String id,String title,String name,String uri,String btnIcon,String selectedType) {
