@@ -174,7 +174,13 @@ public class ACLInterceptor implements HandlerInterceptor {
 				is = true;
 			}
 		}
-		if(!isRes) {
+		//从配置文件中获取获取是否记录日志的标识；如果未配置；默认记录访问日志
+		YesNoType yesNo = YesNoType.getObjByStrValue(InitSysConfig.getInstance().getValue("is.access.log"));
+		if(null == yesNo) {
+			yesNo = YesNoType.YES;
+		}
+		//如果不是资源URL，并且记录访问日志
+		if(!isRes && yesNo.getValue()) {
 			String userAgentStr = request.getHeader("User-Agent");
 			//记录访问日志
 			accessLog = new TNAccessLog();
