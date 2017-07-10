@@ -125,8 +125,6 @@ $.extend(true, snakerflow.editors, {
 		var _props,_k,_div,_src,_r;
 		this.init = function(props, k, div, src, r){
 			_props=props; _k=k; _div=div; _src=src; _r=r;
-			//var checkboxHtml = '<label class="checkbox-inline"><input type="checkbox" data-size="switch-small" data-on-label="是" data-off-label="否" id="'+_div+'_checkbox" value="1" '+(isCheck?'checked=checked':'')+'>  '+label+'</label>';
-			
 			var checkboxHtml = '<div style="width: 85px;float: right;"><div class="switch switch-small" data-on-label="是" data-off-label="否"><input type="checkbox" id="'+_div+'_checkbox" value="1" '+(isCheck?'checked':'')+' /></div></div><div style="float: left;" class="p-t-5 p-l-5">'+label+'</div>';
 			$(checkboxHtml).appendTo('#'+_div);
 			$('#'+_div).data('editor', this);
@@ -146,17 +144,7 @@ $.extend(true, snakerflow.editors, {
 			    	_props[_k].value = "0";
 			    }
 			});
-			/*
-			$("#"+_div).find("input").click(function(){
-				console.log("111")
-				if($(this).prop("checked")) {
-					_props[_k].value = "1";
-				} else {
-					_props[_k].value = "0";
-				}
-			});*/
 			if(_props[_k].value == "1") {
-				//$('#'+_div+'_checkbox').parents(".switch:eq(0)").bootstrapSwitch('setState', true);
 				$('#'+_div+'_checkbox').prop("checked", true);
 			}
 			if(_k == 'taskAttachment') {
@@ -209,14 +197,12 @@ $.extend(true, snakerflow.editors, {
 							    p.append('<label class="col-sm-4"><input type="checkbox" id="'+datas[idx][0]+'"  name="editorArea" value="'+datas[idx][0]+'" />&nbsp;'+datas[idx][1]+'</label>');
 							}
 						}
-						//sle.val(_props[_k].value);
 					 }
 				   }
 				});
 			}
 			sle.find("input[type=checkbox]").click(function(){
-				var pvalue = '';//props[_k].value;
-				//var value = $(this).val();
+				var pvalue = '';
 				$(".checkbox-area input[type=checkbox]:checked").each(function(){
 					pvalue +=$(this).val()+",";
 				});
@@ -225,7 +211,6 @@ $.extend(true, snakerflow.editors, {
 				}
 				props[_k].value = pvalue;
 			});
-			//props[_k].value = sle.val();
 			$('#'+_div).data('editor', this);
 		};
 		this.destroy = function(){
@@ -236,9 +221,12 @@ $.extend(true, snakerflow.editors, {
 		var _props,_k,_div,_src,_r;
 		this.init = function(props, k, div, src, r){
 			_props=props; _k=k; _div=div; _src=src; _r=r;
-			if(!utils.isEmpty(_props[_k].value)) {
-				if(_k == 'attachment') {
+			//如果是流程属性中的“是否有附件”下拉框
+			if(_k == 'attachment') {
+				if(utils.isNotEmpty(_props[_k].value)) {
 					cfg.attachment = _props[_k].value;
+				} else if(utils.isNotEmpty(cfg.attachment)){
+					_props[_k].value = cfg.attachment;
 				}
 			}
 			var sle = $('<select class="form-control input-sm" id="'+_div+'_select" />').val(props[_k].value).change(function(){
@@ -247,8 +235,7 @@ $.extend(true, snakerflow.editors, {
 					cfg.attachment = _props[_k].value;
 				}
 			}).appendTo('#'+_div);
-			var firstValue = '';
-			var isSame = false;
+			const defaultValue = _props[_k].value;
 			if(typeof arg === 'string'){
 				$.ajax({
 				   type: "GET",
@@ -256,39 +243,35 @@ $.extend(true, snakerflow.editors, {
 				   success: function(data){
 					  var opts = eval(data);
 					  opts = opts.datas;
-					 if(opts && opts.length>0){
-						 firstValue = opts[0][0];
-						for(var idx=0; idx<opts.length; idx++){
-							if(utils.isEmpty(_props[_k].value) && idx==0) {
-								_props[_k].value = opts[idx][0];
-								if(_k == 'attachment') {
-									cfg.attachment = _props[_k].value;
-								}
+					  if(opts && opts.length>0){
+						  firstValue = opts[0][0];
+						  for(var idx=0; idx<opts.length; idx++){
+							  if(utils.isEmpty(defaultValue) && idx==0) {
+								  defaultValue = opts[idx][0];
+							  }
+							  sle.append('<option value="'+opts[idx][0]+'">'+opts[idx][1]+'</option>');
 							}
-							if(!isSame) 
-								isSame = (_props[_k].value==opts[idx][0]);
-							sle.append('<option '+(_props[_k].value==opts[idx][0]?'selected':'')+' value="'+opts[idx][0]+'">'+opts[idx][1]+'</option>');
-						}
-					 }
-				   }
+						 }
+						 sle.val(defaultValue);
+						 //加""的原因是：避免整数，导致replace方法异常
+						 _props[_k].value = defaultValue+"";
+						 if(_k == 'attachment') {
+							cfg.attachment = defaultValue;
+						 }
+				    }
 				});
 			}else {
-				firstValue = arg[0].value;
 				for(var idx=0; idx<arg.length; idx++){
-					if(utils.isEmpty(_props[_k].value) && idx==0) {
-						_props[_k].value = arg[idx].value;
-						if(_k == 'attachment') {
-							cfg.attachment = _props[_k].value;
-						}
+					if(utils.isEmpty(defaultValue) && idx==0) {
+						defaultValue = arg[idx].value;
 					}
-					if(!isSame) 
-						isSame = (_props[_k].value==arg[idx].value);
-					sle.append('<option '+(_props[_k].value==arg[idx].value?'selected':'')+' value="'+arg[idx].value+'">'+arg[idx].name+'</option>');
+					sle.append('<option value="'+arg[idx].value+'">'+arg[idx].name+'</option>');
 				}
-				
-			}
-			if(!isSame) {
-				_props[_k].value = firstValue;
+				 sle.val(defaultValue);
+				 _props[_k].value = defaultValue+"";
+				 if(_k == 'attachment') {
+					cfg.attachment = defaultValue;
+				 }
 			}
 			if(_k == 'taskAttachment' && cfg.attachment==0) {
 				$('#'+_div).parent().hide();
@@ -368,13 +351,6 @@ $.extend(true, snakerflow.editors, {
 				    	$(thisDiv).parent().parent().hide();
 				    }
 				});
-				/*$("#pisExeAssigner_checkbox").click(function(){
-					if($(this).prop("checked")) {
-						$(thisDiv).parent().parent().show();
-					} else {
-						$(thisDiv).parent().parent().hide();
-					}
-				});*/
 			}
 		};
 		this.destroy = function(){
@@ -402,9 +378,6 @@ $.extend(true, snakerflow.editors, {
 				$('#'+_div+'_input').attr("title",showName);
 				$('#'+_div+'_input').val(showName);
 				_props[_k].value = showName;
-				//alert(_k+","+name);
-				//alert(_props[_k].value);
-				//alert(id);
 				_props[name].value = id;
 			}});
 		}
