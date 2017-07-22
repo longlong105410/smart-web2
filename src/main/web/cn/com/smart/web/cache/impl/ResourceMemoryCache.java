@@ -11,6 +11,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.cache.CacheException;
 import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
@@ -22,10 +26,6 @@ import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.dao.IResourceDao;
 import cn.com.smart.web.dao.impl.OPAuthDao;
 import cn.com.smart.web.dao.impl.ResourceDao;
-
-import com.mixsmart.enums.YesNoType;
-import com.mixsmart.utils.ArrayUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 资源缓存
@@ -45,9 +45,6 @@ public class ResourceMemoryCache implements InitCache,ICacheManagerAware,IResour
 	private ResourceDao resDao;
 	@Autowired
 	private OPAuthDao authDao;
-	
-	@Autowired
-	private OPAuthMemoryCache authCache;
 	
 	private ICacheManager cacheManager;
 	

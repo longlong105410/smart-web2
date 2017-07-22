@@ -11,15 +11,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.Smart;
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.init.config.InitSysConfig;
+import cn.com.smart.service.SmartContextService;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.IActionConstant;
 import cn.com.smart.web.helper.HttpRequestHelper;
 import cn.com.smart.web.service.RoleService;
-import cn.com.smart.web.spring.util.SpringBeanFactoryUtil;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.CustomBtn;
 import cn.com.smart.web.tag.bean.DelBtn;
@@ -27,8 +29,6 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 控制器基类
@@ -102,7 +102,7 @@ public abstract class BaseController extends Smart implements IBaseController {
     	if(StringUtils.isNotEmpty(busiName)) {
 	    	String daoName = busiName+"Dao";
 			try {
-			     dao = (BaseDaoImpl<?>)SpringBeanFactoryUtil.getInstance().getBean(daoName);
+				dao = (BaseDaoImpl<?>)SmartContextService.findByName(daoName);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -235,20 +235,14 @@ public abstract class BaseController extends Smart implements IBaseController {
      */
 	public Map<String,Object> getRequestParamMap(HttpServletRequest request, boolean isOrgFilter) {
 		Map<String,Object> paramMaps = new HashMap<String, Object>();
-		Map<String,Object> curParamMaps = request.getParameterMap();
+		Map<String, String[]> curParamMaps = request.getParameterMap();
 		if(null != curParamMaps && curParamMaps.size()>0) {
 			for (String key : curParamMaps.keySet()) {
-				Object value = curParamMaps.get(key);
-				if(value.getClass().isArray()) {
-					Object[] objArray = (Object[]) value;
-					if(objArray.length < 2 ) {
-						paramMaps.put(key, objArray[0]); 
-					} else {
-						paramMaps.put(key, value);
-					}
-				}
-				else
+				String[] value = curParamMaps.get(key);
+				if(null != value && value.length > 1) {
 					paramMaps.put(key, value);
+				} else if(null != value)
+					paramMaps.put(key, value[0]);
 			}
 		}
 		UserInfo userInfo = getUserInfoFromSession(request);

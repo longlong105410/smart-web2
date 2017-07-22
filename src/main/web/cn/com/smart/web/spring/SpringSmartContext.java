@@ -9,8 +9,9 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.context.ISmartContext;
-import cn.com.smart.utils.StringUtil;
 
 /**
  * 获取Spring上下文
@@ -37,7 +38,7 @@ public class SpringSmartContext implements ISmartContext {
 
 	@Override
 	public void put(String name, Class<?> clazz) {
-		if(!StringUtil.isEmpty(name) && null != clazz) {
+		if(StringUtils.isNotEmpty(name) && null != clazz) {
 			BeanDefinition definition = new RootBeanDefinition(clazz);
 			beanFactory.registerBeanDefinition(name, definition);
 		}

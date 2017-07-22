@@ -58,12 +58,23 @@ public class ACLInterceptor implements HandlerInterceptor {
 		long useTime = endTime - startTime;
 		LoggerUtils.debug(log, "请求["+currentUri+"]用时："+useTime+"毫秒");
 		if(!isRes(currentUri)) {
+			Object al = request.getAttribute("accessLog");
+			if(null != al) {
+				//保存访问日志
+				TNAccessLog accessLog = (TNAccessLog)al;
+				accessLog.setResponseTime(responseTime);
+				accessLog.setUseTime(useTime);
+				AccessLogService accessLogServ = SmartContextService.find(AccessLogService.class);
+				LoggerUtils.debug(log, "正在保存访问日志...");
+				accessLogServ.save(accessLog);
+			}
+			/*
 			//更新访问日志；计算用时
 			String accessLogId = StringUtils.handNull(request.getAttribute("accessLogId"));
 			if(StringUtils.isNotEmpty(accessLogId)) {
 				AccessLogService accessLogServ = SmartContextService.find(AccessLogService.class);
 				accessLogServ.update(accessLogId, responseTime, useTime);
-			}
+			}*/
 			response.setHeader("Cache-Control","no-cache");
 			response.setHeader("Pragrma","no-cache");
 			response.setDateHeader("Expires",-1);
@@ -82,7 +93,6 @@ public class ACLInterceptor implements HandlerInterceptor {
 		modelMap.put("currentUri", HttpRequestHelper.getCurrentUri(request));
 		modelMap.put("currentUriParam", HttpRequestHelper.getCurrentUriParam(request));
 		//请求参数添加到map里面
-		@SuppressWarnings("unchecked")
 		Map<String,String[]> curParamMaps = request.getParameterMap();
 		if(null != curParamMaps && curParamMaps.size()>0) {
 			Set<Map.Entry<String, String[]>> items = curParamMaps.entrySet();
@@ -174,7 +184,7 @@ public class ACLInterceptor implements HandlerInterceptor {
 				is = true;
 			}
 		}
-		//从配置文件中获取获取是否记录日志的标识；如果未配置；默认记录访问日志
+		//从配置文件中获取是否记录日志的标识；如果未配置；默认记录访问日志
 		YesNoType yesNo = YesNoType.getObjByStrValue(InitSysConfig.getInstance().getValue("is.access.log"));
 		if(null == yesNo) {
 			yesNo = YesNoType.YES;
@@ -206,23 +216,22 @@ public class ACLInterceptor implements HandlerInterceptor {
 					param = param.substring(0, 490);
 				}
 			}
-			UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(request);
 			accessLog.setParam(param);
+			UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(request);
 			if(null != userInfo) {
 				accessLog.setUserId(userInfo.getId());
 				accessLog.setUsername(userInfo.getUsername());
 				accessLog.setLoginId(userInfo.getLoginId());
 			}
-			//如果不执行后续操作
-			if(!is) {
-				accessLog.setResponseTime(new Date());
-				accessLog.setUseTime(0L);
-			}
 			accessLog.setCreateTime(currentTime);
+			//为了避免访问日志更新操作影响性能（数据量大的原因），这里不在保存访问日志，等到请求全部结束后，在保存；
+			//保存方法在 afterCompletion 方法中实现
+			/*
 			LoggerUtils.debug(log, "正在保存访问日志");
 			AccessLogService accessLogServ = SmartContextService.find(AccessLogService.class);
 			accessLogServ.save(accessLog);
-			request.setAttribute("accessLogId", accessLog.getId());
+			request.setAttribute("accessLogId", accessLog.getId());*/
+			request.setAttribute("accessLog", accessLog);
 		}
 		return is;
 	}

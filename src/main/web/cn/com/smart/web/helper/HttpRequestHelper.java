@@ -6,15 +6,11 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.constant.IConstant;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.IActionConstant;
-
-import com.mixsmart.utils.LoggerUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * HttpRequest助手
@@ -23,8 +19,6 @@ import com.mixsmart.utils.StringUtils;
  */
 public class HttpRequestHelper {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HttpRequestHelper.class);
-
 	/**
 	 * 获取当前URI(不含参数)
 	 * @param request
@@ -38,7 +32,6 @@ public class HttpRequestHelper {
 		} else {
 			currentUri = currentUri.substring(1, currentUri.length());
 		}
-		LoggerUtils.debug(logger, "当前请求的URI为:"+currentUri);
 		return currentUri;
 	}
 	
@@ -58,7 +51,6 @@ public class HttpRequestHelper {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		LoggerUtils.debug(logger, "当前请求的URI为:"+currentUri);
 		return currentUri;
 	}
 	

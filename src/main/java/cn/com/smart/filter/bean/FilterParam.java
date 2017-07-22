@@ -3,6 +3,7 @@ package cn.com.smart.filter.bean;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -62,7 +63,6 @@ public class FilterParam implements IFilterParam {
 		this.state = state;
 	}
 
-	
 	/**
 	 * 参数转化为字符串 
 	 * @see FilterParam#getParamToString()
@@ -100,12 +100,21 @@ public class FilterParam implements IFilterParam {
 	
 	/**
 	 * 参数转化为字符串
-	 * 注：页面分页时，不用改方法也支持根据条件分页
+	 * 注：页面分页时，不用该方法也支持根据条件分页
 	 * @return 返回转化结果
 	 */
-	@Deprecated
 	public String getParamToString() {
-		return getParamToString(null);
+		Map<String, Object> map = toMap();
+		StringBuilder paramBuilder = null;
+		if(null != map) {
+			paramBuilder = new StringBuilder();
+			Set<Map.Entry<String, Object>> sets = map.entrySet();
+			for (Map.Entry<String, Object> entry : sets) {
+				paramBuilder.append(entry.getKey()+"="+StringUtils.handNull(entry.getValue())+"&");
+			}
+			paramBuilder.delete(paramBuilder.length()-1, paramBuilder.length());
+		}
+		return (null == paramBuilder)?null:paramBuilder.toString();
 	}
 	
 	@Override

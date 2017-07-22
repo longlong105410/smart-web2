@@ -9,6 +9,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.cache.CacheException;
 import cn.com.smart.cache.ICache;
 import cn.com.smart.cache.ICacheManager;
@@ -21,9 +24,6 @@ import cn.com.smart.web.bean.entity.TNRoleMenu;
 import cn.com.smart.web.dao.IMenuDao;
 import cn.com.smart.web.dao.impl.MenuDao;
 import cn.com.smart.web.dao.impl.ResourceDao;
-
-import com.mixsmart.enums.YesNoType;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 初始化菜单缓存
@@ -42,8 +42,6 @@ public class MenuMemoryCache implements ICacheManagerAware, InitCache, IMenuDao 
 	private MenuDao menuDao;
 	@Autowired
 	private ResourceDao resourceDao;
-	@Autowired
-	private ResourceMemoryCache resCache;
 	@Autowired
 	private DictMemoryCache dictCache;
 	@Autowired
