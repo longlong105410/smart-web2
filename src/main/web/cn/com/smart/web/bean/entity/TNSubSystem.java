@@ -22,6 +22,16 @@ import cn.com.smart.bean.DateBean;
 public class TNSubSystem extends BaseBeanImpl implements DateBean {
 
 	/**
+	 * 外部系统
+	 */
+	public static final String SYS_TYPE_EXTERNAL = "external_sys";
+	/**
+	 * 内部系统
+	 */
+	public static final String SYS_TYPE_INTERNAL = "internal_sys";
+	
+	
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1695437137017685946L;
@@ -33,6 +43,17 @@ public class TNSubSystem extends BaseBeanImpl implements DateBean {
 	private String url;
 	
 	private String icon;
+	
+	/**
+	 * 系统类型；
+	 * 如：
+	 * external_sys -- 外部系统;
+	 * internal_sys -- 内部系统;
+	 * 外部系统和内部系统的区别在于：
+	 * 在访问系统时，内部系统会在url地址后面加免登陆的uri地址及参数；
+	 * 外部系统不会加地址和参数
+	 */
+	private String sysType;
 	
 	private String state;
 	
@@ -77,6 +98,15 @@ public class TNSubSystem extends BaseBeanImpl implements DateBean {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	@Column(name="sys_type", length=127)
+	public String getSysType() {
+		return sysType;
+	}
+
+	public void setSysType(String sysType) {
+		this.sysType = sysType;
 	}
 
 	@Column(name="state", length=2, nullable=false)

@@ -13,6 +13,8 @@
 	<sqlUnit name="sub_system_list">
 		<sql>select t.id,t.name,t.url,t.icon,
 		(select tmp.busi_name from t_n_dict tmp where 
+		    tmp.busi_value=t.sys_type and tmp.parent_id=(select id from t_n_dict where busi_value='SYS_TYPE')) as systype,
+		(select tmp.busi_name from t_n_dict tmp where 
 		    tmp.busi_value=t.state and tmp.parent_id=(select id from t_n_dict where busi_value='DATA_STATE')) as state,
 		t.sort_order,t.create_time from t_n_sub_system t order by t.sort_order asc</sql>
 	</sqlUnit>

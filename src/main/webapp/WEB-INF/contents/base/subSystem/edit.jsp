@@ -15,7 +15,13 @@
 			      <input type="text" class="form-control require" value="${objBean.url }" name="url" data-label-name="地址" id="input2" />
 			    </div>
 			</div>
-			
+			<div class="form-group m-b-10">
+			    <label class="col-sm-2 control-label">系统类型</label>
+			    <div class="col-sm-9 p-l-0">
+			       <select class="form-control cnoj-select" data-uri="dict/item/SYS_TYPE.json" name="sysType" data-default-value="${objBean.sysType }">
+			       </select>
+			    </div>
+			</div>
 			<div class="form-group m-b-10">
 			    <label for="input4" class="col-sm-2 control-label">状态</label>
 			    <div class="col-sm-9 p-l-0">

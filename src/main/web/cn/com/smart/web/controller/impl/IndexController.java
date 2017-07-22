@@ -13,22 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mixsmart.security.SecurityUtils;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNSubSystem;
 import cn.com.smart.web.bean.entity.TNVersion;
 import cn.com.smart.web.constant.enums.VersionType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.service.SubSystemService;
-import cn.com.smart.web.service.UserCustomService;
 import cn.com.smart.web.service.VersionService;
 import cn.com.smart.web.sso.SSOUtils;
 import cn.com.smart.web.sso.bean.SSOUserInfo;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mixsmart.security.SecurityUtils;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 首页
@@ -40,16 +39,12 @@ import com.mixsmart.utils.StringUtils;
 public class IndexController extends BaseController {
 	
 	@Autowired
-	private UserCustomService userCusServ;
-	@Autowired
 	private VersionService versionServ;
 	@Autowired
 	private SubSystemService subSysServ;
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request, String forward) throws Exception {
-		//chResponse = userCusServ.getIndexLayout(getUserInfoFromSession(request).getId(),true);
-		//modelView.getModelMap().put("chResponse", chResponse);
 		ModelAndView modelView = new ModelAndView();
 		TNVersion version = versionServ.getNewVersion(VersionType.PC);
 		if(null == version) {
@@ -63,7 +58,8 @@ public class IndexController extends BaseController {
 		List<TNSubSystem> subSysList = subSysServ.getSubSystems();
 		if(CollectionUtils.isNotEmpty(subSysList)) {
 			for (TNSubSystem subSystem : subSysList) {
-				if(null == subSystem || StringUtils.isEmpty(subSystem.getUrl())) {
+				if(null == subSystem || StringUtils.isEmpty(subSystem.getUrl()) 
+						|| TNSubSystem.SYS_TYPE_EXTERNAL.equals(subSystem.getSysType())) {
 					continue;
 				}
 				String result = "";
