@@ -334,7 +334,8 @@ public class FormDataBusi {
 						TableFieldMap idFieldMap = tfList.get(0);
 						Object value = idFieldMap.getValue();
 						List<Integer> indexs = new ArrayList<Integer>();
-						if(null != value) {
+						//修复ID值为“”时，无法保存数据问题
+						if(null != value && StringUtils.isNotEmpty(value.toString())) {
 							indexs.add(0);
 						} else {
 							List<Object> list = idFieldMap.getValues();
