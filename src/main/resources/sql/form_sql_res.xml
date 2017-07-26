@@ -101,4 +101,19 @@
 			where ff.table_id=ct.id and ff.table_field_id=ctf.id and ff.is_log=1 and ff.form_id=:formId
 		</sql>
 	</sqlUnit>
+	
+	<!-- 表单资源管理 -->
+	<sqlUnit name="form_resource_mgr_list">
+	    <sql>
+          select t.id,t.name,t.uri,(select tmp.busi_name from t_n_dict tmp where tmp.busi_value=t.state and tmp.parent_id=(select id from t_n_dict where busi_value='DATA_STATE')) as state,
+          t.create_time 
+           from t_n_resource t where t.type='form_resource' order by t.create_time asc 
+       </sql>
+	</sqlUnit>
+	<!-- 选择表单列表 -->
+	<sqlUnit name="select_form_list">
+		<sql>
+			select t.id, t.name from t_form t where t.type='normal_form' order by t.create_time desc
+		</sql>
+	</sqlUnit>
 </sqlMap>

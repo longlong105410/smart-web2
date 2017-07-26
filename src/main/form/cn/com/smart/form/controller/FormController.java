@@ -26,6 +26,7 @@ import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 
+import com.mixsmart.exception.NullArgumentException;
 import com.mixsmart.utils.StringUtils;
 
 /**
@@ -53,7 +54,6 @@ public class FormController extends BaseFormController {
 	 */
 	@RequestMapping("/designer")
 	public ModelAndView designer(ModelAndView modelView,String id) throws Exception {
-		
 		if(StringUtils.isNotEmpty(id)) {
 			SmartResponse<Object> smartResp = formServ.find(TForm.class, id);
 			if(OP_SUCCESS.equals(smartResp.getResult())) {
@@ -147,6 +147,24 @@ public class FormController extends BaseFormController {
 		}
 		modelView.getModelMap().put("smartResp", smartResp);
 		modelView.setViewName(VIEW_DIR+"/show");
+		return modelView;
+	}
+	
+	/**
+	 * 通过表单ID，创建表单视图
+	 * @param formId 表单ID
+	 * @param formDataId 表单数据ID（管理时，用于修改表单数据）
+	 * @return 
+	 */
+	@RequestMapping("/create")
+	public ModelAndView create(String formId, String formDataId) {
+		ModelAndView modelView = new ModelAndView();
+		if(StringUtils.isEmpty(formId)) {
+			throw new NullArgumentException("formId参数不能为空");
+		}
+		SmartResponse<TForm> smartResp = formServ.find(formId);
+		modelView.getModelMap().put("smartResp", smartResp);
+		modelView.setViewName(VIEW_DIR+"/create");
 		return modelView;
 	}
 	
