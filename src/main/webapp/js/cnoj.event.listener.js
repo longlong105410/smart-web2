@@ -417,7 +417,7 @@ function formRequireListener($elementWrap) {
  * class="cnoj-change-page" 该标识主要是用来标记分页，点击页面时触发的事件
  *    参数:必须 data-uri 分页uri
  *       可选 data-target 显示地方(一般为一个div层)
- *       data-search-panel-tag 搜索面板标识
+ *            data-search-panel-tag 搜索面板标识
  *   
  * class="cnoj-open-self" 点击时，指定的uri显示到当前"#main-content"里面
  *    参数：必须 data-uri 显示uri
@@ -425,7 +425,10 @@ function formRequireListener($elementWrap) {
  *        
  * class="cnoj-open-blank" 点击时，会弹出一个新窗口（弹出窗口）;  
  *    参数： 必须 data-uri 弹出页面的uri
- *         可选 data-title 弹出窗口的标题;data-width 弹出窗口的宽度
+ *         可选 data-title 弹出窗口的标题;
+ *              data-width 弹出窗口的宽度;
+ *              data-open-target 弹出窗口的方式；针对有iframe的情况；
+ *                  如：值为：parent;会在父页面上提出窗口
  *
  * class="cnoj-open-tabs" 点击时，指定的uri在新的tab中打开
  *    参数：必须 data-uri 显示uri
@@ -592,6 +595,7 @@ function hrefListener($elementWrap) {
 			var uri = $this.data("uri");
 	        var title = $this.data("title");
 	        var w = $this.data("width");
+	        var openTarget = $this.data("open-target");
 	        if(utils.isEmpty(uri)) {
 	        	uri = $this.attr("href");
 	        }
@@ -599,11 +603,19 @@ function hrefListener($elementWrap) {
 	          if(utils.isEmpty(w)) {
 	        	  w = $(window).width()-50;
 	          }
-	          BootstrapDialogUtil.loadUriDialog(title, uri, w, "#fff", false, function(dialog){
-					setTimeout(function(){
-						initEvent(dialog.getModal());
-					}, 200);
-			  });
+	          if(openTarget == 'parent') {
+	        	  parent.BootstrapDialogUtil.loadUriDialog(title, uri, w, "#fff", false, function(dialog){
+						setTimeout(function(){
+							initEvent(dialog.getModal());
+						}, 200);
+				  });
+	          } else {
+		          BootstrapDialogUtil.loadUriDialog(title, uri, w, "#fff", false, function(dialog){
+						setTimeout(function(){
+							initEvent(dialog.getModal());
+						}, 200);
+				  });
+	          }
 	        }
 		}
 	}
@@ -1560,9 +1572,13 @@ function tableWrapListener($elementWrap, isResize) {
 				h = $(window).height();
 				h = h - 60 - 40 - 10;
 			} else {
-				h = getMainHeight();
-				//去掉tabs高度
-				h = h - getTabHeaderHeight();
+				if(utils.isIframe) {
+					h = $(window).height();
+				} else {
+					h = getMainHeight();
+					//去掉tabs高度
+					h = h - getTabHeaderHeight();
+				}
 				h = h - 10;
 			}
 		}
@@ -1727,11 +1743,17 @@ function limitHeightListener($elementWrap, isResize) {
 	function _handler($element, isResize) {
 		if(isResize || !$element.hasClass("cnoj-auto-limit-height-listener")) {
 			$element.addClass("cnoj-auto-limit-height-listener");
-			var h = getMainHeight();
+			var h = 0;
+			var mainTop = 0;
+			if(utils.isIframe) {
+				h = $(window).height();
+			} else {
+				h = getMainHeight();
+				mainTop = getMainTop();
+			}
 			var subtractHeight = $element.data("subtract-height");
 			subtractHeight = utils.isEmpty(subtractHeight)?0:subtractHeight;
 			var top = $element.offset().top;
-			var mainTop = getMainTop();
 			h = h - (top - mainTop) - subtractHeight - 8; 
 			$element.height(h);
 			$element.css({"overflow":"auto"});
@@ -3142,12 +3164,10 @@ function initEvent($elementWrap) {
 	selectListener($elementWrap);
 	cascadeSelectListener($elementWrap);
 	loadUrlListener($elementWrap);
-	spinnerNumListener($elementWrap);
 	inputPluginEvent($elementWrap);
 	printListener($elementWrap);
 	popoverListener($elementWrap);
 	handleEntrySubmit($elementWrap);
-	
 	changePageSizeListener($elementWrap);
 	listPanelListener($elementWrap, false);
 }
@@ -3162,6 +3182,7 @@ function inputPluginEvent($elementWrap) {
 	autoCompleteRelateListener($elementWrap);
 	inputCheckboxListener($elementWrap);
 	inputRadioListener($elementWrap);
+	spinnerNumListener($elementWrap);
 }
 
 /**

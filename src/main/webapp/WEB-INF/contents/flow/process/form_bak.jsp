@@ -2,88 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-	<jsp:include page="../../base/include/common-header.jsp" />
-	<!-- 封装 bootstrap 弹出对话框 -->  
-	<link href="${pageContext.request.contextPath}/css/bootstrap-dialog.css" rel="stylesheet" />
-	<script src="${pageContext.request.contextPath}/js/bootstrap-dialog.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap-dialog-util.js" type="text/javascript"></script>
-
-	<!-- 日期插件  -->
-    <link href="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
-	<script src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript" ></script>
-	<script src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8" type="text/javascript" ></script>
-
-	<!-- zTree插件 -->
-	<link href="${pageContext.request.contextPath}/plugins/zTree/css/zTreeStyle.css" type="text/css" rel="stylesheet"  />
-	<script src="${pageContext.request.contextPath}/plugins/zTree/js/jquery.ztree.core-3.5.min.js" type="text/javascript" ></script>
-	<script src="${pageContext.request.contextPath}/plugins/zTree/js/jquery.ztree.excheck-3.5.min.js" type="text/javascript" ></script>
-	<script src="${pageContext.request.contextPath}/plugins/zTree/js/jquery.ztree.exedit-3.5.min.js" type="text/javascript" ></script>
-	<script src="${pageContext.request.contextPath}/plugins/zTree/js/jquery.ztree.exhide-3.5.min.js" type="text/javascript" ></script>
-	
-	<!-- 上传文件插件 --> 
-	<link href="${pageContext.request.contextPath}/plugins/jqueryFileUpload/css/jquery.fileupload.css" rel="stylesheet"/>
-	<link href="${pageContext.request.contextPath}/plugins/jqueryFileUpload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
-	<script src="${pageContext.request.contextPath}/plugins/jqueryFileUpload/js/vendor/jquery.ui.widget.js"></script>
-	<script src="${pageContext.request.contextPath}/plugins/jqueryFileUpload/js/jquery.iframe-transport.js" type="text/javascript" ></script>
-	<script src="${pageContext.request.contextPath}/plugins/jqueryFileUpload/js/jquery.fileupload.js" type="text/javascript" ></script>
-	
-	<!-- 打印 -->
-	<link href="${pageContext.request.contextPath}/plugins/printArea/css/jquery.printarea.css" rel="stylesheet"/>
-	<script src="${pageContext.request.contextPath}/plugins/printArea/js/jquery.printarea.js" type="text/javascript" ></script>
-	<link href="${pageContext.request.contextPath}/css/print.css" rel="stylesheet" />
-	
-	<!--ueditor编辑器  -->
-	<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.all.js"></script>
-    <script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
-	
-	<!-- 自定义样式 -->
-	<link href="${pageContext.request.contextPath}/css/ztree-rewrite.css" type="text/css" rel="stylesheet"  />
-	<link href="${pageContext.request.contextPath}/css/bootstrap-extend.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/css/bootstrap-rewrite.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/css/jquery-ui-rewrite.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/css/common.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/css/cnoj-ui.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/css/styles.css" rel="stylesheet" />
-	<link href="${pageContext.request.contextPath}/css/layout.css" rel="stylesheet" />
-	<!-- 与流程相关的样式 -->
-	<link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
-	<link href="${ctx}/plugins/flow/css/flow.css" rel="stylesheet" />
-	
-	<!-- 自定义js -->
-	<script src="${pageContext.request.contextPath}/js/check-card-no.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/check-form.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/ztree-util.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/input-select.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/auto-complete.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/table-async-tree.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/jquery-fileupload-util.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/cnoj.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/cnoj.event.listener.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/adjust-ie-height.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/js/jquery.autotextarea.js" type="text/javascript" charset="UTF-8"></script>
-	
-	<!--[if lt IE 9]>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/html5shiv.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/respond.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/jquery-ui-bootstrap/css/custom-theme/jquery.ui.1.10.0.ie.css"/>
-    <![endif]-->
-    
-    <!--[if (gte IE 8)&(lt IE 10)]>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/jqueryFileUpload/js/cors/jquery.xdr-transport.js"></script>
-	<![endif]-->
-	
-	<!--[if IE 7]>
-       <link rel="stylesheet" href="${pageContext.request.contextPath}/plugins/jquery-ui-bootstrap/assets/css/font-awesome-ie7.min.css">
-    <![endif]-->
-    
-    <!--[if lte IE 6]>
-	  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/bootstrap/css/bootstrap-ie6.css">
-	  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/plugins/bootstrap/css/ie.css">
-      <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/bootstrap/js/bootstrap-ie.js"></script>
-     <![endif]-->
-</head>
-  <body>
+<link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
+<link href="${ctx}/plugins/flow/css/flow.css" rel="stylesheet" />
 <div class="wrap-content">
     <input type="hidden" id="refresh-url" value="${refreshUrl }" />
     <div class="modal fade bootstrap-dialog type-primary size-normal" id="myModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -199,7 +119,7 @@
 			        <c:if test="${taskModel.isPrint == '1' }">
 			         <button class="btn btn-info btn-sm cnoj-print" data-target="#process-handle-form" id="print-form"><i class="glyphicon glyphicon-print"></i> 打印</button>
 			        </c:if>
-			        <button class="btn btn-info btn-sm cnoj-open-blank" id="view-pic" data-open-target="parent" data-title="查看流程图" data-uri="process/view?processId=${taskInfo.processId }&orderId=${orderId }"><i class="glyphicon glyphicon-picture"></i> 查看流程图 </button>
+			        <button class="btn btn-info btn-sm cnoj-open-blank" id="view-pic" data-title="查看流程图" data-uri="process/view?processId=${taskInfo.processId }&orderId=${orderId }"><i class="glyphicon glyphicon-picture"></i> 查看流程图 </button>
 			         
 			         <c:if test="${firstNode != 1 }">
 			           <button type="button" id="save-form" class="btn btn-success btn-sm" data-uri="process/saveForm.json"><i class="glyphicon glyphicon-ok-sign"></i> 保存表单</button> 
@@ -228,7 +148,7 @@
 					<ul class="nav nav-tabs ui-state-default" role="tablist">
 						<li class="active"><a href="#process-form-tab" role="presentation" data-toggle="tab"> 表单信息</a></li>
 						<c:if test="${isAtt==1 }">
-						   <li><a href="#process-att-tab" id="process-att-tab-a" role="presentation" data-toggle="tab"> 已上传附件 <span class="badge">1</span></a></li>
+						   <li><a href="#process-att-tab" id="process-att-tab-a" role="presentation" data-toggle="tab"> 附件 <span class="badge">1</span></a></li>
 						</c:if>
 						<li><a href="#process-record-tab" role="presentation" data-toggle="tab"> 流转记录</a></li>
 					</ul>
@@ -238,7 +158,7 @@
 				<div id="flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height">
 					<div role="tabpanel" class="tab-pane active" id="process-form-tab">
 						<div class="form-prop">
-					       <form id="process-handle-form" data-relate-arg-form="#flow-process-form" method="post" enctype="multipart/form-data">
+					       <form id="process-handle-form" method="post" data-relate-arg-form="#flow-process-form" enctype="multipart/form-data">
 					           ${smartResp.data.parseHtml}
 					       </form>
                            <iframe class="hidden" id="handle-form-iframe" name="handle-form-iframe" frameborder=0 width=0 height=0></iframe>
@@ -257,28 +177,22 @@
 	  </div><!-- panel-tabs-wrap -->
    </div>
 </div>
+<script type="text/javascript">
+    if(typeof(UE) == 'undefined') {
+        var $wrap = $("#myModal").parent();
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.config.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/ueditor.all.js"><\/script>');
+        $wrap.append('<script type="text/javascript" charset="utf-8" src="${ctx}/plugins/ueditor/lang/zh-cn/zh-cn.js"><\/script>');
+    }
+</script>
 <script src="${ctx}/plugins/form/js/form.prop.listener.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/flow/js/flow.form.js" type="text/javascript"></script>
 <script src="${ctx}/js/flow.form.js" type="text/javascript"></script>
 <script type="text/javascript">
-	utils.isIframe = true;
-	loadUrlListener();
     $("#process-handle-form").flowForm({
     	formFieldNames:'${taskModel.formPropIds}',
     	username:'${userInfo.fullName}',
     	deptName: '${userInfo.deptName}',
-    	formData:'${output}',
-    	callback: function(){
-    		formRequireListener();
-    		printListener();
-    		inputPluginEvent();
-    		hrefListener();
-    		limitHeightListener();
-    	}
-    });
-    $(".flow-process").resize(function(){
- 	   setTimeout(function() {
- 		  limitHeightListener();
- 	   }, 200);
+    	formData:'${output}'
     });
 </script>

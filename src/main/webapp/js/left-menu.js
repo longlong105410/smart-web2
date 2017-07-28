@@ -41,6 +41,7 @@ $(document).ready(function(){
 		uuid = utils.UUID();
 		initMenuHeight();
 		resizePanel(getActiveTabPanel());
+		iframeResize();
 	});
 	menuTreeListener();
 	tabListner();
@@ -97,28 +98,12 @@ function autoTableWidth($activeTab) {
 		$activeTab = getActiveTabPanel();
 	}
 	tableWrapListener($activeTab, true);
-	/*var $tableTheader = $activeTab.find(".table-theader");
-	var $tableWrap = $activeTab.find(".cnoj-table-wrap");
-	var $parentTable = $tableWrap.parent().parent();
-	var w = $parentTable.width();
-	
-	if(w > 0) {
-		var scrollWidth = utils.getScrollWidth();
-		$tableTheader.width(w - scrollWidth);
-		if(utils.isScroll($tableWrap)) {
-			$tableWrap.width(w);
-		} else {
-			$tableWrap.width(w - scrollWidth);
-		}
-	}*/
-	
 }
 
 /**
  * 初始化菜单高度
  */
 function initMenuHeight() {
-	//var h = $(document).height();
 	var h = $(window).height();
 	var vh = $(".header-body-dividing").outerHeight(true);
 	h = h - getFooterHeight() - $(".header").outerHeight(true)-vh-3;
@@ -205,16 +190,12 @@ function menuTreeListener() {
 		if(!utils.isEmpty(uri) && utils.trim(uri) != '#') {
 			$("#menu-sub-nav .active").removeClass("active");
 			$parent.addClass("active");
-			if(uri.indexOf("mail")>=0)
-				openWin(uri, "邮箱管理");
-			else {
-				var title = $this.data("title");
-				var menuType = $this.data("menu-type");
-				if(!utils.isEmpty(menuType) && menuType=='flow_resource') 
-					openFlowTab(title,uri);
-				 else 
-					addTab(title,uri,false);
-			}
+			var title = $this.data("title");
+			var menuType = $this.data("menu-type");
+			if(!utils.isEmpty(menuType) && menuType=='flow_resource') 
+				openFlowTab(title,uri);
+			else 
+				addTab(title,uri,false);
 			selectedMenuIndex = $this.data("index");
 		}
 		return false;
@@ -337,19 +318,23 @@ function openFlowTab(title,url) {
 				options: {
 					title: title,
 					id:id,
-					href: url
+					content: __createFrame(url),
 				}
 			});
-			flowTab.panel('refresh',url);
 		} else {
 			$('#main-tab').tabs('add',{
 				title: title,
 				id:id,
-				href:url,
+				content: __createFrame(url),
 				closable: true
 			});
 		}
-	});    
+	});
+	
+	function __createFrame(url) {
+	    var iframe = '<iframe class="tabs-content-iframe" scrolling="no" frameborder="0"  src="' + url + '" style="width:100%;height:'+(getMainHeight() - getTabHeaderHeight() - 20)+'px;"></iframe>';
+	    return iframe;
+	}
 }
 
 /**
@@ -425,4 +410,15 @@ function resizePanel(panel) {
 		panel.attr("uuid",uuid);
 	}
 	listPanelListener($(panel), true);
+}
+
+/**
+ * 改变iframe的高度（流程表单在tabs中采用iframe）
+ */
+function iframeResize() {
+	var h = getMainHeight() - getTabHeaderHeight() - 20;
+	var $tabsContentIframe = $(".tabs-content-iframe");
+	if($tabsContentIframe.length > 0) {
+		$tabsContentIframe.height(h);
+	}
 }

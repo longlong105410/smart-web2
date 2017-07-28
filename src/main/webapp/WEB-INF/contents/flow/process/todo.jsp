@@ -115,4 +115,32 @@
 	          return false;
 	     });
 	  }
+   
+   /**
+    * 判断是否存在我的待办tab
+    */
+   function isExistMyTodoTab() {
+	   return true;
+   }
+   
+   /**
+    * 刷新我的待办（提交表单后会调用该方法）
+    */
+   function todoRefresh(refreshUrl) {
+	   setTimeout(function() {
+		   var title = "我的待办";
+			$('#main-tab').tabs('select',title);
+			var $panel = getActiveTabPanel();
+			var param = $panel.find(".panel-search form").serialize();
+			refreshUrl = refreshUrl+(refreshUrl.indexOf("?")>-1?"&":"?")+"1=1";
+			if(utils.isNotEmpty(param)) {
+				refreshUrl = refreshUrl + "&"+param;
+			}
+			var $page = $panel.find(".pagination");
+			if($page.length > 0 ) {
+				refreshUrl = refreshUrl+"&page="+$page.find("li.active").text();
+			}
+			reloadTab(refreshUrl);
+	   }, 200);
+   }
 </script>

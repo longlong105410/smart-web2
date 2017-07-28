@@ -24,7 +24,11 @@
 		setting = $.extend(setting,options);
 		var menuIndex = 0;
 		if(typeof(getActiveTabIndex) != 'undefined') {
-			menuIndex = getActiveTabIndex();
+			if(utils.isIframe) {
+				menuIndex = 1;
+			} else {
+				menuIndex = getActiveTabIndex();
+			}
 		}
 		var $this = $(this);
 		var thisId = $(this).attr("id");

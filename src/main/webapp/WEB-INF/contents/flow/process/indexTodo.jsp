@@ -79,4 +79,13 @@
           return false;
      });
    }
+   
+   /**
+    * 提交表单后刷新首页上的待办任务（提交表单后会调用该方法）
+    */
+   function submitFormRefershIndexTodo() {
+	   setTimeout(function() {
+		   loadingTodoData();
+	   }, 200);
+   }
 </script>
