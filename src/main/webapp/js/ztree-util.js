@@ -275,7 +275,7 @@ var zTreeInstance = new Array();
 			if(null != $ulTree && setting.uri != null && setting.uri != '') {
 				$.ajax({
 					url: setting.uri,
-					async: setting.isAjaxAsync,
+					//async: setting.isAjaxAsync,
 					success: function(data){
 						if(setting.isLoading) {
 							$("#"+divTagId).find(".cnoj-loading").remove();

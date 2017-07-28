@@ -68,9 +68,7 @@
 		              <th class="no-wrap" style="width:150px">待处理人</th>
 		              <th class="text-center no-wrap" style="width:100px">处理信息</th>
 		              <th class="text-center no-wrap" style="width:60px">流程图</th>
-		              <c:if test="${delAuth==1 || jumpNode == 1}">
-		                 <th class="text-center" style="width:100px">操作</th>
-		              </c:if>
+		              <th class="text-center" style="width:100px">操作</th>
 		           </tr>
 		        </thead>
 		        <tbody>

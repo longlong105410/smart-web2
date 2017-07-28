@@ -5,6 +5,10 @@
 
 var utils = function(){}
 /**
+ * 设置是否为iframe；默认为:false
+ */
+utils.isIframe = false;
+/**
  * 是否定义
  */
 utils.YES_OR_NO = {
@@ -1283,6 +1287,9 @@ utils.handleFormPrintLabel = function(element, $root) {
 				$obj.after("<span class='visible-print-inline'>"+value+"</span>");
 			}
 			if(!isParentHiddenPrint) {
+				if($obj.hasClass("cnoj-richtext") && $obj.prev().hasClass("cnoj-richtext")) {
+					$obj.prev().wrap("<span class='hidden-print'></span>");
+				}
 				$obj.wrap("<span class='hidden-print'></span>");
 			}
 		}

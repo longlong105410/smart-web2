@@ -412,7 +412,7 @@ function submitTask(formObj,url,param) {
 	var refreshUrl = $("#refresh-url").val();
 	refreshUrl = utils.isEmpty(refreshUrl)?"process/todo":refreshUrl;
 	if(!utils.isEmpty(url)) {
-		utils.waitLoading("正在处理表单数据...");
+		parent.utils.waitLoading("正在处理表单数据...");
 		if(url.indexOf("?")==-1) {
 			url +="?";
 		} else {
@@ -423,57 +423,22 @@ function submitTask(formObj,url,param) {
 		formObj.attr("target","handle-form-iframe");
 		formObj.submit(); //提交表单到iframe
 		$("#handle-form-iframe").load(function(){
-	    	utils.closeWaitLoading();
+			parent.utils.closeWaitLoading();
 	    	var result = $(this).contents().text();
 	    	if(utils.isNotEmpty(result)) {
 	    		var output = $.parseJSON(result);
-	    		utils.showMsg(output.msg);
+	    		parent.utils.showMsg(output.msg);
 	    		if(output.result=='1') {
-					closeActivedTab();
-					var title = "我的待办";
-					if($('#main-tab').tabs('exists',"我的待办")) {
-						$('#main-tab').tabs('select',title);
-						var $panel = getActiveTabPanel();
-						var param = $panel.find(".panel-search form").serialize();
-						refreshUrl = refreshUrl+(refreshUrl.indexOf("?")>-1?"&":"?")+"1=1";
-						if(utils.isNotEmpty(param)) {
-							refreshUrl = refreshUrl + "&"+param;
-						}
-						var $page = $panel.find(".pagination");
-						if($page.length > 0 ) {
-							refreshUrl = refreshUrl+"&page="+$page.find("li.active").text();
-						}
-						reloadTab(refreshUrl);
+	    			if(utils.isNotEmpty(parent.isExistMyTodoTab)) {
+						parent.todoRefresh(refreshUrl);
 					}
-					loadingTodoData();
+					parent.submitFormRefershIndexTodo();
+					parent.closeActivedTab();
 				}
+	    	} else {
+	    		parent.utils.showMsg('处理失败');
 	    	}
 		});
-		
-		/*$.post(url,formPorcessInfo,function(data){
-			utils.closeWaitLoading();
-			var output = data;
-			utils.showMsg(output.msg+"！");
-			if(output.result=='1') {
-				closeActivedTab();
-				var title = "我的待办";
-				if($('#main-tab').tabs('exists',"我的待办")) {
-					$('#main-tab').tabs('select',title);
-					var $panel = getActiveTabPanel();
-					var param = $panel.find(".panel-search form").serialize();
-					refreshUrl = refreshUrl+(refreshUrl.indexOf("?")>-1?"&":"?")+"1=1";
-					if(utils.isNotEmpty(param)) {
-						refreshUrl = refreshUrl + "&"+param;
-					}
-					var $page = $panel.find(".pagination");
-					if($page.length > 0 ) {
-						refreshUrl = refreshUrl+"&page="+$page.find("li.active").text();
-					}
-					reloadTab(refreshUrl);
-				}
-				loadingTodoData();
-			}
-		});*/
 	}
 }
 
