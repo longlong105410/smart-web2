@@ -181,6 +181,26 @@ public interface IQueryDao<T extends BaseBean> extends IExecuteDao {
      */
     public List<Object> queryObjHql(String hql, Map<String, Object> param, Integer start, Integer rows) throws DaoException;
     
+    /**
+     * 查询HQL语句
+     * @param hql HQL语句
+     * @param param 参数
+     * @return List<E> 返回对象集合
+     * @throws DaoException
+     */
+    public <E> List<E> queryObjectByHql(String hql, Map<String, Object> param) throws DaoException;
+    
+    /**
+     * 查询HQL语句
+     * @param hql HQL语句
+     * @param param 参数
+     * @param start 从第几条开始查询
+     * @param rows 每页显示几条记录
+     * @return List<E> 返回对象集合
+     * @throws DaoException
+     */
+    public <E> List<E> queryObjectByHql(String hql,Map<String, Object> param,Integer start,Integer rows) throws DaoException;
+    
     
     /**
      * 查询SQL
