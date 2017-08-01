@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
 import cn.com.smart.web.tag.bean.ALink;
-import cn.com.smart.web.tag.bean.TableCustomCell;
+import cn.com.smart.web.tag.bean.CustomTableCell;
 
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
@@ -78,7 +78,7 @@ public class TableTag extends AbstractPanelFooterTag {
     
     protected List<ALink> alinks;
     
-    private List<TableCustomCell> customCells;
+    private List<CustomTableCell> customCells;
     
     @Override
 	public int doEndTag() throws JspException {
@@ -268,7 +268,7 @@ public class TableTag extends AbstractPanelFooterTag {
 							out.println("<td "+(StringUtils.isEmpty(tdStyle)?"":"class='"+tdStyle+"'")+" "+getTdWidthStyle(thWidth, count)+">"+a+"</td>");
 							count++;
 						} 
-						out.println(handleLastCustomCell(objArray, row, count, tdStyles, thWidth));
+						out.println(handleLastCustomCell(objArray, row, colCount, tdStyles, thWidth));
 						out.println("</tr>");
 						row++;
 					}
@@ -293,7 +293,7 @@ public class TableTag extends AbstractPanelFooterTag {
 		//如果有自定义单元格，则进行处理 
 		if(CollectionUtils.isNotEmpty(customCells)) {
 			cellBuilder = new StringBuilder();
-			for (TableCustomCell customCell : customCells) {
+			for (CustomTableCell customCell : customCells) {
 				if(customCell.getPosition() > (objArray.length-1) && customCell.getPosition() <= count) {
 					String tdContent = null;
 					if(null != customCell.getCellCallback()) {
@@ -342,7 +342,7 @@ public class TableTag extends AbstractPanelFooterTag {
 	protected String getTdContent(Object[] objArray, int row, String defaultValue, int count, int i) {
 		String a = null;
 		//如果有自定义单元格，则替换对应单元格中的内容
-		TableCustomCell cell = getCell(i);
+		CustomTableCell cell = getCell(i);
 		if(null != cell) {
 			defaultValue = (null == cell.getCellCallback())?cell.replaceContent(objArray):cell.getCellCallback().callback(objArray, row, count, objArray[i]);
 		}
@@ -465,12 +465,12 @@ public class TableTag extends AbstractPanelFooterTag {
      * @param index
      * @return
      */
-    protected TableCustomCell getCell(int index) {
-    	TableCustomCell cell = null;
+    protected CustomTableCell getCell(int index) {
+    	CustomTableCell cell = null;
     	if(CollectionUtils.isEmpty(getCustomCells())) {
     		return cell;
     	}
-    	for (TableCustomCell cellTmp : getCustomCells()) {
+    	for (CustomTableCell cellTmp : getCustomCells()) {
 			if(cellTmp.getPosition().intValue() == index) {
 				cell = cellTmp;
 				break;
@@ -569,11 +569,11 @@ public class TableTag extends AbstractPanelFooterTag {
 		this.subtractHeight = subtractHeight;
 	}
 
-	public List<TableCustomCell> getCustomCells() {
+	public List<CustomTableCell> getCustomCells() {
 		return customCells;
 	}
 
-	public void setCustomCells(List<TableCustomCell> customCells) {
+	public void setCustomCells(List<CustomTableCell> customCells) {
 		this.customCells = customCells;
 	}
 
