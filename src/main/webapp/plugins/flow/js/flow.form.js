@@ -128,7 +128,7 @@ var END_NODE_KEY = "end";
 				var formPorcessInfo = $("#flow-process-form").serialize();//流程信息
 				var uri = $(this).data("uri");
 				if(!utils.isEmpty(uri)) {
-					utils.waitLoading("正在保存数据...");
+				    parent.utils.waitLoading("正在保存数据...");
 					if(uri.indexOf("?")==-1) {
 						uri +="?";
 					} else {
@@ -139,15 +139,16 @@ var END_NODE_KEY = "end";
 					$this.attr("target","handle-form-iframe");
 					$this.submit(); //提交表单到iframe
 					$("#handle-form-iframe").load(function(){
-					    utils.closeWaitLoading();
+					    parent.utils.closeWaitLoading();
 					    var result = $(this).contents().text();
 					    if(utils.isNotEmpty(result)) {
 					    	var output = $.parseJSON(result);
-					    	utils.showMsg(output.msg);
+					    	parent.utils.showMsg(output.msg);
 					    	if(output.result=='1') {
 					    		$("#form-data-id").val(output.data);
 					    	}
 					    }
+					    location.reload();
 					    $saveBtn.prop("disabled",false);
 					});
 				} else {
