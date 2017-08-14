@@ -16,7 +16,7 @@ import com.mixsmart.utils.StringUtils;
  * @version 1.0
  * @since 1.0
  */
-public class TableCustomCell {
+public class CustomTableCell {
 
 	/**
 	 * 
@@ -29,18 +29,18 @@ public class TableCustomCell {
 	
 	private ICustomCellCallback cellCallback;
 	
-	public TableCustomCell() {
+	public CustomTableCell() {
 
 	}
 
-	public TableCustomCell(String content, Integer position,
+	public CustomTableCell(String content, Integer position,
 			Map<String, Object> paramsMap) {
 		this.content = content;
 		this.position = position;
 		this.paramsMap = paramsMap;
 	}
 	
-	public TableCustomCell(String content, Integer position,
+	public CustomTableCell(String content, Integer position,
 			Map<String, Object> paramsMap, ICustomCellCallback cellCallback) {
 		this.content = content;
 		this.position = position;

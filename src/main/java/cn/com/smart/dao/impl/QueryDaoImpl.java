@@ -5,16 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.com.smart.bean.BaseBeanImpl;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.dao.IQueryDao;
 import cn.com.smart.exception.DaoException;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 查询Dao实现类
@@ -240,6 +239,17 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	}
 	
 	@Override
+    public <E> List<E> queryObjectByHql(String hql, Map<String, Object> param) throws DaoException {
+        return queryObjectByHql(hql, param, null, null);
+    }
+    
+    @Override
+    public <E> List<E> queryObjectByHql(String hql,Map<String, Object> param,Integer start,Integer rows) throws DaoException {
+        List<E> list = getList(hql, param, false, start, rows);
+        return list;
+    }
+	
+	@Override
 	public List<T> querySql(String sql) throws DaoException {
 		return querySql(sql, null);
 	}
@@ -249,7 +259,8 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 		return querySql(sql, param, null, null);
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public List<T> querySql(String sql, Map<String, Object> param,Integer start, Integer rows) throws DaoException {
 		if (StringUtils.isEmpty(sql)) {
 			return null;
@@ -328,7 +339,8 @@ public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> imple
 	 * @param <E> 返回类型
 	 * @return 返回列表
 	 */
-	private <E> List<E> getList(String statement, Map<String, Object> param, boolean isSql, Integer start, Integer rows) {
+	@SuppressWarnings("unchecked")
+    private <E> List<E> getList(String statement, Map<String, Object> param, boolean isSql, Integer start, Integer rows) {
 		try {
 			Query query = getQuery(statement, param, isSql);
 			if(null != start && null != rows) {

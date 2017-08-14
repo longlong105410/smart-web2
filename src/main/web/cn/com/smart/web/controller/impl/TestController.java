@@ -29,7 +29,7 @@ import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
-import cn.com.smart.web.tag.bean.TableCustomCell;
+import cn.com.smart.web.tag.bean.CustomTableCell;
 
 /**
  * 测试
@@ -227,9 +227,9 @@ public class TestController extends BaseController {
 		cellParam.put("id", 0);
 		cellParam.put("name", 1);
 		
-		List<TableCustomCell> customCells = new ArrayList<TableCustomCell>();
-		TableCustomCell cell = new TableCustomCell("<a href='#${id}'>${name}</a>",7,cellParam);
-		TableCustomCell cell2 = new TableCustomCell("<button data-uri='test?id=${id}&name=${name}' type=\"button\" class=\"btn btn-success btn-sm\">（成功）Success</button>",8,cellParam);
+		List<CustomTableCell> customCells = new ArrayList<CustomTableCell>();
+		CustomTableCell cell = new CustomTableCell("<a href='#${id}'>${name}</a>",7,cellParam);
+		CustomTableCell cell2 = new CustomTableCell("<button data-uri='test?id=${id}&name=${name}' type=\"button\" class=\"btn btn-success btn-sm\">（成功）Success</button>",8,cellParam);
 		customCells.add(cell);
 		customCells.add(cell2);
 		

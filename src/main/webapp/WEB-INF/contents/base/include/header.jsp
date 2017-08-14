@@ -95,7 +95,7 @@
              	<c:choose>
              		<c:when test="${fn:length(subSysList) == 1}">
              		   <c:forEach var="subSys" items="${subSysList }">
-             		   	   <li><a class="sub-sys" href="${subSys.url }" target="_blank">
+             		   	   <li><a class="sub-sys ${subSys.sysType }" href="${subSys.url }" target="_blank">
              		   	   <c:if test="${ not empty subSys.icon }">
              		   	   <i class="${subSys.icon }" aria-hidden="true"></i>
              		   	   </c:if>
@@ -113,7 +113,7 @@
 							        <c:if test="${st.index > 0 }">
 							        	<li role="presentation" class="divider"></li>
 							        </c:if>
-							    	<li><a href="${subSys.url }" target="_blank">
+							    	<li><a class="sub-sys ${subSys.sysType }" href="${subSys.url }" target="_blank">
 							    	<c:if test="${ not empty subSys.icon }">
 			             		   	   <i class="${subSys.icon }" aria-hidden="true"></i>
 			             		   	   </c:if>
@@ -153,10 +153,10 @@
 		 var screenW = window.screen.width;
          var screenH = window.screen.height;
          var param = "resolution="+screenW+"x"+screenH+"&screenWidth="+screenW+"&screenHeight="+screenH;
-         $(".sub-sys").each(function(){
+         $(".sub-sys.internal_sys").each(function(){
              var $this = $(this);
              var url = $this.attr("href");
-             if(url.indexOf("?")) {
+             if(url.indexOf("?")>-1) {
                  url = url+"&"+param;
              } else {
                  url = url+"?"+param;
