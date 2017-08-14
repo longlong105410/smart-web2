@@ -40,7 +40,7 @@ import cn.com.smart.flow.bean.entity.TFlowForm;
 import cn.com.smart.flow.ext.ExtProcess;
 import cn.com.smart.flow.ext.ExtProcessModel;
 import cn.com.smart.flow.ext.ExtTaskModel;
-import cn.com.smart.flow.helper.FormUploadFileHelper;
+import cn.com.smart.flow.helper.FlowFormUploadFileHelper;
 import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.flow.service.FlowFormService;
 import cn.com.smart.flow.service.ProcessFacade;
@@ -171,7 +171,7 @@ public class ProcessController extends BaseFlowControler {
 			//处理附件
 			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 			if(multipartResolver.isMultipart(request)) {
-				new FormUploadFileHelper((MultipartHttpServletRequest) request, submitFormData.getParams(), submitFormData, userInfo.getId()).upload();
+				new FlowFormUploadFileHelper((MultipartHttpServletRequest) request, submitFormData.getParams(), submitFormData, userInfo.getId()).upload();
 			}
 			smartResp = processFacade.saveOrUpdateForm(submitFormData,userInfo.getId());
 			submitFormData = null;
@@ -202,7 +202,7 @@ public class ProcessController extends BaseFlowControler {
 		//处理附件
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		if(multipartResolver.isMultipart(request)) {
-			new FormUploadFileHelper((MultipartHttpServletRequest) request, params, submitFormData, userInfo.getId()).upload();
+			new FlowFormUploadFileHelper((MultipartHttpServletRequest) request, params, submitFormData, userInfo.getId()).upload();
 		}
 		if(null != submitFormData && StringUtils.isNotEmpty(submitFormData.getProcessId()) && 
 				StringUtils.isNotEmpty(submitFormData.getFormId())) {
@@ -526,7 +526,7 @@ public class ProcessController extends BaseFlowControler {
 				submitFormData.setOrderId(orderId);
 				submitFormData.setProcessId(processId);
 				submitFormData.setParams(datas);
-				new FormUploadFileHelper((MultipartHttpServletRequest) request, datas, submitFormData, userInfo.getId()).upload();
+				new FlowFormUploadFileHelper((MultipartHttpServletRequest) request, datas, submitFormData, userInfo.getId()).upload();
 			}
 			boolean is = flowFormServ.updateForm(datas, formId, formDataId, userInfo.getId(), YesNoType.NO.getIndex());
 			if(is) {

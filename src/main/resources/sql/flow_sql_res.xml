@@ -104,7 +104,7 @@
 	    </sql>
 	</sqlUnit>
 	
-	<!-- 获取下一节点及参与者(多个参与者直接用因为符号“;”隔开) -->
+	<!-- 获取下一节点及参与者(多个参与者直接用英文“;”分隔) -->
 	<sqlUnit name="get_task_actors">
 	   <sql> 
 	     select a.DISPLAY_NAME, group_concat(a.name separator ';') as name from (

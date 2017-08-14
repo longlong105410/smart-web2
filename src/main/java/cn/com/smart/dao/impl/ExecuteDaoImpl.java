@@ -3,13 +3,12 @@ package cn.com.smart.dao.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
+
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.dao.IExecuteDao;
 import cn.com.smart.exception.DaoException;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 执行Dao实现类
@@ -21,10 +20,7 @@ import com.mixsmart.utils.StringUtils;
  * @param <T>
  */
 public abstract class ExecuteDaoImpl extends CommonDaoImpl implements IExecuteDao {
-
-	private static final Logger log = Logger.getLogger(ExecuteDaoImpl.class);
-
-	
+    
 	@Override
 	public Integer executeHql(String hql) throws DaoException {
 		int result = 0;

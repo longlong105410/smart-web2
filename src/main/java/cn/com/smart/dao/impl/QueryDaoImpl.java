@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
@@ -26,8 +25,6 @@ import cn.com.smart.exception.DaoException;
  */
 public abstract class QueryDaoImpl<T extends BaseBean> extends SuperDao<T> implements IQueryDao<T>{
 	
-	private static final Logger log = Logger.getLogger(QueryDaoImpl.class);
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public T find(Serializable id) throws DaoException {

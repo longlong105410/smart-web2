@@ -116,4 +116,13 @@
 			select t.id, t.name from t_form t where t.type='normal_form' order by t.create_time desc
 		</sql>
 	</sqlUnit>
+	
+	<!-- 表单附件列表 -->
+     <sqlUnit name="form_attachment_list">
+         <sql>
+             select fa.id,fa.attachment_id,a.file_name,a.file_size,a.file_suffix,a.create_time,u.full_name,a.user_id  
+             from t_form_attachment fa,t_n_attachment a,t_n_user u where fa.attachment_id=a.id and a.user_id = u.id 
+              and fa.form_data_id=:formDataId
+         </sql>
+     </sqlUnit>
 </sqlMap>

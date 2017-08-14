@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.dao.IDeleteDao;
 import cn.com.smart.exception.DaoException;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 删除Dao实现类
@@ -23,9 +21,6 @@ import com.mixsmart.utils.StringUtils;
  * @param <T>
  */
 public abstract class DeleteDaoImpl<T extends BaseBean> extends QueryDaoImpl<T> implements IDeleteDao<T>{
-	
-	private static final Logger log = Logger.getLogger(DeleteDaoImpl.class);
-
 
 	@Override
 	public boolean delete(T o) throws DaoException {

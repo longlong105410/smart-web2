@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.dao.IBaseDao;
 import cn.com.smart.exception.DaoException;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 基础Dao实现类
@@ -23,8 +21,6 @@ import com.mixsmart.utils.StringUtils;
  * @param <T>
  */
 public abstract class BaseDaoImpl<T extends BaseBean> extends UpdateDaoImpl<T> implements IBaseDao<T>{
-	
-	protected static final Logger log = Logger.getLogger(BaseDaoImpl.class);
 
 	@Override
 	public int getSortOrder(Serializable id) throws DaoException {

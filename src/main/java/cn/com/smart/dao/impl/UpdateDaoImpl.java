@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.bean.DateBean;
@@ -14,8 +15,6 @@ import cn.com.smart.exception.DaoException;
 import cn.com.smart.validate.ExecuteValidator;
 import cn.com.smart.validate.ValidateException;
 import cn.com.smart.validate.Validator;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 更新Dao实现类
@@ -28,17 +27,12 @@ import com.mixsmart.utils.StringUtils;
  */
 @Repository
 public abstract class UpdateDaoImpl<T extends BaseBean> extends DeleteDaoImpl<T> implements IUpdateDao<T> {
-	
-	private static final Logger log = Logger.getLogger(UpdateDaoImpl.class);
 
 	@Override
 	public Serializable save(T o) throws DaoException {
 		return saveObj(o);
 	}
-	
-	
-	
-	
+
 	@Override
 	public List<Serializable> save(List<T> list) throws DaoException {
 		return saveObj(list);

@@ -1812,9 +1812,6 @@ function uploadFileListener($elementWrap) {
 				popHeight = utils.isEmpty(popHeight)?300:popHeight;
 				progressBar = (utils.isEmpty(progressBar) || progressBar=='0')?false:true;
 				closeAfterFun = utils.isEmpty(closeAfterFun)?null:eval(closeAfterFun);
-				/*if(null != formData) {
-					formData = JSON.stringify(param);
-				}*/
 				var param = {
 						uri:uri,
 						formData:formData,
@@ -1923,14 +1920,11 @@ function inputDateListener($elementWrap) {
 				var parentW = $parent.width();
 				var thisW = $element.outerWidth();
 				var w = thisW;//((thisW+30)<parentW)?(thisW+10):parentW;
-				console.log(thisW+","+parentW);
 				//$element.wrap("<div class='text-inline-block' style='width:"+w+"px'></div>");
 				$element.wrap("<div class='text-inline'></div>");
 				$element.parent().append(starRequire);
 				$element.parent().addClass('has-feedback');
 				var inputH = $element.outerHeight();
-				//var top = inputH>28?0:-2;
-				//var style = "top:"+top+"px;";
 				var style = "";
 				//判断是否在iframe中；如果相等，不是iframe；否则是iframe
 				/*var notIframe = (top.location == location);

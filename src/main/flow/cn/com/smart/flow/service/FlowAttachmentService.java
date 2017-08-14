@@ -94,11 +94,13 @@ public class FlowAttachmentService extends MgrServiceImpl<TFlowAttachment> {
 	}
 	
 	/**
-	 * 更新表单字段为空 
+	 * 更新表单字段为空
+	 * <p>请使用{@link cn.com.smart.form.service.FormAttachmentService#updateFormField(String, String, String)} 方法替换</p>
 	 * @param fieldId
 	 * @param formDataId
 	 * @param attId
 	 */
+	@Deprecated
 	public void updateFormField(String fieldId, String formDataId, String attId) {
 		if(StringUtils.isEmpty(fieldId) || StringUtils.isEmpty(formDataId) || StringUtils.isEmpty(attId)) {
 			return;

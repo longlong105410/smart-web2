@@ -8,13 +8,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.com.smart.bean.BaseBean;
@@ -32,10 +33,14 @@ import com.mixsmart.exception.NullArgumentException;
 import com.mixsmart.utils.StringUtils;
 
 public class CommonDaoImpl implements ICommonDao {
+    
+    protected Logger log = null;
 
-	private static final Logger log = Logger.getLogger(CommonDaoImpl.class);
-	
-	@Autowired
+	public CommonDaoImpl() {
+        log = LoggerFactory.getLogger(getClass());
+    }
+
+    @Autowired
 	protected SessionFactory sessionFactory;
 	
 	protected Session getSession() {

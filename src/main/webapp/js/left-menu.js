@@ -192,7 +192,8 @@ function menuTreeListener() {
 			$parent.addClass("active");
 			var title = $this.data("title");
 			var menuType = $this.data("menu-type");
-			if(!utils.isEmpty(menuType) && menuType=='flow_resource') 
+			//表单用iframe方式打开；防止元素冲突
+			if(!utils.isEmpty(menuType) && (menuType=='flow_resource' || menuType == 'form_resource')) 
 				openFlowTab(title,uri);
 			else 
 				addTab(title,uri,false);

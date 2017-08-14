@@ -1,8 +1,11 @@
 package cn.com.smart.form.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.snaker.engine.helper.JsonHelper;
@@ -10,14 +13,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mixsmart.exception.NullArgumentException;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
+import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.form.bean.entity.TForm;
+import cn.com.smart.form.helper.FormUploadFileHelper;
 import cn.com.smart.form.service.FormService;
 import cn.com.smart.web.bean.RequestPage;
+import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
@@ -25,9 +39,6 @@ import cn.com.smart.web.tag.bean.CustomBtn;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
-
-import com.mixsmart.exception.NullArgumentException;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 表单控制器
@@ -163,9 +174,46 @@ public class FormController extends BaseFormController {
 			throw new NullArgumentException("formId参数不能为空");
 		}
 		SmartResponse<TForm> smartResp = formServ.find(formId);
+		ModelMap modelMap = modelView.getModelMap();
+		if(StringUtils.isEmpty(formDataId)) {
+		    modelMap.put("formDataId", StringUtils.uuid());
+		}
 		modelView.getModelMap().put("smartResp", smartResp);
 		modelView.setViewName(VIEW_DIR+"/create");
 		return modelView;
+	}
+	
+	/**
+	 * 提交表单
+	 * @param formId
+	 * @param formDataId
+	 * @param request 
+	 * @param response 
+	 */
+	@RequestMapping(value="submit", method = RequestMethod.POST)
+	public void submit(HttpServletRequest request, HttpServletResponse response, String formId, String formDataId) {
+	    response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain;charset=UTF-8");
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+        smartResp.setMsg("任务处理失败");
+        ObjectMapper objMapper = new ObjectMapper();
+        if(StringUtils.isNotEmpty(formId) && StringUtils.isNotEmpty(formDataId)) {
+            UserInfo userInfo = getUserInfoFromSession(request);
+            //处理参数
+            Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request, false));
+            //处理附件
+            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+            if(multipartResolver.isMultipart(request)) {
+                new FormUploadFileHelper((MultipartHttpServletRequest) request, params, formId, formDataId, userInfo.getId()).upload();
+            }
+            //TODO 保存表单数据
+        } 
+        try {
+            response.getWriter().print(objMapper.writeValueAsString(smartResp));
+        } catch (IOException e) {
+            e.printStackTrace();
+            LoggerUtils.error(log, e.getMessage());
+        }
 	}
 	
 }
