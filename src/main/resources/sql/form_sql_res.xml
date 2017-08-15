@@ -122,7 +122,7 @@
          <sql>
              select fa.id,fa.attachment_id,a.file_name,a.file_size,a.file_suffix,a.create_time,u.full_name,a.user_id  
              from t_form_attachment fa,t_n_attachment a,t_n_user u where fa.attachment_id=a.id and a.user_id = u.id 
-              and fa.form_data_id=:formDataId
+              [ and fa.form_data_id=:formDataId] [ and fa.form_id=:formId and a.user_id=:userId and (fa.form_data_id is null or fa.form_data_id = '')]
          </sql>
      </sqlUnit>
 </sqlMap>

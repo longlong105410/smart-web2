@@ -175,10 +175,7 @@ public class FormController extends BaseFormController {
 		}
 		SmartResponse<TForm> smartResp = formServ.find(formId);
 		ModelMap modelMap = modelView.getModelMap();
-		if(StringUtils.isEmpty(formDataId)) {
-		    modelMap.put("formDataId", StringUtils.uuid());
-		}
-		modelView.getModelMap().put("smartResp", smartResp);
+		modelMap.put("smartResp", smartResp);
 		modelView.setViewName(VIEW_DIR+"/create");
 		return modelView;
 	}

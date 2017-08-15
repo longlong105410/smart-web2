@@ -16,6 +16,11 @@ import java.util.Date;
 @Table(name="t_form_field_change_log")
 public class TFormFieldChangeLog extends BaseBeanImpl implements DateBean {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4049404840509581244L;
+
     private String id;
 
     private String tableFieldId;

@@ -103,9 +103,15 @@ public class FormAttachmentController extends AttachmentUploadController {
         ModelAndView modelView = new ModelAndView();
         SmartResponse<Object> smartResp = new SmartResponse<Object>();
         UserInfo userInfo = getUserInfoFromSession(session);
-        if (StringUtils.isNotEmpty(formId) && StringUtils.isEmpty(formDataId)) {
-            Map<String, Object> param = new HashMap<String, Object>(1);
-            param.put("formDataId", formDataId);
+        if (StringUtils.isNotEmpty(formId)) {
+            Map<String, Object> param = new HashMap<String, Object>(2);
+            //表单未提交时
+            if(StringUtils.isEmpty(formDataId)) {
+                param.put("formId", formId);
+                param.put("userId", userInfo.getId());
+            } else {
+                param.put("formDataId", formDataId);
+            }
             smartResp = opServ.getDatas("form_attachment_list", param);
             if (OP_SUCCESS.equals(smartResp.getResult())) {
                 List<Object> datas = smartResp.getDatas();

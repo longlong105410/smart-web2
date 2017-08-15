@@ -46,6 +46,7 @@
     <link href="${pageContext.request.contextPath}/css/cnoj-ui.css" rel="stylesheet" type="text/css" />
     <link href="${pageContext.request.contextPath}/css/styles.css" rel="stylesheet" />
     <link href="${pageContext.request.contextPath}/css/layout.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/css/file-upload-util.css" rel="stylesheet" />
     <!-- 与表单相关的样式 -->
     <link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
     
@@ -88,10 +89,11 @@
    <div class="form-header">
        <form id="create-form-param">
            <input type="hidden" id="form-data-id" name="formDataId" value="${formDataId}" />
+           <input type="hidden" id="form-id" name="formId" value="${formId}" />
        </form>
        <div class="form-header-btn">
-			<div class="navbar-nar-right m-r-5 m-t-2">
-			    <button type="button" class="btn btn-primary btn-sm" data-uri="form/save.json"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
+			<div class="navbar-nar-right m-r-5 m-t-1">
+			    <button type="button" class="btn btn-primary btn-sm" data-uri="form/submit.json"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
 			</div>
         </div>
    </div>
@@ -115,8 +117,8 @@
                            <iframe class="hidden" id="handle-form-iframe" name="handle-form-iframe" frameborder=0 width=0 height=0></iframe>
 					   </div>
 					</div>
-					<div role="tabpanel" class="tab-pane" id="form-att-tab">
-						<div class="cnoj-load-url" data-uri="form/attachment/list" ></div>
+					<div role="tabpanel" class="tab-pane p-t-10" id="form-att-tab">
+						<div class="cnoj-load-url" data-uri="form/attachment/list?formId=${formId }&formDataId=${formDataId}" ></div>
 					</div>
 				</div>
 			</div>

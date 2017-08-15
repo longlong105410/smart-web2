@@ -37,13 +37,12 @@ public class FormAttachmentService extends MgrServiceImpl<TFormAttachment> {
      * @param att 附件实体对象
      * @param formId  表单ID
      * @param formDataId 表单数据ID
-     * @param userId 用户ID（上传附件用户ID）
      * @return 返回表单附件保存结果
      */
     public SmartResponse<String> saveAttachment(TNAttachment att, 
             String formId, String formDataId) {
         SmartResponse<String> smartResp = new SmartResponse<String>();
-        if(null == att || StringUtils.isEmpty(formId) || StringUtils.isEmpty(formDataId)) {
+        if(null == att || StringUtils.isEmpty(formId)) {
             throw new NullArgumentException("参数为空");
         }
         TFormAttachment formAtt = new TFormAttachment();

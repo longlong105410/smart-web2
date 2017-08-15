@@ -1,11 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-  <form id="process-att-form">
-		<input type="hidden" name="processId" value="${processId }" />
-		<input type="hidden" name="orderId"  value="${orderId }" />
-		<input type="hidden" name="taskId" value="${taskId }" />
-		<input type="hidden" name="taskKey"  value="${taskKey }" />
+   <form id="form-att-form">
+		<input type="hidden" name="formDataId" value="${formDataId }" />
 		<input type="hidden" name="formId" value="${formId }" />
 	</form>
 	<div class="panel panel-default">
@@ -36,7 +33,7 @@
 			       <c:forEach var="datas" items="${smartResp.datas }" varStatus="st" >
 			         <tr>
 				      <td class="hidden">
-				          <input type="hidden" class="process-att-id" name="processAttId" value="${datas[0]}" />
+				          <input type="hidden" class="form-att-id" name="formAttId" value="${datas[0]}" />
 				      </td>
 				      <td class="seq-no">${st.index+1 }</td>
 				      <td><a href="download/att?id=${datas[1]}" target="_blank">${datas[2]}</a></td>
@@ -54,7 +51,7 @@
 				    </tr>
 			       </c:forEach>
 			       <script type="text/javascript">
-			         var $attTabA = $("#process-att-tab-a");
+			         var $attTabA = $("#form-att-tab-a");
 			          if($attTabA.find("span").hasClass("badge")) {
 			        	  $attTabA.find(".badge").html('${fn:length(smartResp.datas)}');
 			          } else {
@@ -65,39 +62,38 @@
 			</c:choose>
 			 </body>
 		</table>
-		<c:if test="${isUploadBtn == '1'}">
-			<form id="file-upload-form">
-				<div class="panel-footer upload-panel" id="flow-att-op">
-				   <span class="btn btn-success btn-sm fileinput-button upload-add">
+		<form id="file-upload-form">
+			<div class="panel-footer upload-panel" id="form-att-op">
+				  <span class="btn btn-success btn-sm fileinput-button upload-add">
 					<i class="glyphicon glyphicon-plus"></i> <span>添加附件</span>
 					<input id="upload-m-file" type="file" name="atts" multiple />
 				  </span> 
 				  <span class="help-block text-inline-block">单个文件大小不超过100M，文件类型为：${fn:replace(uploadFileType,",","，")}.</span>
 				   <div class="attr-upload-prompt-msg help-block">${attrUploadPromptMsg }</div>
-				</div>
-			</form>
-		</c:if>
+			</div>
+		</form>
    </div>
 <script type="text/javascript">
    setTimeout("loadAtt()", 500);
-   var flowAttUri = "process/attachment/list?processId=${processId}&orderId=${orderId}&taskId=${taskId}&taskKey=${taskKey}&formId=${formId}&isAtt=${isAtt}&isUploadBtn=${isUploadBtn}";
+   var formAttUri = "form/attachment/list?formId=${formId}&formDataId=${formDataId}";
    var uploadFileType = '${uploadFileType}';
    function loadAtt() {
 	   uploadFileType = uploadFileType.replace(/,/g, '|');
 	   $("#upload-m-file").jqueryFileUpload({
-	          uri:'process/attachment/upload.json',
-	          formData:$("#process-att-form").serializeArray(),
+	          uri:'form/attachment/upload.json',
+	          formData:$("#form-att-form").serializeArray(),
 	          acceptFileTypes:'/'+uploadFileType+'$/i',
 	          maxFileSize:104857600,//100M
 	          closeAfterFun:function(){
-	             loadUri("#process-att-tab",flowAttUri,false);
+	             loadUri("#form-att-tab",formAttUri,false);
 	          }
-	      });
+	    });
       //上传文件
       listenerAttDel();
    }
    
+   /*
    function refreshList() {
-	   loadUri("#process-att-tab",flowAttUri,false);
-   }
+	   loadUri("#form-att-tab",formAttUri,false);
+   }*/
 </script>
