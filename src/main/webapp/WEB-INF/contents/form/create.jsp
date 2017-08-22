@@ -93,7 +93,7 @@
        </form>
        <div class="form-header-btn">
 			<div class="navbar-nar-right m-r-5 m-t-1">
-			    <button type="button" class="btn btn-primary btn-sm" data-uri="form/submit.json"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
+			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/submit.json"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
 			</div>
         </div>
    </div>
@@ -129,18 +129,40 @@
 <script type="text/javascript">
     utils.isIframe = true;
     loadUrlListener();
-    $("#create-form").initForm({
+    var initForm = $("#create-form").initForm({
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
         formData:'${output}',
-        callback: function(){
+        initDataAfter: function(){
             formRequireListener();
             printListener();
             inputPluginEvent();
             hrefListener();
             limitHeightListener();
+        },
+        callback:function(element){
+            var self = this;
+            $("#form-submit").click(function(){
+                var $this = $(this);
+                $this.prop("disabled",true);
+                if($(element).validateForm()) {
+                    var url = $this.data("uri");
+                    if(utils.isEmpty(url)) {
+                        utils.showMsg("提交地址为空...");
+                        $this.prop("disabled",false);
+                        return false;
+                    }
+                    var formParam = $("#create-form-param").serialize();
+                    self.submitForm(uri, formParam, function(){
+                        $this.prop("disabled",false);
+                    });
+                } else {
+                    $this.prop("disabled",false);
+                }
+            });
         }
     });
+    initForm.init();
     $(".form-contents").resize(function(){
        setTimeout(function() {
           limitHeightListener();

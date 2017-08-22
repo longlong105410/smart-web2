@@ -30,6 +30,7 @@ import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.helper.FormUploadFileHelper;
 import cn.com.smart.form.service.FormService;
+import cn.com.smart.form.service.IFormDataService;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enums.BtnPropType;
@@ -55,6 +56,8 @@ public class FormController extends BaseFormController {
 	private FormService formServ;
 	@Autowired
 	private OPService opServ;
+	@Autowired
+	private IFormDataService formDataServ;
 	
 	/**
 	 * 表单设计器
@@ -192,7 +195,7 @@ public class FormController extends BaseFormController {
 	    response.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
 	    SmartResponse<String> smartResp = new SmartResponse<String>();
-        smartResp.setMsg("任务处理失败");
+        smartResp.setMsg("提交表单失败");
         ObjectMapper objMapper = new ObjectMapper();
         if(StringUtils.isNotEmpty(formId) && StringUtils.isNotEmpty(formDataId)) {
             UserInfo userInfo = getUserInfoFromSession(request);
@@ -204,6 +207,7 @@ public class FormController extends BaseFormController {
                 new FormUploadFileHelper((MultipartHttpServletRequest) request, params, formId, formDataId, userInfo.getId()).upload();
             }
             //TODO 保存表单数据
+            smartResp = formDataServ.saveOrUpdateForm(params, formDataId, formId, userInfo.getId(), 0);
         } 
         try {
             response.getWriter().print(objMapper.writeValueAsString(smartResp));

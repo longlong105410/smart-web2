@@ -157,11 +157,14 @@ public class ProcessFacade {
 	}
 	
 	/**
-	 * 保存或更新
+	 * 保存或更新；
+	 * 该方法已过期；请使用{@link cn.com.smart.form.service.IFormDataService#saveOrUpdateForm(Map, String, String, String, Integer)} 
+	 * 方法代替
 	 * @param data
 	 * @param userId
 	 * @return
 	 */
+	@Deprecated
 	public SmartResponse<String> saveOrUpdateForm(SubmitFormData data,String userId) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		//判断数据是否存在

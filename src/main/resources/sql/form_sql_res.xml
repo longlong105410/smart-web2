@@ -125,4 +125,11 @@
               [ and fa.form_data_id=:formDataId] [ and fa.form_id=:formId and a.user_id=:userId and (fa.form_data_id is null or fa.form_data_id = '')]
          </sql>
      </sqlUnit>
+     
+     <!-- 获取表单附件信息通过附件ID -->
+    <sqlUnit name="get_form_att_infos_byid">
+        <sql>
+            select t.id as attId, fa.id as fattId,t.file_name,t.file_size,t.file_suffix,t.create_time from t_n_attachment t,t_form_attachment fa where t.id=fa.attachment_id and t.id in(:ids)
+        </sql>
+    </sqlUnit>
 </sqlMap>

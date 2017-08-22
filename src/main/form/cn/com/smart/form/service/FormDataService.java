@@ -1,4 +1,4 @@
-package cn.com.smart.flow.form;
+package cn.com.smart.form.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,9 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cn.com.smart.form.interceptor.SubmitFormContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.dao.impl.OPDao;
@@ -19,25 +23,19 @@ import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.QueryFormData;
 import cn.com.smart.form.bean.TableFieldMap;
 import cn.com.smart.form.enums.FormPluginType;
-import cn.com.smart.form.service.FormTableService;
+import cn.com.smart.form.interceptor.SubmitFormContext;
 import cn.com.smart.utils.DateUtil;
 import cn.com.smart.web.constant.IWebConstant;
 
-import com.mixsmart.utils.ArrayUtils;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
-
 /**
- * 处理表单数据；
- * 该类已过期；请使用{@link cn.com.smart.form.service.FormDataService} 实现类代替
+ * 处理表单数据
  * @author lmq <br />
  * 2015年7月7日
  * @version 1.0
  * @since 1.0
  */
-@Deprecated
-@Component
-public class FormDataBusi {
+@Service
+public class FormDataService implements IFormDataService {
 
 	@Autowired
 	private OPDao opDao;
@@ -46,17 +44,17 @@ public class FormDataBusi {
 	
 	/**
 	 * 获取表单数据
-	 * @param orderId 流程实例ID
+	 * @param formDataId 表单数据ID
 	 * @param formId 表单ID
 	 * @param userId 用户ID
 	 * @return
 	 */
-	public SmartResponse<QueryFormData> getFormData(String orderId,String formId,String userId) {
+	public SmartResponse<QueryFormData> getFormData(String formDataId, String formId,String userId) {
 		SmartResponse<QueryFormData> smartResp = new SmartResponse<QueryFormData>();
 		List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);
 		if(null != tfMaps && tfMaps.size()>0) {
 			try {
-				querySqlAndExe(tfMaps, orderId, userId);//处理tfMaps
+				querySqlAndExe(tfMaps, formDataId, userId);//处理tfMaps
 				List<QueryFormData> formDatas = classifyComposite(tfMaps);
 				if(CollectionUtils.isNotEmpty(formDatas)) {
 					smartResp.setResult(IWebConstant.OP_SUCCESS);
@@ -72,6 +70,36 @@ public class FormDataBusi {
 		return smartResp;
 	}
 	
+	@Override
+    public SmartResponse<String> saveOrUpdateForm(Map<String, Object> datas, String formDataId, String formId,
+            String userId, Integer formState) {
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+        //判断数据是否存在
+        if(null == datas || StringUtils.isEmpty(formId)) {
+            return smartResp;
+        }
+        if(StringUtils.isEmpty(formDataId)) {
+            String id = this.saveForm(datas, formId,userId, formState);
+            if(StringUtils.isNotEmpty(id)) {
+                smartResp.setResult(IWebConstant.OP_SUCCESS);
+                smartResp.setMsg("表单数据保存成功");
+                smartResp.setData(id);
+            }
+        } else {
+            boolean is = SubmitFormContext.getInstance().before(formId, formDataId, datas, userId);
+            if(is && this.updateForm(datas, formId, formDataId, userId, formState)){
+                smartResp.setResult(IWebConstant.OP_SUCCESS);
+                smartResp.setMsg("表单数据保存成功");
+                smartResp.setData(formDataId);
+            }
+        }
+        YesNoType state = YesNoType.NO;
+        if(IWebConstant.OP_SUCCESS.equals(smartResp.getResult())) {
+            state = YesNoType.YES;
+        }
+        SubmitFormContext.getInstance().after(state, formId, formDataId, datas, userId);
+        return smartResp;
+    }
 	
 	/**
 	 * 获取表单数据
@@ -102,85 +130,13 @@ public class FormDataBusi {
 	}
 	
 	/**
-	 * 分类组合数据
-	 * @param tfMaps
-	 * @return
-	 */
-	private List<QueryFormData> classifyComposite(List<TableFieldMap> tfMaps) {
-		List<QueryFormData> formDatas = new ArrayList<QueryFormData>();
-		QueryFormData formData = null;
-		//表单分类
-		Map<String,List<TableFieldMap>> formTypeMaps =  formTypelassify(tfMaps);
-		for(String key : formTypeMaps.keySet()) {
-			tfMaps = formTypeMaps.get(key);
-			//针对特殊的表单类型进行处理
-			if(key.startsWith(FormPluginType.Listctrl.getValue())) { 
-				formData = new QueryFormData();
-				formData.setName(tfMaps.get(0).getTableId());
-				
-				formData.setFieldId(tfMaps.get(0).getTableFieldId());
-				formData.setFieldName(tfMaps.get(0).getTableFieldName());
-				formData.setFieldRemark(tfMaps.get(0).getTableFieldRemark());
-				
-				formData.setValueSize(1);
-				List<QueryFormData> subFormDatas = new ArrayList<QueryFormData>();
-				QueryFormData subFormData = null;
-				for (TableFieldMap tfMap : tfMaps) {
-					subFormData = new QueryFormData();
-					subFormData.setName(tfMap.getTableFieldId());
-					subFormData.setFieldId(tfMap.getTableFieldId());
-					subFormData.setFieldName(tfMap.getTableFieldName());
-					subFormData.setFieldRemark(tfMap.getTableFieldRemark());
-					subFormData.setValueSize(1);
-					if(null != tfMap.getValues() && tfMap.getValues().size()>0) {
-						List<Object> objs = new ArrayList<Object>();
-						for (int i = 0; i < tfMap.getValues().size(); i++) {
-							if(null != tfMap.getValues().get(i)){ 
-								objs.add(StringUtils.repaceSpecialChar(tfMap.getValues().get(i).toString()));
-							} else {
-								objs.add("");
-							}
-						}
-						subFormData.setValue(objs);
-						subFormData.setValueSize(tfMap.getValues().size());
-					} else {
-						subFormData.setValue(StringUtils.repaceSpecialChar(StringUtils.nullToStr(tfMap.getValue())));
-					}
-					subFormDatas.add(subFormData);
-				}
-				formData.setNameMoreValues(subFormDatas);
-				formDatas.add(formData);
-			} else {
-				for (TableFieldMap tfMap : tfMaps) {
-					 formData = new QueryFormData();
-					 formData.setName(tfMap.getTableFieldId());
-					 formData.setFieldId(tfMap.getTableFieldId());
-					 formData.setFieldName(tfMap.getTableFieldName());
-					 formData.setFieldRemark(tfMap.getTableFieldRemark());
-					 if(null != tfMap.getValues() && tfMap.getValues().size()>0) {
-						 formData.setValue(tfMap.getValues());
-					 } else {
-						 formData.setValue(StringUtils.nullToStr(tfMap.getValue()));
-					 }
-					 formData.setValueSize(1);
-					 formDatas.add(formData);
-				}
-			}
-		}//for
-		formData = null;
-		tfMaps = null;
-		return formDatas;
-	}
-	
-	
-	/**
 	 * 保存表单
 	 * @param datas
 	 * @param formId
 	 * @param userId
-	 * @param formState 表单状态 <br />
-	 * 1--保存(但未提交) <br />
-	 * 0-- 保存（并提交）
+	 * @param formState 表单状态
+	 * <p>1--保存(但未提交) </p>
+	 * <p>0-- 保存（并提交）</p>
 	 * @return
 	 */
 	public String saveForm(Map<String,Object> datas,String formId,String userId,Integer formState) {
@@ -373,18 +329,80 @@ public class FormDataBusi {
 			is = true;
 		} catch (DaoException ex) {
 			ex.printStackTrace();
-			formDataId = null;
-		} finally {
-			fieldBuild = null;
-			sqlBuild = null;
-			tfList = null;
-			params = null;
-			tableMaps = null;
 		}
 		return is;
 	}
 	
-	
+	/**
+     * 分类组合数据
+     * @param tfMaps
+     * @return
+     */
+    private List<QueryFormData> classifyComposite(List<TableFieldMap> tfMaps) {
+        List<QueryFormData> formDatas = new ArrayList<QueryFormData>();
+        QueryFormData formData = null;
+        //表单分类
+        Map<String,List<TableFieldMap>> formTypeMaps =  formTypelassify(tfMaps);
+        for(String key : formTypeMaps.keySet()) {
+            tfMaps = formTypeMaps.get(key);
+            //针对特殊的表单类型进行处理
+            if(key.startsWith(FormPluginType.Listctrl.getValue())) { 
+                formData = new QueryFormData();
+                formData.setName(tfMaps.get(0).getTableId());
+                
+                formData.setFieldId(tfMaps.get(0).getTableFieldId());
+                formData.setFieldName(tfMaps.get(0).getTableFieldName());
+                formData.setFieldRemark(tfMaps.get(0).getTableFieldRemark());
+                
+                formData.setValueSize(1);
+                List<QueryFormData> subFormDatas = new ArrayList<QueryFormData>();
+                QueryFormData subFormData = null;
+                for (TableFieldMap tfMap : tfMaps) {
+                    subFormData = new QueryFormData();
+                    subFormData.setName(tfMap.getTableFieldId());
+                    subFormData.setFieldId(tfMap.getTableFieldId());
+                    subFormData.setFieldName(tfMap.getTableFieldName());
+                    subFormData.setFieldRemark(tfMap.getTableFieldRemark());
+                    subFormData.setValueSize(1);
+                    if(null != tfMap.getValues() && tfMap.getValues().size()>0) {
+                        List<Object> objs = new ArrayList<Object>();
+                        for (int i = 0; i < tfMap.getValues().size(); i++) {
+                            if(null != tfMap.getValues().get(i)){ 
+                                objs.add(StringUtils.repaceSpecialChar(tfMap.getValues().get(i).toString()));
+                            } else {
+                                objs.add("");
+                            }
+                        }
+                        subFormData.setValue(objs);
+                        subFormData.setValueSize(tfMap.getValues().size());
+                    } else {
+                        subFormData.setValue(StringUtils.repaceSpecialChar(StringUtils.nullToStr(tfMap.getValue())));
+                    }
+                    subFormDatas.add(subFormData);
+                }
+                formData.setNameMoreValues(subFormDatas);
+                formDatas.add(formData);
+            } else {
+                for (TableFieldMap tfMap : tfMaps) {
+                     formData = new QueryFormData();
+                     formData.setName(tfMap.getTableFieldId());
+                     formData.setFieldId(tfMap.getTableFieldId());
+                     formData.setFieldName(tfMap.getTableFieldName());
+                     formData.setFieldRemark(tfMap.getTableFieldRemark());
+                     if(null != tfMap.getValues() && tfMap.getValues().size()>0) {
+                         formData.setValue(tfMap.getValues());
+                     } else {
+                         formData.setValue(StringUtils.nullToStr(tfMap.getValue()));
+                     }
+                     formData.setValueSize(1);
+                     formDatas.add(formData);
+                }
+            }
+        }//for
+        formData = null;
+        tfMaps = null;
+        return formDatas;
+    }
 	
 	/**
 	 * 把字段归类到表
@@ -438,10 +456,10 @@ public class FormDataBusi {
 	/**
 	 * 生成查询SQL语句并执行
 	 * @param tfMaps
-	 * @param orderId
+	 * @param formDataId
 	 * @param userId
 	 */
-	private void querySqlAndExe(List<TableFieldMap> tfMaps,String orderId, String userId) throws DaoException {
+	private void querySqlAndExe(List<TableFieldMap> tfMaps,String formDataId, String userId) throws DaoException {
 		//分开表---同一表的字段放在一个List(归类字段)
 		Map<String,List<TableFieldMap>> tableMaps = fieldClassifyToTable(tfMaps);
 		//生成SQL语句
@@ -457,12 +475,12 @@ public class FormDataBusi {
 			//去掉组合语句时多余的那个逗号","
 			sqlBuild.delete(sqlBuild.length()-1, sqlBuild.length());
 			param.clear();
-			if(StringUtils.isEmpty(orderId)) {
+			if(StringUtils.isEmpty(formDataId)) {
 				sqlBuild.append(" from "+key+" where state='1' and creator=:userId");
 				param.put("userId", userId);
 			} else {
-				sqlBuild.append(" from "+key+" where form_data_id=(select form_data_id from t_flow_form where order_id=:orderId)");
-				param.put("orderId", orderId);
+				sqlBuild.append(" from "+key+" where form_data_id=:formDataId");
+				param.put("formDataId", formDataId);
 			}
 			this.queryAndCompositeData(sqlBuild.toString(), param, tfMapList);
 		}//for
@@ -506,36 +524,40 @@ public class FormDataBusi {
 	 * @param tfMapList
 	 */
 	private void queryAndCompositeData(String sql, Map<String, Object> param, List<TableFieldMap> tfMapList) {
-		if(StringUtils.isNotEmpty(sql)) {
-			List<Object> objs = opDao.queryObjSql(sql, param);
-			//对查询出来的值进行处理
-			if(null != objs && objs.size()>0) {
-				if(objs.size()==1) { //当查询结果只有一条时
-					Object[] objArray = null;
-					if(objs.get(0).getClass().isArray()) {
-						objArray = (Object[])objs.get(0);
-					} else {
-						objArray = new Object[]{objs.get(0)};
-					}
-					if(null != objArray)
-						for (int i = 0; i < objArray.length; i++) {
-							tfMapList.get(i).setValue(objArray[i]);
-						}
-				} else { //当查询结果有多条时，把对应的值放到一个list里面
-					for(Object obj : objs) {
-						Object[] objArray = null;
-						if(objs.get(0).getClass().isArray()) {
-							objArray = (Object[])obj;
-						} else {
-							objArray = new Object[]{obj};
-						}
-						if(null != objArray)
-							for (int i = 0; i < objArray.length; i++) {
-								tfMapList.get(i).getValues().add(objArray[i]);
-							}
-					}
+		if(StringUtils.isEmpty(sql)) {
+		    return;
+		}
+	    List<Object> objs = opDao.queryObjSql(sql, param);
+		if(CollectionUtils.isEmpty(objs)) {
+		    return;
+		}
+		//对查询出来的值进行处理
+		if(objs.size()==1) { //当查询结果只有一条时
+			Object[] objArray = null;
+			if(objs.get(0).getClass().isArray()) {
+				objArray = (Object[])objs.get(0);
+			} else {
+				objArray = new Object[]{objs.get(0)};
+			}
+			if(null != objArray) {
+				for (int i = 0; i < objArray.length; i++) {
+					tfMapList.get(i).setValue(objArray[i]);
 				}
-			}//if
+			}
+		} else { //当查询结果有多条时，把对应的值放到一个list里面
+			for(Object obj : objs) {
+				Object[] objArray = null;
+				if(objs.get(0).getClass().isArray()) {
+					objArray = (Object[])obj;
+				} else {
+					objArray = new Object[]{obj};
+				}
+				if(null != objArray) {
+				    for (int i = 0; i < objArray.length; i++) {
+                        tfMapList.get(i).getValues().add(objArray[i]);
+                    }  
+				}
+			}//for
 		}
 	}
 	
@@ -550,39 +572,41 @@ public class FormDataBusi {
 	 */
 	private Map<String,List<TableFieldMap>> assignmentFormData(Map<String,Object> datas,List<TableFieldMap> tfMaps) {
 		Map<String,List<TableFieldMap>> tableMaps = fieldClassifyToTable(tfMaps);
-		if(null != tableMaps && tableMaps.size()>0) {
-			List<TableFieldMap> tfList = null;
-			for(String key : tableMaps.keySet()) {
-				tfList = tableMaps.get(key); 
-				for (TableFieldMap tf : tfList) {
-					if(datas.containsKey(tf.getTableFieldId())) {
-						Object value = datas.get(tf.getTableFieldId());
-						if(FormPluginType.Listctrl.getValue().equals(tf.getPlugin())) {
-							 if(value.getClass().isArray()) {
-								 Object[] array = (Object[])value;
-								 List<Object> values = new ArrayList<Object>(array.length);
-								 for (Object obj : array) {
-									 values.add(obj);
-								 }
-								 tf.setValues(values);
-							 } else {
-								 tf.setValue(value);
-							 }
-						} else if(value.getClass().isArray()) {
-							Object[] values = (Object[])value;
-							//修改时间：2016年12月07日；同一个表单有相同字段时；只取第一个值，避免出现重复的值
-							if(FormPluginType.Text.getValue().equals(tf.getPlugin())) {
-								tf.setValue(StringUtils.handNull(values[0]));
-							} else {
-								tf.setValue(ArrayUtils.arrayToString(values, IWebConstant.MULTI_VALUE_SPLIT));
-							}
-						} else {
-							tf.setValue(value);
-						}
-					}
-				}
-			}
+		if(null == tableMaps || tableMaps.size() == 0) {
+		    return tableMaps;
 		}
+		List<TableFieldMap> tfList = null;
+		for(String key : tableMaps.keySet()) {
+			tfList = tableMaps.get(key); 
+			for (TableFieldMap tf : tfList) {
+			    if(!datas.containsKey(tf.getTableFieldId())) {
+			        continue;
+			    }
+				Object value = datas.get(tf.getTableFieldId());
+				if(FormPluginType.Listctrl.getValue().equals(tf.getPlugin())) {
+				    if(value.getClass().isArray()) {
+				        Object[] array = (Object[])value;
+						List<Object> values = new ArrayList<Object>(array.length);
+						for (Object obj : array) {
+							values.add(obj);
+						}
+						tf.setValues(values);
+					} else {
+						tf.setValue(value);
+					}
+				} else if(value.getClass().isArray()) {
+					Object[] values = (Object[])value;
+					//修改时间：2016年12月07日；同一个表单有相同字段时；只取第一个值，避免出现重复的值
+					if(FormPluginType.Text.getValue().equals(tf.getPlugin())) {
+						tf.setValue(StringUtils.handNull(values[0]));
+					} else {
+						tf.setValue(ArrayUtils.arrayToString(values, IWebConstant.MULTI_VALUE_SPLIT));
+					}
+				} else {
+					tf.setValue(value);
+				}
+			}//for
+		}//for
 		return tableMaps;
 	}
 	
@@ -591,9 +615,9 @@ public class FormDataBusi {
 	 * @param tableName
 	 * @param tfList
 	 * @param userId
-	 * @param formState 表单状态 <br />
-	 * 1--保存(但未提交) <br />
-	 * 0-- 保存（并提交）
+	 * @param formState 表单状态 
+	 * <p>1--保存(但未提交) </p>
+	 * <p>0-- 保存（并提交）</p>
 	 * @param formDataId
 	 * @return
 	 * @throws DaoException
@@ -756,4 +780,5 @@ public class FormDataBusi {
 		}
 		return tfList;
 	}
+
 }

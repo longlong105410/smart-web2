@@ -183,7 +183,7 @@
 				if(top != 0) {
 					$panel.animate({scrollTop: top}, 300);
 					setTimeout(function() {
-						popoverTmp.popover('show');
+					    popoverTmp.popover('show');
 					}, 310);
 				} else {
 					popoverTmp.popover('show');
@@ -194,7 +194,11 @@
 			if(!utils.isEmpty(setting.callback) && typeof(setting.callback) === 'function') {
 				setting.callback(event,popoverTmp);
 			} else {
-				removePopover();
+			    var name = $(event.target).attr("name");
+			    var thisName = $currentNode.attr("name");
+			    if(name == thisName) {
+			        removePopover();
+			    }
 			}
 		});
 		return result;

@@ -6,13 +6,15 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.flow.bean.QueryFormData;
 
 /**
- * 处理表单数据接口
+ * 处理表单数据接口；
+ * 该类已过期；请使用{@link cn.com.smart.form.service.IFormDataService} 接口类代替
  * @author lmq
  * @create 2015年8月5日
  * @version 1.0 
  * @since 
  *
  */
+@Deprecated
 public interface IFormDataBusi {
 
 	/**

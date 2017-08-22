@@ -30,21 +30,21 @@ public class FormAttachmentDao extends BaseDaoImpl<TFormAttachment> {
         List<TFormAttachment> lists = find(ids);
         if (null != lists && lists.size() > 0) {
             if (delete(lists)) {
-                LoggerUtils.info(log, "流程附件信息删除[成功]");
-                String idStr = "";
+                LoggerUtils.info(log, "表单附件信息删除[成功]");
+                StringBuilder idBuilder = new StringBuilder();
                 for (TFormAttachment formAtt : lists) {
-                    idStr += formAtt.getAttachmentId() + ",";
+                    idBuilder.append(formAtt.getAttachmentId() + ",");
                 }
-                idStr = idStr.substring(0, idStr.length() - 1);
+                idBuilder = idBuilder.delete(idBuilder.length()-1, idBuilder.length());
                 // 删除附件
-                if (attDao.delete(idStr)) {
+                if (attDao.delete(idBuilder.toString())) {
                     is = true;
-                    LoggerUtils.info(log, "流程附件删除[成功]");
+                    LoggerUtils.info(log, "表单附件删除[成功]");
                 } else {
-                    LoggerUtils.error(log, "流程附件删除[失败]");
+                    LoggerUtils.error(log, "表单附件删除[失败]");
                 }
             } else {
-                LoggerUtils.error(log, "流程附件信息删除[失败]");
+                LoggerUtils.error(log, "表单附件信息删除[失败]");
             }
         }
         return is;

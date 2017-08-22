@@ -6,7 +6,7 @@
 		<input type="hidden" name="formId" value="${formId }" />
 	</form>
 	<div class="panel panel-default">
-		<table class="handle-info-form table table-striped table-bordered table-condensed" id="process-attachment">
+		<table class="handle-info-form table table-striped table-bordered table-condensed" id="form-attachment">
 			<thead>
 				<tr>
 				   <th class="hidden"></th>
@@ -23,7 +23,7 @@
 			   <c:when test="${smartResp.result != 1 }">
 			      <tr class="text-center"><td colspan="7">没有查询到相关附件！</td></tr>
 			      <script type="text/javascript">
-				      var $attTabA = $("#process-att-tab-a");
+				      var $attTabA = $("#form-att-tab-a");
 			          if($attTabA.find("span").hasClass("badge")) {
 			        	  $attTabA.find(".badge").remove();
 			          }
@@ -75,7 +75,7 @@
    </div>
 <script type="text/javascript">
    setTimeout("loadAtt()", 500);
-   var formAttUri = "form/attachment/list?formId=${formId}&formDataId=${formDataId}";
+   var attListUri = "form/attachment/list?formId=${formId}&formDataId=${formDataId}";
    var uploadFileType = '${uploadFileType}';
    function loadAtt() {
 	   uploadFileType = uploadFileType.replace(/,/g, '|');
@@ -85,11 +85,11 @@
 	          acceptFileTypes:'/'+uploadFileType+'$/i',
 	          maxFileSize:104857600,//100M
 	          closeAfterFun:function(){
-	             loadUri("#form-att-tab",formAttUri,false);
+	             loadUri("#form-att-tab",attListUri,false);
 	          }
 	    });
       //上传文件
-      listenerAttDel();
+      listenerAttDel('#form-attachment', '#form-att-tab', 'form/attachment/delete');
    }
    
    /*

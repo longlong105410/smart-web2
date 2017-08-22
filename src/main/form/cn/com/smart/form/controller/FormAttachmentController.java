@@ -166,7 +166,7 @@ public class FormAttachmentController extends AttachmentUploadController {
         String[] ids = id.split(MULTI_VALUE_SPLIT);
         Map<String, Object> param = new HashMap<String, Object>(1);
         param.put("ids", ids);
-        smartResp = opServ.getDatas("get_flow_att_infos_byid", param);
+        smartResp = opServ.getDatas("get_form_att_infos_byid", param);
         if (OP_SUCCESS.equals(smartResp.getResult())) {
             List<Object> list = smartResp.getDatas();
             // 处理文件大小
@@ -181,14 +181,15 @@ public class FormAttachmentController extends AttachmentUploadController {
 
     /**
      * 删除表单中的附件
-     * @param id 附件ID
+     * @param id 表单附件ID
      * @param fieldId 字段ID
-     * @param formDataId 
+     * @param formDataId 表单数据ID
+     * @param attId 附件ID
      * @return
      */
-    @RequestMapping("/delete")
+    @RequestMapping(value="/deleteForm", produces={"application/json;charset=UTF-8"})
     @ResponseBody
-    public SmartResponse<String> delete(String id, String fieldId, String formDataId, String attId) {
+    public SmartResponse<String> deleteForm(String id, String fieldId, String formDataId, String attId) {
         SmartResponse<String> smartResp = new SmartResponse<String>();
         smartResp.setMsg("附件删除失败");
         if (StringUtils.isEmpty(id)) {
@@ -197,6 +198,28 @@ public class FormAttachmentController extends AttachmentUploadController {
         smartResp = formAttServ.delete(id);
         if (OP_SUCCESS.equals(smartResp.getResult())) {
             formAttServ.updateFormField(fieldId, formDataId, attId);
+            smartResp.setResult(OP_SUCCESS);
+            smartResp.setMsg("附件删除成功");
+        }
+        return smartResp;
+    }
+    
+    
+    /**
+     * 删除附件列表中的附件
+     * @param id 表单附件ID
+     * @return
+     */
+    @RequestMapping(value="/delete", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+    public SmartResponse<String> delete(String id) {
+        SmartResponse<String> smartResp = new SmartResponse<String>();
+        smartResp.setMsg("附件删除失败");
+        if (StringUtils.isEmpty(id)) {
+            return smartResp;
+        }
+        smartResp = formAttServ.delete(id);
+        if (OP_SUCCESS.equals(smartResp.getResult())) {
             smartResp.setResult(OP_SUCCESS);
             smartResp.setMsg("附件删除成功");
         }
