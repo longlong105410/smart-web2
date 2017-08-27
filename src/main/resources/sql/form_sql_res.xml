@@ -85,6 +85,13 @@
         </sql>
      </sqlUnit>
      
+     <!-- 获取标题对应的字段ID -->
+    <sqlUnit name="get_institle_fieldid_by_form">
+        <sql>
+           select t.table_field_id from t_form_field t where t.form_id=:formId and t.is_institle='1'
+        </sql>
+    </sqlUnit>
+     
      <!-- 更新字段值 -->
      <sqlUnit name="update_field_value">
         <sql>
@@ -130,6 +137,14 @@
     <sqlUnit name="get_form_att_infos_byid">
         <sql>
             select t.id as attId, fa.id as fattId,t.file_name,t.file_size,t.file_suffix,t.create_time from t_n_attachment t,t_form_attachment fa where t.id=fa.attachment_id and t.id in(:ids)
+        </sql>
+    </sqlUnit>
+    <!-- 获取表单实例列表 -->
+    <sqlUnit name="get_form_instance_list">
+        <sql>
+            SELECT t.id, t.title,t.form_id, t.form_data_id,u.full_name,t.create_time 
+            FROM t_form_instance t,t_n_user u,t_form f where t.form_id=f.id and t.user_id=u.id [ and t.title like '%:name%']
+            order by t.create_time desc
         </sql>
     </sqlUnit>
 </sqlMap>

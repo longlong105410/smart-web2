@@ -9,6 +9,8 @@ import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.web.constant.IWebConstant;
 import com.mixsmart.exception.NullArgumentException;
 import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.LoggerUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,4 +103,48 @@ public class FormService extends MgrServiceImpl<TForm> implements IFormService {
 		param.put("formId", formId);
 		return getDao().querySqlToBean(sql, param, LogFieldInfo.class);
 	}
+	
+	@Override
+    public String getInstanceTitle(Map<String, Object> datas, String formId, String userId, String name) {
+        String insTitle = null;
+        if(null == datas || StringUtils.isEmpty(userId)) 
+            return insTitle;
+        insTitle = getTitleFormParams(datas, formId, name);
+        return insTitle;
+    }
+	
+	/**
+     * 从参数中获取标题
+     * @param datas
+     * @param formId
+     * @param processName
+     * @return
+     */
+    private String getTitleFormParams(Map<String, Object> datas, String formId, String processName) {
+        String title = null;
+        if(null == datas || datas.size() == 0 || StringUtils.isEmpty(formId)) {
+            LoggerUtils.error(logger, "表单提交的数据为空");
+            return title;
+        }
+        //获取流程实例标题对应的字段ID
+        String sql = SQLResUtil.getOpSqlMap().getSQL("get_institle_fieldid_by_form");
+        if(StringUtils.isEmpty(sql)) {
+            return title;
+        }
+        Map<String,Object> params = new HashMap<String, Object>(1);
+        params.put("formId", formId);
+        processName = StringUtils.isEmpty(processName)?"":(processName+"-");
+        List<Object> lists = getDao().queryObjSql(sql, params);
+        if(null != lists && lists.size()>0) {
+            String insTitleFieldId = StringUtils.handNull(lists.get(0));
+            title = StringUtils.handNull(datas.get(insTitleFieldId));
+            if(StringUtils.isNotEmpty(title)) {
+                title = processName + title;
+            } else {
+                LoggerUtils.info(logger, "标题获取失败");
+                title = null;
+            }
+        }
+        return title;
+    }
 }

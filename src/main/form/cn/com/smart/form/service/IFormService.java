@@ -41,4 +41,14 @@ public interface IFormService {
      * @return 返回字段信息列表
      */
     List<LogFieldInfo> getLogFieldInfo(String formId);
+    
+    /**
+     * 获取实例标题（流程实例标题或表单实例标题）
+     * @param datas 表单数据
+     * @param formId 表单ID
+     * @param userId 用户ID
+     * @param name 名称（当获取的是流程实例标题时为流程名称，当获取的时表单实例标题时为表单名称）
+     * @return 返回实例标题
+     */
+    String getInstanceTitle(Map<String, Object> datas, String formId, String userId, String name);
 }

@@ -71,6 +71,4 @@ public interface IFormDataService {
 	 */
 	public boolean updateForm(Map<String,Object> datas, String formId, String formDataId, String userId, Integer formState);
 	
-	
-	
 }

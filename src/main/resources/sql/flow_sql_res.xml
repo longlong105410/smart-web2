@@ -96,13 +96,6 @@
 	         [ and pa.form_id=:formId] [ and a.user_id=:userId] [ and pa.order_id=:orderId] 
 	     </sql>
 	 </sqlUnit>
-	 
-	 <!-- 获取流程实例标题对应的字段ID -->
-	<sqlUnit name="get_institle_fieldid_by_form">
-	    <sql>
-	       select t.table_field_id from t_form_field t where t.form_id=:formId and t.is_institle='1'
-	    </sql>
-	</sqlUnit>
 	
 	<!-- 获取下一节点及参与者(多个参与者直接用英文“;”分隔) -->
 	<sqlUnit name="get_task_actors">
