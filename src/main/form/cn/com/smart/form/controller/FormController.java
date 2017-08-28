@@ -28,11 +28,10 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.form.bean.entity.TForm;
+import cn.com.smart.form.helper.FormDataHelper;
 import cn.com.smart.form.helper.FormUploadFileHelper;
 import cn.com.smart.form.service.FormInstanceService;
 import cn.com.smart.form.service.FormService;
-import cn.com.smart.form.service.IFormDataService;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enums.BtnPropType;
@@ -120,7 +119,7 @@ public class FormController extends BaseFormController {
 		customBtns = new ArrayList<CustomBtn>(1);
 		customBtns.add(customBtn);
 		
-		delBtn = new DelBtn("op/del.json","form", "确定要删除选中的表单吗，删除后数据将无法恢复？",uri,null, null);
+		delBtn = new DelBtn("form/delete", "确定要删除选中的表单吗，删除后数据将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
@@ -130,7 +129,6 @@ public class FormController extends BaseFormController {
 		link.setDialogTitle("预览表单");
 		link.setDialogWidth("");
 		alinks.add(link);
-		link = null;
 
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -140,9 +138,6 @@ public class FormController extends BaseFormController {
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("alinks", alinks);
-		customBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
-		alinks = null;
 		
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
@@ -199,7 +194,7 @@ public class FormController extends BaseFormController {
 	    SmartResponse<String> smartResp = new SmartResponse<String>();
         smartResp.setMsg("提交表单失败");
         if(StringUtils.isEmpty(formDataId)) {
-            formDataId = StringUtils.createSerialNum();
+            formDataId = FormDataHelper.createNewFormDataId();
         }
         ObjectMapper objMapper = new ObjectMapper();
         if(StringUtils.isNotEmpty(formId) && StringUtils.isNotEmpty(formDataId)) {
@@ -209,7 +204,7 @@ public class FormController extends BaseFormController {
             //处理附件
             CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
             if(multipartResolver.isMultipart(request)) {
-                new FormUploadFileHelper((MultipartHttpServletRequest) request, params, formId, formDataId, userInfo.getId()).upload();
+                new FormUploadFileHelper((MultipartHttpServletRequest) request, params, formId, FormDataHelper.handleFormDataId(formDataId), userInfo.getId()).upload();
             }
             //TODO 保存表单数据
             smartResp = formInstServ.create(params, formDataId, formId, userInfo);
@@ -222,4 +217,19 @@ public class FormController extends BaseFormController {
         }
 	}
 	
+	/**
+	 * 删除表单
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public SmartResponse<String> delete(String id) {
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+	    smartResp.setMsg("删除失败");
+	    if(StringUtils.isNotEmpty(id)) {
+	        smartResp = formServ.delete(id);
+	    }
+	    return smartResp;
+	}
 }

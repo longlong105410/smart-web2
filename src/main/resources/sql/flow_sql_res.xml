@@ -78,16 +78,6 @@
 		   <sql>select ff.title,u.full_name from t_flow_form ff,t_n_user u where ff.user_id=u.id and ff.order_id=:orderId</sql>
 		</sqlUnit>
 		
-		<!-- 获取表单表名称 -->
-		<sqlUnit name="get_table_name">
-		    <sql>select distinct tct.table_name from t_form_field ft,t_create_table tct where ft.form_id=:formId and ft.table_id=tct.id</sql>
-		</sqlUnit>
-		
-		<!-- 删除表单中的实例信息 -->
-		<sqlUnit name="del_form_order_data">
-		   <sql>delete from ${table} where form_data_id=:formDataId</sql>
-		</sqlUnit>
-		
 	 <!-- 流程附件列表 -->
 	 <sqlUnit name="process_attachment_list">
 	     <sql>

@@ -94,7 +94,7 @@ public class FlowFormDao extends BaseDaoImpl<TFlowForm> {
 		Map<String,Object> param = null;
 		try {
 			if(null != flowForms && flowForms.size()>0) {
-				String delSql = SQLResUtil.getOpSqlMap().getSQL("del_form_order_data");
+				String delSql = SQLResUtil.getOpSqlMap().getSQL("del_form_data");
 				param = new HashMap<String, Object>();
 				String sql = SQLResUtil.getOpSqlMap().getSQL("get_table_name");
 				for (TFlowForm flowForm : flowForms) {

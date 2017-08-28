@@ -23,6 +23,7 @@ import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.QueryFormData;
 import cn.com.smart.form.bean.TableFieldMap;
 import cn.com.smart.form.enums.FormPluginType;
+import cn.com.smart.form.helper.FormDataHelper;
 import cn.com.smart.form.interceptor.SubmitFormContext;
 import cn.com.smart.utils.DateUtil;
 import cn.com.smart.web.constant.IWebConstant;
@@ -42,13 +43,7 @@ public class FormDataService implements IFormDataService {
 	@Autowired
 	private FormTableService formTableServ;
 	
-	/**
-	 * 获取表单数据
-	 * @param formDataId 表单数据ID
-	 * @param formId 表单ID
-	 * @param userId 用户ID
-	 * @return
-	 */
+	@Override
 	public SmartResponse<QueryFormData> getFormData(String formDataId, String formId,String userId) {
 		SmartResponse<QueryFormData> smartResp = new SmartResponse<QueryFormData>();
 		List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);
@@ -78,8 +73,9 @@ public class FormDataService implements IFormDataService {
         if(null == datas || StringUtils.isEmpty(formId)) {
             return smartResp;
         }
-        if(StringUtils.isEmpty(formDataId)) {
-            String id = this.saveForm(datas, formId,userId, formState);
+        if(StringUtils.isEmpty(formDataId) || 
+                formDataId.startsWith(FormDataHelper.APP_NEW_PREFIX)) {
+            String id = this.saveForm(datas, formId, formDataId, userId, formState);
             if(StringUtils.isNotEmpty(id)) {
                 smartResp.setResult(IWebConstant.OP_SUCCESS);
                 smartResp.setMsg("表单数据保存成功");
@@ -101,13 +97,7 @@ public class FormDataService implements IFormDataService {
         return smartResp;
     }
 	
-	/**
-	 * 获取表单数据
-	 * @param formDataId form数据ID
-	 * @param formId 表单ID
-	 * @param userId 用户ID
-	 * @return
-	 */
+	@Override
 	public SmartResponse<QueryFormData> getFormDataByFormDataId(String formDataId,String formId) {
 		SmartResponse<QueryFormData> smartResp = new SmartResponse<QueryFormData>();
 		List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);
@@ -129,53 +119,43 @@ public class FormDataService implements IFormDataService {
 		return smartResp;
 	}
 	
-	/**
-	 * 保存表单
-	 * @param datas
-	 * @param formId
-	 * @param userId
-	 * @param formState 表单状态
-	 * <p>1--保存(但未提交) </p>
-	 * <p>0-- 保存（并提交）</p>
-	 * @return
-	 */
+	@Override
+    public String saveForm(Map<String,Object> datas,String formId, String formDataId ,String userId,Integer formState) {
+        if(StringUtils.isEmpty(formDataId)) {
+            formDataId = StringUtils.createSerialNum();
+        } else {
+            formDataId = FormDataHelper.handleFormDataId(formDataId);
+        }
+        //表单保存前拦截
+        boolean is = SubmitFormContext.getInstance().before(formId, formDataId, datas, userId);
+        if (!is)
+            return null;
+        List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);
+        if(null == tfMaps || tfMaps.size()<1) {
+            return null;
+        }
+        Map<String,List<TableFieldMap>> tableMaps = assignmentFormData(datas, tfMaps);
+        tfMaps = null;
+        //拼SQL语句
+        try {
+            for (String key : tableMaps.keySet()) {
+                insertData(key, tableMaps.get(key), userId, formState, formDataId);
+            }//for
+        } catch (DaoException ex) {
+            ex.printStackTrace();
+            formDataId = null;
+        } finally {
+            tableMaps = null;
+        }
+        return formDataId;
+    }
+	
+	@Override
 	public String saveForm(Map<String,Object> datas,String formId,String userId,Integer formState) {
-		String formDataId = StringUtils.createSerialNum();
-		//表单保存前拦截
-		boolean is = SubmitFormContext.getInstance().before(formId, formDataId, datas, userId);
-		if (!is)
-			return null;
-		List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);
-		if(null == tfMaps || tfMaps.size()<1) {
-			return null;
-		}
-		Map<String,List<TableFieldMap>> tableMaps = assignmentFormData(datas, tfMaps);
-		tfMaps = null;
-		//拼SQL语句
-		try {
-			for (String key : tableMaps.keySet()) {
-				insertData(key, tableMaps.get(key), userId, formState, formDataId);
-			}//for
-		} catch (DaoException ex) {
-			ex.printStackTrace();
-			formDataId = null;
-		} finally {
-			tableMaps = null;
-		}
-		return formDataId;
+		return saveForm(datas, formId, null, userId, formState);
 	}
 	
-	/**
-	 * 更新表单数据
-	 * @param datas
-	 * @param formId
-	 * @param formDataId
-	 * @param userId
-	 * @param formState 表单状态 <br />
-	 * 1--保存(但未提交) <br />
-	 * 0-- 保存（并提交）
-	 * @return
-	 */
+	@Override
 	public boolean updateForm(Map<String,Object> datas,String formId,String formDataId,String userId,Integer formState) {
 		boolean is = false;
 		List<TableFieldMap> tfMaps = formTableServ.tableFieldMap(formId);

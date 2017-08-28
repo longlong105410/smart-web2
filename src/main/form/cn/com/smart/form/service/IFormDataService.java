@@ -50,13 +50,26 @@ public interface IFormDataService {
 	 * 保存表单
 	 * @param datas 表单数据Map对象
 	 * @param formId 表单ID
+	 * @param formDataId 表单数据ID
 	 * @param userId 用户ID
 	 * @param formState 表单状态 
 	 * <p>1--保存(但未提交) </p>
      * <p>0-- 保存（并提交）</p>
 	 * @return 返回表单数据ID
 	 */
-	public String saveForm(Map<String,Object> datas, String formId, String userId, Integer formState);
+	public String saveForm(Map<String,Object> datas, String formId, String formDataId, String userId, Integer formState);
+	
+	/**
+     * 保存表单
+     * @param datas 表单数据Map对象
+     * @param formId 表单ID
+     * @param userId 用户ID
+     * @param formState 表单状态 
+     * <p>1--保存(但未提交) </p>
+     * <p>0-- 保存（并提交）</p>
+     * @return 返回表单数据ID
+     */
+    public String saveForm(Map<String,Object> datas, String formId, String userId, Integer formState);
 	
 	/**
 	 * 更新表单数据
