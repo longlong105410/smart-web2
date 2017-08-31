@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <div class="wrap-content m-t-5">
     <div class="container-fluid">
        <div class="row">

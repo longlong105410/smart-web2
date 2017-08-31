@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <s:action name="include/header" executeResult="true" />
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/left-menu.js"></script>
 <!----------左侧菜单--------------->

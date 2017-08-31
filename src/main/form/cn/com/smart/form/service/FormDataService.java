@@ -75,7 +75,7 @@ public class FormDataService implements IFormDataService {
         }
         if(StringUtils.isEmpty(formDataId) || 
                 formDataId.startsWith(FormDataHelper.APP_NEW_PREFIX)) {
-            String id = this.saveForm(datas, formId, formDataId, userId, formState);
+            String id = this.saveForm(datas, formId, FormDataHelper.handleFormDataId(formDataId), userId, formState);
             if(StringUtils.isNotEmpty(id)) {
                 smartResp.setResult(IWebConstant.OP_SUCCESS);
                 smartResp.setMsg("表单数据保存成功");

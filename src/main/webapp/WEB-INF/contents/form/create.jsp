@@ -93,7 +93,8 @@
        </form>
        <div class="form-header-btn">
 			<div class="navbar-nar-right m-r-5 m-t-1">
-			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/submit.json"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
+			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/submit">
+			    <i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
 			</div>
         </div>
    </div>
@@ -153,7 +154,7 @@
                         return false;
                     }
                     var formParam = $("#create-form-param").serialize();
-                    self.submitForm(uri, formParam, function(){
+                    self.submitForm(url, formParam, function(){
                         $this.prop("disabled",false);
                     });
                 } else {

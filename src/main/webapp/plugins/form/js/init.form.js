@@ -436,8 +436,8 @@
                     return false;
                 }
                 if(utils.isNotEmpty(param)) {
-                    url = utils.isContain(url,"?") ? (url+"&") : (url+"&");
-                    url += "&"+param;
+                    url = utils.isContain(url,"?") ? (url+"&") : (url+"?");
+                    url += param;
                 }
                 this.$this.attr("action", url);
                 this.$this.attr("target","handle-form-iframe");

@@ -17,6 +17,7 @@ import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.bean.entity.TFormInstance;
+import cn.com.smart.form.helper.FormDataHelper;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.service.impl.MgrServiceImpl;
 import cn.com.smart.web.bean.UserInfo;
@@ -56,16 +57,24 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
         if (StringUtils.isEmpty(insTitle)) {
             insTitle = form.getName() + "(" + userInfo.getFullName() + ")";
         }
-        smartResp = formDataServ.saveOrUpdateForm(datas, formDataId, formId, userInfo.getId(), 0);
-        if (OP_SUCCESS.equals(smartResp.getResult())) {
-            TFormInstance formInstance = new TFormInstance();
-            formInstance.setFormDataId(formDataId);
-            formInstance.setFormId(formId);
-            formInstance.setOrgId(userInfo.getOrgId());
-            formInstance.setTitle(insTitle);
-            formInstance.setUserId(userInfo.getId());
-            super.save(formInstance);
-            smartResp.setMsg("表单提交成功");
+        if(formDataId.startsWith(FormDataHelper.APP_NEW_PREFIX)) {
+            formDataId = formDataServ.saveForm(datas, formDataId, formId, userInfo.getId(), 0);
+            if (StringUtils.isNotEmpty(formDataId)) {
+                TFormInstance formInstance = new TFormInstance();
+                formInstance.setFormDataId(formDataId);
+                formInstance.setFormId(formId);
+                formInstance.setOrgId(userInfo.getOrgId());
+                formInstance.setTitle(insTitle);
+                formInstance.setUserId(userInfo.getId());
+                super.save(formInstance);
+                smartResp.setMsg("表单提交成功");
+            }
+        } else {
+            boolean is = formDataServ.updateForm(datas, formDataId, formId, userInfo.getId(), 0);
+            if (is) {
+               updateTitle(formDataId, insTitle);
+               smartResp.setMsg("表单提交成功");
+            }
         }
         return smartResp;
     }
@@ -119,5 +128,17 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
             e.printStackTrace();
         }
         return is;
+    }
+    
+    /**
+     * 更新标题
+     * @param formDataId
+     * @param title
+     */
+    private void updateTitle(String formDataId, String title) {
+        Map<String,Object> params = new HashMap<String, Object>(2);
+        params.put("title", title);
+        params.put("formDataId", formDataId);
+        super.execute("update_form_inst_title", params);
     }
 }

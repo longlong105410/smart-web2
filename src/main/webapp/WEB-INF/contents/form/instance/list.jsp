@@ -6,13 +6,7 @@
               <form class="form-inline cnoj-entry-submit" id="search-form" method="post" role="form" action="form/list">
                   <div class="form-group p-r-10">
 				    <label for="search-input01">名称：</label>
-				    <input type="text" class="form-control input-form-control" id="search-input01" name="name" placeholder="请输入表单名称" value="${searchParam.name }"/>
-				  </div>
-				  <div class="form-group p-r-10">
-				    <label for="search-select01">类型：</label>
-				    <select class="form-control cnoj-select select-form-control" data-uri="dict/item/FORM_TYPE.json" name="type" data-default-value="${searchParam.type }"  id="search-select01">
-				       <option value="">请选择</option>
-				    </select>
+				    <input type="text" class="form-control input-form-control" id="search-input01" name="name" placeholder="请输入表单名称或标题" value="${searchParam.name }"/>
 				  </div>
 				  <div class="form-group p-l-10">
 					  <span class="btn btn-primary btn-sm cnoj-search-submit">

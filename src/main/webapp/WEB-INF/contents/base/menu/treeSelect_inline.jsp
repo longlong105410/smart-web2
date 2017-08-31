@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib prefix="s" uri="/struts-tags" %>
 <div class="wrap-content-dialog">
    <div class="panel panel-default m-b-0">
 	    <div class="panel-heading ui-widget-header"><strong>菜单列表</strong></div>

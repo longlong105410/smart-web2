@@ -143,8 +143,8 @@
     <sqlUnit name="get_form_instance_list">
         <sql>
             SELECT t.id, t.title,u.full_name,t.create_time,t.form_id, t.form_data_id  
-            FROM t_form_instance t,t_n_user u,t_form f where t.form_id=f.id and t.user_id=u.id [ and t.title like '%:name%']
-            order by t.create_time desc
+            FROM t_form_instance t,t_n_user u,t_form f where t.form_id=f.id and t.user_id=u.id 
+            [ and t.title like '%:name%'] [and f.name like '%:name%'] order by t.create_time desc
         </sql>
     </sqlUnit>
     
@@ -156,5 +156,11 @@
         <!-- 删除表单中的实例信息 -->
         <sqlUnit name="del_form_data">
            <sql>delete from ${table} where form_data_id=:formDataId</sql>
+        </sqlUnit>
+        
+        <sqlUnit name="update_form_inst_title">
+            <sql>
+                update from t_form_instance set title=:title where form_data_id=:formDataId
+            </sql>
         </sqlUnit>
 </sqlMap>
