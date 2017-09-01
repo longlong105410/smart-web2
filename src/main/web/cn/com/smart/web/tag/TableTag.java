@@ -424,9 +424,9 @@ public class TableTag extends AbstractPanelFooterTag {
     	String[] paramNameArray = alink.getParamName().split(",");
 		String[] paramIndexArray = alink.getParamIndex().split(",");
 		for (int j = 0; j < paramNameArray.length; j++) {
-			paramBuilder.append(paramNameArray[j]+"=");
+			paramBuilder.append(StringUtils.handNull(paramNameArray[j])+"=");
 			if(paramIndexArray[j].startsWith("'") && paramIndexArray[j].endsWith("'")) {
-				paramBuilder.append(paramIndexArray[j].substring(1,paramIndexArray[j].length()-1));
+				paramBuilder.append(StringUtils.handNull(paramIndexArray[j].substring(1,paramIndexArray[j].length()-1)));
 			} else {
 				paramBuilder.append(objArray[Integer.parseInt(paramIndexArray[j].trim())]);
 			}

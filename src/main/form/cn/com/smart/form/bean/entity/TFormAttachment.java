@@ -29,6 +29,11 @@ public class TFormAttachment extends BaseBeanImpl {
     private String formId;
     
     private String formDataId;
+    
+    /**
+     * 用户ID（主要用于表单实例未启动前，添加附件时，与formId属性联合标记）
+     */
+    private String userId;
 
     @Id
     @Column(name="id", length=50)
@@ -65,6 +70,15 @@ public class TFormAttachment extends BaseBeanImpl {
 
     public void setFormDataId(String formDataId) {
         this.formDataId = formDataId;
+    }
+
+    @Column(name="user_id", length = 50)
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
     
 }

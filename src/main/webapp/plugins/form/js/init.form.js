@@ -13,13 +13,14 @@
             formData:null,
             username:null,
             deptName:null,
+            isView:false,
+            isToLabel:false,
             formFieldNames:null,
             formAttTabTag:'#form-att-tab',
             //获取表单附件信息URI
             formAttInfoUri:'form/attachment/info',
             //删除附件URI
             delAttUri:'form/attachment/deleteForm',
-            isToLabel: false,
             //表单数据初始化前执行
             initDataBefore:null,
             //表单数据初始化之后执行
@@ -43,6 +44,7 @@
                 if(typeof(this.setting.initDataBefore) === 'function') {
                     this.setting.initDataBefore();
                 }
+                this.controlFormField();
                 this.initFormData();
                 if(typeof(this.setting.initDataAfter) === 'function') {
                     this.setting.initDataAfter();
@@ -70,9 +72,79 @@
                 }
             },
             /**
+             * 控制表单字段
+             */
+            controlFormField: function(){
+                this.$this.find("input,select,textarea,span.cnoj-checkbox,span.cnoj-radio").each(function(){
+                    var $findElement = $(this);
+                    var tagName = $findElement.prop("tagName").toLowerCase();
+                    if(tagName == 'span' || tagName == 'select') {
+                        $findElement.attr("data-edit-enable", "0");
+                    }
+                    if(tagName != 'span') {
+                        $findElement.prop("disabled",true);
+                        $findElement.attr("title","");
+                        if(tagName == 'input') {
+                            var type = $findElement.attr("type");
+                            if(type == 'file' && $findElement.hasClass("cnoj-upload")) {
+                                $findElement.parent().addClass("disabled");
+                            }
+                        }
+                    }
+                });
+                //所有list-ctrl属性改为只读
+                this.$this.find(".list-ctrl").find("input,select,textarea").each(function(){
+                    $(this).prop("disabled",false);
+                    $(this).prop("readonly",true);
+                });
+                if(utils.isNotEmpty(this.setting.formFieldNames)) {
+                    var fieldNames = this.setting.formFieldNames.split(",");
+                    var self = this;
+                    for(var i=0;i<fieldNames.length;i++) {
+                        this.$this.find("input[name='"+fieldNames[i]+"'],select[name='"+fieldNames[i]+"'],textarea[name='"+fieldNames[i]+"'],#"+fieldNames[i]+",span[data-name='"+fieldNames[i]+"']").each(function(){
+                            var $findElement = $(this);
+                            var tagName = $findElement.prop("tagName").toLowerCase();
+                            if(tagName == 'span') {
+                                $findElement.attr("data-edit-enable", "1");
+                            } else if(tagName == 'div'){
+                                if($findElement.hasClass("file-upload")) {
+                                    var type = $findElement.find(".fileinput-button").removeClass("disabled");
+                                    $findElement.find("input").prop("disabled",false);
+                                }
+                            } else {
+                                if(tagName == 'select') {
+                                    $findElement.attr("data-edit-enable", "1");
+                                }
+                                $findElement.prop("disabled",false);
+                                $findElement.prop("readonly",false);
+                                if($findElement.hasClass("cnoj-sysuser-defvalue")) {
+                                    $findElement.val(setting.username);
+                                } else if($findElement.hasClass("cnoj-sysdeptname-defvalue")) {
+                                    $findElement.val(setting.deptName);
+                                }
+                            }
+                        });
+                    }
+                }
+                this.$this.find(".list-ctrl").find("input,select,textarea").each(function(){
+                    if($(this).prop("readonly")) {
+                        $(this).removeClass("cnoj-input-select");
+                        $(this).removeClass("cnoj-input-select-relate");
+                        $(this).removeClass("cnoj-auto-complete");
+                        $(this).removeClass("cnoj-auto-complete-relate");
+                        $(this).removeClass("cnoj-input-tree");
+                        
+                        $(this).removeClass("cnoj-datetime-listener");
+                        $(this).removeClass("cnoj-date-listener");
+                        $(this).removeClass("cnoj-time-listener");
+                    }
+                });
+            },
+            /**
              * 初始化表单数据
              */
             initFormData: function() {
+                console.log(this.setting.formData);
                 if(utils.isEmpty(this.setting.formData)) {
                     return;
                 }
@@ -326,7 +398,7 @@
                 if(utils.isEmpty($element)) {
                     return false;
                 }
-                $element.find("input[type=text],select,textarea").each(function(){
+                $element.find("input[type=text],input[type=radio],input[type=checkbox],select,textarea").each(function(){
                     var $obj = $(this);
                     var tagName = $obj.prop("tagName").toLowerCase();
                     if(!$obj.hasClass("hidden") && !$obj.hasClass("hide")) {
@@ -341,7 +413,9 @@
                                 $obj.addClass("hidden");
                                 return;
                             } else {
-                                $obj.parent().addClass("hidden");
+                                //$obj.parent().addClass("hidden");
+                                $obj.addClass("hidden");
+                                $obj.next().addClass("hidden");
                                 return;
                             }
                         }
@@ -349,6 +423,10 @@
                         $obj.addClass("hidden");
                         var $td = $obj.parents("td:eq(0)");
                         var tbColor = $td.css("border-color");
+                        var $next = $obj.next();
+                        if($next.hasClass("star-require") || $next.hasClass("form-control-feedback")) {
+                            $next.addClass("hidden");
+                        }
                         if($td.length==0 || utils.isNotEmpty(tbColor) && 
                                 (tbColor.toLowerCase() == '#fff' || tbColor.toLowerCase() == '#ffffff' 
                                     || tbColor.toLowerCase() == 'rgb(255, 255, 255)'))

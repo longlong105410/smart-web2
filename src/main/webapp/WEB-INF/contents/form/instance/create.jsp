@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-    <jsp:include page="../base/include/common-header.jsp" />
+    <jsp:include page="../../base/include/common-header.jsp" />
     <!-- 封装 bootstrap 弹出对话框 -->  
     <link href="${pageContext.request.contextPath}/css/bootstrap-dialog.css" rel="stylesheet" />
     <script src="${pageContext.request.contextPath}/js/bootstrap-dialog.js" type="text/javascript"></script>
@@ -93,7 +93,7 @@
        </form>
        <div class="form-header-btn">
 			<div class="navbar-nar-right m-r-5 m-t-1">
-			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/submit">
+			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/instance/submit">
 			    <i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
 			</div>
         </div>

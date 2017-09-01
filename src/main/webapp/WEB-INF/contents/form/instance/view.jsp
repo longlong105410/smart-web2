@@ -17,11 +17,11 @@
                 </div>
             </div>
             <div class="panel-body p-0">
-                <div id="form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height">
+                <div id="form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height" data-subtract-height="150">
                     <div role="tabpanel" class="tab-pane active" id="form-content-tab">
                         <div class="form-prop">
                            <form id="create-form" method="post" data-relate-arg-form="#create-form-param" enctype="multipart/form-data">
-                               ${smartResp.data.parseHtml}
+                               ${objBean.parseHtml}
                            </form>
                            <iframe class="hidden" id="handle-form-iframe" name="handle-form-iframe" frameborder=0 width=0 height=0></iframe>
                        </div>
@@ -42,6 +42,7 @@
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
         formData:'${output}',
+        isView:true,
         initDataAfter: function(){
             formRequireListener();
             printListener();

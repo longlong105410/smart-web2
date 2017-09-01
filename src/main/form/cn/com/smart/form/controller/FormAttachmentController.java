@@ -74,7 +74,7 @@ public class FormAttachmentController extends AttachmentUploadController {
                 LoggerUtils.debug(log, "表单附件上传失败");
                 return smartResp;
             }
-            SmartResponse<String> resultResp = formAttServ.saveAttachment(att, formId, formDataId);
+            SmartResponse<String> resultResp = formAttServ.saveAttachment(att, formId, formDataId, userId);
             if (OP_SUCCESS.equals(resultResp.getResult())) {
                 smartResp.setData(att);
                 smartResp.setResult(OP_SUCCESS);

@@ -24,10 +24,12 @@ public class FormUploadFileHelper extends AbstractFormUploadFileHelper {
     private AttachmentService attServ;
     private String formId;
     private String formDataId;
+    private String userId;
     
     public FormUploadFileHelper(MultipartHttpServletRequest multiRequest, 
             Map<String, Object> formArgs, String formId, String formDataId,String userId) {
         super(multiRequest, formArgs, userId);
+        this.userId = userId;
         this.formId = formId;
         this.formDataId = formDataId;
         formAttServ = SmartContextService.find(FormAttachmentService.class);
@@ -39,7 +41,7 @@ public class FormUploadFileHelper extends AbstractFormUploadFileHelper {
         TNAttachment att = uploadHandler.fileUpload(file.getInputStream(), file.getContentType(), file.getOriginalFilename(),file.getSize() ,userId);
         String id = null;
         if(null != att) {
-            SmartResponse<String> samrtResp = formAttServ.saveAttachment(att, formId, formDataId);
+            SmartResponse<String> samrtResp = formAttServ.saveAttachment(att, formId, formDataId, userId);
             if(IConstant.OP_SUCCESS.equals(samrtResp.getResult())) {
                 id = att.getId();
             } else {

@@ -58,7 +58,7 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
             insTitle = form.getName() + "(" + userInfo.getFullName() + ")";
         }
         if(formDataId.startsWith(FormDataHelper.APP_NEW_PREFIX)) {
-            formDataId = formDataServ.saveForm(datas, formDataId, formId, userInfo.getId(), 0);
+            formDataId = formDataServ.saveForm(datas, formId, formDataId, userInfo.getId(), 0);
             if (StringUtils.isNotEmpty(formDataId)) {
                 TFormInstance formInstance = new TFormInstance();
                 formInstance.setFormDataId(formDataId);

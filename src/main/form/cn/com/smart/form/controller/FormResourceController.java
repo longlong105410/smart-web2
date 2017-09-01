@@ -88,7 +88,7 @@ public class FormResourceController extends BaseFormController {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != resource) {
 			resource.setType(ResourceConstant.FORM_RESOURCE);
-			String uri = "form/create?formId="+resource.getUri();
+			String uri = "form/instance/create?formId="+resource.getUri();
 			resource.setUri(uri);
 			smartResp = resServ.save(resource);
 		}
@@ -106,7 +106,7 @@ public class FormResourceController extends BaseFormController {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != resource) {
 			resource.setType(ResourceConstant.FORM_RESOURCE);
-			String uri = "form/create?formId="+resource.getUri();
+			String uri = "form/instance/create?formId="+resource.getUri();
 			resource.setUri(uri);
 			smartResp = resServ.update(resource);
 		}
