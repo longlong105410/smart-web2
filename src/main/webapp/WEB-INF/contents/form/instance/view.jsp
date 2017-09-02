@@ -27,7 +27,7 @@
                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane p-t-10" id="form-att-tab">
-                        <div class="cnoj-load-url" data-uri="form/attachment/list?formId=${formId }&formDataId=${formDataId}" ></div>
+                        <div class="cnoj-load-url" data-uri="form/attachment/list?formId=${formId }&formDataId=${formDataId}&isView=1" ></div>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,6 @@
 </div>
 
 <script type="text/javascript">
-    utils.isIframe = true;
     loadUrlListener();
     var initForm = $("#create-form").initForm({
         username:'${userInfo.fullName}',

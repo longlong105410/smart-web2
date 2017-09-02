@@ -28,26 +28,32 @@ public class FormAttachmentDao extends BaseDaoImpl<TFormAttachment> {
         }
         String[] ids = id.toString().split(",");
         List<TFormAttachment> lists = find(ids);
-        if (null != lists && lists.size() > 0) {
-            if (delete(lists)) {
-                LoggerUtils.info(log, "表单附件信息删除[成功]");
-                StringBuilder idBuilder = new StringBuilder();
-                for (TFormAttachment formAtt : lists) {
-                    idBuilder.append(formAtt.getAttachmentId() + ",");
-                }
-                idBuilder = idBuilder.delete(idBuilder.length()-1, idBuilder.length());
-                // 删除附件
-                if (attDao.delete(idBuilder.toString())) {
-                    is = true;
-                    LoggerUtils.info(log, "表单附件删除[成功]");
-                } else {
-                    LoggerUtils.error(log, "表单附件删除[失败]");
-                }
-            } else {
-                LoggerUtils.error(log, "表单附件信息删除[失败]");
+        return delete(lists);
+    }
+
+    @Override
+    public boolean delete(List<TFormAttachment> list) {
+        boolean is = false;
+        if (null == list || list.size() == 0) {
+            return is;
+        }
+        if (super.delete(list)) {
+            LoggerUtils.info(log, "表单附件信息删除[成功]");
+            StringBuilder idBuilder = new StringBuilder();
+            for (TFormAttachment formAtt : list) {
+                idBuilder.append(formAtt.getAttachmentId() + ",");
             }
+            idBuilder = idBuilder.delete(idBuilder.length() - 1, idBuilder.length());
+            // 删除附件
+            if (attDao.delete(idBuilder.toString())) {
+                is = true;
+                LoggerUtils.info(log, "表单附件删除[成功]");
+            } else {
+                LoggerUtils.error(log, "表单附件删除[失败]");
+            }
+        } else {
+            LoggerUtils.error(log, "表单附件信息删除[失败]");
         }
         return is;
     }
-
 }

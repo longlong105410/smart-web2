@@ -84,4 +84,12 @@ public interface IFormDataService {
 	 */
 	public boolean updateForm(Map<String,Object> datas, String formId, String formDataId, String userId, Integer formState);
 	
+	/**
+	 * 获取字段中的附件ID
+	 * @param formId 表单ID
+	 * @param plugins 插件名称
+	 * @param formDataId 表单数据ID
+	 * @return 返回获取结果；获取成功，通过getDatas()方法获取返回结果
+	 */
+	public SmartResponse<String> getFieldInAttIds(String formId, String[] plugins, String formDataId);
 }

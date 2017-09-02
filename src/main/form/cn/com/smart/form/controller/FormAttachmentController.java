@@ -142,12 +142,6 @@ public class FormAttachmentController extends AttachmentUploadController {
         modelMap.put("isView", isView);
         modelMap.put("smartResp", smartResp);
         modelView.setViewName(VIEW_DIR + "/list");
-        if ("1".equals(isView)) {
-            modelView.setViewName(VIEW_DIR + "/listView");
-        }
-        if ("2".equals(isView)) {
-            modelView.setViewName(VIEW_DIR + "/editList");
-        }
         return modelView;
     }
 

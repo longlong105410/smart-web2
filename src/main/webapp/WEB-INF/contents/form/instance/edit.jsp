@@ -13,7 +13,7 @@
        </form>
        <div class="form-header-btn">
 			<div class="navbar-nar-right m-r-5 m-t-1">
-			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/submit.json"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
+			    <button type="button" class="btn btn-primary btn-sm" id="form-submit" data-uri="form/instance/submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> 提交 </button>
 			</div>
         </div>
    </div>
@@ -28,11 +28,11 @@
 				</div>
 			</div>
 			<div class="panel-body p-0">
-				<div id="form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height">
+				<div id="form-panel-contents" class="tab-content panel-tab-content bg-color-white cnoj-auto-limit-height" data-subtract-height="150">
 					<div role="tabpanel" class="tab-pane active" id="form-content-tab">
 						<div class="form-prop">
 					       <form id="create-form" method="post" data-relate-arg-form="#create-form-param" enctype="multipart/form-data">
-					           ${smartResp.data.parseHtml}
+					           ${objBean.parseHtml}
 					       </form>
                            <iframe class="hidden" id="handle-form-iframe" name="handle-form-iframe" frameborder=0 width=0 height=0></iframe>
 					   </div>
@@ -47,14 +47,14 @@
 </div>
 
 <script type="text/javascript">
-    utils.isIframe = true;
     loadUrlListener();
     var initForm = $("#create-form").initForm({
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
         formData:'${output}',
+        isDialog: true,
         initDataAfter: function(){
-            formRequireListener();
+            //formRequireListener();
             printListener();
             inputPluginEvent();
             hrefListener();
@@ -65,20 +65,16 @@
             $("#form-submit").click(function(){
                 var $this = $(this);
                 $this.prop("disabled",true);
-                //if($(element).validateForm()) {
-                    var url = $this.data("uri");
-                    if(utils.isEmpty(url)) {
-                        utils.showMsg("提交地址为空...");
-                        $this.prop("disabled",false);
-                        return false;
-                    }
-                    var formParam = $("#create-form-param").serialize();
-                    self.submitForm(uri, formParam, function(){
-                        $this.prop("disabled",false);
-                    });
-               // } else {
-                //    $this.prop("disabled",false);
-               // }
+                var url = $this.data("uri");
+                if(utils.isEmpty(url)) {
+                   utils.showMsg("提交地址为空...");
+                   $this.prop("disabled",false);
+                   return false;
+                }
+                var formParam = $("#create-form-param").serialize();
+                self.submitForm(url, formParam, function(){
+                   $this.prop("disabled",false);
+                });
             });
         }
     });

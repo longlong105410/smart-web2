@@ -85,7 +85,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     					addBtn.setSelectedType(BtnPropType.SelectType.NONE.getValue());
     				btnHtml = "<button type='button' id='"+addBtn.getId()+"' class='btn "+(StringUtils.isEmpty(addBtn.getBtnStyle())?BTN_DEFAULT_THEME:addBtn.getBtnStyle())+" add param' data-selected-type='"+
     		    			StringUtils.handNull(addBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(addBtn.getUri())+"' data-title='"+StringUtils.handNull(addBtn.getTitle())+"' data-busi='"+
-    		    			StringUtils.handNull(addBtn.getBusi())+"' data-value='' data-width='"+(StringUtils.isEmpty(addBtn.getWidth())?600:addBtn.getWidth())+"' data-before-check='"+StringUtils.handNull(addBtn.getBeforeCheck())+"'><i class='glyphicon glyphicon-plus'></i> "
+    		    			StringUtils.handNull(addBtn.getBusi())+"' data-value='' data-width='"+StringUtils.handNull(addBtn.getWidth())+"' data-before-check='"+StringUtils.handNull(addBtn.getBeforeCheck())+"'><i class='glyphicon glyphicon-plus'></i> "
     		    			+(StringUtils.isEmpty(addBtn.getName())?"添加":addBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, addBtn, btnHtml);
     			}
@@ -93,7 +93,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     				if(StringUtils.isEmpty(editBtn.getSelectedType()))
     					editBtn.setSelectedType(BtnPropType.SelectType.MULTI.getValue());
     				btnHtml = "<button type='button' id='"+editBtn.getId()+"' class='btn "+(StringUtils.isEmpty(editBtn.getBtnStyle())?BTN_DEFAULT_THEME:editBtn.getBtnStyle())+" edit param' data-selected-type='"+StringUtils.handNull(editBtn.getSelectedType())+"' data-uri='"+
-    						StringUtils.handNull(editBtn.getUri())+"' data-title='"+StringUtils.handNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handNull(editBtn.getBusi())+"' data-value='' data-width='"+(StringUtils.isEmpty(editBtn.getWidth())?600:editBtn.getWidth())+"' data-before-check='"+
+    						StringUtils.handNull(editBtn.getUri())+"' data-title='"+StringUtils.handNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handNull(editBtn.getBusi())+"' data-value='' data-width='"+StringUtils.handNull(editBtn.getWidth())+"' data-before-check='"+
     						StringUtils.handNull(editBtn.getBeforeCheck())+"'><i class='glyphicon glyphicon-pencil'></i> "+(StringUtils.isEmpty(editBtn.getName())?"编辑":editBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, editBtn, btnHtml);
     			}
@@ -123,7 +123,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 	    						}
 	    					}
 	    					btnHtml = "<button type='button' id='"+customBtn.getId()+"' class='btn "+StringUtils.handNull(customBtn.getBtnStyle())+" "+customBtn.getOpenStyle()+" param' data-selected-type='"+StringUtils.handNull(customBtn.getSelectedType())+"' data-uri='"+
-	    					           StringUtils.handNull(customBtn.getUri())+"' data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' data-width='"+(StringUtils.isEmpty(customBtn.getWidth())?600:customBtn.getWidth())+
+	    					           StringUtils.handNull(customBtn.getUri())+"' data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' data-width='"+StringUtils.handNull(customBtn.getWidth())+
 	    					           "' data-before-check='"+StringUtils.handNull(customBtn.getBeforeCheck())+"'>"+icon+" "+StringUtils.handNull(customBtn.getName())+"</button>";
 	    					addBtnHtmlToList(btnList, customBtn, btnHtml);
     					}

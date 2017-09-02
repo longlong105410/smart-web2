@@ -15,6 +15,8 @@
             deptName:null,
             isView:false,
             isToLabel:false,
+            isIframe:false,
+            isDialog: false,
             formFieldNames:null,
             formAttTabTag:'#form-att-tab',
             //获取表单附件信息URI
@@ -44,7 +46,9 @@
                 if(typeof(this.setting.initDataBefore) === 'function') {
                     this.setting.initDataBefore();
                 }
-                this.controlFormField();
+                if(this.setting.isView) {
+                    this.controlFormField();
+                }
                 this.initFormData();
                 if(typeof(this.setting.initDataAfter) === 'function') {
                     this.setting.initDataAfter();
@@ -144,7 +148,6 @@
              * 初始化表单数据
              */
             initFormData: function() {
-                console.log(this.setting.formData);
                 if(utils.isEmpty(this.setting.formData)) {
                     return;
                 }
@@ -337,6 +340,7 @@
                     return false;
                 }
                 var attsInfoUri = utils.isContain(this.setting.formAttInfoUri,"?")?this.setting.formAttInfoUri+"&":this.setting.formAttInfoUri+"?";
+                const self = this;
                 $.get(attsInfoUri+"id="+value, function(output){
                     var attInfos = null;
                     var elementId = $element.attr("name");
@@ -358,7 +362,8 @@
                             }
                             attInfos += "<li><a href='download/att?id="+datas[i][0]+"' target='_blank'>下载</a></li>";
                             if(!isDisabled) {
-                                attInfos += "<li><a href='javascript:void(0)' data-input-id='"+elementId+"' onclick=deleteFormAtt(this,'"+datas[i][1]+"','"+datas[i][0]+"')><i class='fa fa-trash' aria-hidden='true'></i> 删除</a></li>";
+                                attInfos += "<li><a href='javascript:void(0)' class='delete-att' data-input-id='"+elementId+"' " +
+                                		"data-id='"+datas[i][1]+"' data-att-id='"+datas[i][0]+"'><i class='fa fa-trash' aria-hidden='true'></i> 删除</a></li>";
                             }
                             attInfos +="</ul></li>";
                             attIds += datas[i][0]+",";
@@ -374,6 +379,12 @@
                             $attOp.removeClass("hidden");
                         }).mouseout(function() {
                             $(this).find(".form-att-op").addClass("hidden");
+                        });
+                        $ul.find(".delete-att").click(function(){
+                            var $this = $(this);
+                            var id = $this.data("id");
+                            var attId = $this.data("att-id");
+                            self.deleteFormAtt(this, id, attId);
                         });
                         //判断是否添加过，如果添加过，则删除附件列表元素
                         var $parent = $element.parent();
@@ -445,8 +456,8 @@
              */
              deleteFormAtt: function(elementObj, id, attId) {
                 if(utils.isNotEmpty(id)) {
-                    var $li = $(elementObj).parents("li:eq(0)");
-                    var $ul = $(elementObj).parents("ul:eq(0)");
+                    var $li = $(elementObj).parents(".att-item:eq(0)");
+                    var $ul = $(elementObj).parents(".file-list:eq(0)");
                     var inputEleId = $(elementObj).data("input-id");
                     var formDataId = $("#form-data-id").val();
                     var delAttUri = utils.isContain(this.setting.delAttUri,"?")?this.setting.delAttUri+"&":this.setting.delAttUri+"?";
@@ -454,6 +465,7 @@
                         alert("delAttUri参数不能为空！");
                         return false;
                     }
+                    const self = this;
                     BootstrapDialogUtil.delDialog("附件",delAttUri+'fieldId='+inputEleId+'&formDataId='+formDataId+"&attId="+attId,id,function(){
                         $li.remove();
                         //删除隐藏文本框内的对应的附件ID
@@ -473,7 +485,7 @@
                             $inputFile.val("");
                         }
                         if(utils.isNotEmpty(attListUri)) {
-                            loadUri(formAttTabTag,attListUri,false);
+                            loadUri(self.setting.formAttTabTag,attListUri,false);
                         }
                     });
                 }
@@ -517,20 +529,41 @@
                     url = utils.isContain(url,"?") ? (url+"&") : (url+"?");
                     url += param;
                 }
+                var loadingMsgText = "正在提交数据...";
+                if(this.setting.isIframe) {
+                    parent.utils.waitLoading(loadingMsgText);
+                } else {
+                    utils.waitLoading(loadingMsgText);
+                }
                 this.$this.attr("action", url);
                 this.$this.attr("target","handle-form-iframe");
                 this.$this.submit(); //提交表单到iframe
+                const self = this;
                 $("#handle-form-iframe").load(function(){
-                    parent.utils.closeWaitLoading();
+                    if(self.setting.isIframe) { 
+                        parent.utils.closeWaitLoading();
+                    } else {
+                        utils.closeWaitLoading();
+                    }
                     var result = $(this).contents().text();
                     if(utils.isNotEmpty(result)) {
                         var output = $.parseJSON(result);
-                        parent.utils.showMsg(output.msg);
+                        if(self.setting.isIframe) { 
+                            parent.utils.showMsg(output.msg);
+                        } else {
+                            utils.showMsg(output.msg);
+                        }
                         if(output.result=='1') {
                             if(typeof(callback) === 'function') {
                                 callback(output.result);
                             }
-                            parent.closeActivedTab();
+                            if(self.setting.isDialog) {
+                                BootstrapDialogUtil.close();
+                            } else if(self.setting.isIframe) { 
+                                parent.closeActivedTab();
+                            } else {
+                                closeActivedTab();
+                            }
                         } else {
                             if(typeof(callback) === 'function') {
                                 callback(output.result);
@@ -540,7 +573,11 @@
                         if(typeof(callback) === 'function') {
                             callback(output.result);
                         }
-                        parent.utils.showMsg('提交失败');
+                        if(self.setting.isIframe) { 
+                            parent.utils.showMsg('提交失败');
+                        } else {
+                            utils.showMsg('提交失败');
+                        }
                     }
                 });
             }

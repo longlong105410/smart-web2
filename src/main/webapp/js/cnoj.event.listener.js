@@ -3204,7 +3204,10 @@ function openProp(obj,op,flag) {
 	var beforeCheck = $obj.data("before-check");
 	selectedType = utils.isEmpty(selectedType)?'none-selected':selectedType;
 	var width = $obj.data("width");
-	width = utils.regexNum(width)?width:600;
+	if(utils.isEmpty(width) || !utils.regexNum(width)) {
+        width = getDialogAutoWidth();
+    } 
+	//width = utils.regexNum(width)?width:600;
 	paramName = utils.isEmpty(paramName)?'id':paramName;
 	if(utils.isEmpty(selectedType)) {
 		return;
@@ -3357,4 +3360,11 @@ function findNextInput($parentDiv,value){
 		}
 		return $input;
 	}
+}
+
+/**
+ * 自动宽度
+ */
+function getDialogAutoWidth() {
+    return $(window).width()-50;
 }

@@ -34,6 +34,8 @@ public class TFormAttachment extends BaseBeanImpl {
      * 用户ID（主要用于表单实例未启动前，添加附件时，与formId属性联合标记）
      */
     private String userId;
+    
+    private Long createTimestamp;
 
     @Id
     @Column(name="id", length=50)
@@ -79,6 +81,15 @@ public class TFormAttachment extends BaseBeanImpl {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @Column(name="create_timestamp")
+    public Long getCreateTimestamp() {
+        return createTimestamp;
+    }
+
+    public void setCreateTimestamp(Long createTimestamp) {
+        this.createTimestamp = createTimestamp;
     }
     
 }

@@ -18,6 +18,7 @@ import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.constant.IConstant;
 import cn.com.smart.dao.impl.OPDao;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.QueryFormData;
@@ -25,6 +26,7 @@ import cn.com.smart.form.bean.TableFieldMap;
 import cn.com.smart.form.enums.FormPluginType;
 import cn.com.smart.form.helper.FormDataHelper;
 import cn.com.smart.form.interceptor.SubmitFormContext;
+import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.utils.DateUtil;
 import cn.com.smart.web.constant.IWebConstant;
 
@@ -42,6 +44,8 @@ public class FormDataService implements IFormDataService {
 	private OPDao opDao;
 	@Autowired
 	private FormTableService formTableServ;
+	@Autowired
+	private FormTableFieldServ formTableFieldServ;
 	
 	@Override
 	public SmartResponse<QueryFormData> getFormData(String formDataId, String formId,String userId) {
@@ -312,8 +316,6 @@ public class FormDataService implements IFormDataService {
 		}
 		return is;
 	}
-	
-	
 	
 	/**
      * 分类组合数据
@@ -762,5 +764,46 @@ public class FormDataService implements IFormDataService {
 		}
 		return tfList;
 	}
+
+    @Override
+    public SmartResponse<String> getFieldInAttIds(String formId, String[] plugins, String formDataId) {
+        SmartResponse<String> smartResp = new SmartResponse<String>();
+        if(StringUtils.isEmpty(formId) || null == plugins || plugins.length==0 
+                || StringUtils.isEmpty(formDataId)) {
+            return smartResp;
+        }
+        Map<String, List<String>> dataMap = formTableFieldServ.getTableFieldByPugin(formId, plugins);
+        Set<Map.Entry<String, List<String>>> sets = dataMap.entrySet();
+        List<String> attIds = new ArrayList<String>();
+        String sql = SQLResUtil.getOpSqlMap().getSQL("get_field_value");
+        Map<String, Object> param = new HashMap<String, Object>(1);
+        param.put("formDataId", formDataId);
+        for (Map.Entry<String, List<String>> set : sets) {
+            String tableName = set.getKey();
+            List<String> fieldNames = set.getValue();
+            int fieldLen = fieldNames.size();
+            String tmpSql = sql.replace("${tableName}", tableName);
+            tmpSql = tmpSql.replace("${fieldName}", StringUtils.collection2String(fieldNames, IConstant.MULTI_VALUE_SPLIT));
+            List<Object> list = formTableServ.getDao().queryObjSql(tmpSql, param);
+            if(null != list && list.size()>0) {
+                for (Object obj : list) {
+                    if(fieldLen == 1) {
+                        attIds.add(StringUtils.handNull(obj));
+                    } else {
+                        Object[] objArray = (Object[]) obj;
+                        for (int i = 0; i < fieldLen; i++) {
+                            attIds.add(StringUtils.handNull(objArray[i]));
+                        }
+                    }
+                }//for
+            }//if
+        }//for
+        if(attIds.size()>0) {
+            smartResp.setDatas(attIds);
+            smartResp.setResult(IConstant.OP_SUCCESS);
+            smartResp.setMsg(IConstant.OP_SUCCESS_MSG);
+        }
+        return smartResp;
+    }
 
 }

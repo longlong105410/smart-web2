@@ -28,6 +28,7 @@ import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.flow.bean.QueryFormData;
 import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.form.bean.entity.TForm;
+import cn.com.smart.form.bean.entity.TFormInstance;
 import cn.com.smart.form.helper.FormDataHelper;
 import cn.com.smart.form.helper.FormUploadFileHelper;
 import cn.com.smart.form.service.FormInstanceService;
@@ -96,11 +97,10 @@ public class FormInstanceController extends BaseFormController {
     /**
      * 通过表单ID，创建表单视图
      * @param formId 表单ID
-     * @param formDataId 表单数据ID（管理时，用于修改表单数据）
      * @return 
      */
     @RequestMapping("/create")
-    public ModelAndView create(String formId, String formDataId) {
+    public ModelAndView create(String formId) {
         ModelAndView modelView = new ModelAndView();
         if(StringUtils.isEmpty(formId)) {
             throw new NullArgumentException("formId参数不能为空");
@@ -108,6 +108,7 @@ public class FormInstanceController extends BaseFormController {
         SmartResponse<TForm> smartResp = formServ.find(formId);
         ModelMap modelMap = modelView.getModelMap();
         modelMap.put("smartResp", smartResp);
+        modelMap.put("formDataId", FormDataHelper.createNewFormDataId());
         modelView.setViewName(VIEW_DIR+"/create");
         return modelView;
     }
@@ -125,9 +126,9 @@ public class FormInstanceController extends BaseFormController {
         response.setContentType("text/plain;charset=UTF-8");
         SmartResponse<String> smartResp = new SmartResponse<String>();
         smartResp.setMsg("提交表单失败");
-        if(StringUtils.isEmpty(formDataId)) {
+        /*if(StringUtils.isEmpty(formDataId)) {
             formDataId = FormDataHelper.createNewFormDataId();
-        }
+        }*/
         ObjectMapper objMapper = new ObjectMapper();
         if(StringUtils.isNotEmpty(formId) && StringUtils.isNotEmpty(formDataId)) {
             UserInfo userInfo = getUserInfoFromSession(request);
@@ -178,14 +179,16 @@ public class FormInstanceController extends BaseFormController {
     
     /**
      * 修改表单数据
-     * @param formId 表单ID
-     * @param formDataId 表单数据ID
+     * @param id 表单实例ID
      * @return
      */
     @RequestMapping("/edit")
-    public ModelAndView edit(String formId, String formDataId) {
+    public ModelAndView edit(String id) {
         ModelAndView modelView = new ModelAndView();
-        handleView(modelView.getModelMap(), formId, formDataId);
+        if(StringUtils.isNotEmpty(id)) {
+            TFormInstance formIns = formInsServ.find(id).getData();
+            handleView(modelView.getModelMap(), formIns.getFormId(), formIns.getFormDataId());
+        }
         modelView.setViewName(VIEW_DIR+"edit");
         return modelView;
     }
@@ -214,6 +217,8 @@ public class FormInstanceController extends BaseFormController {
         if(StringUtils.isNotEmpty(formId) && StringUtils.isNotEmpty(formDataId)) {
             TForm form = formServ.find(formId).getData();
             modelMap.put("objBean", form);
+            modelMap.put("formId", formId);
+            modelMap.put("formDataId", formDataId);
             SmartResponse<QueryFormData> smartResp = formDataServ.getFormDataByFormDataId(formDataId, formId);
             String output = JsonHelper.toJson(smartResp);
             output = StringUtils.repaceSpecialChar(output);

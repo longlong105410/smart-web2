@@ -134,6 +134,7 @@
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
         formData:'${output}',
+        isIframe: utils.isIframe,
         initDataAfter: function(){
             formRequireListener();
             printListener();

@@ -29,6 +29,11 @@ import cn.com.smart.web.service.OPService;
 @Service
 public class FormAttachmentService extends MgrServiceImpl<TFormAttachment> {
 
+    /**
+     * 过期时间
+     */
+    private static long EXPIRE_TIME = 24 * 60 * 60 * 1000;
+    
     @Autowired
     private OPService opServ;
     
@@ -51,8 +56,24 @@ public class FormAttachmentService extends MgrServiceImpl<TFormAttachment> {
         formAtt.setFormDataId(formDataId);
         formAtt.setFormId(formId);
         formAtt.setUserId(userId);
+        formAtt.setCreateTimestamp(System.currentTimeMillis());
         smartResp = super.save(formAtt);
         return smartResp;
+    }
+    
+    /**
+     * 更新表单附件中的表单数据字段；
+     * 通过附件选项卡上传附件时，因为表单数据未正式创建，所以当时的formDataId为临时的Id;
+     * @param formDataId 表单数据ID
+     * @param tmplFormDataId 临时的表单数据ID
+     */
+    public void updateFormDataId(String formDataId, String tmplFormDataId) {
+        if(StringUtils.isNotEmpty(formDataId) && StringUtils.isNotEmpty(tmplFormDataId)) {
+            Map<String, Object> params = new HashMap<String, Object>(2);
+            params.put("formDataId", formDataId);
+            params.put("tmplFormDataId", tmplFormDataId);
+            super.execute("update_form_data_id", params);
+        }
     }
     
     
@@ -114,6 +135,65 @@ public class FormAttachmentService extends MgrServiceImpl<TFormAttachment> {
             }
         } else {
             LoggerUtils.error(logger, "附件字段更新为空[失败]，原因是：获取表名及字段名称失败");
+        }
+    }
+    
+    /**
+     * 删除过期的临时附件
+     */
+    public void deleteExpireTmpAtt() {
+        LoggerUtils.debug(logger, "删除过期的临时表单附件");
+        String sql = SQLResUtil.getOpSqlMap().getSQL("get_expire_form_attachment");
+        if(StringUtils.isEmpty(sql)) {
+            return;
+        }
+        Long expireTime = System.currentTimeMillis() - EXPIRE_TIME;
+        Map<String, Object> param = new HashMap<String, Object>(1);
+        param.put("expireTime", expireTime);
+        List<TFormAttachment> list = getDao().querySqlToEntity(sql, param, TFormAttachment.class);
+        getDao().delete(list);
+        LoggerUtils.debug(logger, "删除过期的临时表单附件[成功]");
+    } 
+    
+    /**
+     * 通过附件ID删除表单附件信息
+     * @param attIds
+     */
+    public void deleteByAttIds(List<String> attIds) {
+        if(CollectionUtils.isEmpty(attIds)) {
+            return;
+        }
+        String sql = SQLResUtil.getOpSqlMap().getSQL("get_form_att_by_attid");
+        if(StringUtils.isEmpty(sql)) {
+            return;
+        }
+        LoggerUtils.debug(logger, "根据附件ID删除表单附件信息...");
+        Map<String, Object> param = new HashMap<String, Object>(1);
+        param.put("attIds", attIds.toArray());
+        List<TFormAttachment> list = getDao().querySqlToEntity(sql, param, TFormAttachment.class);
+        if(null != list && list.size()>0) {
+            getDao().delete(list);
+        }
+    }
+    
+    /**
+     * 通过表单数据ID删除表单附件信息
+     * @param formDataId
+     */
+    public void deleteByFormDataId(String formDataId) {
+        if(StringUtils.isEmpty(formDataId)) {
+            throw new NullArgumentException("formDataId参数为空");
+        }
+        String sql = SQLResUtil.getOpSqlMap().getSQL("get_form_att_by_formdataid");
+        if(StringUtils.isEmpty(sql)) {
+            throw new NullPointerException("get_form_att_by_formdataid对应的SQL为空");
+        }
+        LoggerUtils.debug(logger, "根据表单数据ID删除表单附件信息...");
+        Map<String, Object> param = new HashMap<String, Object>(1);
+        param.put("formDataId", formDataId);
+        List<TFormAttachment> list = getDao().querySqlToEntity(sql, param, TFormAttachment.class);
+        if(null != list && list.size()>0) {
+            getDao().delete(list);
         }
     }
 }

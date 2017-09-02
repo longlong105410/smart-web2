@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mixsmart.constant.IMixConstant;
+import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
@@ -35,6 +36,8 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
     private IFormDataService formDataServ;
     @Autowired
     private FormService formServ;
+    @Autowired
+    private FormAttachmentService formAttServ;
 
     /**
      * 创建表单实例
@@ -58,6 +61,7 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
             insTitle = form.getName() + "(" + userInfo.getFullName() + ")";
         }
         if(formDataId.startsWith(FormDataHelper.APP_NEW_PREFIX)) {
+            String tmplFormDataId = formDataId;
             formDataId = formDataServ.saveForm(datas, formId, formDataId, userInfo.getId(), 0);
             if (StringUtils.isNotEmpty(formDataId)) {
                 TFormInstance formInstance = new TFormInstance();
@@ -67,12 +71,18 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
                 formInstance.setTitle(insTitle);
                 formInstance.setUserId(userInfo.getId());
                 super.save(formInstance);
+                smartResp.setResult(OP_SUCCESS);
                 smartResp.setMsg("表单提交成功");
+                //更新表单附件中的formDataId字段值
+                formAttServ.updateFormDataId(formDataId, tmplFormDataId);
+                //删除过期的表单附件信息
+                formAttServ.deleteExpireTmpAtt();
             }
         } else {
-            boolean is = formDataServ.updateForm(datas, formDataId, formId, userInfo.getId(), 0);
+            boolean is = formDataServ.updateForm(datas, formId, formDataId, userInfo.getId(), 0);
             if (is) {
                updateTitle(formDataId, insTitle);
+               smartResp.setResult(OP_SUCCESS);
                smartResp.setMsg("表单提交成功");
             }
         }
@@ -109,8 +119,16 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
             String delSql = SQLResUtil.getOpSqlMap().getSQL("del_form_data");
             param = new HashMap<String, Object>();
             String sql = SQLResUtil.getOpSqlMap().getSQL("get_table_name");
+            String[] plugins = new String[] {"file","files"};
             for (TFormInstance formIns : list) {
+                //删除表单对应的附件
+                List<String> attIds = formDataServ.getFieldInAttIds(formIns.getFormId(), plugins, formIns.getFormDataId()).getDatas();
+                if(CollectionUtils.isNotEmpty(attIds)) {
+                    formAttServ.deleteByAttIds(attIds);
+                }
+                formAttServ.deleteByFormDataId(formIns.getFormDataId());
                 param.put("formId", formIns.getFormId());
+                //获取表名称
                 List<Object> objs = super.getDao().queryObjSql(sql, param);
                 if (null != objs && objs.size() > 0) {
                     for (Object obj : objs) {

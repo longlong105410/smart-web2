@@ -132,6 +132,12 @@
               [ and fa.form_data_id=:formDataId] [ and fa.form_id=:formId and a.user_id=:userId and (fa.form_data_id is null or fa.form_data_id = '')]
          </sql>
      </sqlUnit>
+     <!-- 更新表单附件表中的form_data_id -->
+     <sqlUnit name="update_form_data_id">
+         <sql>
+             update t_form_attachment set form_data_id=:formDataId where form_data_id=:tmplFormDataId
+         </sql>
+     </sqlUnit>
      
      <!-- 获取表单附件信息通过附件ID -->
     <sqlUnit name="get_form_att_infos_byid">
@@ -144,7 +150,7 @@
         <sql>
             SELECT t.id, t.title,u.full_name,t.create_time,t.form_id, t.form_data_id  
             FROM t_form_instance t,t_n_user u,t_form f where t.form_id=f.id and t.user_id=u.id 
-            [ and t.title like '%:name%'] [and f.name like '%:name%'] order by t.create_time desc
+            [ and (t.title like '%:name%' or f.name like '%:name%')] order by t.create_time desc
         </sql>
     </sqlUnit>
     
@@ -160,7 +166,33 @@
         
         <sqlUnit name="update_form_inst_title">
             <sql>
-                update from t_form_instance set title=:title where form_data_id=:formDataId
+                update t_form_instance set title=:title where form_data_id=:formDataId
+            </sql>
+        </sqlUnit>
+        <!-- 获取过期的表单附件（超过24小时） -->
+        <sqlUnit name="get_expire_form_attachment">
+            <sql>
+                select * from t_form_attachment t where t.form_data_id like 'NEW_%' and t.create_timestamp &lt;:expireTime
+            </sql>
+        </sqlUnit>
+        <!-- 获取表及字段名称通过指定表单和插件类型 -->
+        <sqlUnit name="get_table_fields_by_plugin">
+            <sql>
+                SELECT ct.table_name,ctf.field_name FROM t_form_field ff, t_create_table ct,t_create_table_field ctf 
+                where ff.table_id = ct.id and ff.table_field_id = ctf.id and ff.form_id=:formId and ff.plugins in(:plugins)
+            </sql>
+        </sqlUnit>
+        <!-- 获取表单附件信息根据附件ID -->
+        <sqlUnit name="get_form_att_by_attid">
+            <sql>
+                select t.* from t_form_attachment t where t.attachment_id in(:attIds)
+            </sql>
+        </sqlUnit>
+        
+        <!-- 获取表单附件信息根据表单数据ID -->
+        <sqlUnit name="get_form_att_by_formdataid">
+            <sql>
+                select t.* from t_form_attachment t where t.form_data_id=:formDataId
             </sql>
         </sqlUnit>
 </sqlMap>
