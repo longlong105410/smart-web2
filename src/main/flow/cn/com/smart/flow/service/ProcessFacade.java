@@ -375,6 +375,7 @@ public class ProcessFacade {
 		//删除其他关联数据
 		flowFormDao.deleteAssocData(orderIds);
 		smartResp.setResult(IWebConstant.OP_SUCCESS);
+		smartResp.setMsg("实例删除成功");
 		return smartResp;
 	}
 	

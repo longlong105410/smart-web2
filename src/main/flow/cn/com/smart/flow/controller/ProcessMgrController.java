@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.flow.SnakerEngineFacets;
 import cn.com.smart.flow.bean.DataClassify;
@@ -42,12 +46,9 @@ import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.BaseBtn;
+import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
-
-import com.mixsmart.enums.YesNoType;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程实例--管理
@@ -162,11 +163,13 @@ public class ProcessMgrController extends BaseFlowControler {
 		String target = "#process-hist-order-tab";
 		refreshBtn = new RefreshBtn(searchUri, null, target);
 		pageParam = new PageParam(uri, target, page.getPage(), page.getPageSize());
+		delBtn = new DelBtn("process/mgr/delete", "您确定要删除选中的所有流程实例吗？", uri, "#process-order-tab", null);
 		
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
+		modelMap.put("delBtn", delBtn);
 		modelMap.put("target", target);
 		modelView.setViewName(VIEW_DIR+"/histOrderList");
 		return modelView;

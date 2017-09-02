@@ -68,12 +68,12 @@
 		        <tbody>
 		           <c:choose>
 		               <c:when test="${smartResp.result != 1 }">
-		                  <tr><td colspan="6" class="text-center">${smartResp.msg}</td></tr>
+		                  <tr><td colspan="7" class="text-center">${smartResp.msg}</td></tr>
 		               </c:when>
 		               <c:otherwise>
 		                  <c:forEach var="orderClassify" items="${smartResp.datas }" varStatus="st" >
 			                   <tr class="expand-data tr-parent-tree tr-tree" id="${orderClassify.id}">
-			                      <td colspan="6" class="tr-parent-tree-td"><span class='ui-icon ui-icon-triangle-1-s left'></span> ${orderClassify.name }</td>
+			                      <td colspan="7" class="tr-parent-tree-td"><span class='ui-icon ui-icon-triangle-1-s left'></span> ${orderClassify.name }</td>
 			                   </tr>
 			                   <c:forEach var="datas" items="${orderClassify.datas}">
 			                    <tr class="tr-tree tr-sub-tree ${orderClassify.id}" id="t-${datas[1]}">

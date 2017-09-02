@@ -133,7 +133,7 @@
 		        </tbody>
 		    </table>
 		</div>
-		<cnoj:panelFooter smartResp="${smartResp}" currentUri="${currentUri }" refreshBtn="${refreshBtn }" page="${pageParam }" />
+		<cnoj:panelFooter smartResp="${smartResp}" currentUri="${currentUri }" refreshBtn="${refreshBtn }" page="${pageParam }" delBtn="${delBtn }" />
 	</div>
 </div>
 <script type="text/javascript">
