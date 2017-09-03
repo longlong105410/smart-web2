@@ -21,7 +21,7 @@
 =======
 -------
 ---数据库MySQL5.6以上 <br/>
----下载后把data目录下的smart_web2.zip解压；然后解压出来的脚本文件（“smart_web2.sql”）导入到mysql数据库中；注：建库时，字符集编码为：utf8（utf8_general_ci）<br/>
+---下载后把data目录下的smart-web2.zip解压；然后解压出来的脚本文件（“smart-web2.sql”）导入到mysql数据库中；注：建库时，字符集编码为：utf8（utf8_general_ci）<br/>
 ---修改配置文件“jdbc.properties”，改成对应数据库的用户名和密码 <br/>
 ---“sysconfig.properties”系统配置文件；需要修改“root.dir”属性，设置为系统上传文件时用来存放的根目录 <br/>
 ----系统管理员用户名为：admin；密码为：123456 <br/>
@@ -31,6 +31,13 @@
 2.tomcat6或tomcat7； <br />
 3.eclipse版本4.4以上；<br />
 4.浏览器要求：IE8及以上（最理想的是IE10及以上），火狐，chrome等。<br />
+
+版本说明
+----------
+1.0.x 为第一个稳定版本（不含独立表单，表单需要和流程一起使用）<br />
+1.1.x 为第二稳定版本（支持表单单独使用）<br />
+master 为开发版本 <br />
+下一版本为：1.2.x（预计新增简单自定义报表功能）<br />
 
 系统截图
 =========
