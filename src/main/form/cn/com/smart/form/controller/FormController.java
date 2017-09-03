@@ -128,6 +128,22 @@ public class FormController extends BaseFormController {
 	}
 	
 	/**
+     * 删除表单
+     * @param id
+     * @return
+     */
+    @RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> delete(String id) {
+        SmartResponse<String> smartResp = new SmartResponse<String>();
+        smartResp.setMsg("删除失败");
+        if(StringUtils.isNotEmpty(id)) {
+            smartResp = formServ.delete(id);
+        }
+        return smartResp;
+    }
+	
+	/**
 	 * 查看表单
 	 * @param modelView
 	 * @param id

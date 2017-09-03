@@ -684,7 +684,7 @@ utils.checkboxItem = function(id,uri,defaultValue,name,isH,require,callback) {
 	if(!this.isEmpty(uri)) {
 		var defaultValueArray = new Array();
 		defaultValue = utils.handleNull(defaultValue);
-		if(defaultValue.indexOf(",")) {
+		if(typeof(defaultValue) == 'string' && defaultValue.indexOf(",")>-1) {
 			defaultValueArray = defaultValue.split(",");
 		} else {
 			defaultValueArray.push(defaultValue);
@@ -758,7 +758,9 @@ utils.radioItem = function(id,uri,defaultValue,name,isH,require,callback) {
 	if(!this.isEmpty(uri)) {
 		var defaultValueArray = new Array();
 		defaultValue = utils.handleNull(defaultValue);
-		if(defaultValue.indexOf(",")) {
+		console.log(defaultValue);
+		console.log(typeof(defaultValue));
+		if(typeof(defaultValue) == 'string' && defaultValue.indexOf(",")>-1) {
 			defaultValueArray = defaultValue.split(",");
 		} else {
 			defaultValueArray.push(defaultValue);
