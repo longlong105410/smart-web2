@@ -25,6 +25,7 @@
 ---修改配置文件“jdbc.properties”，改成对应数据库的用户名和密码 <br/>
 ---“sysconfig.properties”系统配置文件；需要修改“root.dir”属性，设置为系统上传文件时用来存放的根目录 <br/>
 ----系统管理员用户名为：admin；密码为：123456 <br/>
+----linux类系统需要修改mysql的配置文件，改为数据库表名不区分大小写（lower_case_table_names=1） <br />
 环境要求
 ------------
 1.jdk要求1.7及以上；<br />
