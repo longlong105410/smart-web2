@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snaker.engine.SnakerEngine;
@@ -20,14 +19,14 @@ import org.snaker.engine.model.TransitionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.flow.IFlowConstant;
 import cn.com.smart.flow.SnakerEngineFacets;
 import cn.com.smart.flow.ext.ExtTaskModel;
 import cn.com.smart.flow.service.FlowFormService;
-
-import com.mixsmart.enums.YesNoType;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 自动执行任务触发器(可以修改为监听者模式)

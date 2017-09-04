@@ -2,13 +2,12 @@ package cn.com.smart.flow.trigger;
 
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.springframework.stereotype.Component;
-
-import cn.com.smart.service.SmartContextService;
 
 import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
+
+import cn.com.smart.service.SmartContextService;
 
 /**
  * 任务触发抽象类

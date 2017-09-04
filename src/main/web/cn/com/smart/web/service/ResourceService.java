@@ -8,13 +8,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.bean.TreeProp;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.bean.entity.TNRole;
@@ -79,7 +80,7 @@ public class ResourceService extends MgrServiceImpl<TNResource> {
 				List<TNOPAuth> opAuths = null;
 				for (Object obj : lists) {
 					Object[] objArray = (Object[])obj;
-					if( null != objArray[4] && !StringUtil.isEmpty(objArray[4].toString())) {
+					if( null != objArray[4] && StringUtils.isNotEmpty(objArray[4].toString())) {
 						String[] authValus = objArray[4].toString().split(",");
 						
 						opAuths = authCache.queryAuths(authValus);
@@ -179,7 +180,7 @@ public class ResourceService extends MgrServiceImpl<TNResource> {
 	public SmartResponse<String> delete(String id) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("资源删除失败");
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			try {
 				if(resDao.delete(id)) {
 					smartResp.setResult(OP_SUCCESS);
@@ -243,7 +244,7 @@ public class ResourceService extends MgrServiceImpl<TNResource> {
 			if(null != lists && lists.size()>0) {
 				List<TreeProp> treeProps = resAuth2TreeProp(lists);
 				Map<String,List<TNOPAuth>> selectedResAuthMaps = null;
-				if(!StringUtil.isEmpty(roleId))
+				if(StringUtils.isNotEmpty(roleId))
 					selectedResAuthMaps = roleResCache.queryByRole(roleId);
 				if(null != treeProps && treeProps.size()>0) {
 					ZTreeHelper<ZTreeData> zTreeHelper = new ZTreeHelper<ZTreeData>(ZTreeData.class, treeProps);

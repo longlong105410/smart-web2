@@ -61,7 +61,7 @@ public class FormResourceController extends BaseFormController {
 		String uri = HttpRequestHelper.getCurrentUri(request);
 		addBtn = new EditBtn("add","showPage/form_resource_add", null, "添加表单资源", "600");
 		editBtn = new EditBtn("edit","showPage/form_resource_edit", "resource", "修改表单资源", "600");
-		delBtn = new DelBtn("op/del.json", "resource", "确定要删除选中的表单资源吗？",uri,null, null);
+		delBtn = new DelBtn("resource/delete.json", "确定要删除选中的表单资源吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "resource",null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		

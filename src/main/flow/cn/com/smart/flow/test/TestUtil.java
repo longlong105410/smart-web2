@@ -1,6 +1,6 @@
 package cn.com.smart.flow.test;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  * @author lmq
@@ -16,7 +16,7 @@ public class TestUtil {
 	 */
 	public static void main(String[] args) {
 		String num = "087";
-		System.out.println(StringUtil.isInteger(num));
+		System.out.println(StringUtils.isInteger(num));
 		Integer n = Integer.parseInt(num);
 		System.out.println(n);
 	}

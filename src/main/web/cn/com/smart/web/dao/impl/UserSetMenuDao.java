@@ -4,22 +4,21 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNUserSetMenu;
 
 /**
- * 
+ * 未使用到
  * @author lmq
  *
  */
 @Repository("userSetMenuDao")
 public class UserSetMenuDao extends BaseDaoImpl<TNUserSetMenu>{
-
-	private static final long serialVersionUID = 1L;
 	
 	private SqlMapping sqlMap;
 	
@@ -34,7 +33,7 @@ public class UserSetMenuDao extends BaseDaoImpl<TNUserSetMenu>{
 	public List<Object> queryRelated() throws DaoException {
 		List<Object> lists = null;
 		String sql = sqlMap.getSQL("user_setting_list");
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			lists = queryObjSql(sql);
 		}
 		return lists;
@@ -48,7 +47,7 @@ public class UserSetMenuDao extends BaseDaoImpl<TNUserSetMenu>{
 	public List<TNUserSetMenu> queryVaidMenu() throws DaoException {
 		List<TNUserSetMenu> lists = null;
 		String hql = sqlMap.getSQL("user_setting_valid_menu");
-		if(!StringUtil.isEmpty(hql)) {
+		if(StringUtils.isNotEmpty(hql)) {
 			lists = queryHql(hql);
 		}
 		return lists;

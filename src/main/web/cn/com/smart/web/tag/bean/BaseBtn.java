@@ -2,8 +2,6 @@ package cn.com.smart.web.tag.bean;
 
 import com.mixsmart.enums.YesNoType;
 
-import cn.com.smart.web.constant.enums.BtnPropType;
-
 
 /**
  * 操作按钮基类
@@ -21,7 +19,6 @@ public class BaseBtn {
 	
 	protected String uri;
 	
-	@Deprecated
 	protected String busi;
 	
 	protected String btnStyle="btn-default";
@@ -65,12 +62,10 @@ public class BaseBtn {
 		this.uri = uri;
 	}
 
-	@Deprecated
 	public String getBusi() {
 		return busi;
 	}
 
-	@Deprecated
 	public void setBusi(String busi) {
 		this.busi = busi;
 	}

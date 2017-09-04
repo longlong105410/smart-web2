@@ -132,5 +132,18 @@ public class DelBtn extends BaseBtn {
 	public void setTarget(String target) {
 		this.target = target;
 	}
+
+    @Override
+    @Deprecated
+    public String getBusi() {
+        return super.getBusi();
+    }
+
+    @Override
+    @Deprecated
+    public void setBusi(String busi) {
+        super.setBusi(busi);
+    }
+	
 	
 }

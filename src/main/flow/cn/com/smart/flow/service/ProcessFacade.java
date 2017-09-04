@@ -5,16 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.com.smart.form.interceptor.SubmitFormContext;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
-import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.WorkItem;
 import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TransitionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.constant.IConstant;
@@ -38,16 +40,12 @@ import cn.com.smart.flow.ext.ExtTaskModel;
 import cn.com.smart.flow.helper.DataClassifyHelper;
 import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.form.bean.entity.TForm;
-import cn.com.smart.form.dao.FormFieldDao;
+import cn.com.smart.form.interceptor.SubmitFormContext;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.service.SmartContextService;
 import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.constant.IWebConstant;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
-
-import com.mixsmart.enums.YesNoType;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程运行处理类
@@ -62,8 +60,6 @@ public class ProcessFacade {
 
 	@Autowired
 	private FlowProcessDao flowProcessDao;
-	@Autowired
-	private FormFieldDao formFieldDao;
 	@Autowired
 	private FlowFormDao flowFormDao;
 	@Autowired

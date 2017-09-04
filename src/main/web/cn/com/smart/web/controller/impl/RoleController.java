@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.web.bean.RequestPage;
@@ -22,7 +24,6 @@ import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNRole;
 import cn.com.smart.web.constant.enums.SelectedEventType;
 import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.ZTreeData;
 import cn.com.smart.web.service.MenuService;
 import cn.com.smart.web.service.OPService;
@@ -33,8 +34,6 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 角色
@@ -55,7 +54,7 @@ public class RoleController extends BaseController {
 	private ResourceService resServ;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,ModelAndView modelView,RequestPage page) throws Exception {
+	public ModelAndView list(HttpSession session,ModelAndView modelView,RequestPage page) {
 		Map<String,Object> params = null;
 		UserInfo userInfo = getUserInfoFromSession(session);
 		if(!isSuperAdmin(userInfo)) {
@@ -65,7 +64,7 @@ public class RoleController extends BaseController {
 		SmartResponse<Object> smartResp = opServ.getDatas("role_mgr_list", params, page.getStartNum(), page.getPageSize());
 		
 		String uri = "role/list"; 
-		addBtn = new EditBtn("add","showPage/base_role_add", null, "添加角色", "600");
+		addBtn = new EditBtn("add","showPage/base_role_add", "添加角色", "600");
 		editBtn = new EditBtn("edit","showPage/base_role_edit", "role", "修改角色", "600");
 		delBtn = new DelBtn("role/delete.json", "确定要删除选中的角色吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
@@ -77,7 +76,6 @@ public class RoleController extends BaseController {
 		link.setDialogTitle("已配置的权限");
 		link.setDialogWidth("600");
 		alinks.add(link);
-		link = null;
 		
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -87,9 +85,7 @@ public class RoleController extends BaseController {
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("alinks", alinks);
-		
-		addBtn = null;editBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
+
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
 	}
@@ -125,7 +121,13 @@ public class RoleController extends BaseController {
 		return roleServ.delete(id);
 	}
 	
-	
+	/**
+	 * 查看角色信息
+	 * @param modelView
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/show")
 	public ModelAndView show(ModelAndView modelView,String id) throws Exception {
 		modelView.getModelMap().put("id", id);
@@ -135,7 +137,7 @@ public class RoleController extends BaseController {
 	
 	
 	/**
-	 * 简单列表
+	 * 简单角色列表
 	 * @return
 	 * @throws Exception
 	 */
@@ -177,7 +179,7 @@ public class RoleController extends BaseController {
 		pageParam = new PageParam(uri, "#role-user-tab", page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addUser?id="+searchParam.getId(), null, "该角色中添加用户", "600");
-		delBtn = new DelBtn("op/moreParamDel.json?roleId="+searchParam.getId(), "roleUser", "确定要从该角色中删除选中的用户吗？",uri,"#role-user-tab", null);
+		delBtn = new DelBtn("role/deleteUser?roleId="+searchParam.getId(), "确定要从该角色中删除选中的用户吗？",uri,"#role-user-tab", null);
 		refreshBtn = new RefreshBtn(uri, "roleUser","#role-user-tab");
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -191,6 +193,17 @@ public class RoleController extends BaseController {
 		return modelView;
 	}
 	
+	/**
+	 * 从角色中删除用户
+	 * @param roleId 角色ID
+	 * @param id 用户ID
+	 * @return
+	 */
+	@RequestMapping(value="/deleteUser", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public SmartResponse<String> deleteUser(String roleId, String id) {
+	    return roleServ.deleteUser(roleId, id);
+	}
 	
 	/**
 	 * 拥有该角色的组织机构列表
@@ -204,7 +217,7 @@ public class RoleController extends BaseController {
 		pageParam = new PageParam(uri, "#role-org-tab", page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
 		addBtn = new EditBtn("add","role/addOrg?id="+searchParam.getId(), null, "该角色中添加组织机构", "600");
-		delBtn = new DelBtn("op/moreParamDel?roleId="+searchParam.getId(), "roleOrg", "确定要从该角色中删除选中的组织机构吗？",uri,"#role-org-tab", null);
+		delBtn = new DelBtn("role/deleteOrg?roleId="+searchParam.getId(), "确定要从该角色中删除选中的组织机构吗？",uri,"#role-org-tab", null);
 		refreshBtn = new RefreshBtn(uri, "roleOrg","#role-org-tab");
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -220,6 +233,18 @@ public class RoleController extends BaseController {
 	}
 	
 	/**
+     * 从角色中删除组织架构
+     * @param roleId 角色ID
+     * @param id 组织架构ID
+     * @return 返回操作结果
+     */
+    @RequestMapping(value="/deleteOrg", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> deleteOrg(String roleId, String id) {
+        return roleServ.deleteOrg(roleId, id);
+    }
+	
+	/**
 	 * 拥有该角色的岗位列表
 	 * @return
 	 * @throws Exception
@@ -230,8 +255,8 @@ public class RoleController extends BaseController {
 		SmartResponse<Object> smartResp = opServ.getDatas("role_position_list",searchParam, page.getStartNum(), page.getPageSize());
 		pageParam = new PageParam(uri, "#role-position-tab", page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
-		addBtn = new EditBtn("add","role/addPosition?id="+searchParam.getId(), null, "该角色中添加职位", "600");
-		delBtn = new DelBtn("op/moreParamDel?roleId="+searchParam.getId(), "rolePosition", "确定要从该角色中删除选中的职位吗？",uri,"#role-position-tab", null);
+		addBtn = new EditBtn("add","role/addPosition?id="+searchParam.getId(), "该角色中添加职位", "600");
+		delBtn = new DelBtn("role/deletePosition?roleId="+searchParam.getId(), "确定要从该角色中删除选中的职位吗？",uri,"#role-position-tab", null);
 		refreshBtn = new RefreshBtn(uri, "rolePosition","#role-position-tab");
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);
@@ -244,6 +269,18 @@ public class RoleController extends BaseController {
 		modelView.setViewName(VIEW_DIR+"/positionlist");
 		return modelView;
 	}
+	
+	/**
+     * 从角色中删除职位
+     * @param roleId 角色ID
+     * @param id 职位ID
+     * @return 返回操作结果
+     */
+    @RequestMapping(value="/deletePosition", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> deletePosition(String roleId, String id) {
+        return roleServ.deletePosition(roleId, id);
+    }
 	
 	
 	/**

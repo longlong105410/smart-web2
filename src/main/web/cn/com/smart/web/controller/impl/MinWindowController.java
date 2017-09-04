@@ -44,7 +44,7 @@ public class MinWindowController extends BaseController {
 		String uri = "minwin/list"; 
 		addBtn = new EditBtn("add","showPage/base_minwin_add", "minWin", "添加小窗口", "600");
 		editBtn = new EditBtn("edit","showPage/base_minwin_edit", "minWin", "修改小窗口", "600");
-		delBtn = new DelBtn("op/del.json", "minWin", "确定要删除选中的小窗口吗？",uri,null, null);
+		delBtn = new DelBtn("minwin/delete", "确定要删除选中的小窗口吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
@@ -95,4 +95,10 @@ public class MinWindowController extends BaseController {
 		}
 		return smartResp;
 	}
+	
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> delete(String id) {
+        return minWinServ.delete(id);
+    }
 }

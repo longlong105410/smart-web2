@@ -343,6 +343,10 @@
     <sqlUnit name="del_role_position">
        <sql>delete from t_n_role_position where role_id=:roleId and position_id in(:id)</sql>
     </sqlUnit>
+    <!-- 删除岗位中的角色-->
+    <sqlUnit name="del_position_role">
+       <sql>delete from t_n_role_position where position_id=:positionId and role_id in(:id)</sql>
+    </sqlUnit>
     <!-- 检测岗位是否已经添加到角色里面 -->
     <sqlUnit name="check_position_in_role_exits">
         <sql>select count(*) from t_n_role_position t where t.role_id=:roleId and t.position_id in(:positionIds) </sql>
@@ -366,10 +370,7 @@
         <sql>select count(*) from t_n_role_org t where t.org_id=:orgId and t.role_id in(:roleIds) and t.flag='org' </sql>
     </sqlUnit>
     
-    <!-- 删除岗位中的角色-->
-    <sqlUnit name="del_position_role">
-       <sql>delete from t_n_role_position where position_id=:positionId and role_id in(:id)</sql>
-    </sqlUnit>
+    
     <!-- 检测角色是否已经添加到岗位里面 -->
     <sqlUnit name="check_role_in_position_exits">
         <sql>select count(*) from t_n_role_position t where t.position_id=:positionId and t.role_id in(:roleIds) </sql>

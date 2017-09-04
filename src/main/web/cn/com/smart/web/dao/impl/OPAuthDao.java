@@ -8,11 +8,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.dao.IOPAuthDao;
 
@@ -24,8 +25,6 @@ import cn.com.smart.web.dao.IOPAuthDao;
  */
 @Repository("opAuthDao")
 public class OPAuthDao extends BaseDaoImpl<TNOPAuth> implements IOPAuthDao {
-
-	private static final long serialVersionUID = -6560374841327528485L;
 
 	@Autowired
 	private ResourceDao resDao;
@@ -53,7 +52,7 @@ public class OPAuthDao extends BaseDaoImpl<TNOPAuth> implements IOPAuthDao {
 	public List<Object> queryAuthAll(int start,int rows) throws DaoException {
 		List<Object> lists = null;
 		String sql = sqlMap.getSQL("opauth_mgr_list");
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			lists = queryObjSql(sql, null, start, rows);
 		} else {
 			throw new DaoException("SQL语句为空--[opauth_mgr_list]值为空");
@@ -68,7 +67,7 @@ public class OPAuthDao extends BaseDaoImpl<TNOPAuth> implements IOPAuthDao {
 	public long countAuthAll() throws DaoException {
 		long count = 0;
 		String sql = sqlMap.getSQL("opauth_mgr_list");
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			count = countSql(sql, null);
 		} else {
 			throw new DaoException("SQL语句为空--[opauth_mgr_list]值为空");
@@ -82,11 +81,10 @@ public class OPAuthDao extends BaseDaoImpl<TNOPAuth> implements IOPAuthDao {
 		List<TNOPAuth> lists = null;
 		if(null != values && values.length>0) {
 			String sql = sqlMap.getSQL("opauths_by_value");
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				params = new HashMap<String, Object>(1);
 				params.put("values", values);
 				lists = queryHql(sql, params);
-				params = null;
 			} else {
 				throw new DaoException("SQL语句为空--[opauths_by_value]值为空");
 			}
@@ -97,10 +95,10 @@ public class OPAuthDao extends BaseDaoImpl<TNOPAuth> implements IOPAuthDao {
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
 		boolean is = false;
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			String[] ids = id.toString().split(",");
 			String delSql = sqlMap.getSQL("del_op_auth");
-			if(!StringUtil.isEmpty(delSql)) {
+			if(StringUtils.isNotEmpty(delSql)) {
 				params = new HashMap<String, Object>(1);
 				params.put("ids", ids);
 				List<TNOPAuth> lists = find(ids);
@@ -119,11 +117,9 @@ public class OPAuthDao extends BaseDaoImpl<TNOPAuth> implements IOPAuthDao {
 						is = true;
 					}
 				}
-				params = null;
 			} else {
 				throw new DaoException("SQL语句为空--[del_op_auth]值为空");
 			}
-			ids = null;
 		}
 		return is;
 	}

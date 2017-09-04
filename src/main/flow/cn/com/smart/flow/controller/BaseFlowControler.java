@@ -6,7 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.helper.HttpRequestHelper;
@@ -31,12 +32,12 @@ public class BaseFlowControler extends BaseController {
 		UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(session);
 		if(null != userInfo) {
 			groups = new ArrayList<String>();
-			if(!StringUtil.isEmpty(userInfo.getDepartmentId())) {
+			if(StringUtils.isNotEmpty(userInfo.getDepartmentId())) {
 				groups.add(userInfo.getDepartmentId());
-			} else if(!StringUtil.isEmpty(userInfo.getOrgId())) {
+			} else if(StringUtils.isNotEmpty(userInfo.getOrgId())) {
 				groups.add(userInfo.getOrgId());
 			}
-			if(!StringUtil.isEmpty(userInfo.getPositionId())) {
+			if(StringUtils.isNotEmpty(userInfo.getPositionId())) {
 				groups.add(userInfo.getPositionId());
 			}
 			groups.add(userInfo.getId());

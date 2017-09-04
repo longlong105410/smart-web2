@@ -40,7 +40,7 @@ public class DelBtnTag extends BtnTag {
    				selectedType = BtnPropType.SelectType.MULTI.getValue();
    			JspWriter out = this.pageContext.getOut();
    			if(null == delBtn)
-   				delBtn = new DelBtn(uri, busi, msg, refreshUri, target, delAfter, btnStyle, name);
+   				delBtn = new DelBtn(uri, msg, refreshUri, target, delAfter, btnStyle, name);
    			else {
    				if(StringUtils.isEmpty(delBtn.getBtnStyle()))
    					delBtn.setBtnStyle(btnStyle);

@@ -13,9 +13,5 @@ import cn.com.smart.form.bean.entity.TFormField;
 @Repository
 public class FormFieldDao extends BaseDaoImpl<TFormField>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2815868858036304368L;
 
 }

@@ -13,9 +13,5 @@ import cn.com.smart.flow.bean.entity.TFlowPageModel;
 @Repository("flowPageModelDao")
 public class FlowPageModelDao extends BaseDaoImpl<TFlowPageModel>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5782899075349018661L;
 
 }

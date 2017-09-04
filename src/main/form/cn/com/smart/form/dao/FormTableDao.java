@@ -8,12 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import cn.com.smart.ISmart;
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.form.bean.entity.TCreateTable;
 import cn.com.smart.form.bean.entity.TCreateTableField;
-import cn.com.smart.utils.StringUtil;
 
 /**
  * @author lmq
@@ -25,11 +23,6 @@ import cn.com.smart.utils.StringUtil;
 @Repository("formTableDao")
 public class FormTableDao extends BaseDaoImpl<TCreateTable>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4283944038236190476L;
-	
 	@Autowired
 	private FormTableFieldDao tableFieldDao;
 

@@ -7,6 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
@@ -18,14 +22,9 @@ import cn.com.smart.web.bean.entity.TNRole;
 import cn.com.smart.web.cache.impl.MenuMemoryCache;
 import cn.com.smart.web.cache.impl.RoleMenuMemoryCache;
 import cn.com.smart.web.dao.impl.MenuDao;
-import cn.com.smart.web.dao.impl.ResourceDao;
 import cn.com.smart.web.dao.impl.RoleDao;
 import cn.com.smart.web.dao.impl.RoleMenuDao;
 import cn.com.smart.web.plugins.ZTreeData;
-
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.LoggerUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -41,8 +40,6 @@ public class MenuService extends MgrServiceImpl<TNMenu> {
 	private RoleDao roleDao;
 	@Autowired
 	private RoleMenuDao roleMenuDao;
-	@Autowired
-	private ResourceDao resourceDao;
 	@Autowired
 	private ObjectTreeHelper objTreeHelper;
 	

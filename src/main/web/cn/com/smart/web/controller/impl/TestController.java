@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
@@ -25,11 +26,11 @@ import cn.com.smart.web.push.impl.PushMessageContext;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.UserService;
 import cn.com.smart.web.tag.bean.CustomBtn;
+import cn.com.smart.web.tag.bean.CustomTableCell;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
-import cn.com.smart.web.tag.bean.CustomTableCell;
 
 /**
  * 测试
@@ -108,7 +109,7 @@ public class TestController extends BaseController {
 	@ResponseBody
 	public SmartResponse<Object> tableAsyncTreeJson(String parentId) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
-		if(StringUtil.isNotEmpty(parentId)) {
+		if(StringUtils.isNotEmpty(parentId)) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("parentId", parentId);
 			smartResp = opServ.getTreeDatas("test_org_async_tree", params);
@@ -126,7 +127,7 @@ public class TestController extends BaseController {
 		String uri = "org/list"; 
 		addBtn = new EditBtn("add","showPage/base_org_add", "org", "添加菜单", "600");
 		editBtn = new EditBtn("edit","showPage/base_org_edit", "org", "修改菜单", "600");
-		delBtn = new DelBtn("op/del.json", "org", "确定要删除选中的组织机构吗？（注：如果该机构下面有子机构的话，会一起删除的哦~）",uri,null, null);
+		delBtn = new DelBtn("org/delete",  "确定要删除选中的组织机构吗？（注：如果该机构下面有子机构的话，会一起删除的哦~）",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "org",null);
 		ModelMap modelMap = modelView.getModelMap();
 		
@@ -162,8 +163,8 @@ public class TestController extends BaseController {
 		editBtn.setBeforeCheck("beforeCheck()");
 		String paramStr = null;
 		paramStr = (null != searchParam)?searchParam.getParamToString():null;
-		uri += StringUtil.isNotEmpty(paramStr)?("?"+paramStr):"";
-		uri = StringUtil.isContains(uri, "?")?uri+"&page=":uri+"?page=";
+		uri += StringUtils.isNotEmpty(paramStr)?("?"+paramStr):"";
+		uri = StringUtils.isContains(uri, "?")?uri+"&page=":uri+"?page=";
 		uri += page;
 		refreshBtn = new RefreshBtn(uri, "resource",null);
 		
@@ -176,7 +177,7 @@ public class TestController extends BaseController {
 		if("0".equals(searchParam.getOrgId())) {
 			searchParam.setOrgId(null);
 		}
-		searchParam.setOrgIds(StringUtil.list2Array(getUserInfoFromSession(session).getOrgIds()));
+		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		pageParam = new PageParam(uri, null, page);
 		
 		SmartResponse<Object> smartResp = userServ.findAllObj(searchParam, getStartNum(page), getPerPageSize());
@@ -212,8 +213,8 @@ public class TestController extends BaseController {
 		editBtn = new EditBtn("edit","showPage/base_user_edit", "user", "修改用户信息", "600");
 		String paramStr = null;
 		paramStr = (null != searchParam)?searchParam.getParamToString():null;
-		uri += StringUtil.isNotEmpty(paramStr)?("?"+paramStr):"";
-		uri = StringUtil.isContains(uri, "?")?uri+"&page=":uri+"?page=";
+		uri += StringUtils.isNotEmpty(paramStr)?("?"+paramStr):"";
+		uri = StringUtils.isContains(uri, "?")?uri+"&page=":uri+"?page=";
 		uri += page;
 		
 		refreshBtn = new RefreshBtn(uri, "resource",null);
@@ -221,8 +222,6 @@ public class TestController extends BaseController {
 		customBtn.setWidth("500");
 		customBtns = new ArrayList<CustomBtn>(1);
 		customBtns.add(customBtn);
-		Map<String, Object> param = new HashMap<String, Object>();
-		
 		Map<String, Object> cellParam = new HashMap<String, Object>();
 		cellParam.put("id", 0);
 		cellParam.put("name", 1);

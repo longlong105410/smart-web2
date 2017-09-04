@@ -3,8 +3,10 @@ package cn.com.smart.flow.sort;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.utils.ListUtil;
-import cn.com.smart.utils.StringUtil;
 
 /**
  * 分类排序实现工厂 <br /> 
@@ -23,7 +25,7 @@ public class SortClassifyFactory<E> implements ISortClassify<E>{
 
 	@Override
 	public E get(String key) {
-		if(StringUtil.isEmpty(key) || ListUtil.isEmpty(sortClassifys)) {
+		if(StringUtils.isEmpty(key) || CollectionUtils.isEmpty(sortClassifys)) {
 			return null;
 		}
 		E entity = null;
@@ -38,7 +40,7 @@ public class SortClassifyFactory<E> implements ISortClassify<E>{
 
 	@Override
 	public void put(String key, E entity) {
-		if(ListUtil.isEmpty(sortClassifys)) {
+		if(CollectionUtils.isEmpty(sortClassifys)) {
 			sortClassifys = new ArrayList<SortClassifyBean<E>>();
 		}
 		SortClassifyBean<E> sortClassify = new SortClassifyBean<E>();
@@ -51,7 +53,7 @@ public class SortClassifyFactory<E> implements ISortClassify<E>{
 
 	@Override
 	public void destory() {
-		if(ListUtil.isNotEmpty(sortClassifys)) {
+		if(CollectionUtils.isNotEmpty(sortClassifys)) {
 			sortClassifys.clear();
 		}
 		sortClassifys = null;

@@ -1,7 +1,5 @@
 package cn.com.smart.form.test;
 
-import org.hibernate.transform.Transformers;
-
 /**
  * @author lmq
  * @create 2015年7月4日

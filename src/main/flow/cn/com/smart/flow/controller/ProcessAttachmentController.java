@@ -16,17 +16,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.flow.bean.TaskInfo;
 import cn.com.smart.flow.service.FlowAttachmentService;
 import cn.com.smart.flow.service.FlowService;
+import cn.com.smart.form.service.FormAttachmentService;
 import cn.com.smart.init.config.InitSysConfig;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNAttachment;
 import cn.com.smart.web.controller.base.AttachmentUploadController;
 import cn.com.smart.web.service.OPService;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程实例--附件
@@ -47,6 +48,8 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 	private OPService opServ;
 	@Autowired
 	private FlowAttachmentService flowAttServ;
+	@Autowired
+	private FormAttachmentService formAttServ;
 	
 	/**
 	 * 上传附件
@@ -193,7 +196,7 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 			return smartResp;
 		}
 		if(flowAttServ.getDao().delete(id)) {
-			flowAttServ.updateFormField(fieldId, formDataId, attId);
+		    formAttServ.updateFormField(fieldId, formDataId, attId);
 			smartResp.setResult(OP_SUCCESS);
 			smartResp.setMsg("附件删除成功");
 		}

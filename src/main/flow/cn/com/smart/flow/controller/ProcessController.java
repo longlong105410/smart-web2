@@ -45,6 +45,7 @@ import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.flow.service.FlowFormService;
 import cn.com.smart.flow.service.ProcessFacade;
 import cn.com.smart.form.bean.entity.TForm;
+import cn.com.smart.form.service.IFormDataService;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.tag.bean.PageParam;
@@ -78,6 +79,8 @@ public class ProcessController extends BaseFlowControler {
 	
 	@Autowired
 	private ProcessContext processContext;
+	@Autowired
+	private IFormDataService formDataServ;
 	
 	
 	/**
@@ -173,7 +176,10 @@ public class ProcessController extends BaseFlowControler {
 			if(multipartResolver.isMultipart(request)) {
 				new FlowFormUploadFileHelper((MultipartHttpServletRequest) request, submitFormData.getParams(), submitFormData, userInfo.getId()).upload();
 			}
-			smartResp = processFacade.saveOrUpdateForm(submitFormData,userInfo.getId());
+			smartResp = formDataServ.saveOrUpdateForm(submitFormData.getParams(), 
+			        submitFormData.getFormDataId(), submitFormData.getFormId(), userInfo.getId(), 
+			        submitFormData.getFormState());
+			//smartResp = processFacade.saveOrUpdateForm(submitFormData,userInfo.getId());
 			submitFormData = null;
 		}
 		response.setCharacterEncoding("UTF-8");

@@ -121,7 +121,7 @@ public class FlowController extends BaseFlowControler {
 		alinks.add(link2);
 		link = null;link2 = null;
 		
-		delBtn = new DelBtn("flow/delete",null, "确定要删除选中的部署流程信息吗，删除后数据将无法恢复？",uri,null, null);
+		delBtn = new DelBtn("flow/delete", "确定要删除选中的部署流程信息吗，删除后数据将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
 		ModelMap modelMap = modelView.getModelMap();
 		modelMap.put("smartResp", smartResp);

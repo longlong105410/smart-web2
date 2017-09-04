@@ -2,8 +2,10 @@ package cn.com.smart.web.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mixsmart.security.SecurityUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.bean.TreeProp;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.helper.ObjectHelper;
-import cn.com.smart.security.EncryptAlg;
 import cn.com.smart.service.impl.MgrServiceImpl;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNOrg;
@@ -24,22 +29,14 @@ import cn.com.smart.web.bean.entity.TNPosition;
 import cn.com.smart.web.bean.entity.TNRoleUser;
 import cn.com.smart.web.bean.entity.TNUser;
 import cn.com.smart.web.constant.enums.OrgType;
-import cn.com.smart.web.dao.impl.MenuDao;
 import cn.com.smart.web.dao.impl.OrgDao;
 import cn.com.smart.web.dao.impl.PositionDao;
-import cn.com.smart.web.dao.impl.ResourceDao;
-import cn.com.smart.web.dao.impl.RoleDao;
-import cn.com.smart.web.dao.impl.RoleOrgDao;
 import cn.com.smart.web.dao.impl.RoleUserDao;
 import cn.com.smart.web.dao.impl.UserDao;
 import cn.com.smart.web.filter.bean.UserSearchParam;
 import cn.com.smart.web.helper.TreeCombinHelper;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.plugins.ZTreeHelper;
-
-import com.mixsmart.security.SecurityUtils;
-import com.mixsmart.utils.LoggerUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -55,14 +52,6 @@ public class UserService extends MgrServiceImpl<TNUser> {
 	private OrgDao orgDao;
     @Autowired
 	private RoleUserDao roleUserDao;
-    @Autowired
-    private RoleDao roleDao;
-    @Autowired
-    private RoleOrgDao roleOrgDao;
-    @Autowired
-    private ResourceDao resDao;
-    @Autowired
-    private MenuDao menuDao;
     @Autowired
     private TreeCombinHelper treeCombinHelper;
     @Autowired
@@ -572,5 +561,28 @@ public class UserService extends MgrServiceImpl<TNUser> {
 	@Override
 	public UserDao getDao() {
 		return (UserDao)super.getDao();
+	}
+	
+	/**
+	 * 从用户中删除角色
+	 * @param userId
+	 * @param roleId
+	 * @return
+	 */
+	public SmartResponse<String> deleteRole(String userId, String roleId) {
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+	    smartResp.setMsg("删除失败");
+	    if(StringUtils.isEmpty(userId) || StringUtils.isEmpty(roleId)) {
+	        return smartResp;
+	    }
+	    Map<String, Object> param = new HashMap<String, Object>(3);
+	    param.put("userId", userId);
+	    param.put("id", roleId);
+	    param.put("flag", "u");
+	    if(roleUserDao.delete(param)) {
+	        smartResp.setResult(OP_SUCCESS);
+	        smartResp.setMsg("删除成功");
+	    }
+	    return smartResp;
 	}
 }

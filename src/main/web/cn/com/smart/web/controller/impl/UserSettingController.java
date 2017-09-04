@@ -48,7 +48,7 @@ public class UserSettingController extends BaseController {
 		String uri = "user/setting/list"; 
 		addBtn = new EditBtn("add","showPage/base_user_setting_add", "userSetMenu", "添加个人设置菜单", "600");
 		editBtn = new EditBtn("edit","showPage/base_user_setting_edit", "userSetMenu", "修改个人设置菜单", "600");
-		delBtn = new DelBtn("op/del.json", "userSetMenu", "确定要删除选中的操作权限吗？",uri,null, null);
+		delBtn = new DelBtn("user/setting/delete", "确定要删除选中的用户设置吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
@@ -85,5 +85,11 @@ public class UserSettingController extends BaseController {
 		}
 		return smartResp;
 	}
+	
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+	@ResponseBody
+    public SmartResponse<String> delete(String id) {
+        return userSettingServ.delete(id);
+    }
 	
 }

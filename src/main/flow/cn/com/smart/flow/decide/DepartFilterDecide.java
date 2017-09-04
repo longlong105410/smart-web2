@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 import org.snaker.engine.model.TaskModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.mixsmart.enums.YesNoType;
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.flow.ITaskSubmitBeforeAware;
 import cn.com.smart.flow.bean.TaskBefore;
@@ -19,10 +22,6 @@ import cn.com.smart.flow.ext.ExtTaskModel;
 import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.web.dao.impl.PositionDao;
 import cn.com.smart.web.dao.impl.UserDao;
-
-import com.mixsmart.enums.YesNoType;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 部门过滤决策

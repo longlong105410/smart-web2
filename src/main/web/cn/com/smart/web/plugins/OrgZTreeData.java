@@ -1,6 +1,6 @@
 package cn.com.smart.web.plugins;
 
-import cn.com.smart.utils.StringUtil;
+import com.mixsmart.utils.StringUtils;
 
 /**
  *  ZTree插件---组织机构树形数据结构类
@@ -20,7 +20,7 @@ public class OrgZTreeData extends ZTreeData {
 	@Override
 	public Boolean getNocheck() {
 		nocheck = true;
-		if(StringUtil.isEmpty(checkFlag) || checkFlag.equals(flag)) {
+		if(StringUtils.isEmpty(checkFlag) || checkFlag.equals(flag)) {
 			nocheck = false;
 		} 
 		return super.getNocheck();

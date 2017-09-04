@@ -47,9 +47,9 @@ public class FlowPageModelController extends BaseController {
 		SmartResponse<Object> smartResp = opServ.getDatas("page_model_mgr_list",params, page.getStartNum(), page.getPageSize());
 		params = null;
 		String uri = "flow/page/model/list";
-		addBtn = new EditBtn("add","showPage/flow_page_model_add", null, "添加页面模版", "600");
+		addBtn = new EditBtn("add","showPage/flow_page_model_add", "添加页面模版", "600");
 		editBtn = new EditBtn("edit","showPage/flow_page_model_edit", "flowPageModel", "修改页面模版", "600");
-		delBtn = new DelBtn("op/del", "flowPageModel", "确定要删除选中的页面模版吗？",uri,null, null);
+		delBtn = new DelBtn("flow/page/model/delete", "确定要删除选中的页面模版吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
@@ -60,10 +60,6 @@ public class FlowPageModelController extends BaseController {
 		modelMap.put("delBtn", delBtn);
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
-		
-		addBtn = null;editBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
-		
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
 	}
@@ -87,6 +83,12 @@ public class FlowPageModelController extends BaseController {
 		}
 		return smartResp;
 	}
+	
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> delete(String id) {
+        return pageModelServ.delete(id);
+    }
 	
 	@RequestMapping("/item")
 	public @ResponseBody SmartResponse<Object> item() throws Exception {

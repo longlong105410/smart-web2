@@ -30,31 +30,33 @@ public class RoleOrgDao extends BaseDaoImpl<TNRoleOrg>{
 	@Override
 	public boolean delete(Map<String, Object> param) throws DaoException {
 		boolean is = false;
-		if(null != param && param.size()>0) {
-			String flag = StringUtils.handNull(param.get("flag"));
-			String delSql = null;
-			if(StringUtils.isEmpty(flag)) {
-				delSql = sqlMap.getSQL("del_role_org");
-				
-			} else {
-				param.remove("flag");
-				if("o".equals(flag)) {
-					delSql = sqlMap.getSQL("del_org_role");
-				}
+		if(null == param || param.size() == 0) {
+		    return is;
+		}
+ 		String flag = StringUtils.handNull(param.get("flag"));
+		String delSql = null;
+		if(StringUtils.isEmpty(flag)) {
+		    //删除角色中的组织机构
+			delSql = sqlMap.getSQL("del_role_org");
+		} else {
+		    //删除组织机构中的角色
+			param.remove("flag");
+			if("o".equals(flag)) {
+				delSql = sqlMap.getSQL("del_org_role");
 			}
-			if(StringUtils.isNotEmpty(delSql)) {
-				//判断处理是否有逗号分割的多条数据组合
-				for (String key : param.keySet()) {
-					if(!param.get(key).getClass().isArray()) {
-						String value = StringUtils.handNull(param.get(key));
-						if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
-							String[] values = value.split(",");
-							param.put(key, values);
-						}
+		}
+		if(StringUtils.isNotEmpty(delSql)) {
+			//判断处理是否有逗号分割的多条数据组合
+			for (String key : param.keySet()) {
+				if(!param.get(key).getClass().isArray()) {
+					String value = StringUtils.handNull(param.get(key));
+					if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
+						String[] values = value.split(",");
+						param.put(key, values);
 					}
 				}
-				is = executeSql(delSql, param)>0?true:false;
 			}
+			is = executeSql(delSql, param)>0?true:false;
 		}
 		param = null;
 		return is;

@@ -10,13 +10,12 @@ import java.util.Map;
  * 2015年8月22日
  */
 public interface IFilterParam {
-
-	/**
-	 * 参数边字符串
-	 * @param varName
-	 * @return String
-	 */
-	public String getParamToString(String varName);
+    
+    /**
+     * 参数对象转换为字符串参数
+     * @return
+     */
+    public String getParamToString();
 
 	/**
 	 * 转换为Map

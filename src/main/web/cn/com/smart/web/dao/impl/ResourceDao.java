@@ -9,14 +9,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.ArrayUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.filter.HandleFilterParam;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.ArrayUtil;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNOPAuth;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.dao.IResourceDao;
@@ -29,11 +30,6 @@ import cn.com.smart.web.dao.IResourceDao;
 @Repository("resourceDao")
 public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6009211225555208446L;
-	
 	@Autowired
 	private MenuDao menuDao;
 	
@@ -50,10 +46,10 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
 		boolean is = false;
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			String[] ids = id.toString().split(",");
 			String sqls = sqlMap.getSQL("del_resource");
-			if(!StringUtil.isEmpty(sqls)) {
+			if(StringUtils.isNotEmpty(sqls)) {
 				String[] sqlArray = sqls.split(";");
 				params = new HashMap<String, Object>(1);
 				params.put("resourceIds", ids);
@@ -69,10 +65,8 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 				//删除菜单
 				List<Object> menuIds = menuDao.queryMenuIdByResourceId(ids);
 				if(null != menuIds && menuIds.size()>0) 
-					menuDao.delete(ArrayUtil.arrayToString(menuIds.toArray(), ","));
-				menuIds = null;
+					menuDao.delete(ArrayUtils.arrayToString(menuIds.toArray(), ","));
 			}
-			ids = null;
 		}
 		return is;
 	}
@@ -88,10 +82,9 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 		List<Object> lists = null;
 		params = new HandleFilterParam(searchParam).getParams();
 		String sql = sqlMap.getSQL("res_mgr_list");
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			lists = queryObjSql(sql, params, start, rows);
 		}
-		searchParam = null;
 		return lists;
 	}
 	
@@ -106,10 +99,9 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 		long total = 0;
 		params = new HandleFilterParam(searchParam).getParams();
 		String sql = sqlMap.getSQL("res_mgr_list");
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			total = countSql(sql, params);
 		}
-		searchParam = null;
 		return total;
 	}
 	
@@ -129,17 +121,17 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 			if(null != lists && lists.size()>0) {
 				for (TNResource res : lists) {
 					isDel = false;
-					if(!StringUtil.isEmpty(res.getOpAuths())) {
+					if(StringUtils.isNotEmpty(res.getOpAuths())) {
 						for (int i = 0; i < values.length; i++) {
-							if(!StringUtil.isEmpty(res.getOpAuths()) 
-									&& ArrayUtil.isArrayContains(res.getOpAuths(), values[i], ",")) {
+							if(StringUtils.isNotEmpty(res.getOpAuths()) 
+									&& ArrayUtils.isArrayContains(res.getOpAuths(), values[i], ",")) {
 								regex = ","+values[i]+",|"+values[i]+",|,"+values[i];
 								res.setOpAuths(res.getOpAuths().replaceAll(regex, ""));
 								isDel = true;
 							}
 						}//for
 						if(isDel) {
-							if(!StringUtil.isEmpty(res.getOpAuths())) {
+							if(StringUtils.isNotEmpty(res.getOpAuths())) {
 							   res.setOpAuths(res.getOpAuths().replaceAll(",,", ""));
 							   if(res.getOpAuths().length()>0 && res.getOpAuths().lastIndexOf(",")>-1)
 							      res.setOpAuths(res.getOpAuths().substring(0,res.getOpAuths().length()-1));
@@ -152,7 +144,6 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 			if(updateList.size()>0) {
 				is = update(updateList);
 			}
-			updateList = null;
 		}
 		return is;
 	}
@@ -165,13 +156,13 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 	 */
 	public boolean updateAuth(String srcValue,String desValue) throws DaoException  {
 		boolean is = false;
-		if(!StringUtil.isEmpty(srcValue) && !StringUtil.isEmpty(desValue)) {
+		if(StringUtils.isNotEmpty(srcValue) && StringUtils.isNotEmpty(desValue)) {
 			List<TNResource> lists = findAll();
 			List<TNResource> updateList = new ArrayList<TNResource>();
 			if(null != lists && lists.size()>0) {
 				for (TNResource res : lists) {
-					if(!StringUtil.isEmpty(res.getOpAuths())) {
-						if(ArrayUtil.isArrayContains(res.getOpAuths(), srcValue, ",")) {
+					if(StringUtils.isNotEmpty(res.getOpAuths())) {
+						if(ArrayUtils.isArrayContains(res.getOpAuths(), srcValue, ",")) {
 						 	res.setOpAuths(res.getOpAuths().replaceAll(srcValue+",", desValue+","));
 						 	updateList.add(res);
 						}
@@ -181,7 +172,6 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 			if(updateList.size()>0) {
 				is = update(updateList);
 			}
-			updateList = null;
 		}
 		return is;
 	}
@@ -196,7 +186,7 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 			String[] authValueArray = null;
 			List<TNOPAuth> auths = null;
 			for (TNResource res : lists) {
-				if(!StringUtil.isEmpty(res.getOpAuths())) {
+				if(StringUtils.isNotEmpty(res.getOpAuths())) {
 					authValueArray = res.getOpAuths().split(",");
 					auths = opAuthDao.queryAuths(authValueArray);
 					if(null != auths && auths.size()>0) {
@@ -204,10 +194,7 @@ public class ResourceDao extends BaseDaoImpl<TNResource> implements IResourceDao
 					}
 				}//if
 			}//for
-			authValueArray = null;
-			auths = null;
 		}
-		params = null;
 		return lists;
 	}
 }

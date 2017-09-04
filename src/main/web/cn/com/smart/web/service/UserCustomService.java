@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNCusIndexMinWin;
 import cn.com.smart.web.bean.entity.TNCustomIndex;
 import cn.com.smart.web.bean.entity.TNMinWindow;
@@ -84,7 +85,7 @@ public class UserCustomService extends MgrServiceImpl<TNCustomIndex> {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
 			if(null != cusIndex) {
-				if(!StringUtil.isEmpty(cusIndex.getId())) {
+				if(StringUtils.isNotEmpty(cusIndex.getId())) {
 					cusIndexDao.delete(cusIndex.getId());
 				}
 				smartResp = super.save(cusIndex);

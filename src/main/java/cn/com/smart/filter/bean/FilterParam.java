@@ -62,41 +62,6 @@ public class FilterParam implements IFilterParam {
 	public void setState(String state) {
 		this.state = state;
 	}
-
-	/**
-	 * 参数转化为字符串 
-	 * @see FilterParam#getParamToString()
-	 * @param varName
-	 * @return 返回转化结果
-	 */
-	@Deprecated
-	public String getParamToString(String varName) {
-		StringBuilder paramBuff = new StringBuilder();
-		varName = StringUtils.handNull(varName);
-		if(StringUtils.isNotEmpty(varName)) {
-			varName +=".";
-		}
-		if(StringUtils.isNotEmpty(id)) {
-			paramBuff.append(varName+"id="+id);
-		}
-		if(StringUtils.isNotEmpty(name)) {
-			paramBuff.append("&"+varName+"name="+name);
-		}
-		if(StringUtils.isNotEmpty(state)) {
-			paramBuff.append("&"+varName+"state="+state);
-		}
-		if(StringUtils.isNotEmpty(type)) {
-			paramBuff.append("&"+varName+"type="+type);
-		}
-		if(StringUtils.isNotEmpty(orgId)) {
-			paramBuff.append("&"+varName+"orgId="+orgId);
-		}
-		String paramStr = paramBuff.toString();
-		if(StringUtils.isNotEmpty(paramStr) && paramStr.startsWith("&")) {
-			paramStr = paramStr.substring(1);
-		}
-		return paramStr;
-	}
 	
 	/**
 	 * 参数转化为字符串

@@ -49,9 +49,9 @@ public class FlowResourceController extends BaseFlowControler {
 		SmartResponse<Object> smartResp = opServ.getDatas("flow_resource_mgr_list",params, page.getStartNum(), page.getPageSize());
 		params = null;
 		String uri = "flow/resource/list";
-		addBtn = new EditBtn("add","showPage/flow_resource_add", null, "添加流程菜单资源", "600");
+		addBtn = new EditBtn("add","showPage/flow_resource_add", "添加流程菜单资源", "600");
 		editBtn = new EditBtn("edit","showPage/flow_resource_edit", "resource", "修改流程菜单资源", "600");
-		delBtn = new DelBtn("op/del.json", "resource", "确定要删除选中的流程菜单资源吗？",uri,null, null);
+		delBtn = new DelBtn("resource/delete.json", "确定要删除选中的流程菜单资源吗？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, "resource",null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		
@@ -62,10 +62,6 @@ public class FlowResourceController extends BaseFlowControler {
 		modelMap.put("delBtn", delBtn);
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
-		
-		addBtn = null;editBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
-		
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
 	}

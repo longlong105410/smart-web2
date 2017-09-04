@@ -7,12 +7,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.helper.TreeHelper;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.dao.IMenuDao;
 
@@ -23,8 +24,6 @@ import cn.com.smart.web.dao.IMenuDao;
  */
 @Repository("menuDao")
 public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
-
-	private static final long serialVersionUID = 220294470621336821L;
 	
 	private SqlMapping sqlMap;
 	private Map<String,Object> params;
@@ -37,7 +36,7 @@ public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
 	public List<Object> queryObjAll() throws DaoException {
 		List<Object> objs = null;
 		String sql = sqlMap.getSQL("menu_mgr_list");
-		if(!StringUtil.isEmpty(sql)) {
+		if(StringUtils.isNotEmpty(sql)) {
 			objs = queryObjSql(sql);
 		} else {
 			throw new DaoException("[menu_mgr_list]值为空");
@@ -49,7 +48,7 @@ public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
 	public List<TNMenu> getValidAll() throws DaoException {
 		List<TNMenu> menus = null;
 		String hql = sqlMap.getSQL("valid_menu");
-		if(!StringUtil.isEmpty(hql)) {
+		if(StringUtils.isNotEmpty(hql)) {
 			menus = queryHql(hql);
 		} else {
 			throw new DaoException("[valid_menu]值为空");
@@ -61,7 +60,7 @@ public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
 		boolean is = false;
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			List<TNMenu> lists = findAll();
 			String[] ids = id.toString().split(",");
 			for(String idTmp : ids) {
@@ -89,9 +88,9 @@ public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
 						listTmps = null;
 						tmp = null;
 					}
-					if(!StringUtil.isEmpty(delIds)) {
+					if(StringUtils.isNotEmpty(delIds)) {
 						String sqls = sqlMap.getSQL("del_menu");
-						if(!StringUtil.isEmpty(sqls)) {
+						if(StringUtils.isNotEmpty(sqls)) {
 							String[] sqlDelArray = sqls.split(";");
 							params = new HashMap<String, Object>(1);
 							String[] delIdArray = delIds.split(",");
@@ -117,7 +116,7 @@ public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
 		List<TNMenu> menus = null;
 		if(null != roleIds && roleIds.size()>0) {
 			String hql = sqlMap.getSQL("menu_by_role");
-			if(!StringUtil.isEmpty(hql)) {
+			if(StringUtils.isNotEmpty(hql)) {
 				params = new HashMap<String, Object>(1);
 				params.put("roleIds", roleIds.toArray());
 				menus = queryHql(hql, params);
@@ -135,7 +134,7 @@ public class MenuDao extends BaseDaoImpl<TNMenu> implements IMenuDao {
 		List<Object> ids = null;
 		if(null != resourceIds && resourceIds.length>0) {
 			String sql = sqlMap.getSQL("query_menuid_by_resid");
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				params = new HashMap<String, Object>(1);
 				params.put("resourceIds", resourceIds);
 				ids = queryObjSql(sql, params);

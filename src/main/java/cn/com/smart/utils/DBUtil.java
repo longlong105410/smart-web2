@@ -2,9 +2,9 @@ package cn.com.smart.utils;
 
 import org.hibernate.internal.SessionFactoryImpl;
 
-import cn.com.smart.web.spring.util.SpringBeanFactoryUtil;
-
 import com.mixsmart.utils.StringUtils;
+
+import cn.com.smart.service.SmartContextService;
 
 /**
  * 数据库工具类
@@ -77,7 +77,8 @@ public class DBUtil {
 	public static boolean isDB(String dbname) {
 		boolean is = false;
 		if(StringUtils.isNotEmpty(dbname)) {
-			SessionFactoryImpl sessionFactory = (SessionFactoryImpl)SpringBeanFactoryUtil.getInstance().getBean("sessionFactory");
+			//SessionFactoryImpl sessionFactory = (SessionFactoryImpl)SpringBeanFactoryUtil.getInstance().getBean("sessionFactory");
+			SessionFactoryImpl sessionFactory = (SessionFactoryImpl)SmartContextService.findByName("sessionFactory");
 			if(null != sessionFactory) {
 				String dialect = sessionFactory.getDialect().toString();
 				dialect = dialect.substring(dialect.lastIndexOf(".")+1, dialect.length());

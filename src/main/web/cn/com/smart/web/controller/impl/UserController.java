@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.entity.TNUser;
@@ -20,7 +22,6 @@ import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.constant.enums.SelectedEventType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.UserService;
@@ -30,8 +31,6 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 用户
@@ -54,7 +53,7 @@ public class UserController extends BaseController {
 		String uri = "user/list"; 
 		addBtn = new EditBtn("add","showPage/base_user_add", null, "添加用户", "600");
 		editBtn = new EditBtn("edit","showPage/base_user_edit", "user", "修改用户信息", "600");
-		delBtn = new DelBtn("op/del.json", "user", "确定要删除选中的用户吗？",uri,null, null);
+		delBtn = new DelBtn("user/delete", "确定要删除选中的用户吗？",uri,null, null);
 		
 		refreshBtn = new RefreshBtn(uri, "resource",null);
 		CustomBtn customBtn = new CustomBtn("changepwd", "修改密码", "修改密码", "showPage/base_user_batchChangePwd","glyphicon-pencil",BtnPropType.SelectType.MULTI.getValue());
@@ -78,10 +77,6 @@ public class UserController extends BaseController {
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("customBtns", customBtns);
-		
-		addBtn = null;editBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
-		
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
 	}
@@ -104,6 +99,16 @@ public class UserController extends BaseController {
 		return smartResp;
 	}
 	
+	/**
+	 * 删除用户信息
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public SmartResponse<String> delete(String id) {
+	    return userServ.delete(id);
+	}
 	
 	/**
 	 * 安全退出
@@ -114,13 +119,6 @@ public class UserController extends BaseController {
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session,ModelAndView model) {
 		 // 清除session
-		/*Enumeration<String> names = session.getAttributeNames();
-		session.removeAttribute(SESSION_USER_KEY);
-		if(null != names) {
-			while(names.hasMoreElements()) {
-				session.removeAttribute(names.nextElement());
-			}
-		}*/
 		session.invalidate();
 		RedirectView view =  new RedirectView("/login", true, true, false);
 		model.setView(view);
@@ -223,8 +221,8 @@ public class UserController extends BaseController {
 		SmartResponse<Object> smartResp = opServ.getDatas("user_role_list",searchParam, page.getStartNum(), page.getPageSize());
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
-		addBtn = new EditBtn("add","user/addRole?id="+searchParam.getId(), null, "用户中添加角色", "600");
-		delBtn = new DelBtn("op/moreParamDel.json?flag=u&userId="+searchParam.getId(), "roleUser", "确定要从该用户中删除选中的角色吗？",uri,"#user-role-tab", null);
+		addBtn = new EditBtn("add","user/addRole?id="+searchParam.getId(), "用户中添加角色", "600");
+		delBtn = new DelBtn("user/deleteRole?userId="+searchParam.getId(), "确定要从该用户中删除选中的角色吗？",uri,"#user-role-tab", null);
 		refreshBtn = new RefreshBtn(uri, null,"#user-role-tab");
 		
 		ModelMap modelMap = modelView.getModelMap();
@@ -238,6 +236,18 @@ public class UserController extends BaseController {
 		
 		modelView.setViewName(VIEW_DIR+"/rolelist");
 		return modelView;
+	}
+	
+	/**
+	 * 从用户角色列表中删除角色
+	 * @param userId 用户ID
+	 * @param id 角色ID
+	 * @return
+	 */
+	@RequestMapping(value="/deleteRole", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public SmartResponse<String> deleteRole(String userId, String id) {
+	    return userServ.deleteRole(userId, id);
 	}
 	
 	/**

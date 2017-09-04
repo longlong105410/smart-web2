@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.web.bean.RequestPage;
@@ -20,7 +22,6 @@ import cn.com.smart.web.bean.entity.TNPosition;
 import cn.com.smart.web.constant.enums.SelectedEventType;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.OrgPositionZTreeData;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.PositionService;
@@ -29,8 +30,6 @@ import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 import cn.com.smart.web.tag.bean.SelectedEventProp;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 岗位
@@ -48,6 +47,15 @@ public class PositionController extends BaseController {
 	@Autowired
 	private OPService opServ;
 	
+	/**
+	 * 职位列表
+	 * @param session
+	 * @param modelView
+	 * @param orgId
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/list")
 	public ModelAndView list(HttpSession session,ModelAndView modelView,String orgId,RequestPage page) throws Exception {
 		Map<String,Object> params = null;
@@ -62,7 +70,7 @@ public class PositionController extends BaseController {
 		String uri = "position/list?orgId="+StringUtils.handNull(orgId);
 		addBtn = new EditBtn("add","showPage/base_position_add?id="+StringUtils.handNull(orgId),null, "添加职位", "600");
 		editBtn = new EditBtn("edit","showPage/base_position_edit", "position", "修改职位", "600");
-		delBtn = new DelBtn("op/del", "position", "确定要删除选中的职位吗？",uri,"#position-list", null);
+		delBtn = new DelBtn("position/delete", "确定要删除选中的职位吗？",uri,"#position-list", null);
 		refreshBtn = new RefreshBtn(uri, "position","#position-list");
 		pageParam = new PageParam(uri, "#position-list", page.getPage(), page.getPageSize());
 		
@@ -73,15 +81,16 @@ public class PositionController extends BaseController {
 		modelMap.put("delBtn", delBtn);
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
-		
-		addBtn = null;editBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
-		
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
 	}
 	
-	
+	/**
+	 * 添加职位
+	 * @param position
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> add(TNPosition position) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
@@ -91,6 +100,12 @@ public class PositionController extends BaseController {
 		return smartResp;
 	}
 	
+	/**
+	 * 修改职位信息
+	 * @param position
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/edit",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> edit(TNPosition position) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
@@ -100,9 +115,28 @@ public class PositionController extends BaseController {
 		return smartResp;
 	}
 	
+	/**
+	 * 删除职位
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public SmartResponse<String> delete(String id) {
+	    return posServ.delete(id);
+	}
+	
+	/**
+	 * 职位简单列表
+	 * @param session
+	 * @param searchParam
+	 * @param modelView
+	 * @param page
+	 * @return
+	 */
 	@RequestMapping("/simplist")
 	public ModelAndView simplist(HttpSession session,UserSearchParam searchParam,
-    		ModelAndView modelView,RequestPage page) throws Exception {
+    		ModelAndView modelView,RequestPage page) {
 		String uri = "position/simplist";
 		searchParam.setOrgIds(StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		SmartResponse<Object> smartResp = opServ.getDatas("position_simp_list",searchParam, page.getStartNum(), page.getPageSize());
@@ -114,7 +148,6 @@ public class PositionController extends BaseController {
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("searchParam", searchParam);
 		modelMap.put("selectedEventProp", selectedEventProp);
-		pageParam = null;
 		
 		modelView.setViewName(VIEW_DIR+"/simplist");
 		return modelView;
@@ -133,8 +166,8 @@ public class PositionController extends BaseController {
 		SmartResponse<Object> smartResp = opServ.getDatas("position_role_list",searchParam, page.getStartNum(), page.getPageSize());
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();	
-		addBtn = new EditBtn("add","position/addRole?id="+searchParam.getId(), null, "该岗位中添加角色", "600");
-		delBtn = new DelBtn("op/moreParamDel?flag=p&positionId="+searchParam.getId(), "rolePosition", "确定要从该岗位中删除选中的角色吗？",uri,"#position-role-tab", null);
+		addBtn = new EditBtn("add","position/addRole?id="+searchParam.getId(), "该职位中添加角色", "600");
+		delBtn = new DelBtn("position/deleteRole?positionId="+searchParam.getId(), "确定要从该职位中删除选中的角色吗？",uri,"#position-role-tab", null);
 		refreshBtn = new RefreshBtn(uri, null,"#position-role-tab");
 		
 		ModelMap modelMap = modelView.getModelMap();
@@ -144,7 +177,6 @@ public class PositionController extends BaseController {
 		modelMap.put("addBtn", addBtn);
 		modelMap.put("delBtn", delBtn);
 		modelMap.put("refreshBtn", refreshBtn);
-		pageParam = null;
 		
 		modelView.setViewName(VIEW_DIR+"/rolelist");
 		return modelView;
@@ -152,7 +184,7 @@ public class PositionController extends BaseController {
 	
 	
 	/**
-	 * 
+	 * 职位中添加角色（视图）
 	 * @return
 	 * @throws Exception
 	 */
@@ -171,6 +203,13 @@ public class PositionController extends BaseController {
 		return modelView;
 	}
 	
+	/**
+	 * 职位中添加角色
+	 * @param submitDatas
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/saveRole",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> saveUser(String submitDatas,String id) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
@@ -181,9 +220,26 @@ public class PositionController extends BaseController {
 		return smartResp;
 	}
 	
-	
+	/**
+	 * 菜单树
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/orgTree")
 	public @ResponseBody SmartResponse<OrgPositionZTreeData> orgTree(HttpSession session) throws Exception {
 		return posServ.getOrgPositionZTree(getUserInfoFromSession(session).getOrgIds());
 	}
+	
+	/**
+     * 从职位中删除角色
+     * @param positionId 职位ID
+     * @param id 角色ID
+     * @return 返回操作结果
+     */
+    @RequestMapping(value="/deleteRole", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> deleteRole(String positionId, String id) {
+        return posServ.deleteRole(positionId, id);
+    }
 }

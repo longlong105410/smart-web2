@@ -3,9 +3,12 @@ package cn.com.smart.web.service;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
@@ -15,10 +18,6 @@ import cn.com.smart.service.impl.MgrServiceImpl;
 import cn.com.smart.web.bean.entity.TNDict;
 import cn.com.smart.web.cache.impl.DictMemoryCache;
 import cn.com.smart.web.dao.impl.DictDao;
-
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.LoggerUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 

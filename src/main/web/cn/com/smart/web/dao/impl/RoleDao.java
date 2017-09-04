@@ -7,12 +7,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.constant.IConstant;
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNRole;
 
 /**
@@ -22,8 +23,6 @@ import cn.com.smart.web.bean.entity.TNRole;
  */
 @Repository("roleDao")
 public class RoleDao extends BaseDaoImpl<TNRole>{
-
-	private static final long serialVersionUID = -2992875662173275736L;
 	
 	private SqlMapping sqlMap;
 	private Map<String,Object> params;
@@ -45,43 +44,28 @@ public class RoleDao extends BaseDaoImpl<TNRole>{
 		if(null != lists && lists.size()>0 && lists.size()==1) {
 			role = lists.get(0);
 		}
-		lists = null;
-		return role;
-	}
-	
-	public TNRole findLink(String id) throws DaoException {
-		TNRole role = null;
-		if(!StringUtil.isEmpty(id)) {
-			role = find(id);
-			if(null != role) {
-				
-			}
-		}
 		return role;
 	}
 
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
 		boolean is = false;
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			String[] ids = id.toString().split(",");
 			if(!isContainsSuperAdminRole(ids)) {
 				String sqls = sqlMap.getSQL("del_role");
-				if(!StringUtil.isEmpty(sqls)) {
+				if(StringUtils.isNotEmpty(sqls)) {
 					params = new HashMap<String, Object>(1);
 					params.put("roleIds", ids);
 					String[] sqlDelArray = sqls.split(";");
 					for (int i = 0; i < sqlDelArray.length; i++) {
 						executeSql(sqlDelArray[i],params);
 					}
-					sqlDelArray = null;
-					params = null;
 					is = true;
 				}
 			} else {
 				log.error("删除的角色中含有超级管理员角色，超级管理员角色不能删除！");
 			}
-			ids = null;
 		}
 		return is;
 	}

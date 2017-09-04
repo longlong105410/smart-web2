@@ -16,15 +16,14 @@ import org.snaker.engine.model.TaskModel.PerformType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.com.smart.flow.ITaskSubmitBeforeAware;
-import cn.com.smart.flow.SnakerEngineFacets;
-import cn.com.smart.flow.bean.TaskBefore;
-import cn.com.smart.flow.dao.FlowFormDao;
-import cn.com.smart.service.SmartContextService;
-
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
+
+import cn.com.smart.flow.ITaskSubmitBeforeAware;
+import cn.com.smart.flow.SnakerEngineFacets;
+import cn.com.smart.flow.bean.TaskBefore;
+import cn.com.smart.service.SmartContextService;
 
 /**
  * 驳回判断
@@ -38,8 +37,6 @@ public class BackDecide implements ITaskSubmitBeforeAware {
 	
 	@Autowired
 	private SnakerEngineFacets facet;
-	@Autowired
-	private FlowFormDao flowFormDao;
 	
 	@Override
 	public boolean taskExeBefore(TaskBefore taskBefore) {

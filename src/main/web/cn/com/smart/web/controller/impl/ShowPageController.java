@@ -60,7 +60,6 @@ public class ShowPageController extends BaseController {
 				modelMap.put("objBean", objBean);
 			}
 		}
-		
 		return modelView;
 	}
 	

@@ -27,8 +27,6 @@ import com.mixsmart.utils.StringUtils;
 public class DynamicFormManager {
 
 	@Autowired
-	private FormDao formDao;
-	@Autowired
 	private FormFieldDao formFieldDao;
 	
 	/**

@@ -6,12 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.helper.TreeHelper;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.bean.entity.TNRoleMenu;
 import cn.com.smart.web.dao.impl.MenuDao;
@@ -41,7 +42,7 @@ public class RoleMenuService extends MgrServiceImpl<TNRoleMenu> {
 	public SmartResponse<String> save(String roleId,String[] menuIds) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(roleId)) {
+			if(StringUtils.isNotEmpty(roleId)) {
 				if(roleMenuDao.delete(roleId)) {
 					smartResp.setResult(OP_SUCCESS);
 					smartResp.setMsg(OP_SUCCESS_MSG);
@@ -136,7 +137,7 @@ public class RoleMenuService extends MgrServiceImpl<TNRoleMenu> {
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
 		smartResp.setMsg(OP_NOT_DATA_SUCCESS_MSG);
 		try {
-			if(!StringUtil.isEmpty(roleId)) {
+			if(StringUtils.isNotEmpty(roleId)) {
 				List<TNMenu> menus = menuDao.findAll();
 				if(null != menus && menus.size()>0) {
 					List<TNRoleMenu> roleMenus = roleMenuDao.queryByRole(roleId);

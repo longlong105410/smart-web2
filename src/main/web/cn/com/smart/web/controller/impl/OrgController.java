@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNOrg;
 import cn.com.smart.web.controller.base.BaseController;
 import cn.com.smart.web.filter.bean.UserSearchParam;
-import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.OrgZTreeData;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.service.OrgService;
@@ -24,8 +25,6 @@ import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
-
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 组织机构
@@ -59,14 +58,12 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		modelMap.put("editBtn", editBtn);
 		modelMap.put("delBtn", delBtn);
 		modelMap.put("refreshBtn", refreshBtn);
-		addBtn = null;editBtn = null;delBtn = null;
-		refreshBtn = null;
 		modelView.setViewName(VIEW_DIR+"/list");
 		return modelView;
 	}
 	
 	/**
-	 * 
+	 * 添加组织架构
 	 * @param session
 	 * @param org
 	 * @return
@@ -111,8 +108,6 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		return smartResp;
 	}
 	
-	
-	
 	@RequestMapping("/tree")
 	public @ResponseBody SmartResponse<OrgZTreeData> tree(HttpSession session,String treeType) throws Exception {
 		return orgServ.getZTree(getUserInfoFromSession(session).getOrgIds(),treeType);
@@ -131,8 +126,8 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		SmartResponse<Object> smartResp = opServ.getDatas("org_role_list",searchParam, page.getStartNum(), page.getPageSize());
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		uri = uri+"?id="+searchParam.getId();
-		addBtn = new EditBtn("add","org/addRole?id="+searchParam.getId(), null, "该组织机构中添加角色", "600");
-		delBtn = new DelBtn("op/moreParamDel.json?flag=o&orgId="+searchParam.getId(), "roleOrg", "确定要从该组织机构中删除选中的角色吗？",uri,"#org-role-tab", null);
+		addBtn = new EditBtn("add","org/addRole?id="+searchParam.getId(), "该组织机构中添加角色", "600");
+		delBtn = new DelBtn("org/deleteRole?orgId="+searchParam.getId(), "确定要从该组织机构中删除选中的角色吗？",uri,"#org-role-tab", null);
 		refreshBtn = new RefreshBtn(uri, null,"#org-role-tab");
 		
 		ModelMap modelMap = modelView.getModelMap();
@@ -142,17 +137,31 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		modelMap.put("refreshBtn", refreshBtn);
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("searchParam", searchParam);
-		
-		addBtn = null;delBtn = null;
-		refreshBtn = null;pageParam = null;
-		
 		modelView.setViewName(VIEW_DIR+"/rolelist");
 		return modelView;
 	}
 	
-
+	/**
+	 * 从组织架构中删除角色
+	 * @param orgId 组织架构ID
+ 	 * @param id 角色ID
+	 * @return 返回操作结果
+	 */
+	@RequestMapping(value="/deleteRole", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public SmartResponse<String> deleteRole(String orgId, String id) {
+	    return orgServ.deleteRole(orgId, id);
+	}
+	
+	/**
+	 * 组织架构中添加角色（试图）
+	 * @param searchParam
+	 * @param modelView
+	 * @param page
+	 * @return
+	 */
 	@RequestMapping("/addRole")
-	public ModelAndView addRole(UserSearchParam searchParam,ModelAndView modelView,RequestPage page) throws Exception {
+	public ModelAndView addRole(UserSearchParam searchParam,ModelAndView modelView,RequestPage page) {
 		String uri = "org/addRole";
 		SmartResponse<Object> smartResp = opServ.getDatas("org_addrole_list",searchParam, page.getStartNum(), page.getPageSize());
 		String paramUri = uri += (null != searchParam)?("?"+searchParam.getParamToString()):"";
@@ -162,21 +171,24 @@ private static final String VIEW_DIR = WEB_BASE_VIEW_DIR+"/org";
 		modelMap.put("smartResp", smartResp);
 		modelMap.put("pageParam", pageParam);
 		modelMap.put("searchParam", searchParam);
-		pageParam = null;
 		modelView.setViewName(VIEW_DIR+"/addRole");
 		return modelView;
 		
 	}
 	
-	
+	/**
+	 * 组织架构中添加角色
+	 * @param id
+	 * @param submitDatas
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/saveRole",method=RequestMethod.POST)
 	public @ResponseBody SmartResponse<String> saveRole(String id,String submitDatas) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(StringUtils.isNotEmpty(submitDatas) && StringUtils.isNotEmpty(id)) {
 			String[] values = submitDatas.split(",");
 			smartResp = orgServ.addRole2Org(id, values);
-			values = null;
-			submitDatas = null;
 		}
 		return smartResp;
 	}

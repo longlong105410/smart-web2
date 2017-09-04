@@ -24,6 +24,13 @@ public class EditBtn extends BaseBtn {
 		this.width = width;
 	}
 	
+	public EditBtn(String id,String uri,String title,String width) {
+        this.id = id;
+        this.uri = uri;
+        this.title = title;
+        this.width = width;
+    }
+	
 	public EditBtn(String id,String uri,String busi,String title,String width,String btnStyle,String name) {
 		this.id = id;
 		this.uri = uri;

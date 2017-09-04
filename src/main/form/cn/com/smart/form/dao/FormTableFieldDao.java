@@ -7,13 +7,13 @@ import java.util.Map;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.form.bean.entity.TCreateTableField;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.web.bean.entity.TNDict;
-import cn.com.smart.web.dao.impl.RalteDictDaoImpl;
-
-import com.mixsmart.utils.StringUtils;
+import cn.com.smart.web.dao.impl.RelateDictDaoImpl;
 
 /**
  * @author lmq
@@ -23,12 +23,7 @@ import com.mixsmart.utils.StringUtils;
  *
  */
 @Repository("formTableFieldDao")
-public class FormTableFieldDao extends RalteDictDaoImpl<TCreateTableField>{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8374095278935807907L;
+public class FormTableFieldDao extends RelateDictDaoImpl<TCreateTableField>{
 
 	@Override
 	public void asgmtValueByDict(List<TCreateTableField> ts, List<TNDict> dicts) {

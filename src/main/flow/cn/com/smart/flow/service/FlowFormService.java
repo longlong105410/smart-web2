@@ -8,6 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
@@ -16,9 +20,9 @@ import cn.com.smart.flow.bean.QueryFormData;
 import cn.com.smart.flow.bean.SubmitFormData;
 import cn.com.smart.flow.bean.entity.TFlowForm;
 import cn.com.smart.flow.dao.FlowFormDao;
-import cn.com.smart.flow.form.FormDataBusi;
 import cn.com.smart.form.bean.entity.TFormField;
 import cn.com.smart.form.dao.FormFieldDao;
+import cn.com.smart.form.service.IFormDataService;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.service.impl.MgrServiceImpl;
 import cn.com.smart.utils.ObjectUtil;
@@ -26,10 +30,6 @@ import cn.com.smart.web.bean.entity.TNUser;
 import cn.com.smart.web.constant.IWebConstant;
 import cn.com.smart.web.plugins.OrgUserZTreeData;
 import cn.com.smart.web.service.UserService;
-
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.LoggerUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 流程表单
@@ -43,10 +43,11 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 
 	@Autowired
 	private FormFieldDao formFieldDao;
-	@Autowired
-	private FormDataBusi formDataBusi;
+	//private FormDataBusi formDataBusi;
 	@Autowired
 	private UserService userServ;
+	@Autowired
+	private IFormDataService formDataServ;
 	
 	/**
 	 * 获取表单数据
@@ -55,7 +56,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	 * @return
 	 */
 	public SmartResponse<QueryFormData> getFormData(String formId,String userId) {
-		return formDataBusi.getFormData(null, formId, userId);
+		return formDataServ.getFormData(null, formId, userId);
 	}
 	
 	/**
@@ -91,7 +92,8 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		try {
 			List<TFlowForm> flowForms = getDao().queryByField(params);
 			if(null != flowForms && flowForms.size()>0) {
-				smartResp = formDataBusi.getFormData(orderId, flowForms.get(0).getFormId(), null);
+			    formDataServ.getFormData(flowForms.get(0).getFormDataId(), flowForms.get(0).getFormId(), null);
+				//smartResp = formDataBusi.getFormData(orderId, flowForms.get(0).getFormId(), null);
 				QueryFormData formData = new QueryFormData();
 				formData.setName("formDataId");
 				formData.setValue(flowForms.get(0).getFormDataId());
@@ -117,7 +119,8 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	public String saveForm(Map<String,Object> datas,String formId,String userId,Integer formState) {
 		String id = null;
 		if(StringUtils.isNotEmpty(formId) && null != datas && datas.size()>0) {
-			id = formDataBusi.saveForm(datas, formId, userId, formState);
+			//id = formDataBusi.saveForm(datas, formId, userId, formState);
+			id = formDataServ.saveForm(datas, formId, userId, formState);
 		}
 		return id;
 	}
@@ -139,7 +142,8 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 	public boolean updateForm(Map<String,Object> datas,String formId,String formDataId,String userId,Integer formState) {
 		boolean is = false;
 		if(StringUtils.isNotEmpty(formId) && null != datas && datas.size()>0 && StringUtils.isNotEmpty(formDataId)) {
-			is = formDataBusi.updateForm(datas, formId, formDataId,userId, formState);
+			//is = formDataBusi.updateForm(datas, formId, formDataId,userId, formState);
+			is = formDataServ.updateForm(datas, formId, formDataId, userId, formState);
 		}
 		return is;
 	}

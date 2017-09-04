@@ -35,7 +35,6 @@ public class RoleUserDao extends BaseDaoImpl<TNRoleUser>{
 			String delSql = null;
 			if(StringUtils.isEmpty(flag)) {
 				delSql = sqlMap.getSQL("del_role_user");
-				
 			} else {
 				param.remove("flag");
 				if("u".equals(flag)) {

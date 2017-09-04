@@ -3,7 +3,9 @@ package cn.com.smart.web.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -331,6 +333,28 @@ public class OrgService extends MgrServiceImpl<TNOrg> {
 		return smartResp;
 	}
 	
+	/**
+	 * 从组织结构中删除角色
+	 * @param orgId
+	 * @param id
+	 * @return
+	 */
+	public SmartResponse<String> deleteRole(String orgId, String id) {
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+	    smartResp.setMsg("删除失败");
+	    if(StringUtils.isEmpty(orgId) || StringUtils.isEmpty(id)) {
+	        return smartResp;
+	    }
+	    Map<String,Object> param = new HashMap<String, Object>(3);
+	    param.put("orgId", orgId);
+	    param.put("id", id);
+	    param.put("flag", "o");
+	    if(roleOrgDao.delete(param)) {
+	        smartResp.setResult(OP_SUCCESS);
+	        smartResp.setMsg("删除成功");
+	    }
+	    return smartResp;
+	}
 	
 	/**
 	 * 组织机构中添加角色

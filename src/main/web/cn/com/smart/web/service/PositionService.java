@@ -207,14 +207,34 @@ public class PositionService extends MgrServiceImpl<TNPosition> {
 						smartResp.setMsg(OP_SUCCESS_MSG);
 						smartResp.setDatas(ztreeDatas);
 					}
-					ztreeDatas = null;
 				}
 			} catch (DaoException e) {
 				throw new ServiceException(e);
-			} finally {
-				orgIdArray = null;
 			}
 		}
 		return smartResp;
 	}
+	
+	/**
+     * 从职位中删除角色
+     * @param positionId
+     * @param id
+     * @return
+     */
+    public SmartResponse<String> deleteRole(String positionId, String id) {
+        SmartResponse<String> smartResp = new SmartResponse<String>();
+        smartResp.setMsg("删除失败");
+        if(StringUtils.isEmpty(positionId) || StringUtils.isEmpty(id)) {
+            return smartResp;
+        }
+        Map<String,Object> param = new HashMap<String, Object>(3);
+        param.put("positionId", positionId);
+        param.put("id", id);
+        param.put("flag", "p");
+        if(rolePosDao.delete(param)) {
+            smartResp.setResult(OP_SUCCESS);
+            smartResp.setMsg("删除成功");
+        }
+        return smartResp;
+    }
 }

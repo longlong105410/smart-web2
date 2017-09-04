@@ -7,12 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.flow.bean.entity.TFlowForm;
 import cn.com.smart.flow.bean.entity.TFlowProcess;
 import cn.com.smart.form.bean.entity.TForm;
-import cn.com.smart.utils.StringUtil;
 
 /**
  * 流程处理DAO
@@ -22,7 +23,6 @@ import cn.com.smart.utils.StringUtil;
 @Repository
 public class FlowProcessDao extends BaseDaoImpl<TFlowProcess> {
 
-	private static final long serialVersionUID = 4690717943266613643L;
 	
 	@Autowired
 	private FlowFormDao flowFormDao;
@@ -57,7 +57,7 @@ public class FlowProcessDao extends BaseDaoImpl<TFlowProcess> {
 	 */
 	public TFlowProcess findByProcessId(String processId) throws DaoException {
 		TFlowProcess flowProcess = null;
-		if(!StringUtil.isEmpty(processId)) {
+		if(StringUtils.isNotEmpty(processId)) {
 			Map<String,Object> param = new HashMap<String, Object>(1);
 			param.put("processId", processId);
 			List<TFlowProcess> lists = queryByField(param);
@@ -78,7 +78,7 @@ public class FlowProcessDao extends BaseDaoImpl<TFlowProcess> {
 	 */
 	public TForm getFormByProcessId(String processId) throws Exception {
 		TForm form = null;
-		if(!StringUtil.isEmpty(processId)) {
+		if(StringUtils.isNotEmpty(processId)) {
 			String hql = "from "+TForm.class.getName()+" t where t.id=(select tl.formId from "+
 		    TFlowProcess.class.getName()+" tl where tl.processId=:processId)";
 			Map<String,Object> param = new HashMap<String, Object>(1);

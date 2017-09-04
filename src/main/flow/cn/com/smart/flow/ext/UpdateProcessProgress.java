@@ -5,25 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.com.smart.flow.service.FlowFormService;
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.LoggerUtils;
-import com.mixsmart.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.LoggerUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.flow.IProcessExecuteAware;
-import cn.com.smart.flow.SnakerEngineFacets;
 import cn.com.smart.flow.bean.SubmitFormData;
-import cn.com.smart.flow.bean.entity.TFlowForm;
 import cn.com.smart.flow.bean.entity.TFlowProcess;
-import cn.com.smart.flow.dao.FlowFormDao;
 import cn.com.smart.flow.dao.FlowProcessDao;
 import cn.com.smart.flow.helper.ProcessHelper;
-import cn.com.smart.utils.ListUtil;
-import cn.com.smart.utils.StringUtil;
+import cn.com.smart.flow.service.FlowFormService;
 
 /**
  * 更新流程进度
@@ -41,8 +37,6 @@ public class UpdateProcessProgress implements IProcessExecuteAware {
 	private FlowFormService flowFormServ;
 	@Autowired
 	private FlowProcessDao flowProcessDao;
-	@Autowired
-	private SnakerEngineFacets facet;
 	
 	@Override
 	public void taskExeAfter(SubmitFormData formData, String userId,String orgId) {
@@ -84,7 +78,7 @@ public class UpdateProcessProgress implements IProcessExecuteAware {
 	 */
 	private int countCurrentPosition(String nodeCollection,String currentNodeName) {
 		int count = 0;
-		if(StringUtil.isNotEmpty(nodeCollection) && StringUtil.isNotEmpty(currentNodeName)) {
+		if(StringUtils.isNotEmpty(nodeCollection) && StringUtils.isNotEmpty(currentNodeName)) {
 			String[] nodes = ProcessHelper.nodeStrToArray(nodeCollection);
 			if(null != nodes && nodes.length>0) {
 				for (int i = 0; i < nodes.length; i++) {

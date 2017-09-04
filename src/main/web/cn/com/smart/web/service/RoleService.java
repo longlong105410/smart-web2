@@ -2,17 +2,20 @@ package cn.com.smart.web.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.bean.TreeProp;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.bean.entity.TNResource;
 import cn.com.smart.web.bean.entity.TNRole;
@@ -72,7 +75,7 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 		try {
 			if(null != role) {
 				Serializable id = roleDao.save(role);
-				if(null != id && !StringUtil.isEmpty(id.toString())) {
+				if(null != id && StringUtils.isNotEmpty(id.toString())) {
 					boolean is = true;
 					boolean isMenu = true;
 					boolean isRes = true;
@@ -99,7 +102,6 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 					  	}
 					  	resources = null;
 					}
-					menuIds = null;
 					if(is && isMenu && isRes) {
 						smartResp.setResult(OP_SUCCESS);
 						smartResp.setMsg(OP_SUCCESS_MSG);
@@ -107,7 +109,6 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 						roleMenuCache.refreshCache();
 					}
 				} 
-				menuIds = null;
 			}
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
@@ -161,7 +162,6 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 						roleMenuCache.refreshCache();
 					}
 				} 
-				menuIds = null;
 			}
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
@@ -179,7 +179,7 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 	public SmartResponse<String> delete(String id) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		smartResp.setMsg("角色删除失败");
-		if(!StringUtil.isEmpty(id)) {
+		if(StringUtils.isNotEmpty(id)) {
 			if(roleDao.delete(id)) {
 				smartResp.setResult(OP_SUCCESS);
 				smartResp.setMsg("角色删除成功");
@@ -201,7 +201,7 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 	public SmartResponse<String> addUser2Role(String roleId,String[] userIds) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(roleId) && null != userIds && userIds.length>0) {
+			if(StringUtils.isNotEmpty(roleId) && null != userIds && userIds.length>0) {
 				if(!roleUserDao.isUserInRoleExist(roleId, userIds)) {
 					List<TNRoleUser> roleUsers = new ArrayList<TNRoleUser>();
 					TNRoleUser roleUser = null;
@@ -243,7 +243,7 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 	public SmartResponse<String> addOrg2Role(String roleId,String[] orgIds) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(roleId) && null != orgIds && orgIds.length>0) {
+			if(StringUtils.isNotEmpty(roleId) && null != orgIds && orgIds.length>0) {
 				if(!roleOrgDao.isOrgInRoleExist(roleId, orgIds)) {
 					List<TNRoleOrg> roleOrgs = new ArrayList<TNRoleOrg>();
 					TNRoleOrg roleOrg = null;
@@ -286,7 +286,7 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 	public SmartResponse<String> addPosition2Role(String roleId,String[] positionIds) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(roleId) && null != positionIds && positionIds.length>0) {
+			if(StringUtils.isNotEmpty(roleId) && null != positionIds && positionIds.length>0) {
 				if(!rolePosDao.isPositionInRoleExist(roleId, positionIds)) {
 					List<TNRolePosition> rolePositions = new ArrayList<TNRolePosition>();
 					TNRolePosition rolePosition = null;
@@ -341,5 +341,71 @@ public class RoleService extends MgrServiceImpl<TNRole> {
 		}
 		return is;
 	}
+	
+	/**
+     * 从角色中删除用户
+     * @param roleId
+     * @param userId
+     * @return
+     */
+    public SmartResponse<String> deleteUser(String roleId, String userId) {
+        SmartResponse<String> smartResp = new SmartResponse<String>();
+        smartResp.setMsg("删除失败");
+        if(StringUtils.isEmpty(roleId) || StringUtils.isEmpty(userId)) {
+            return smartResp;
+        }
+        Map<String, Object> param = new HashMap<String, Object>(2);
+        param.put("roleId", roleId);
+        param.put("id", userId);
+        if(roleUserDao.delete(param)) {
+            smartResp.setResult(OP_SUCCESS);
+            smartResp.setMsg("删除成功");
+        }
+        return smartResp;
+    }
+	
+	/**
+	 * 从角色中删除组织架构
+	 * @param roleId
+	 * @param orgId
+	 * @return
+	 */
+	public SmartResponse<String> deleteOrg(String roleId, String orgId) {
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+	    smartResp.setMsg("删除失败");
+	    if(StringUtils.isEmpty(roleId) || StringUtils.isEmpty(orgId)) {
+	        return smartResp;
+	    }
+	    Map<String, Object> param = new HashMap<String, Object>(2);
+	    param.put("roleId", roleId);
+	    param.put("id", orgId);
+	    if(roleOrgDao.delete(param)) {
+	        smartResp.setResult(OP_SUCCESS);
+	        smartResp.setMsg("删除成功");
+	    }
+	    return smartResp;
+	}
+	
+	/**
+     * 从角色中删除职位
+     * @param roleId
+     * @param positionId
+     * @return
+     */
+    public SmartResponse<String> deletePosition(String roleId, String positionId) {
+        SmartResponse<String> smartResp = new SmartResponse<String>();
+        smartResp.setMsg("删除失败");
+        if(StringUtils.isEmpty(roleId) || StringUtils.isEmpty(positionId)) {
+            return smartResp;
+        }
+        Map<String, Object> param = new HashMap<String, Object>(2);
+        param.put("roleId", roleId);
+        param.put("id", positionId);
+        if(rolePosDao.delete(param)) {
+            smartResp.setResult(OP_SUCCESS);
+            smartResp.setMsg("删除成功");
+        }
+        return smartResp;
+    }
 	
 }

@@ -13,7 +13,6 @@ import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.res.SQLResUtil;
-import cn.com.smart.utils.StringUtil;
 
 /**
  * 
@@ -23,10 +22,6 @@ import cn.com.smart.utils.StringUtil;
 @Repository("formDao")
 public class FormDao extends BaseDaoImpl<TForm>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8729279044240020088L;
 
 	@Override
 	public boolean delete(Serializable id) throws DaoException {

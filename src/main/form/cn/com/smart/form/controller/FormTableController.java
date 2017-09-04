@@ -69,7 +69,7 @@ public class FormTableController extends BaseController {
 		String uri = "form/table/list";
 		addBtn = new EditBtn("add","showPage/form_table_add", null, "创建表", "800");
 		editBtn = new EditBtn("edit","showPage/form_table_edit", "formTable", "修改表", "800");
-		delBtn = new DelBtn("op/del.json","formTable", "确定要删除选中的表吗，删除后将无法恢复？",uri,null, null);
+		delBtn = new DelBtn("form/table/delete", "确定要删除选中的表吗，删除后将无法恢复？",uri,null, null);
 		refreshBtn = new RefreshBtn(uri, null,null);
 		pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
 		alinks = new ArrayList<ALink>();
@@ -224,4 +224,9 @@ public class FormTableController extends BaseController {
 		return smartResp;
 	}
 	
+	@RequestMapping(value="/delete", produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public SmartResponse<String> delete(String id) {
+        return tableServ.delete(id);
+    }
 }

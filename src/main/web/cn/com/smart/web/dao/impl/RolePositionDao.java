@@ -35,7 +35,6 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 			String delSql = null;
 			if(StringUtils.isEmpty(flag)) {
 				delSql = sqlMap.getSQL("del_role_position");
-				
 			} else {
 				param.remove("flag");
 				if("p".equals(flag)) {

@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNCustomIndex;
 import cn.com.smart.web.bean.entity.TNDict;
 import cn.com.smart.web.controller.base.BaseController;
@@ -50,7 +51,7 @@ public class UserCustomController extends BaseController {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != customIndex) {
 			String layout = customIndex.getLayout();
-			if(!StringUtil.isEmpty(layout)) {
+			if(StringUtils.isNotEmpty(layout)) {
 				String[] rowsCols = layout.split("-");
 				try {
 					customIndex.setRows(Integer.parseInt(rowsCols[1]));

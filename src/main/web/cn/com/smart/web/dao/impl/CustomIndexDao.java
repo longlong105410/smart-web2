@@ -7,11 +7,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.dao.impl.BaseDaoImpl;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.res.sqlmap.SqlMapping;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNCustomIndex;
 
 /**
@@ -21,8 +22,6 @@ import cn.com.smart.web.bean.entity.TNCustomIndex;
  */
 @Repository
 public class CustomIndexDao extends BaseDaoImpl<TNCustomIndex> {
-
-	private static final long serialVersionUID = 1L;
 	
 	private SqlMapping sqlMap;
     private Map<String, Object> params;
@@ -38,9 +37,9 @@ public class CustomIndexDao extends BaseDaoImpl<TNCustomIndex> {
 	 */
 	public TNCustomIndex queryIndexLayout(String userId) throws DaoException  {
 		TNCustomIndex cusIndex = null;
-		if(!StringUtil.isEmpty(userId)) {
+		if(StringUtils.isNotEmpty(userId)) {
 			String hql = sqlMap.getSQL("user_index_layout");
-			if(!StringUtil.isEmpty(hql)) {
+			if(StringUtils.isNotEmpty(hql)) {
 				params = new HashMap<String, Object>();
 				params.put("userId", userId);
 				List<TNCustomIndex> lists = queryHql(hql, params);
@@ -59,9 +58,9 @@ public class CustomIndexDao extends BaseDaoImpl<TNCustomIndex> {
 	@Override
 	public boolean delete(Serializable id) throws DaoException {
 		boolean is = false;
-		if(null != id && !StringUtil.isEmpty(id.toString())) {
+		if(null != id && StringUtils.isNotEmpty(id.toString())) {
 			String sql = sqlMap.getSQL("del_cus_index");
-			if(!StringUtil.isEmpty(sql)) {
+			if(StringUtils.isNotEmpty(sql)) {
 				String[] sqls = sql.split(";");
 				params = new HashMap<String, Object>(1);
 				params.put("cusIndexId", id.toString());

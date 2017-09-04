@@ -8,11 +8,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.exception.DaoException;
 import cn.com.smart.exception.ServiceException;
 import cn.com.smart.service.impl.MgrServiceImpl;
-import cn.com.smart.utils.StringUtil;
 import cn.com.smart.web.bean.entity.TNRoleUser;
 import cn.com.smart.web.dao.impl.RoleUserDao;
 
@@ -37,7 +38,7 @@ public class RoleUserService extends MgrServiceImpl<TNRoleUser> {
 	public SmartResponse<String> delete(String id,String roleId) throws ServiceException {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
-			if(!StringUtil.isEmpty(id) && !StringUtil.isEmpty(roleId)) {
+			if(StringUtils.isNotEmpty(id) && StringUtils.isNotEmpty(roleId)) {
 				String[] ids = id.split(",");
 				String sql = "delete from t_n_role_user where role_id=:roleId and user_id=:userId";
 				Map<String, Object> param = null;

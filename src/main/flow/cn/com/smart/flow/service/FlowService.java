@@ -65,8 +65,6 @@ public class FlowService extends MgrServiceImpl<TFlowProcess> {
 	@Autowired
 	private AttachmentDao attDao;
 	@Autowired
-	private FlowAttachmentDao flowAttDao;
-	@Autowired
 	private OPService opServ;
 	
 
