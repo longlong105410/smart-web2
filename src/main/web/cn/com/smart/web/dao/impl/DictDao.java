@@ -67,7 +67,7 @@ public class DictDao extends BaseDaoImpl<TNDict> implements IDictDao {
 						e.printStackTrace();
 					}
 					if(!idList.isEmpty()) {
-						String delSql = "delete from T_N_DICT where id in (:delIds)";
+						String delSql = "delete from t_n_dict where id in (:delIds)";
 						Map<String,Object> param = new HashMap<String, Object>();
 						param.put("delIds", idList.toArray());
 						if(executeSql(delSql,param)>0) {

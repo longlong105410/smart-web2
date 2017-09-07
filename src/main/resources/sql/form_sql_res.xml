@@ -60,7 +60,7 @@
 	 <!-- 获取表单帮助选项 -->
 	 <sqlUnit name="get_form_helper_items">
 	 	<sql>
-	 		SELECT fh.id,fh.title FROM t_form_helper fh where fh.state=1 order by fh.create_time asc 
+	 		select fh.id,fh.title from t_form_helper fh where fh.state=1 order by fh.create_time asc 
 	 	</sql>
 	 </sqlUnit>
 	 
@@ -102,9 +102,9 @@
 	<!--获取需要记录日志的字段信息-->
 	<sqlUnit name="log_field_info">
 		<sql>
-			SELECT ff.table_id as tableId,ct.table_name as tableName,ctf.field_name as tableFieldName,
+			select ff.table_id as tableId,ct.table_name as tableName,ctf.field_name as tableFieldName,
 			ff.table_field_id as tableFieldId,ff.plugins
-			FROM t_form_field ff,t_create_table ct,t_create_table_field ctf
+			from t_form_field ff,t_create_table ct,t_create_table_field ctf
 			where ff.table_id=ct.id and ff.table_field_id=ctf.id and ff.is_log=1 and ff.form_id=:formId
 		</sql>
 	</sqlUnit>
@@ -148,8 +148,8 @@
     <!-- 获取表单实例列表 -->
     <sqlUnit name="get_form_instance_list">
         <sql>
-            SELECT t.id, t.title,u.full_name,t.create_time,t.form_id, t.form_data_id  
-            FROM t_form_instance t,t_n_user u,t_form f where t.form_id=f.id and t.user_id=u.id 
+            select t.id, t.title,u.full_name,t.create_time,t.form_id, t.form_data_id  
+            from t_form_instance t,t_n_user u,t_form f where t.form_id=f.id and t.user_id=u.id 
             [ and (t.title like '%:name%' or f.name like '%:name%')] order by t.create_time desc
         </sql>
     </sqlUnit>
@@ -178,7 +178,7 @@
         <!-- 获取表及字段名称通过指定表单和插件类型 -->
         <sqlUnit name="get_table_fields_by_plugin">
             <sql>
-                SELECT ct.table_name,ctf.field_name FROM t_form_field ff, t_create_table ct,t_create_table_field ctf 
+                select ct.table_name,ctf.field_name from t_form_field ff, t_create_table ct,t_create_table_field ctf 
                 where ff.table_id = ct.id and ff.table_field_id = ctf.id and ff.form_id=:formId and ff.plugins in(:plugins)
             </sql>
         </sqlUnit>

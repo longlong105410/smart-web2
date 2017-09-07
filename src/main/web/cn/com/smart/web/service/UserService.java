@@ -216,21 +216,6 @@ public class UserService extends MgrServiceImpl<TNUser> {
 						if(OrgType.DEPARTMENT.getValue().equals(org.getType())) {
 							userInfo.setDepartmentId(org.getId());
 						}
-						/*if(OrgType.COMPANY.getValue().equals(org.getType())) {
-							userInfo.setOrgId(org.getId());
-						} else {
-							userInfo.setDepartmentId(org.getId());
-						}
-						
-						if(StringUtils.isEmpty(userInfo.getOrgId()) && StringUtils.isNotEmpty(org.getParentId())) {
-							SmartResponse<Object> smartResp2 = orgServ.find(TNOrg.class,org.getParentId());
-							if(OP_SUCCESS.equals(smartResp2.getResult())) {
-								org = (TNOrg)smartResp2.getData();
-								userInfo.setOrgId(org.getId());
-								seqDeptName = org.getName()+">>"+deptName;
-							}
-							smartResp2 = null;
-						}*/
 					} else {
 						userInfo.setOrgId(user.getOrgId());
 					}

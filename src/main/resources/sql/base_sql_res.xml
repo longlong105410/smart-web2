@@ -156,7 +156,7 @@
 		    (select tmp.busi_name from t_n_dict tmp where 
 		    tmp.busi_value=t.state and tmp.parent_id=(select id from t_n_dict where busi_value='DATA_STATE')) as state,
 		    t.sort_order as sortOrder,t.icon 
-		    from T_N_MENU t order by t.sort_order asc 
+		    from t_n_menu t order by t.sort_order asc 
 		 </sql>
     </sqlUnit>
     <sqlUnit name="valid_menu">
@@ -253,7 +253,7 @@
 
     <!-- 删除组织机构信息 -->
     <sqlUnit name="del_org">
-       <sql>delete from T_N_ORG where id in (:ids)</sql>
+       <sql>delete from t_n_org where id in (:ids)</sql>
     </sqlUnit>
     
     <!-- 获取组织机构信息根据组织机构ID -->
@@ -320,7 +320,10 @@
     </sqlUnit>
     <!-- 删除自定义首页 -->
     <sqlUnit name="del_cus_index">
-       <sql>delete from t_n_custom_index where id =:cusIndexId;delete from t_n_cus_index_min_win where cus_index_id =:cusIndexId</sql>
+       <sql>
+           delete from t_n_custom_index where id =:cusIndexId;
+           delete from t_n_cus_index_min_win where cus_index_id =:cusIndexId
+       </sql>
     </sqlUnit>
     
     <!-- 删除角色中的用户 -->

@@ -90,44 +90,44 @@
 	<!-- 获取下一节点及参与者(多个参与者直接用英文“;”分隔) -->
 	<sqlUnit name="get_task_actors">
 	   <sql> 
-	     select a.DISPLAY_NAME, group_concat(a.name separator ';') as name from (
-			select task.DISPLAY_NAME, group_concat(u.full_name separator ';') as name from t_wf_task task,t_wf_task_actor actor, t_n_user u  
-			where task.ORDER_ID=:orderId and task.id = actor.TASK_ID and u.id=actor.ACTOR_ID [ and u.org_id=:orgId ] [ and task.task_name=:taskKey ] group by task.DISPLAY_NAME
+	     select a.display_name, group_concat(a.name separator ';') as name from (
+			select task.display_name, group_concat(u.full_name separator ';') as name from t_wf_task task,t_wf_task_actor actor, t_n_user u  
+			where task.order_id=:orderId and task.id = actor.task_id and u.id=actor.actor_id [ and u.org_id=:orgId ] [ and task.task_name=:taskKey ] group by task.display_name
 			union 
-			select task.DISPLAY_NAME, group_concat(org.name separator ';') as name from t_wf_task task,t_wf_task_actor actor, t_n_org org   
-			where task.ORDER_ID=:orderId and task.id = actor.TASK_ID and org.id=actor.ACTOR_ID [ and org.id=:orgId] [ and task.task_name=:taskKey ] group by task.DISPLAY_NAME
+			select task.display_name, group_concat(org.name separator ';') as name from t_wf_task task,t_wf_task_actor actor, t_n_org org   
+			where task.order_id=:orderId and task.id = actor.task_id and org.id=actor.actor_id [ and org.id=:orgId] [ and task.task_name=:taskKey ] group by task.display_name
 			union 
-			select task.DISPLAY_NAME, group_concat(p.name separator ';') as name from t_wf_task task,t_wf_task_actor actor, t_n_position p   
-			where task.ORDER_ID=:orderId and task.id = actor.TASK_ID and p.id=actor.ACTOR_ID [ and p.org_id=:orgId] [ and task.task_name=:taskKey ] group by task.DISPLAY_NAME) a 
-			group by a.DISPLAY_NAME
+			select task.display_name, group_concat(p.name separator ';') as name from t_wf_task task,t_wf_task_actor actor, t_n_position p   
+			where task.order_id=:orderId and task.id = actor.task_id and p.id=actor.actor_id [ and p.org_id=:orgId] [ and task.task_name=:taskKey ] group by task.display_name) a 
+			group by a.display_name
 	   </sql>
 	</sqlUnit>
 	
 	<!-- 获取任务模型 -->
 	<sqlUnit name="get_taskmodel_order">
 	    <sql>
-	      select task.id,task.TASK_NAME,task.DISPLAY_NAME from t_wf_task task where task.ORDER_ID=:orderId
+	      select task.id,task.task_name,task.display_name from t_wf_task task where task.order_id=:orderId
 	    </sql>
 	</sqlUnit>
 	<!-- 获取驳回参与者 -->
 	<sqlUnit name="back_assigner">
 	    <sql>
-	       select hta.ACTOR_ID from t_wf_hist_task_actor hta where hta.TASK_ID = (
-	       select ht.id from t_wf_hist_task ht where ht.ORDER_ID=:orderId 
-	       and ht.TASK_NAME=:taskKey order by ht.FINISH_TIME desc limit 1)
+	       select hta.actor_id from t_wf_hist_task_actor hta where hta.task_id = (
+	       select ht.id from t_wf_hist_task ht where ht.order_id=:orderId 
+	       and ht.task_name=:taskKey order by ht.finish_time desc limit 1)
 	    </sql>
 	</sqlUnit>
 	<!-- 判断任务是否领取了，如果统计出来大于0表示已经被领取，否则表示未领取 -->
 	<sqlUnit name="is_take_task">
 	    <sql>
-	      select count(task.id) from t_wf_task task where task.id=:taskId and task.TAKE_TIME is not null
+	      select count(task.id) from t_wf_task task where task.id=:taskId and task.take_time is not null
 	    </sql>
 	</sqlUnit>
 	
 	<!-- 检测流程实例名称是否已经存在 -->
 	<sqlUnit name="check_instance_title">
 	   <sql>
-	      SELECT count(t.id) FROM t_flow_form t WHERE t.form_id=:formId and t.title=:title
+	      select count(t.id) from t_flow_form t where t.form_id=:formId and t.title=:title
 	   </sql>
 	</sqlUnit>
 	
@@ -141,7 +141,7 @@
 	<!-- 获取未能正常流程的流程实例ID -->
 	<sqlUnit name="get_abnormal_order_ids">
 		<sql>
-			SELECT distinct t.order_id FROM t_wf_task t WHERE t.order_id IN(SELECT id FROM t_wf_order o where o.process_id=:processId) AND t.task_name NOT IN(:taskNames)
+			select distinct t.order_id from t_wf_task t where t.order_id in(select id from t_wf_order o where o.process_id=:processId) and t.task_name not in(:taskNames)
 		</sql>
 	</sqlUnit>
 	
@@ -159,9 +159,9 @@
 	
 	<sqlUnit name="get_hist_task_by_order_taskKey">
 		<sql>
-			SELECT t.id,t.DISPLAY_NAME,t.OPERATOR FROM t_wf_hist_task t 
-			where t.ORDER_ID=:orderId and t.TASK_NAME=:taskKey and t.TASK_STATE=0 
-			order by t.FINISH_TIME desc limit 0,5
+			select t.id,t.display_name,t.operator from t_wf_hist_task t 
+			where t.order_id=:orderId and t.task_name=:taskKey and t.task_state=0 
+			order by t.finish_time desc limit 0,5
 		</sql>
 	</sqlUnit>
 	
@@ -190,7 +190,7 @@
     <!-- 获取流程显示名称 -->
     <sqlUnit name="get_flow_displayname">
         <sql>
-            SELECT p.display_name FROM t_flow_form t,t_wf_process p where t.form_data_id=:formDataId and t.process_id=p.id
+            select p.display_name from t_flow_form t,t_wf_process p where t.form_data_id=:formDataId and t.process_id=p.id
         </sql>
     </sqlUnit>
 
