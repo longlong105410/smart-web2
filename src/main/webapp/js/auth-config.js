@@ -15,11 +15,11 @@ $(document).ready(function(){
  */
 function authConfigSubmitBtnListener($elementWrap) {
 	if(utils.isEmpty($elementWrap) || !utils.isExist($elementWrap)) {
-		$(".cnoj-auth-config-submit").click(function(){
+		$(".cnoj-auth-config-submit").click(function(event){
 			_clickElement(event, $(this));
 		});
 	} else {
-		$elementWrap.find(".cnoj-auth-config-submit").click(function(){
+		$elementWrap.find(".cnoj-auth-config-submit").click(function(event){
 			_clickElement(event, $(this));
 			return false;
 		});

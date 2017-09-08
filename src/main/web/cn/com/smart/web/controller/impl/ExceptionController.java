@@ -51,7 +51,7 @@ public class ExceptionController extends BaseController {
 	 * 500错误
 	 * @return
 	 */
-	@RequestMapping("/500.do")
+	@RequestMapping("/500")
 	public ModelAndView error500() {
 		ModelAndView modelView = new ModelAndView();
 		modelView.setViewName(VIEW_DIR+"500");
@@ -62,10 +62,18 @@ public class ExceptionController extends BaseController {
 	 * 404错误
 	 * @return
 	 */
-	@RequestMapping("/404.do")
+	@RequestMapping("/404")
 	public ModelAndView error404() {
 		ModelAndView modelView = new ModelAndView();
 		modelView.setViewName(VIEW_DIR+"404");
 		return modelView;
+	}
+	
+	@RequestMapping("/noaccess")
+    @ResponseBody
+	public SmartResponse<String> noAccess() {
+	    SmartResponse<String> smartResp = new SmartResponse<String>();
+	    smartResp.setMsg("没有访问权限");
+	    return smartResp;
 	}
 }

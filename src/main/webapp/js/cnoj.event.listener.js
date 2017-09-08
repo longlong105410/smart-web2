@@ -1563,7 +1563,12 @@ function tableWrapListener($elementWrap, isResize) {
 			limitHeightListener($elementWrap, false);
 			h = $autoLimitHeiht.height();
 			var $table = $tableWrap.find("table");
-			var borderWidth = parseInt($table.css("border-width"));
+			var borderWidth = $table.css("border-width");
+			if(utils.isEmpty(borderWidth)) {
+			    borderWidth = 0;
+			} else {
+			    borderWidth = parseInt($table.css("border-width"));
+			}
 			h = h - borderWidth * 2 - 1;
 		} else {
 			//判断是否是弹出窗口中的表格

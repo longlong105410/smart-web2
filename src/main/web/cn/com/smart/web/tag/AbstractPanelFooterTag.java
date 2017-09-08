@@ -5,10 +5,14 @@ import java.util.List;
 
 import javax.servlet.jsp.JspWriter;
 
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.helper.PageHelper;
+import cn.com.smart.web.helper.WebSecurityHelper;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.BaseBtn;
 import cn.com.smart.web.tag.bean.CustomBtn;
@@ -16,9 +20,6 @@ import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
 import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
-
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 面板底部分页或按钮栏
@@ -80,28 +81,32 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     			btnStyleFlag = "${btnListStyle}";
     			htmlContent.append("<div class='btn-list' "+StringUtils.handNull(btnStyleFlag)+"><div class='btn-group cnoj-op-btn-list'>");
     			String btnHtml = null;
+    			String authUrl = null;
     			if(null != addBtn && (!addBtn.getIsAuth() || authServ.isAuth(currentUri, addBtn, userInfo.getRoleIds()))) {
+    			    authUrl = WebSecurityHelper.addUriAuth(currentUri, addBtn.getId(), addBtn.getUri());
     				if(StringUtils.isEmpty(addBtn.getSelectedType()))
     					addBtn.setSelectedType(BtnPropType.SelectType.NONE.getValue());
     				btnHtml = "<button type='button' id='"+addBtn.getId()+"' class='btn "+(StringUtils.isEmpty(addBtn.getBtnStyle())?BTN_DEFAULT_THEME:addBtn.getBtnStyle())+" add param' data-selected-type='"+
-    		    			StringUtils.handNull(addBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(addBtn.getUri())+"' data-title='"+StringUtils.handNull(addBtn.getTitle())+"' data-busi='"+
+    		    			StringUtils.handNull(addBtn.getSelectedType())+"' data-uri='"+authUrl+"' data-title='"+StringUtils.handNull(addBtn.getTitle())+"' data-busi='"+
     		    			StringUtils.handNull(addBtn.getBusi())+"' data-value='' data-width='"+StringUtils.handNull(addBtn.getWidth())+"' data-before-check='"+StringUtils.handNull(addBtn.getBeforeCheck())+"'><i class='glyphicon glyphicon-plus'></i> "
     		    			+(StringUtils.isEmpty(addBtn.getName())?"添加":addBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, addBtn, btnHtml);
     			}
     			if(null != editBtn && (!editBtn.getIsAuth() || authServ.isAuth(currentUri, editBtn, userInfo.getRoleIds()))) {
-    				if(StringUtils.isEmpty(editBtn.getSelectedType()))
+    			    authUrl = WebSecurityHelper.addUriAuth(currentUri, editBtn.getId(), editBtn.getUri());
+    			    if(StringUtils.isEmpty(editBtn.getSelectedType()))
     					editBtn.setSelectedType(BtnPropType.SelectType.MULTI.getValue());
     				btnHtml = "<button type='button' id='"+editBtn.getId()+"' class='btn "+(StringUtils.isEmpty(editBtn.getBtnStyle())?BTN_DEFAULT_THEME:editBtn.getBtnStyle())+" edit param' data-selected-type='"+StringUtils.handNull(editBtn.getSelectedType())+"' data-uri='"+
-    						StringUtils.handNull(editBtn.getUri())+"' data-title='"+StringUtils.handNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handNull(editBtn.getBusi())+"' data-value='' data-width='"+StringUtils.handNull(editBtn.getWidth())+"' data-before-check='"+
+    						authUrl+"' data-title='"+StringUtils.handNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handNull(editBtn.getBusi())+"' data-value='' data-width='"+StringUtils.handNull(editBtn.getWidth())+"' data-before-check='"+
     						StringUtils.handNull(editBtn.getBeforeCheck())+"'><i class='glyphicon glyphicon-pencil'></i> "+(StringUtils.isEmpty(editBtn.getName())?"编辑":editBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, editBtn, btnHtml);
     			}
     			if(null != delBtn && (!delBtn.getIsAuth() || authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds()))) {
-    				if(StringUtils.isEmpty(delBtn.getSelectedType()))
+    			    authUrl = WebSecurityHelper.addUriAuth(currentUri, delBtn.getId(), delBtn.getUri());
+    			    if(StringUtils.isEmpty(delBtn.getSelectedType()))
     					delBtn.setSelectedType(BtnPropType.SelectType.MULTI.getValue());
     				btnHtml = "<button type='button' id='"+delBtn.getId()+"' class='btn "+(StringUtils.isEmpty(delBtn.getBtnStyle())?BTN_DEFAULT_THEME:delBtn.getBtnStyle())+" del param' data-selected-type='"+StringUtils.handNull(delBtn.getSelectedType())+"' data-uri='"+
-    					    StringUtils.handNull(delBtn.getUri())+"' data-busi='"+StringUtils.handNull(delBtn.getBusi())+"' data-msg='"+StringUtils.handNull(delBtn.getMsg())+"' data-value='' data-refresh-uri='"+StringUtils.handNull(delBtn.getRefreshUri())+"' data-target='"+
+    				        authUrl+"' data-busi='"+StringUtils.handNull(delBtn.getBusi())+"' data-msg='"+StringUtils.handNull(delBtn.getMsg())+"' data-value='' data-refresh-uri='"+StringUtils.handNull(delBtn.getRefreshUri())+"' data-target='"+
     						StringUtils.handNull(delBtn.getTarget())+"' data-delAfter='"+StringUtils.handNull(delBtn.getCallback())+"' ><i class='glyphicon glyphicon-trash'></i> "+(StringUtils.isEmpty(delBtn.getName())?"删除":delBtn.getName())+"</button>";
     				addBtnHtmlToList(btnList, delBtn, btnHtml);
     			}
@@ -115,6 +120,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     					btnHtml = "";
     					if(!customBtn.getIsAuth() || authServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
     						String icon = "";
+    						authUrl = WebSecurityHelper.addUriAuth(currentUri, customBtn.getId(), customBtn.getUri());
 	    					if(StringUtils.isNotEmpty(customBtn.getBtnIcon())) {
 	    						if(customBtn.getBtnIcon().split(" ").length > 1) {
 	    							icon = "<i class='"+StringUtils.handNull(customBtn.getBtnIcon())+"'></i>";
@@ -122,8 +128,8 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 	    							icon = "<i class='glyphicon "+StringUtils.handNull(customBtn.getBtnIcon())+"'></i>";
 	    						}
 	    					}
-	    					btnHtml = "<button type='button' id='"+customBtn.getId()+"' class='btn "+StringUtils.handNull(customBtn.getBtnStyle())+" "+customBtn.getOpenStyle()+" param' data-selected-type='"+StringUtils.handNull(customBtn.getSelectedType())+"' data-uri='"+
-	    					           StringUtils.handNull(customBtn.getUri())+"' data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' data-width='"+StringUtils.handNull(customBtn.getWidth())+
+	    					btnHtml = "<button type='button' id='"+customBtn.getId()+"' class='btn "+StringUtils.handNull(customBtn.getBtnStyle())+" "+customBtn.getOpenStyle()+" param' data-selected-type='"+StringUtils.handNull(customBtn.getSelectedType())+"' "
+	    					        + "data-uri='"+authUrl+"' data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' data-width='"+StringUtils.handNull(customBtn.getWidth())+
 	    					           "' data-before-check='"+StringUtils.handNull(customBtn.getBeforeCheck())+"'>"+icon+" "+StringUtils.handNull(customBtn.getName())+"</button>";
 	    					addBtnHtmlToList(btnList, customBtn, btnHtml);
     					}

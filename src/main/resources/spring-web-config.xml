@@ -74,6 +74,13 @@
 				<property name="resSuffix">
 					<value>jpg,png,gif,js,css,eot,svg,ttf,woff,jsp</value>
 				</property>
+				<property name="authUriList">
+				    <list>
+				        <value>*/delete</value>
+				        <value>*/delete/*</value>
+				        <value>*/delete.json</value>
+				    </list>
+				</property>
 			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

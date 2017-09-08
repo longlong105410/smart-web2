@@ -1,3 +1,4 @@
+<%@page import="cn.com.smart.web.helper.WebSecurityHelper"%>
 <%@page import="cn.com.smart.web.tag.bean.CustomBtn"%>
 <%@page import="cn.com.smart.web.tag.bean.DelBtn"%>
 <%@page import="cn.com.smart.web.bean.UserInfo"%>
@@ -13,12 +14,14 @@
     int delAuth = 0;
     int jumpNode = 0;
     int formEdit = 0;
+    String delUrl = "process/mgr/delete.json";
     if(null != authServ) {
     	UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(request);
     	DelBtn delBtn = new DelBtn();
     	String currentUri = "process/mgr/orderList";
     	if(authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds())) {
     		delAuth = 1;
+    		delUrl = WebSecurityHelper.addUriAuth(currentUri, delBtn.getId(), delUrl);
     	}
     	CustomBtn jumpNodeBtn = new CustomBtn("jump_task","任意跳转","选择节点","");
     	if(authServ.isAuth(currentUri, jumpNodeBtn, userInfo.getRoleIds())) {
@@ -30,6 +33,7 @@
     	}
     }
     pageContext.setAttribute("delAuth", delAuth);
+    pageContext.setAttribute("delUrl", delUrl);
     pageContext.setAttribute("jumpNode", jumpNode);
     pageContext.setAttribute("formEdit", formEdit);
 %>
@@ -122,7 +126,7 @@
 			                              data-uri="process/mgr/jumpNodeSet?processId=${datas[0]}&orderId=${datas[1] }&refreshUri=${refreshUri}" data-target="${target }"><i class="glyphicon glyphicon-random"></i> 跳转</button>
 			                          </c:if>
 			                          <c:if test="${delAuth==1}">
-				                         <button type="button" class="btn btn-danger btn-xs cnoj-post-data" data-del-alert="您确定要删除，该流程实例吗？" data-param="id=${datas[1]}" data-uri="process/mgr/delete.json" data-target="${target }" data-refresh-uri="${searchUri}&page=${page}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+				                         <button type="button" class="btn btn-danger btn-xs cnoj-post-data" data-del-alert="您确定要删除，该流程实例吗？" data-param="id=${datas[1]}" data-uri="${delUrl }" data-target="${target }" data-refresh-uri="${searchUri}&page=${page}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
 				                     </c:if>
 				                  </td>
 			                    </tr>

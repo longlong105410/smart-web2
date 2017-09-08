@@ -32,7 +32,7 @@ public class SSOUtils {
 	 * @return 返回密匙
 	 */
 	public static String getSecretKey() {
-		String secretKey = InitSysConfig.getInstance().getValue("sso.secret.key");
+		String secretKey = InitSysConfig.getInstance().getValue("secret.key");
 		secretKey = StringUtils.isEmpty(secretKey)?"123456":secretKey;
 		return secretKey;
 	}

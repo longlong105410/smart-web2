@@ -25,4 +25,10 @@
 			select * from t_n_sub_system t where t.state='1' order by t.sort_order asc
 		</sql>
 	</sqlUnit>
+	<!-- 获取操作ID通过URI -->
+	<sqlUnit name="get_op_auths_byuri">
+	   <sql>
+	       select rr.op_auths from t_n_resource t,t_n_role_resource rr where t.id=rr.resource_id and t.uri=:uri and rr.role_id in(:roleIds)
+	   </sql>
+	</sqlUnit>
 </sqlMap>

@@ -10,6 +10,7 @@ import javax.servlet.jsp.JspWriter;
 import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.bean.entity.TNMenu;
 import cn.com.smart.web.service.MenuService;
 
@@ -38,7 +39,8 @@ public class MenuTag extends BaseTag {
 			log.info("正在创建菜单");
 			if(null == smartResp) {
 		        menuServ = (MenuService) getService("menuServ");
-				smartResp = menuServ.getMenuTree(getUserInfo().getMenuRoleIds());
+		        UserInfo userInfo = getUserInfo();
+				smartResp = menuServ.getMenuTree(userInfo.getMenuRoleIds());
 			}
 			if(!OP_SUCCESS.equals(smartResp.getResult())) {
 				out.println(smartResp.getMsg());

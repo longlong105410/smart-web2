@@ -92,7 +92,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		try {
 			List<TFlowForm> flowForms = getDao().queryByField(params);
 			if(null != flowForms && flowForms.size()>0) {
-			    formDataServ.getFormData(flowForms.get(0).getFormDataId(), flowForms.get(0).getFormId(), null);
+			    smartResp = formDataServ.getFormData(flowForms.get(0).getFormDataId(), flowForms.get(0).getFormId(), null);
 				//smartResp = formDataBusi.getFormData(orderId, flowForms.get(0).getFormId(), null);
 				QueryFormData formData = new QueryFormData();
 				formData.setName("formDataId");
