@@ -261,7 +261,7 @@ public class SSOContoller extends BaseController {
 			e.printStackTrace();
 		}*/
 		if(checkLogin(request, ssoResp)) {
-			String beforeUri = StringUtils.handNull(session.getAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI));
+			String beforeUri = StringUtils.handleNull(session.getAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI));
 			smartResp.setData(beforeUri);
 			smartResp.setResult(OP_SUCCESS);
 			smartResp.setMsg("登录成功");
