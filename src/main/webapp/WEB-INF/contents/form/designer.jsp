@@ -24,7 +24,7 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 		    <div class="form-group">
 				<label for="input03" class="col-sm-2 control-label fw-normal p-t-0 p-l-0">表单类型</label>
 				<div class="col-sm-10 p-t-0 p-l-0">
-				  <select id="form_type" class="form-control cnoj-select select-form-control" name="type" id="input03" data-uri="dict/item/FORM_TYPE.json" data-default-value="${form.type }" >
+				  <select class="form-control cnoj-select select-form-control" name="type" id="input03" data-uri="dict/item/FORM_TYPE.json" data-default-value="${form.type }" >
 				  </select>
 				</div>
 			</div>

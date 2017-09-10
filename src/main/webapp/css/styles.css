@@ -108,9 +108,19 @@ h4.ui-widget-header {margin-bottom: 0;font-size: 13px;}
 /***********搜索样式***********************/
 .panel-search {padding: 4px 5px;font-size: 13px;}
 .panel-search form {margin-bottom: 0;}
-.panel-search .form-inline .input-form-control, .panel-search .form-inline .select-form-control{height: 32px;padding: 4px 6px;}
-.panel-search .form-inline .select-form-control,.panel-search .form-inline .select-form-sm-control {min-width: 120px;}
-.panel-search .form-inline .input-form-sm-control, .panel-search .form-inline .select-form-sm-control {height: 28px;padding: 3px;}
+/*.panel-search .form-inline .input-form-control, 
+.panel-search .form-inline .select-form-control{height: 32px;padding: 4px 6px;}
+.form-inline .select-form-control,
+.panel-search .form-inline .select-form-sm-control {min-width: 120px;}
+.panel-search .form-inline .input-form-sm-control, 
+.panel-search .form-inline .select-form-sm-control {height: 28px;padding: 3px;}
+*/
+.form-inline .input-form-control, 
+.form-inline .select-form-control{height: 32px;padding: 4px 6px;}
+.form-inline .select-form-control,
+.form-inline .select-form-sm-control {min-width: 120px;}
+.form-inline .input-form-sm-control, 
+.form-inline .select-form-sm-control {height: 28px;padding: 3px;}
 .panel-search .form-inline .form-group>label {font-weight:normal;}
 .cal-date {left: -25px;}
 .th-checkbox,.td-checkbox {width: 35px;}
