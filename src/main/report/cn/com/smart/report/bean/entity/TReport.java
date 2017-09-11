@@ -1,6 +1,7 @@
 package cn.com.smart.report.bean.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,14 +38,15 @@ public class TReport implements BaseBean, DateBean {
      */
     private String type;
     
-    /**
-     * 是否支持导出功能
-     */
-    private Integer isImport;
-    
     private String creator;
     
     private Date createTime;
+    
+    private TReportProperties properties;
+    
+    private List<TReportField> fields;
+    
+    private TReportSqlResourse sqlResource;
 
     @Id
     @Column(name="id", length=50)
@@ -74,15 +76,6 @@ public class TReport implements BaseBean, DateBean {
         this.type = type;
     }
 
-    @Column(name="is_import")
-    public Integer getIsImport() {
-        return isImport;
-    }
-
-    public void setIsImport(Integer isImport) {
-        this.isImport = isImport;
-    }
-
     @Column(name="creator")
     public String getCreator() {
         return creator;
@@ -106,5 +99,32 @@ public class TReport implements BaseBean, DateBean {
     @Transient
     public String getPrefix() {
         return "R";
+    }
+
+    @Transient
+    public TReportProperties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(TReportProperties properties) {
+        this.properties = properties;
+    }
+
+    @Transient
+    public List<TReportField> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<TReportField> fields) {
+        this.fields = fields;
+    }
+    
+    @Transient
+    public TReportSqlResourse getSqlResource() {
+        return sqlResource;
+    }
+
+    public void setSqlResource(TReportSqlResourse sqlResource) {
+        this.sqlResource = sqlResource;
     }
 }

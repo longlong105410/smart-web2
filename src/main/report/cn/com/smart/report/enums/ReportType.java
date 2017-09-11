@@ -16,6 +16,12 @@ public enum ReportType {
      * 普通表单报表
      */
     FORM_REPORT(1,"form_report"),
+    
+    /**
+     * 自定义SQL语句
+     */
+    CUSTOM_SQL_REPORT(2,"custom_sql_report"),
+    
     /**
      * 其他报表
      */

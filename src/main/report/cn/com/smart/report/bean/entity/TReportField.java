@@ -10,8 +10,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.mixsmart.enums.YesNoType;
-
 import cn.com.smart.bean.BaseBean;
 import cn.com.smart.bean.DateBean;
 
@@ -37,20 +35,6 @@ public class TReportField implements BaseBean, DateBean {
     private String fieldName;
     
     private String fieldText;
-    
-    /**
-     * 是否为ID字段
-     * 1 -- 是;
-     * 0 -- 否
-     */
-    private Integer isIdField = YesNoType.NO.getIndex();
-    
-    /**
-     * 如果是ID字段，是否显示ID字段
-     * 1 -- 是;
-     * 0 -- 否
-     */
-    private Integer isShowId = YesNoType.NO.getIndex();
     
     private Date createTime;
 
@@ -89,24 +73,6 @@ public class TReportField implements BaseBean, DateBean {
 
     public void setFieldText(String fieldText) {
         this.fieldText = fieldText;
-    }
-
-    @Column(name="is_id_field")
-    public Integer getIsIdField() {
-        return isIdField;
-    }
-
-    public void setIsIdField(Integer isIdField) {
-        this.isIdField = isIdField;
-    }
-
-    @Column(name="is_show_id")
-    public Integer getIsShowId() {
-        return isShowId;
-    }
-
-    public void setIsShowId(Integer isShowId) {
-        this.isShowId = isShowId;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
