@@ -101,7 +101,7 @@ public class FormInstanceService extends MgrServiceImpl<TFormInstance> {
         if (null != list && list.size() > 0) {
             if(deleteAssocByObj(list)) {
                 smartResp.setResult(OP_SUCCESS);
-                smartResp.setMsg("流程实例删除成功");
+                smartResp.setMsg("表单实例删除成功");
             }
         }
         return smartResp;
