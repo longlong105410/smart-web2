@@ -50,11 +50,11 @@ public class TextParser implements IFormParser {
 			return null;
 		}
 		boolean isHide = false;
-		if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("orghide")))) {
+		if(YesNoType.YES.getStrValue().equals(StringUtils.handleNull(dataMap.get("orghide")))) {
 			isHide = true;
 		}
 		
-		String value = StringUtils.handNull(dataMap.get("value"));
+		String value = StringUtils.handleNull(dataMap.get("value"));
 		String classDefaultTag = "";
 		if(StringUtils.isNotEmpty(value) && value.startsWith("${")) {
 			if("${today}".equals(value)) {
@@ -67,37 +67,37 @@ public class TextParser implements IFormParser {
 			value = "";
 		}
 		StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<input type=\"text\" name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" value=\""+value+"\"  style=\""+dataMap.get("style")+"\"");
-		String dataFormat = StringUtils.handNull(dataMap.get("data_format"));
+		strBuild.append("<input type=\"text\" name=\""+StringUtils.handleNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" value=\""+value+"\"  style=\""+dataMap.get("style")+"\"");
+		String dataFormat = StringUtils.handleNull(dataMap.get("data_format"));
 		if(!StringUtils.isEmpty(dataFormat)) {
 			strBuild.append(" data-format=\""+dataFormat+"\"");
 		}
-		String dateFormat = StringUtils.handNull(dataMap.get("date_format"));
+		String dateFormat = StringUtils.handleNull(dataMap.get("date_format"));
 		if(StringUtils.isNotEmpty(dateFormat)) {
 			strBuild.append(" data-date-format=\""+dateFormat+"\"");
 		}
-		String relateField = StringUtils.handNull(dataMap.get("relate_field"));
+		String relateField = StringUtils.handleNull(dataMap.get("relate_field"));
 		if(StringUtils.isNotEmpty(relateField)) {
 			strBuild.append(" relate-field=\""+relateField+"\"");
 		}
-		String relateFieldValue = StringUtils.handNull(dataMap.get("relate_field_value"));
+		String relateFieldValue = StringUtils.handleNull(dataMap.get("relate_field_value"));
 		if(StringUtils.isNotEmpty(relateFieldValue)) {
 			strBuild.append(" relate-field-value=\""+relateFieldValue+"\"");
 		}
-		String className = StringUtils.handNull(dataMap.get("class"))+" "+classDefaultTag;
-		String orgType = StringUtils.handNull(dataMap.get("orgtype"));
-		String inputPlugin = StringUtils.handNull(dataMap.get("input_plugin"));
+		String className = StringUtils.handleNull(dataMap.get("class"))+" "+classDefaultTag;
+		String orgType = StringUtils.handleNull(dataMap.get("orgtype"));
+		String inputPlugin = StringUtils.handleNull(dataMap.get("input_plugin"));
 		if(!StringUtils.isEmpty(inputPlugin)) {
 			strBuild.append(" class=\""+className);
 			if(isHide) strBuild.append(" hide ");
 			strBuild.append(" "+inputPlugin+"\"");
-			strBuild.append(" data-uri=\""+StringUtils.handNull(dataMap.get("input_plugin_uri"))+"\"");
+			strBuild.append(" data-uri=\""+StringUtils.handleNull(dataMap.get("input_plugin_uri"))+"\"");
 			if(inputPlugin.equals(INPUT_PLUGIN_SELECT) || inputPlugin.equals(INPUT_PLUGIN_TREE)) {
-				if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("fieldrequire"))))
+				if(YesNoType.YES.getStrValue().equals(StringUtils.handleNull(dataMap.get("fieldrequire"))))
 					strBuild.append(" data-is-show-none=\"no\"");
 			}
 			if(inputPlugin.equals(INPUT_PLUGIN_SELECT)) {
-				if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("fieldrequire"))))
+				if(YesNoType.YES.getStrValue().equals(StringUtils.handleNull(dataMap.get("fieldrequire"))))
 					strBuild.append(" data-is-show-all=\"no\"");
 			}
 		} else if(!("date").equals(orgType) && !"datetime".equals(orgType) && !"time".equals(orgType) && !"text".equals(orgType)){

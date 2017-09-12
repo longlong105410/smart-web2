@@ -31,12 +31,12 @@ public class HelpersParser implements IFormParser {
 		if(null == dataMap || dataMap.isEmpty()) {
 			return null;
 		}
-		String name = StringUtils.handNull(dataMap.get("orgname"));
-		String source = StringUtils.handNull(dataMap.get("orgsource"));
-		String url = StringUtils.handNull(dataMap.get("orgurl"));
-		String disModelStr = StringUtils.handNull(dataMap.get("display_model"));
-		String helperId = StringUtils.handNull(dataMap.get("helper_id"));
-		String orgContent = StringUtils.handNull(dataMap.get("orgcontent"));
+		String name = StringUtils.handleNull(dataMap.get("orgname"));
+		String source = StringUtils.handleNull(dataMap.get("orgsource"));
+		String url = StringUtils.handleNull(dataMap.get("orgurl"));
+		String disModelStr = StringUtils.handleNull(dataMap.get("display_model"));
+		String helperId = StringUtils.handleNull(dataMap.get("helper_id"));
+		String orgContent = StringUtils.handleNull(dataMap.get("orgcontent"));
 		StringBuilder strBuild = new StringBuilder();
 		strBuild.append(" <a title=\"帮助\"");
 		SourceType sourceType = SourceType.getObj(source);

@@ -186,7 +186,7 @@ public class FormTableController extends BaseController {
 			for (Object obj : objs) {
 				Object[] objArray = (Object[])obj;
 				//objArray[0] = objArray[1];
-				if(StringUtils.isNotEmpty(StringUtils.handNull(objArray[2]))) {
+				if(StringUtils.isNotEmpty(StringUtils.handleNull(objArray[2]))) {
 					objArray[1] = objArray[2];
 				}
 			}
@@ -216,7 +216,7 @@ public class FormTableController extends BaseController {
 			//字段名与字段注释组合在一起
 			for (Object obj : objs) {
 				Object[] objArray = (Object[])obj;
-				if(StringUtils.isNotEmpty(StringUtils.handNull(objArray[2]))) {
+				if(StringUtils.isNotEmpty(StringUtils.handleNull(objArray[2]))) {
 					objArray[1] = objArray[2];
 				}
 			}//for

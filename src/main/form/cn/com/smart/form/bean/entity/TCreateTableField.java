@@ -152,8 +152,8 @@ public class TCreateTableField extends BaseBeanImpl {
 		boolean is = false;
 		if(null != field) {
 			is = (this.id.equals(field.getId()) && this.fieldName.equals(field.getFieldName()) && 
-					this.dataFormat.equals(field.getDataFormat()) && StringUtils.handNumNull(this.length).equals(StringUtils.handNumNull(field.getLength())) 
-					&& StringUtils.handNull(this.fieldRemark).equals(field.getFieldRemark()));
+					this.dataFormat.equals(field.getDataFormat()) && StringUtils.handleNumNull(this.length).equals(StringUtils.handleNumNull(field.getLength())) 
+					&& StringUtils.handleNull(this.fieldRemark).equals(field.getFieldRemark()));
 		}
 		return is;
 	}
@@ -194,7 +194,7 @@ public class TCreateTableField extends BaseBeanImpl {
 	public boolean isLengthSame(TCreateTableField field) {
 		boolean is = false;
 		if(null != field) {
-			is = StringUtils.handNumNull(this.length).equals(StringUtils.handNumNull(field.getLength()));
+			is = StringUtils.handleNumNull(this.length).equals(StringUtils.handleNumNull(field.getLength()));
 		}
 		return is;
 	}
@@ -207,7 +207,7 @@ public class TCreateTableField extends BaseBeanImpl {
 	public boolean isRemart(TCreateTableField field) {
 		boolean is = false;
 		if(null != field) {
-			is = StringUtils.handNull(this.getFieldRemark()).equals(StringUtils.handNull(field.getFieldRemark()));
+			is = StringUtils.handleNull(this.getFieldRemark()).equals(StringUtils.handleNull(field.getFieldRemark()));
 		}
 		return is;
 	}

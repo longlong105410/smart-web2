@@ -60,7 +60,7 @@ public abstract class AbstractFormUploadFileHelper {
                     String key = set.getKey();
                     if(key.endsWith(ATT_FIELD_SUFFIX)) {
                         String fieldId = key.substring(0, id.length() - (ATT_FIELD_SUFFIX.length()-1));
-                        String value = StringUtils.handNull(formArgs.get(fieldId));
+                        String value = StringUtils.handleNull(formArgs.get(fieldId));
                         if(StringUtils.isNotEmpty(value)) {
                             value +=IConstant.MULTI_VALUE_SPLIT + id;
                         } else {

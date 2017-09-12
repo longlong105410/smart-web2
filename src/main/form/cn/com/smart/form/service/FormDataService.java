@@ -183,7 +183,7 @@ public class FormDataService implements IFormDataService {
 					String delParamName = tableId+"_del";
 					String changeParamName = tableId+"_change";
 					String idParamName = tableId+"_id";
-					String delId = StringUtils.handNull(datas.get(delParamName));
+					String delId = StringUtils.handleNull(datas.get(delParamName));
 					Object id = datas.get(idParamName);
 					String[] idArray = null;
 					if(null != id) {
@@ -191,10 +191,10 @@ public class FormDataService implements IFormDataService {
 							Object[] ids = (Object[])id;
 							idArray = new String[ids.length];
 							for (int i = 0; i < ids.length; i++) {
-								idArray[i] = StringUtils.handNull(ids[i]);
+								idArray[i] = StringUtils.handleNull(ids[i]);
 							}
 						} else {
-							idArray = new String[]{StringUtils.handNull(id)};
+							idArray = new String[]{StringUtils.handleNull(id)};
 						}
 					}
 					//删除的
@@ -205,7 +205,7 @@ public class FormDataService implements IFormDataService {
 						opDao.executeSql(deleteSql, params);
 					}
 					//更新
-					String changeId = StringUtils.handNull(datas.get(changeParamName));
+					String changeId = StringUtils.handleNull(datas.get(changeParamName));
 					if(StringUtils.isNotEmpty(changeId)) {
 						String[] changeIdArray = changeId.split(IWebConstant.MULTI_VALUE_SPLIT);
 						if(null != idArray) {
@@ -231,7 +231,7 @@ public class FormDataService implements IFormDataService {
 										TableFieldMap fieldMap = tfList.get(j);
 										if(null != fieldMap.getValue() && index == 0) {
 											param.put(fieldMap.getTableFieldName(), fieldMap.getValue());
-											if(StringUtils.isNotEmpty(StringUtils.handNull(fieldMap.getValue()))) {
+											if(StringUtils.isNotEmpty(StringUtils.handleNull(fieldMap.getValue()))) {
 												isValueNull = isValueNull && false;
 											} else {
 												isValueNull = isValueNull && true;
@@ -240,7 +240,7 @@ public class FormDataService implements IFormDataService {
 											if(null != fieldMap.getValues() && fieldMap.getValues().size() > index) {
 												Object value = fieldMap.getValues().get(index);
 												param.put(fieldMap.getTableFieldName(), value);
-												if(StringUtils.isNotEmpty(StringUtils.handNull(value))) {
+												if(StringUtils.isNotEmpty(StringUtils.handleNull(value))) {
 													isValueNull = isValueNull && false;
 												} else {
 													isValueNull = isValueNull && true;
@@ -282,7 +282,7 @@ public class FormDataService implements IFormDataService {
 						} else {
 							List<Object> list = idFieldMap.getValues();
 							for (int i = 0; i < list.size(); i++) {
-								if(StringUtils.isNotEmpty(StringUtils.handNull(list.get(i)))) 
+								if(StringUtils.isNotEmpty(StringUtils.handleNull(list.get(i)))) 
 									indexs.add(i);
 							}
 						}
@@ -582,7 +582,7 @@ public class FormDataService implements IFormDataService {
 					Object[] values = (Object[])value;
 					//修改时间：2016年12月07日；同一个表单有相同字段时；只取第一个值，避免出现重复的值
 					if(FormPluginType.Text.getValue().equals(tf.getPlugin())) {
-						tf.setValue(StringUtils.handNull(values[0]));
+						tf.setValue(StringUtils.handleNull(values[0]));
 					} else {
 						tf.setValue(ArrayUtils.arrayToString(values, IWebConstant.MULTI_VALUE_SPLIT));
 					}
@@ -660,7 +660,7 @@ public class FormDataService implements IFormDataService {
 			}*/
 			isValueEmpty = true;
 			for (Map.Entry<String, List<Object>> item : items) {
-				String value = StringUtils.handNull(item.getValue().get(i));
+				String value = StringUtils.handleNull(item.getValue().get(i));
 				if(StringUtils.isNotEmpty(value)) {
 					isValueEmpty = isValueEmpty && false;
 				}
@@ -773,6 +773,9 @@ public class FormDataService implements IFormDataService {
             return smartResp;
         }
         Map<String, List<String>> dataMap = formTableFieldServ.getTableFieldByPugin(formId, plugins);
+        if(null == dataMap || dataMap.size() == 0) {
+            return smartResp;
+        }
         Set<Map.Entry<String, List<String>>> sets = dataMap.entrySet();
         List<String> attIds = new ArrayList<String>();
         String sql = SQLResUtil.getOpSqlMap().getSQL("get_field_value");
@@ -788,11 +791,11 @@ public class FormDataService implements IFormDataService {
             if(null != list && list.size()>0) {
                 for (Object obj : list) {
                     if(fieldLen == 1) {
-                        attIds.add(StringUtils.handNull(obj));
+                        attIds.add(StringUtils.handleNull(obj));
                     } else {
                         Object[] objArray = (Object[]) obj;
                         for (int i = 0; i < fieldLen; i++) {
-                            attIds.add(StringUtils.handNull(objArray[i]));
+                            attIds.add(StringUtils.handleNull(objArray[i]));
                         }
                     }
                 }//for

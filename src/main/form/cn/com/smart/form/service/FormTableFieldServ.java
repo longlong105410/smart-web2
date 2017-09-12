@@ -50,13 +50,13 @@ public class FormTableFieldServ extends MgrServiceImpl<TCreateTableField> {
 	        List<Object> list = smartResp.getDatas();
 	        for (Object obj : list) {
                 Object[] objArray = (Object[])obj;
-                String tableName = StringUtils.handNull(objArray[0]);
+                String tableName = StringUtils.handleNull(objArray[0]);
                 List<String> fields = dataMap.get(tableName);
                 if(null == fields) {
                     fields = new ArrayList<String>();
                     dataMap.put(tableName, fields);
                 }
-                fields.add(StringUtils.handNull(objArray[1]));
+                fields.add(StringUtils.handleNull(objArray[1]));
             }
 	    }
 	    return dataMap;

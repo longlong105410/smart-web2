@@ -136,8 +136,8 @@ public class FormService extends MgrServiceImpl<TForm> implements IFormService {
         processName = StringUtils.isEmpty(processName)?"":(processName+"-");
         List<Object> lists = getDao().queryObjSql(sql, params);
         if(null != lists && lists.size()>0) {
-            String insTitleFieldId = StringUtils.handNull(lists.get(0));
-            title = StringUtils.handNull(datas.get(insTitleFieldId));
+            String insTitleFieldId = StringUtils.handleNull(lists.get(0));
+            title = StringUtils.handleNull(datas.get(insTitleFieldId));
             if(StringUtils.isNotEmpty(title)) {
                 title = processName + title;
             } else {

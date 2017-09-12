@@ -29,20 +29,20 @@ public class ListctrlParser implements IFormParser {
 			return null;
 		}
 		
-		String title = StringUtils.handNull(dataMap.get("orgtitle"));
-		String colType = StringUtils.handNull(dataMap.get("orgcoltype"));
+		String title = StringUtils.handleNull(dataMap.get("orgtitle"));
+		String colType = StringUtils.handleNull(dataMap.get("orgcoltype"));
 		/*String unit = StringUtil.handNull(dataMap.get("orgunit"));
 		String sum = StringUtil.handNull(dataMap.get("orgsum"));*/
-		String pluginType = StringUtils.handNull(dataMap.get("plugintype"));
-		String pluginUri = StringUtils.handNull(dataMap.get("pluginuri"));
-		String fieldRequire = StringUtils.handNull(dataMap.get("fieldrequire"));
-		String fieldHide = StringUtils.handNull(dataMap.get("fieldhide"));
+		String pluginType = StringUtils.handleNull(dataMap.get("plugintype"));
+		String pluginUri = StringUtils.handleNull(dataMap.get("pluginuri"));
+		String fieldRequire = StringUtils.handleNull(dataMap.get("fieldrequire"));
+		String fieldHide = StringUtils.handleNull(dataMap.get("fieldhide"));
 		
-		String colValue = StringUtils.handNull(dataMap.get("orgcolvalue"));
-		String fieldName = StringUtils.handNull(dataMap.get("bind_table_field"));
-		String name = StringUtils.handNull(dataMap.get("bind_table"));
-		String tableWidth = StringUtils.handNull(dataMap.get("tablewidth"));
-		String remarks = StringUtils.handNull(dataMap.get("remarks"));
+		String colValue = StringUtils.handleNull(dataMap.get("orgcolvalue"));
+		String fieldName = StringUtils.handleNull(dataMap.get("bind_table_field"));
+		String name = StringUtils.handleNull(dataMap.get("bind_table"));
+		String tableWidth = StringUtils.handleNull(dataMap.get("tablewidth"));
+		String remarks = StringUtils.handleNull(dataMap.get("remarks"));
 		if(StringUtils.isEmpty(tableWidth)) {
 			tableWidth = "100%";
 		}
@@ -170,7 +170,7 @@ public class ListctrlParser implements IFormParser {
         	if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
         		thBuild.append("<th>"+titles[i]);
         		if(StringUtils.isNotEmpty(remarksArray[i])) {
-        			thBuild.append("<p class=\"help-block\" style=\"margin:0;padding:0\">"+StringUtils.handNull(remarksArray[i])+"</p>");
+        			thBuild.append("<p class=\"help-block\" style=\"margin:0;padding:0\">"+StringUtils.handleNull(remarksArray[i])+"</p>");
         		}
         		thBuild.append("</th>");
         	}

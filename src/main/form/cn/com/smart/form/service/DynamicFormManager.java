@@ -5,18 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mixsmart.enums.YesNoType;
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.com.smart.form.bean.entity.TForm;
-import cn.com.smart.form.bean.entity.TFormField;
-import cn.com.smart.form.dao.FormDao;
-import cn.com.smart.form.dao.FormFieldDao;
-
+import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
+
+import cn.com.smart.form.bean.entity.TForm;
+import cn.com.smart.form.bean.entity.TFormField;
+import cn.com.smart.form.dao.FormFieldDao;
 
 /**
  * 表单设计器管理
@@ -81,7 +79,7 @@ public class DynamicFormManager {
                     nameMap.put(entry.getKey(), field.getTableFieldId());
                     fieldIds.add(tableFieldId);
                 }
-                YesNoType yesNo = YesNoType.getObjByStrValue(StringUtils.handNull(fieldInfo.get("islog")));
+                YesNoType yesNo = YesNoType.getObjByStrValue(StringUtils.handleNull(fieldInfo.get("islog")));
                 yesNo = (null == yesNo)?YesNoType.NO : yesNo;
                 field.setIsLog(yesNo.getIndex());
             }

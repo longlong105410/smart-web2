@@ -28,13 +28,13 @@ public class TextAreaParser implements IFormParser {
 			return null;
 		}
 		boolean isHide = false;
-		if("1".equals(StringUtils.handNull(dataMap.get("orghide")))) {
+		if("1".equals(StringUtils.handleNull(dataMap.get("orghide")))) {
 			isHide = true;
 		}
-		String orgRich = StringUtils.handNull(dataMap.get("orgrich"));
+		String orgRich = StringUtils.handleNull(dataMap.get("orgrich"));
 		StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<textarea name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" ");
-		String className = StringUtils.handNull(dataMap.get("class"));
+		strBuild.append("<textarea name=\""+StringUtils.handleNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" ");
+		String className = StringUtils.handleNull(dataMap.get("class"));
 		if(YesNoType.YES.getStrValue().equals(orgRich)) {
 			className = className.replace("form-control", "");
 		}
@@ -42,16 +42,16 @@ public class TextAreaParser implements IFormParser {
 		if(isHide) strBuild.append(" hide ");
 		strBuild.append("\"");
 		strBuild.append("data-label-name=\""+dataMap.get("title")+"\" style=\""+dataMap.get("style")+"\"");
-		String relateField = StringUtils.handNull(dataMap.get("relate_field"));
+		String relateField = StringUtils.handleNull(dataMap.get("relate_field"));
 		if(StringUtils.isNotEmpty(relateField)) {
 			strBuild.append(" relate-field=\""+relateField+"\"");
 		}
-		String relateFieldValue = StringUtils.handNull(dataMap.get("relate_field_value"));
+		String relateFieldValue = StringUtils.handleNull(dataMap.get("relate_field_value"));
 		if(StringUtils.isNotEmpty(relateFieldValue)) {
 			strBuild.append(" relate-field-value=\""+relateFieldValue+"\"");
 		}
 		strBuild.append(" >");
-		String defaultValue = StringUtils.handNull(dataMap.get("value"));
+		String defaultValue = StringUtils.handleNull(dataMap.get("value"));
 		if(!StringUtils.isEmpty(defaultValue)) {
 			defaultValue = defaultValue.replace("&lt;br/&gt;", "\n");
 			strBuild.append(defaultValue);

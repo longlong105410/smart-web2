@@ -37,11 +37,11 @@ public class CheckboxsParser implements IFormParser {
 			return null;
 		}
 		StringBuilder strBuild = new StringBuilder();
-		String fromData = StringUtils.handNull(dataMap.get("from_data"));
-		String alignmentMode = StringUtils.handNull(dataMap.get("orgchecked"));
-		String dynamicLoad = StringUtils.handNull(dataMap.get("dynamicload"));
+		String fromData = StringUtils.handleNull(dataMap.get("from_data"));
+		String alignmentMode = StringUtils.handleNull(dataMap.get("orgchecked"));
+		String dynamicLoad = StringUtils.handleNull(dataMap.get("dynamicload"));
 		FormDataSourceType sourceType = FormDataSourceType.getObj(fromData);
-		String fieldRequire = StringUtils.handNull(dataMap.get("fieldrequire"));
+		String fieldRequire = StringUtils.handleNull(dataMap.get("fieldrequire"));
 		String require = "";
 		if(YesNoType.YES.getStrValue().equals(fieldRequire)) {
 			require = "require";
@@ -54,13 +54,13 @@ public class CheckboxsParser implements IFormParser {
 				if(alignmentMode.equals(AlignmentMode.Vertical.getValue())) {
 					isHorizontal = "no";
 				}
-				strBuild.append("<span class=\"cnoj-checkbox checkbox-parent\" data-label-name=\""+StringUtils.handNull(dataMap.get("title"))+"\" data-is-horizontal=\""+isHorizontal+"\" data-require=\""+require+"\" data-name=\""+dataMap.get("bind_table_field")+"\" data-uri=\""+StringUtils.handNull(dataMap.get("data_uri"))+"\"");
+				strBuild.append("<span class=\"cnoj-checkbox checkbox-parent\" data-label-name=\""+StringUtils.handleNull(dataMap.get("title"))+"\" data-is-horizontal=\""+isHorizontal+"\" data-require=\""+require+"\" data-name=\""+dataMap.get("bind_table_field")+"\" data-uri=\""+StringUtils.handleNull(dataMap.get("data_uri"))+"\"");
 				strBuild.append("></span>");
 				break;
 			}
 		default:
 			String checked = "";
-			strBuild.append("<span class=\"checkbox-parent\" data-label-name=\""+StringUtils.handNull(dataMap.get("title"))+"\">");
+			strBuild.append("<span class=\"checkbox-parent\" data-label-name=\""+StringUtils.handleNull(dataMap.get("title"))+"\">");
 			for (Map<String,Object> option : options) {
 				if("checked".equals(option.get("checked"))) {
 					checked = "checked=\"checked\"";
@@ -68,8 +68,8 @@ public class CheckboxsParser implements IFormParser {
 				if(dataMap.get("orgchecked").equals(AlignmentMode.Vertical.getValue())) {
 					strBuild.append("<div>");
 				}
-				strBuild.append("<input type=\"checkbox\" name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"_"+StringUtils.handNull(option.get("value"))+"\" value=\""+StringUtils.handNull(option.get("value"))+"\" ");
-				strBuild.append(" "+checked+" /> <label class=\"text-normal\" for=\""+dataMap.get("bind_table_field")+"_"+StringUtils.handNull(option.get("value"))+"\">"+StringUtils.handNull(option.get("text"))+"</label>&nbsp;");
+				strBuild.append("<input type=\"checkbox\" name=\""+StringUtils.handleNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"_"+StringUtils.handleNull(option.get("value"))+"\" value=\""+StringUtils.handleNull(option.get("value"))+"\" ");
+				strBuild.append(" "+checked+" /> <label class=\"text-normal\" for=\""+dataMap.get("bind_table_field")+"_"+StringUtils.handleNull(option.get("value"))+"\">"+StringUtils.handleNull(option.get("text"))+"</label>&nbsp;");
 				if(dataMap.get("orgchecked").equals(AlignmentMode.Vertical.getValue())) {
 					strBuild.append("</div>");
 				}

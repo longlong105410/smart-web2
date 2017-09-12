@@ -93,8 +93,8 @@ public class FormAttachmentService extends MgrServiceImpl<TFormAttachment> {
         SmartResponse<Object> smartResp = opServ.getDatas("get_tablename_fieldname_byfieldid", param);
         if(OP_SUCCESS.equals(smartResp.getResult())) {
             Object[] array = (Object[])smartResp.getDatas().get(0);
-            String tableName = StringUtils.handNull(array[0]);
-            String fieldName = StringUtils.handNull(array[1]);
+            String tableName = StringUtils.handleNull(array[0]);
+            String fieldName = StringUtils.handleNull(array[1]);
             param.clear();
             param.put("formDataId", formDataId);
             
@@ -105,7 +105,7 @@ public class FormAttachmentService extends MgrServiceImpl<TFormAttachment> {
                 querySql = querySql.replace("${tableName}", tableName).replace("${fieldName}", fieldName);
                 List<Object> list = getDao().queryObjSql(querySql, param);
                 if(CollectionUtils.isNotEmpty(list)) {
-                    sourceValue = StringUtils.handNull(list.get(0));
+                    sourceValue = StringUtils.handleNull(list.get(0));
                 }
                 if(StringUtils.isNotEmpty(sourceValue)) {
                     String[] sourceValues = sourceValue.split(MULTI_VALUE_SPLIT);

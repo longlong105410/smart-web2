@@ -203,7 +203,7 @@ public class FormFieldLog {
             valueMap.put(fieldInfo.getTableFieldId(), fieldMap);
         }
         if(null != value) {
-            fieldMap.getValues().add(StringUtils.handNull(value));
+            fieldMap.getValues().add(StringUtils.handleNull(value));
         }
     }
 

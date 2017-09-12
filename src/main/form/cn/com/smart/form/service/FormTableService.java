@@ -227,12 +227,12 @@ public class FormTableService extends MgrServiceImpl<TCreateTable> {
 				for (Object obj : datas) {
 					Object[] objs = (Object[])obj;
 					tfMap = new TableFieldMap();
-					tfMap.setId(StringUtils.handNull(objs[0]));
-					tfMap.setPlugin(StringUtils.handNull(objs[1]));
-					tfMap.setTableId(StringUtils.handNull(objs[2]));
-					tfMap.setTableName(StringUtils.handNull(objs[3]));
-					tfMap.setTableFieldId(StringUtils.handNull(objs[4]));
-					tfMap.setTableFieldName(StringUtils.handNull(objs[5]));
+					tfMap.setId(StringUtils.handleNull(objs[0]));
+					tfMap.setPlugin(StringUtils.handleNull(objs[1]));
+					tfMap.setTableId(StringUtils.handleNull(objs[2]));
+					tfMap.setTableName(StringUtils.handleNull(objs[3]));
+					tfMap.setTableFieldId(StringUtils.handleNull(objs[4]));
+					tfMap.setTableFieldName(StringUtils.handleNull(objs[5]));
 					tfMaps.add(tfMap);
 				}
 			}

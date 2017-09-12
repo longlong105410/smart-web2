@@ -30,10 +30,10 @@ public class SelectParser implements IFormParser {
 		if(null == dataMap || dataMap.size()<1) {
 			return null;
 		}
-		String content = StringUtils.handNull(dataMap.get("content"));
-		String fromData = StringUtils.handNull(dataMap.get("from_data"));
-		String dynamicLoad = StringUtils.handNull(dataMap.get("dynamicload"));
-		String formControlField = StringUtils.handNull(dataMap.get("form_control_field"));
+		String content = StringUtils.handleNull(dataMap.get("content"));
+		String fromData = StringUtils.handleNull(dataMap.get("from_data"));
+		String dynamicLoad = StringUtils.handleNull(dataMap.get("dynamicload"));
+		String formControlField = StringUtils.handleNull(dataMap.get("form_control_field"));
 		FormControlFieldType fcfType = FormControlFieldType.getObjByValue(formControlField);
 		String fcfClassName = null;
 		if(null != fcfType) {
@@ -45,15 +45,15 @@ public class SelectParser implements IFormParser {
 		case CUSTOM_URI:
 			if(YesNoType.YES.getStrValue().equals(dynamicLoad)) {
 				StringBuilder strBuild = new StringBuilder();
-				strBuild.append("<select name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" ");
-				strBuild.append(" class=\""+dataMap.get("class")+" cnoj-select "+StringUtils.handNull(fcfClassName)+" \"");
+				strBuild.append("<select name=\""+StringUtils.handleNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" ");
+				strBuild.append(" class=\""+dataMap.get("class")+" cnoj-select "+StringUtils.handleNull(fcfClassName)+" \"");
 				strBuild.append(" style=\""+dataMap.get("style")+"\" data-uri=\""+dataMap.get("data_uri")+"\"></select>");
 				content = strBuild.toString();
 				break;
 			}
 		default:
 			if(!StringUtils.isEmpty(content)) {
-				content = content.replaceAll("<select([^>].*?)>", "<select class=\""+dataMap.get("class")+" "+StringUtils.handNull(fcfClassName)+"\" name=\"111\" >");
+				content = content.replaceAll("<select([^>].*?)>", "<select class=\""+dataMap.get("class")+" "+StringUtils.handleNull(fcfClassName)+"\" name=\"111\" >");
 				content = content.replaceAll("(leipiplugins=\".*?\")|(field.*?=\".*?\")|(org.*?=\".*?\")|(from.*?=\".*?\")|(bind_.*?=\".*?\")", "");
 				content = content.replaceAll("name=\".*?\"", "name=\""+dataMap.get("bind_table_field")+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\"" + dataMap.get("title") + "\" style=\""+dataMap.get("style")+"\"");
 			}

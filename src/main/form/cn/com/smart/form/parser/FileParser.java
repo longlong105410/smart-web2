@@ -30,26 +30,26 @@ public class FileParser implements IFormParser {
 			return null;
 		}
 		boolean isHide = false;
-		if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("orghide")))) {
+		if(YesNoType.YES.getStrValue().equals(StringUtils.handleNull(dataMap.get("orghide")))) {
 			isHide = true;
 		}
 		
-		String value = StringUtils.handNull(dataMap.get("value"));
-		String fileType = StringUtils.handNull(dataMap.get("filetype"));
+		String value = StringUtils.handleNull(dataMap.get("value"));
+		String fileType = StringUtils.handleNull(dataMap.get("filetype"));
 		StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<input type=\"file\" name=\""+StringUtils.handNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" value=\""+value+"\"  style=\""+dataMap.get("style")+"\"");
+		strBuild.append("<input type=\"file\" name=\""+StringUtils.handleNull(dataMap.get("bind_table_field"))+"\" id=\""+dataMap.get("bind_table_field")+"\" data-label-name=\""+dataMap.get("title")+"\" value=\""+value+"\"  style=\""+dataMap.get("style")+"\"");
 		if(StringUtils.isNotEmpty(fileType)) {
 			strBuild.append(" accept=\""+MimeTypeConfig.getInstance().getValues(fileType)+"\"");
 		}
-		String relateField = StringUtils.handNull(dataMap.get("relate_field"));
+		String relateField = StringUtils.handleNull(dataMap.get("relate_field"));
 		if(StringUtils.isNotEmpty(relateField)) {
 			strBuild.append(" relate-field=\""+relateField+"\"");
 		}
-		String relateFieldValue = StringUtils.handNull(dataMap.get("relate_field_value"));
+		String relateFieldValue = StringUtils.handleNull(dataMap.get("relate_field_value"));
 		if(StringUtils.isNotEmpty(relateFieldValue)) {
 			strBuild.append(" relate-field-value=\""+relateFieldValue+"\"");
 		}
-		String className = StringUtils.handNull(dataMap.get("class"));
+		String className = StringUtils.handleNull(dataMap.get("class"));
 		strBuild.append(" class=\""+className+(isHide?" hide":"")+"\"");
 		strBuild.append(" />");
 		return strBuild.toString();

@@ -30,24 +30,24 @@ public class FilesParser implements IFormParser {
 			return null;
 		}
 		boolean isHide = false;
-		if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("orghide")))) {
+		if(YesNoType.YES.getStrValue().equals(StringUtils.handleNull(dataMap.get("orghide")))) {
 			isHide = true;
 		}
 		boolean isRequire = false;
-		if(YesNoType.YES.getStrValue().equals(StringUtils.handNull(dataMap.get("fieldrequire")))) {
+		if(YesNoType.YES.getStrValue().equals(StringUtils.handleNull(dataMap.get("fieldrequire")))) {
 			isRequire = true;
 		}
 		String url = "";
-		String fileType = StringUtils.handNull(dataMap.get("filetype"));
-		String btnStyle = StringUtils.handNull(dataMap.get("org_btn_style"));
-		String formType = StringUtils.handNull(dataMap.get("formtype"));
-		String fieldId = StringUtils.handNull(dataMap.get("bind_table_field"));
-		String maxFileNum = StringUtils.handNull(dataMap.get("maxfiles"));
-		String maxFileSize = StringUtils.handNull(dataMap.get("filesize"));
-		String remarks = StringUtils.handNull(dataMap.get("remarks"));
-		String jsCallback = StringUtils.handNull(dataMap.get("jscallback"));
-		String orgUri = StringUtils.handNull(dataMap.get("orguri"));
-		String formId = StringUtils.handNull(dataMap.get("formid"));
+		String fileType = StringUtils.handleNull(dataMap.get("filetype"));
+		String btnStyle = StringUtils.handleNull(dataMap.get("org_btn_style"));
+		String formType = StringUtils.handleNull(dataMap.get("formtype"));
+		String fieldId = StringUtils.handleNull(dataMap.get("bind_table_field"));
+		String maxFileNum = StringUtils.handleNull(dataMap.get("maxfiles"));
+		String maxFileSize = StringUtils.handleNull(dataMap.get("filesize"));
+		String remarks = StringUtils.handleNull(dataMap.get("remarks"));
+		String jsCallback = StringUtils.handleNull(dataMap.get("jscallback"));
+		String orgUri = StringUtils.handleNull(dataMap.get("orguri"));
+		String formId = StringUtils.handleNull(dataMap.get("formid"));
 		
 		if(StringUtils.isEmpty(btnStyle)) {
 			btnStyle = "btn-success";
@@ -72,16 +72,16 @@ public class FilesParser implements IFormParser {
 		}
 		
 		StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<div class=\"file-upload-wrap\"><div id=\""+fieldId+"\" data-label-name=\""+StringUtils.handNull(dataMap.get("title"))+"\"");
-		String relateField = StringUtils.handNull(dataMap.get("relate_field"));
+		strBuild.append("<div class=\"file-upload-wrap\"><div id=\""+fieldId+"\" data-label-name=\""+StringUtils.handleNull(dataMap.get("title"))+"\"");
+		String relateField = StringUtils.handleNull(dataMap.get("relate_field"));
 		if(StringUtils.isNotEmpty(relateField)) {
 			strBuild.append(" relate-field=\""+relateField+"\"");
 		}
-		String relateFieldValue = StringUtils.handNull(dataMap.get("relate_field_value"));
+		String relateFieldValue = StringUtils.handleNull(dataMap.get("relate_field_value"));
 		if(StringUtils.isNotEmpty(relateFieldValue)) {
 			strBuild.append(" relate-field-value=\""+relateFieldValue+"\"");
 		}
-		//String className = StringUtils.handNull(dataMap.get("class"));
+		//String className = StringUtils.handleNull(dataMap.get("class"));
 		strBuild.append(" class=\"file-upload "+(isHide?" hide":"")+" "+(isRequire?" require":"")+" hidden-print\"");
 		strBuild.append(">");
 		strBuild.append("<span class=\"btn "+btnStyle+" btn-sm fileinput-button upload-add\">");

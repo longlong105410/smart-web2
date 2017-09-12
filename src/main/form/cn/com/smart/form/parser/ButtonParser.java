@@ -27,10 +27,10 @@ public class ButtonParser implements IFormParser {
 			return null;
 		}
 		StringBuilder strBuild = new StringBuilder();
-		String name = StringUtils.handNull(dataMap.get("orgname"));
-		String btnStyle =  StringUtils.handNull(dataMap.get("org_btn_style"));
-		String btnIdClass = StringUtils.handNull(dataMap.get("btn_id_class"));
-		String btnIcon = StringUtils.handNull(dataMap.get("btn_icon"));
+		String name = StringUtils.handleNull(dataMap.get("orgname"));
+		String btnStyle =  StringUtils.handleNull(dataMap.get("org_btn_style"));
+		String btnIdClass = StringUtils.handleNull(dataMap.get("btn_id_class"));
+		String btnIcon = StringUtils.handleNull(dataMap.get("btn_icon"));
 		strBuild.append("<button type=\"button\" ");
 		handleClass(strBuild, btnStyle, btnIdClass);
 		strBuild.append(">");
