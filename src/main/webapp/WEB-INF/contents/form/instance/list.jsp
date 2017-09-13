@@ -19,7 +19,6 @@
 		<!-- table -->
 	    <cnoj:table smartResp="${smartResp }" headers="标题,创建人,创建时间" currentUri="${currentUri }" 
 	     isCheckbox="1" isRowSelected="1" alinks="${alinks }" editBtn="${editBtn }"
-	     delBtn="${delBtn }" refreshBtn="${refreshBtn }" page="${pageParam }" customBtns="${customBtns }"
-	    />
+	     delBtn="${delBtn }" refreshBtn="${refreshBtn }" page="${pageParam }" />
 	</div>
 </div>

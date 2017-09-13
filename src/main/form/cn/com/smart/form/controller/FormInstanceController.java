@@ -41,6 +41,7 @@ import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.DelBtn;
 import cn.com.smart.web.tag.bean.EditBtn;
+import cn.com.smart.web.tag.bean.PageParam;
 import cn.com.smart.web.tag.bean.RefreshBtn;
 
 /**
@@ -83,6 +84,7 @@ public class FormInstanceController extends BaseFormController {
         alink.setParamName("formId,formDataId");
         alinks = new ArrayList<ALink>(1);
         alinks.add(alink);
+        pageParam = new PageParam(uri, null, page.getPageSize());
         
         ModelMap modelMap = modelView.getModelMap();
         modelMap.put("smartResp", smartResp);
@@ -90,6 +92,7 @@ public class FormInstanceController extends BaseFormController {
         modelMap.put("delBtn", delBtn);
         modelMap.put("editBtn", editBtn);
         modelMap.put("alinks", alinks);
+        modelMap.put("pageParam", pageParam);
         modelView.setViewName(VIEW_DIR+"list");
         return modelView;
     }

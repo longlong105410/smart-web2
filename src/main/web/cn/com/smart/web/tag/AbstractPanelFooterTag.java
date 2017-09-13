@@ -214,9 +214,10 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
     			htmlContent.append("<span>"+(smartResp.getTotalPage()>0?page.getPage():"0")+" - "+smartResp.getTotalPage()+"</span>");
     		}
     		StringBuilder showPageBuilder = null;
+    		int defaultPageSize = 0;
     		//每页显示数量选择
     		if(null != page && page.getIsSelectSize()) {
-				int defaultPageSize = page.getPageSize();
+				defaultPageSize = page.getPageSize();
 				if(defaultPageSize == 0) {
 					defaultPageSize = PageHelper.defaultPageSize();
 				}
@@ -234,7 +235,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 					showPageBuilder.append("</select>");
 				}
     		}
-    		htmlContent.append("<span>&nbsp;&nbsp; 共"+smartResp.getTotalNum()+"条(每页显示"+(smartResp.getTotalPage()==0?(smartResp.getTotalNum()==0?page.getPageSize():smartResp.getTotalNum()):""+(null == showPageBuilder ? smartResp.getPerPageSize():showPageBuilder.toString()))+"</span>条)</span></div>");
+    		htmlContent.append("<span>&nbsp;&nbsp; 共"+smartResp.getTotalNum()+"条(每页显示"+(smartResp.getTotalPage()==0?(smartResp.getTotalNum()==0?defaultPageSize:smartResp.getTotalNum()):""+(null == showPageBuilder ? smartResp.getPerPageSize():showPageBuilder.toString()))+"</span>条)</span></div>");
     		htmlContent.append("</div>");
     		String resultContent = htmlContent.toString();
     		String styleStart = "style=\"";
