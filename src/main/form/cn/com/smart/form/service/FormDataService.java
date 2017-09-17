@@ -567,6 +567,10 @@ public class FormDataService implements IFormDataService {
 			        continue;
 			    }
 				Object value = datas.get(tf.getTableFieldId());
+				if(null == value) {
+				    tf.setValue(value);
+				    continue;
+				}
 				if(FormPluginType.Listctrl.getValue().equals(tf.getPlugin())) {
 				    if(value.getClass().isArray()) {
 				        Object[] array = (Object[])value;

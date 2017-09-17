@@ -15,15 +15,13 @@
 	padding-left: 10px;
 	/*font-weight: normal;*/
 }
-
+/*
 .table-condensed>thead>tr>th,.table-condensed>thead>tr>th.th-checkbox.text-center, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td {
 	padding: 3px;
-}
+}*/
 
-.table-condensed>thead>tr>th .form-control,
-.table-condensed>tbody>tr>th .form-control,
-.table-condensed>thead>tr>td .form-control,
-.table-condensed>tbody>tr>td .form-control {
+.table-condensed>tbody>tr>td input.form-control,
+.table-condensed>tbody>tr>td select.form-control {
 	padding: 4px 6px;
 	height: 30px;
 }

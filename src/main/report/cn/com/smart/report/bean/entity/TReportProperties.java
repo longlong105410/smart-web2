@@ -30,8 +30,17 @@ public class TReportProperties extends BaseBeanImpl{
     
     /**
      * 是否支持导出功能
+     * 1 -- 是;
+     * 0 -- 否
      */
-    private Integer isImport;
+    private Integer isImport = YesNoType.NO.getIndex();
+    
+    /**
+     * 是否固定头部
+     * 1 -- 是;
+     * 0 -- 否
+     */
+    private Integer isFixedHeader = YesNoType.YES.getIndex();
     
     /**
      * 是否有ID
@@ -46,6 +55,13 @@ public class TReportProperties extends BaseBeanImpl{
      * 0 -- 否
      */
     private Integer isShowId = YesNoType.NO.getIndex();
+    
+    /**
+     * 是否有复选框；
+     * 1 -- 有;
+     * 0 -- 无
+     */
+    private Integer isCheckbox = YesNoType.NO.getIndex();
     
     @Id
     @Column(name="id", length=50)
@@ -64,6 +80,15 @@ public class TReportProperties extends BaseBeanImpl{
 
     public void setReportId(String reportId) {
         this.reportId = reportId;
+    }
+    
+    @Column(name="is_fixed_header")
+    public Integer getIsFixedHeader() {
+        return isFixedHeader;
+    }
+
+    public void setIsFixedHeader(Integer isFixedHeader) {
+        this.isFixedHeader = isFixedHeader;
     }
     
     @Column(name="is_import")
@@ -91,6 +116,15 @@ public class TReportProperties extends BaseBeanImpl{
 
     public void setIsShowId(Integer isShowId) {
         this.isShowId = isShowId;
+    }
+
+    @Column(name="is_checkbox")
+    public Integer getIsCheckbox() {
+        return isCheckbox;
+    }
+
+    public void setIsCheckbox(Integer isCheckbox) {
+        this.isCheckbox = isCheckbox;
     }
     
 }

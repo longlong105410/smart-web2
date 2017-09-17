@@ -100,10 +100,12 @@ public class PushMessageContext {
 				}
 			}
 		}
-		if(CollectionUtils.isEmpty(pluginNames) && CollectionUtils.isEmpty(pushAbleList)) {
+		/*if(CollectionUtils.isEmpty(pluginNames) && CollectionUtils.isEmpty(pushAbleList)) {
 			throw new RuntimeException("没有找到推送插件名称对应的推送实现类");
-		}
-		sendMsg(CollectionUtils.isEmpty(pushAbleList)?pushImplList:pushAbleList, msgType, userIds, groupIds, sendData);
+		}*/
+		if(CollectionUtils.isNotEmpty(pluginNames) && CollectionUtils.isNotEmpty(pushAbleList)) {
+		    sendMsg(CollectionUtils.isEmpty(pushAbleList)?pushImplList:pushAbleList, msgType, userIds, groupIds, sendData);
+        }
 	}
 	
 	/**

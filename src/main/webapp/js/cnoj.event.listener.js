@@ -398,6 +398,9 @@ function formRequireListener($elementWrap) {
 	 */
 	function _handler($element) {
 		var id = $element.attr("id");
+		if(utils.isEmpty(id)) {
+		    id = utils.UUID();
+		} 
 		var newIdTag = id+"-"+"require";
 		if(!$element.prop("disabled") && !$element.prop("readonly")) {
 			if($element.parent().find("#"+newIdTag).length == 0) {
