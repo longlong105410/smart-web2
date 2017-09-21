@@ -32,9 +32,23 @@ public class TReportField implements BaseBean, DateBean {
     
     private String reportId;
     
-    private String fieldName;
+    private String title;
     
-    private String fieldText;
+    private String width;
+    
+    private String url;
+    
+    private String openUrlType;
+    
+    private String paramName;
+    
+    private String paramValue;
+    
+    private String searchName;
+    
+    private String customClass;
+    
+    private Integer sortOrder;
     
     private Date createTime;
 
@@ -57,24 +71,87 @@ public class TReportField implements BaseBean, DateBean {
         this.reportId = reportId;
     }
 
-    @Column(name="field_name", length=127)
-    public String getFieldName() {
-        return fieldName;
+    @Column(name="title", length=127, nullable=false)
+    public String getTitle() {
+        return title;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    @Column(name="field_text")
-    public String getFieldText() {
-        return fieldText;
+    @Column(name="width", length = 50)
+    public String getWidth() {
+        return width;
     }
 
-    public void setFieldText(String fieldText) {
-        this.fieldText = fieldText;
+    public void setWidth(String width) {
+        this.width = width;
     }
 
+    @Column(name="url", length = 255)
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Column(name="open_url_type", length = 127)
+    public String getOpenUrlType() {
+        return openUrlType;
+    }
+
+    public void setOpenUrlType(String openUrlType) {
+        this.openUrlType = openUrlType;
+    }
+
+    @Column(name="param_name", length=255)
+    public String getParamName() {
+        return paramName;
+    }
+
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
+    }
+
+    @Column(name="param_value", length = 127)
+    public String getParamValue() {
+        return paramValue;
+    }
+
+    public void setParamValue(String paramValue) {
+        this.paramValue = paramValue;
+    }
+
+    @Column(name="search_name", length=127)
+    public String getSearchName() {
+        return searchName;
+    }
+
+    public void setSearchName(String searchName) {
+        this.searchName = searchName;
+    }
+
+    @Column(name="sort_order")
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+    
+    @Column(name="custom_class", length=255)
+    public String getCustomClass() {
+        return customClass;
+    }
+
+    public void setCustomClass(String customClass) {
+        this.customClass = customClass;
+    }
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_time", updatable=false)
     public Date getCreateTime() {
@@ -90,6 +167,4 @@ public class TReportField implements BaseBean, DateBean {
     public String getPrefix() {
         return "RF";
     }
-
-    
 }

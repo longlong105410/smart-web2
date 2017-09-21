@@ -38,7 +38,7 @@ public class TReport implements BaseBean, DateBean {
      */
     private String type;
     
-    private String creator;
+    private String userId;
     
     private Date createTime;
     
@@ -76,13 +76,13 @@ public class TReport implements BaseBean, DateBean {
         this.type = type;
     }
 
-    @Column(name="creator")
-    public String getCreator() {
-        return creator;
+    @Column(name="user_id", length=50, nullable = false, updatable = false)
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Temporal(TemporalType.TIMESTAMP)

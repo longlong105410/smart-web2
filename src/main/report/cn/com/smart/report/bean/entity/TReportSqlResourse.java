@@ -30,6 +30,8 @@ public class TReportSqlResourse extends BaseBeanImpl {
 
     private String id;
     
+    private String reportId;
+    
     private String name;
     
     private String sql;
@@ -40,8 +42,6 @@ public class TReportSqlResourse extends BaseBeanImpl {
      * 0 -- 否
      */
     private Integer isFilter = YesNoType.YES.getIndex();
-    
-    private String creator;
     
     private Date createTime;
 
@@ -55,6 +55,15 @@ public class TReportSqlResourse extends BaseBeanImpl {
         this.id = id;
     }
 
+    @Column(name="report_id", length=50, nullable=false)
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
+    }
+    
     @Column(name="name", length=127, nullable=false, unique=true)
     public String getName() {
         return name;
@@ -64,7 +73,7 @@ public class TReportSqlResourse extends BaseBeanImpl {
         this.name = name;
     }
 
-    @Column(name="sql_", length=1024, nullable=false)
+    @Column(name="sql_", length=4000, nullable=false)
     public String getSql() {
         return sql;
     }
@@ -82,15 +91,6 @@ public class TReportSqlResourse extends BaseBeanImpl {
         this.isFilter = isFilter;
     }
 
-    @Column(name="creator", length=50, nullable=false)
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_time", updatable = false)
     public Date getCreateTime() {
@@ -100,4 +100,5 @@ public class TReportSqlResourse extends BaseBeanImpl {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
 }

@@ -19,50 +19,43 @@
 			}
 			var fieldElementTr = "<tr id=\"tr"+seqNum+"\"><td class=\"seq-num text-right\" style=\"width: 40px;\">"+
 			"<input type=\"hidden\" name=\"fields["+(seqNum-1)+"].sortOrder\" value=\""+seqNum+"\" />"+seqNum+"</td>"+
-            "<td style=\"width: 180px;\"><div class=\"col-sm-12 p-l-0 p-r-0\"><input type=\"text\" id=\"file-name"+seqNum+"\" class=\"form-control input-sm require\" data-label-name=\"字段名称\" name=\"fields["+(seqNum-1)+"].fieldName\" placeholder=\"请输入字段名\" /></div></td>"+
-            "<td style=\"width: 150px;\"><div class=\"col-sm-12 p-l-0 p-r-0\"><select class=\"cnoj-select field-type form-control input-sm\" data-uri=\"dict/item/TABLE_FIELD_DATA_FORMAT.json\" style=\"width: 140px;\" name=\"fields["+(seqNum-1)+"].dataFormat\"></select></div></td>"+
-            "<td style=\"width: 150px;\"><div class=\"col-sm-12 p-l-0 p-r-0\"><input type=\"text\" class=\"form-control field-length input-sm\" data-format=\"num\" data-step=\"1\" name=\"fields["+(seqNum-1)+"].length\" /></div></td>"+
-            "<td><input type=\"text\" class=\"form-control require input-sm\" name=\"fields["+(seqNum-1)+"].fieldRemark\" /></td>"+
-            "<td id=\"del"+seqNum+"\"></td>"+
+            "<td style=\"width: 120px;\"><input id=\"title"+seqNum+"\" name=\"fields["+(seqNum-1)+"].title\" class=\"form-control\" placeholder=\"请填写标题，必填\" title=\"必填项\" type=\"text\"  /></td>"+
+            "<td style=\"width: 80px;\"><input class=\"form-control\" name=\"fields["+(seqNum-1)+"].width\" type=\"text\" placeholder=\"自动宽度\" /></td>"+
+            "<td style=\"width: 200px;\"><input class=\"form-control\" type=\"text\" name=\"fields["+(seqNum-1)+"].url\" placeholder=\"URL地址\" /></td>"+
+            "<td style=\"width: 100px;\"><select class=\"form-control cnoj-select\" name=\"fields["+(seqNum-1)+"].openUrlType\" data-uri=\"dict/item/OPEN_URL_TYPE.json\"><option value=''>请选择</option></select></td>"+
+            "<td style=\"width: 120px;\"><input class=\"form-control\" name=\"fields["+(seqNum-1)+"].paramName\" title=\"多个参数用英文逗号分隔，如果没有请为空\" placeholder=\"多个参数用英文逗号分隔，如果没有请为空\" type=\"text\"  /></td>"+
+            "<td style=\"width: 120px;\"><input class=\"form-control\" name=\"fields["+(seqNum-1)+"].paramValue\" title=\"多个参数引用下标用英文逗号分隔，如果没有请为空\" placeholder=\"多个参数引用下标用英文逗号分隔，如果没有请为空\" type=\"text\"  /></td>"+
+            "<td style=\"width: 120px;\"><input class=\"form-control\" name=\"fields["+(seqNum-1)+"].searchName\" title=\"填写搜索变量，如果该标题不是搜索项，请为空\" placeholder=\"填写搜索变量，如果该标题不是搜索项，请为空\" type=\"text\"  /></td>"+
+            "<td><input class=\"form-control\" type=\"text\" name=\"fields["+(seqNum-1)+"].customClass\" title=\"自定义实现类，需要实现ICustomCellCallback接口\" placeholder=\"自定义实现类，需要实现ICustomCellCallback接口\" /></td>"+
+            "<td id=\"del"+seqNum+"\" style=\"width: 40px;\" class=\"text-center\"></td>"+
             "</tr>";
 			$tbody.append(fieldElementTr);
-			$("<button type=\"button\" title=\"删除\" class=\"close\" data-dismiss=\"tr1\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>").click(function(){
-				$(this).parent().parent().remove();
-			}).appendTo("#del"+seqNum);
+            $("<button type=\"button\" title=\"删除\" class=\"close text-center\" style=\"float: none;font-size: 18px;\" data-dismiss=\"tr1\" aria-label=\"Close\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></button>").click(function(){
+                $(this).parent().parent().remove();
+            }).appendTo("#del"+seqNum);
             selectListener($this);
-            formRequireListener($this);
-            $(".field-type").off('change');
-            _fieldTypeListner();
 		});
-        _fieldTypeListner();
 
-        function _fieldTypeListner() {
-            $(".field-type").on('change',function () {
-                var value = $(this).val();
-                var $tr = $(this).closest("tr");
-                var $fieldLen = $tr.find(".field-length");
-                $fieldLen.prop("disabled", false);
-                $fieldLen.attr('regexp',null);
-                switch (value) {
-                    case 'numeric':
-                        $fieldLen.attr('data-regexp','/\d+,\d+/');
-                        break;
-                    case 'text':
-                    case 'longtext':
-                    case 'datetime':
-                        $fieldLen.val("");
-                        $fieldLen.prop("disabled", true);
-                        break;
-                    default:
-                        break;
-                }
-            });
-        }
-		
 		//删除字段
 		$(".close").click(function(){
 			$(this).parent().parent().remove();
 		});
+		
+		/**
+		 * 保存报表设计
+		 */
+		$("#save-designer").click(function(){
+		    if($("#report-designer-form").validateForm()) {
+		        var formData = $("#report-designer-form").serialize();
+		        utils.waitLoading("正在提交数据...");
+		        $.post('report/designer/save', formData, function(response){
+		            utils.closeWaitLoading();
+		            utils.showMsg(response.msg);
+		            if(response.result==1) {
+		                closeActivedTab();
+		            }
+		        });
+		    }
+		});
 	}
-	
 })(jQuery);

@@ -240,7 +240,7 @@ public class SSOContoller extends BaseController {
 	 * 获取返回来的用户在本系统中的角色
 	 * @param session
 	 * @param result
-	 * @param ssoResResult
+	 * @param ssoResp
 	 * @return
 	 */
 	@RequestMapping("/login")
