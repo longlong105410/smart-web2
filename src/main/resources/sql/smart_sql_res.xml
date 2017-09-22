@@ -3,5 +3,6 @@
 <sqlMap>
 	<include file="/sql/form_sql_res.xml"/>
     <include file="/sql/flow_sql_res.xml"/>
+    <include file="/sql/report_sql_res.xml"/>
     <include file="/sql/test_sql_res.xml"/>
 </sqlMap>

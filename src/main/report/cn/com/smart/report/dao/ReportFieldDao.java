@@ -7,5 +7,5 @@ import cn.com.smart.report.bean.entity.TReportField;
 
 @Repository
 public class ReportFieldDao extends BaseDaoImpl<TReportField> {
-
+    
 }

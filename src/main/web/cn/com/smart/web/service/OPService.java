@@ -7,10 +7,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mixsmart.utils.CollectionUtils;
+import com.mixsmart.utils.StringUtils;
+
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.constant.IConstant;
 import cn.com.smart.exception.DaoException;
-import cn.com.smart.exception.ServiceException;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.helper.ObjectHelper;
 import cn.com.smart.helper.ObjectTreeHelper;
@@ -20,9 +22,6 @@ import cn.com.smart.web.bean.AutoComplete;
 import cn.com.smart.web.helper.PageHelper;
 import cn.com.smart.web.plugins.ZTreeData;
 import cn.com.smart.web.plugins.service.ZTreeService;
-
-import com.mixsmart.utils.CollectionUtils;
-import com.mixsmart.utils.StringUtils;
 
 /**
  * 
@@ -37,12 +36,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 	@Autowired
 	private ZTreeService zTreeServ;
 	
-	/**
-	 * 查询数据
-	 * @param resId
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
@@ -69,13 +63,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据
-	 * @param resId
-	 * @param params
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId,Map<String,Object> params) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
@@ -102,13 +90,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据
-	 * @param resId
-	 * @param params
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId,FilterParam params) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
@@ -135,14 +117,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据(分页)
-	 * @param resId
-	 * @param start
-	 * @param rows
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId,int start,int rows) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
@@ -173,15 +148,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据(分页)
-	 * @param resId
-	 * @param params
-	 * @param start
-	 * @param rows
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId,Map<String,Object> params,int start,int rows) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
@@ -212,16 +179,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	
-	/**
-	 * 查询数据(分页)
-	 * @param resId
-	 * @param params
-	 * @param start
-	 * @param rows
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId,FilterParam params,int start,int rows) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
@@ -252,16 +210,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据(分页)
-	 * @param resId
-	 * @param params
-	 * @param filterParam
-	 * @param start
-	 * @param rows
-	 * @return
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getDatas(String resId,Map<String,Object> params,FilterParam filterParam,int start,int rows) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
@@ -293,14 +242,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 	}
 	
 	
-	/**
-	 * 查询数据，返回树形数据结构
-	 * @param resId 资源ID
-	 * @param params 参数
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示获取数据成功；否则失败；
-	 * 如果成功；通过调用getDatas()获取数据列表
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getTreeDatas(String resId,Map<String,Object> params) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		try {
@@ -329,13 +271,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据,返回树形数据结构
-	 * @param resId 资源ID
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示获取数据成功；否则失败；
-	 * 如果成功；通过调用getDatas()获取数据列表
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<Object> getTreeDatas(String resId) {
 		SmartResponse<Object> smartResp = new SmartResponse<Object>();
 		smartResp.setResult(OP_NOT_DATA_SUCCESS);
@@ -366,15 +302,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	
-	/**
-	 * 查询数据，返回ZTree树形数据结构
-	 * @param resId 资源ID
-	 * @param params 参数
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示获取数据成功；否则失败；
-	 * 如果成功；通过调用getDatas()获取数据列表
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<ZTreeData> getZTreeDatas(String resId,Map<String,Object> params) {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		List<ZTreeData> lists = null;
@@ -431,13 +359,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	/**
-	 * 查询数据,返回ZTree树形数据结构
-	 * @param resId 资源ID
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示获取数据成功；否则失败；
-	 * 如果成功；通过调用getDatas()获取数据列表
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<ZTreeData> getZTreeDatas(String resId) {
 		SmartResponse<ZTreeData> smartResp = new SmartResponse<ZTreeData>();
 		List<ZTreeData> lists = null;
@@ -473,15 +395,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	
-	/**
-	 * 自动完成
-	 * @param resId 资源ID
-	 * @param params 参数
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示获取数据成功；否则失败；
-	 * 如果成功；通过调用getDatas()获取数据列表
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<AutoComplete> getAutoCompleteDatas(String resId,Map<String,Object> params) {
 		SmartResponse<AutoComplete> smartResp = new SmartResponse<AutoComplete>();
 		try {
@@ -494,17 +408,17 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 						Object[] objArray = (Object[]) obj;
 						autoComplete = new AutoComplete();
 						if(objArray.length>=3) {
-							autoComplete.setId(StringUtils.handNull(objArray[0]));
-							autoComplete.setValue(StringUtils.handNull(objArray[1]));
-							autoComplete.setLabel(StringUtils.handNull(objArray[2]));
+							autoComplete.setId(StringUtils.handleNull(objArray[0]));
+							autoComplete.setValue(StringUtils.handleNull(objArray[1]));
+							autoComplete.setLabel(StringUtils.handleNull(objArray[2]));
 						} else if(objArray.length==2) {
-							autoComplete.setId(StringUtils.handNull(objArray[0]));
-							autoComplete.setValue(StringUtils.handNull(objArray[1]));
-							autoComplete.setLabel(StringUtils.handNull(objArray[1]));
+							autoComplete.setId(StringUtils.handleNull(objArray[0]));
+							autoComplete.setValue(StringUtils.handleNull(objArray[1]));
+							autoComplete.setLabel(StringUtils.handleNull(objArray[1]));
 						} else if(objArray.length==1) {
-							autoComplete.setId(StringUtils.handNull(objArray[0]));
-							autoComplete.setValue(StringUtils.handNull(objArray[0]));
-							autoComplete.setLabel(StringUtils.handNull(objArray[0]));
+							autoComplete.setId(StringUtils.handleNull(objArray[0]));
+							autoComplete.setValue(StringUtils.handleNull(objArray[0]));
+							autoComplete.setLabel(StringUtils.handleNull(objArray[0]));
 						} 
 						if(objArray.length>3) {
 							List<Object> otherValues = new ArrayList<Object>();
@@ -535,14 +449,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 	
-	
-	/**
-	 * 执行update,delete等的sql
-	 * @param resId 资源ID
-	 * @param params 参数
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示执行成功；否则失败；
-	 * @throws ServiceException
-	 */
+	@Override
 	public SmartResponse<String> execute(String resId,Map<String,Object> params) {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		try {
@@ -551,9 +458,9 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 				for (String key : params.keySet()) {
 					Object objValue = params.get(key);
 					if(null != objValue && objValue.getClass().isArray()) {
-						String value = StringUtils.handNull(objValue);
-						if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
-							String[] values = value.split(",");
+						String value = StringUtils.handleNull(objValue);
+						if(StringUtils.isNotEmpty(value) && value.indexOf(MULTI_VALUE_SPLIT)>-1) {
+							String[] values = value.split(MULTI_VALUE_SPLIT);
 							params.put(key, values);
 						}
 					}
@@ -571,14 +478,7 @@ public class OPService extends BaseServiceImpl implements IOPService, IConstant 
 		return smartResp;
 	}
 
-	/**
-	 * 根据资源ID及提供的参数，获取指定 <code>clazz</code> 类列表的数据
-	 * @param resId 资源ID
-	 * @param params 参数
-	 * @param clazz 需要转换类型的类
-	 * @return 返回SmartResponse对象；如果getResult()为“1”表示获取数据成功；否则失败；
-	 * 如果成功；通过调用getDatas()获取数据列表
-	 */
+	@Override
 	public <E> SmartResponse<E> getDatas(String resId, Map<String, Object> params, Class<?> clazz) {
 		SmartResponse<E> smartRes = new SmartResponse<E>();
 		List<E> lists = getOPDao().queryDatas(resId, params, clazz);

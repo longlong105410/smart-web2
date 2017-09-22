@@ -17,7 +17,7 @@
 		                  <tr>
 		                      <th style="width: 80px;">名称</th>
 		                      <td>
-		                          <input type="text" name="name" class="form-control require" placeholder="请输入报表名称" value="${objBean.name }" />
+		                          <input type="text" name="name" data-label-name="名称" class="form-control require" placeholder="请输入报表名称" value="${objBean.name }" />
 		                      </td>
 		                      <th style="width: 80px;">类型</th>
                               <td style="width: 200px;">

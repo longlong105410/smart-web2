@@ -31,12 +31,18 @@ public class SmartResponse<T> {
 	private int perPageSize;
 	
 	private int size;
+	
+	public SmartResponse() {}
+	
+	public SmartResponse(String msg) {
+	    this.msg = msg;
+	}
 
-	/**
+    /**
 	 * 操作结果
 	 * @see cn.com.smart.web.constant.IWebConstant
-	 * @return 结果码 <br />
-	 * 结果码，详情yn.cn.com.smart.web.constant.IWebConstant接口类
+	 * @return <p>结果码 </p>
+	 * 结果码，详情{@link cn.com.smart.web.constant.IWebConstant} 接口类
 	 */
 	public String getResult() {
 		return result;

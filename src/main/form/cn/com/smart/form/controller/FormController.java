@@ -3,6 +3,7 @@ package cn.com.smart.form.controller;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.snaker.engine.helper.JsonHelper;
@@ -21,6 +22,7 @@ import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.service.FormService;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.constant.enums.BtnPropType;
+import cn.com.smart.web.helper.HttpRequestHelper;
 import cn.com.smart.web.service.OPService;
 import cn.com.smart.web.tag.bean.ALink;
 import cn.com.smart.web.tag.bean.CustomBtn;
@@ -93,9 +95,9 @@ public class FormController extends BaseFormController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session,ModelAndView modelView,FilterParam searchParam,RequestPage page) throws Exception {
+	public ModelAndView list(HttpServletRequest request, ModelAndView modelView,FilterParam searchParam,RequestPage page) throws Exception {
 		SmartResponse<Object> smartResp = opServ.getDatas("form_mgr_list",searchParam,page.getStartNum(), page.getPageSize());
-		String uri = "form/list";
+		String uri = HttpRequestHelper.getCurrentUri(request);
 		CustomBtn customBtn = new CustomBtn("edit_designer", "表单设计器", "修改表单设计", "form/designer");
 		customBtn.setSelectedType(BtnPropType.SelectType.ONE.getValue());
 		customBtn.setBtnIcon("glyphicon-pencil");

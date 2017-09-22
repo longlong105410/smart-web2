@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import cn.com.smart.bean.BaseBean;
+import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.bean.DateBean;
 
 /**
@@ -22,7 +23,7 @@ import cn.com.smart.bean.DateBean;
  */
 @Entity
 @Table(name="t_report")
-public class TReport implements BaseBean, DateBean {
+public class TReport extends BaseBeanImpl implements DateBean {
     
     /**
      * 

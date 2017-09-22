@@ -48,7 +48,7 @@
 		    if($("#report-designer-form").validateForm()) {
 		        var formData = $("#report-designer-form").serialize();
 		        utils.waitLoading("正在提交数据...");
-		        $.post('report/designer/save', formData, function(response){
+		        $.post('report/designer', formData, function(response){
 		            utils.closeWaitLoading();
 		            utils.showMsg(response.msg);
 		            if(response.result==1) {

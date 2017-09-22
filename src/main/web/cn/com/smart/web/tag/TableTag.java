@@ -145,7 +145,7 @@ public class TableTag extends AbstractPanelFooterTag {
 	    	} else {
 	    		tableClassStyle = "";
 	    	}
-	    	out.println("<table "+(StringUtils.isNotEmpty(this.tableId)?"id='"+this.tableId+"'":"")+" class='table "+tableClassStyle+" "+tableStyles+" "+StringUtils.handNull(divTag)+" "+(isCheckbox==1?"cnoj-checkbox-wrap":"")+" '>");
+	    	out.println("<table "+(StringUtils.isNotEmpty(this.tableId)?"id='"+this.tableId+"'":"")+" class='table "+tableClassStyle+" "+tableStyles+" "+StringUtils.handleNull(divTag)+" "+(isCheckbox==1?"cnoj-checkbox-wrap":"")+" '>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,7 +180,7 @@ public class TableTag extends AbstractPanelFooterTag {
 	    		}
 	    		out.println("<thead><tr class='"+headerTrStyle+"' "+dataHeight+">");
 	    		if(isCheckbox==1) {
-		    		out.println("<th class='th-checkbox text-center'><div class='checkbox'><label><input class='cnoj-checkbox-all cnoj-op-checkbox' data-target='.one-checkbox' value='' type='checkbox'></label></div></th>");
+		    		out.println("<th class='th-checkbox' style=\"width:30px;\"><div class='checkbox'><label><input class='cnoj-checkbox-all cnoj-op-checkbox' data-target='.one-checkbox' value='' type='checkbox'></label></div></th>");
 		    	}
 	    		headerArray = headers.split(",");
 		    	tWidth = new String[headerArray.length];
@@ -242,14 +242,14 @@ public class TableTag extends AbstractPanelFooterTag {
 	    			for (Object obj : objs) {
 						Object[] objArray = (Object[])obj;
 						if(isRowSelected==1 && isCheckbox==1) {
-							out.println("<tr id='t-"+StringUtils.handNull(objArray[0])+"' class='tr-selected tr-mutil-selected'>");
+							out.println("<tr id='t-"+StringUtils.handleNull(objArray[0])+"' class='tr-selected tr-mutil-selected'>");
 						} else if(isRowSelected == 1 && isCheckbox==0){
-							out.println("<tr id='t-"+StringUtils.handNull(objArray[0])+"' class='tr-selected tr-one-selected'>");
+							out.println("<tr id='t-"+StringUtils.handleNull(objArray[0])+"' class='tr-selected tr-one-selected'>");
 						} else {
-							out.println("<tr id='t-"+StringUtils.handNull(objArray[0])+"'>");
+							out.println("<tr id='t-"+StringUtils.handleNull(objArray[0])+"'>");
 						}
 						if(isCheckbox==1) {
-							out.println("<td class='td-checkbox text-center'><div class='checkbox'><label><input type='checkbox' class='one-checkbox cnoj-op-checkbox' value='"+StringUtils.handNull(objArray[0])+"'></label></div></td>");
+							out.println("<td class='td-checkbox' style=\"width:30px;\"><div class='checkbox'><label><input type='checkbox' class='one-checkbox cnoj-op-checkbox' value='"+StringUtils.handleNull(objArray[0])+"'></label></div></td>");
 						}
 						int count = 0;
 						for (int i = 0; i < objArray.length;i++) {
@@ -263,7 +263,7 @@ public class TableTag extends AbstractPanelFooterTag {
 							if(isId == 1 && isIdShow != 1 && i==0) {
 								continue;
 							}
-							String tdContent = StringUtils.handNull(objArray[i]);
+							String tdContent = StringUtils.handleNull(objArray[i]);
 							String a = getTdContent(objArray, row, tdContent, count, i);
 							out.println("<td "+(StringUtils.isEmpty(tdStyle)?"":"class='"+tdStyle+"'")+" "+getTdWidthStyle(thWidth, count)+">"+a+"</td>");
 							count++;
@@ -424,9 +424,9 @@ public class TableTag extends AbstractPanelFooterTag {
     	String[] paramNameArray = alink.getParamName().split(",");
 		String[] paramIndexArray = alink.getParamIndex().split(",");
 		for (int j = 0; j < paramNameArray.length; j++) {
-			paramBuilder.append(StringUtils.handNull(paramNameArray[j])+"=");
+			paramBuilder.append(StringUtils.handleNull(paramNameArray[j])+"=");
 			if(paramIndexArray[j].startsWith("'") && paramIndexArray[j].endsWith("'")) {
-				paramBuilder.append(StringUtils.handNull(paramIndexArray[j].substring(1,paramIndexArray[j].length()-1)));
+				paramBuilder.append(StringUtils.handleNull(paramIndexArray[j].substring(1,paramIndexArray[j].length()-1)));
 			} else {
 				paramBuilder.append(objArray[Integer.parseInt(paramIndexArray[j].trim())]);
 			}
