@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/report/js/report.js"></script>
 <div class="wrap-content report-designer">
     <div class="report-designer p-5">
@@ -11,7 +12,6 @@
 		          <input type="hidden" name="id" value="${objBean.id }" />
 		          <input type="hidden" name="properties.id" value="${objBean.properties.id }" />
 		          <input type="hidden" name="sqlResource.id" value="${objBean.sqlResource.id }" />
-		          
 		          <table class="table table-condensed table-bordered table-sm">
 		              <tbody>
 		                  <tr>
@@ -95,6 +95,46 @@
 		                       <div class="cnoj-auto-limit-height report-setting-prop" data-subtract-height="15">
 		                           <table class="table table-condensed table-bordered table-sm">
 		                               <tbody>
+		                                  <c:if test="${not empty objBean  }">
+			                                  <c:forEach items="${objBean.fields }" var="field" varStatus="st">
+			                                      <tr>
+			                                          <td class="seq-num text-right" style="width: 40px;">
+			                                              <input type="hidden" name="fields[${st.index}].id" value="${field.id }" />
+			                                              <input type="hidden" class="sort-order" name="fields[${st.index}].sortOrder" value="${field.sortOrder }" />
+			                                              <span class="sort-order-label">${field.sortOrder }</span>
+			                                          </td>
+			                                          <td style="width: 120px;">
+			                                              <input name="fields[${st.index }].title" class="form-control" placeholder="请填写标题，必填" title="必填项" type="text" value="${field.title }"  />
+			                                          </td>
+			                                          <td style="width: 80px;">
+	                                                      <input name="fields[${st.index }].width" class="form-control" placeholder="自动宽度" type="text" value="${field.width }"  />
+	                                                  </td>
+	                                                  <td style="width: 200px;">
+	                                                      <input name="fields[${st.index }].url" class="form-control" placeholder="URL地址" type="text" value="${field.url }"  />
+	                                                  </td>
+	                                                  <td style="width: 100px;">
+	                                                      <select class="form-control cnoj-select" name="fields[${st.index}].openUrlType" data-uri="dict/item/OPEN_URL_TYPE.json" data-default-value="${field.openUrlType}">
+	                                                      <option value="">请选择</option>
+	                                                      </select>
+	                                                  </td>
+	                                                  <td style="width: 120px;">
+	                                                      <input name="fields[${st.index }].paramName" class="form-control" title="多个参数用英文逗号分隔，如果没有请为空" placeholder="多个参数用英文逗号分隔，如果没有请为空" type="text" value="${field.paramName }"  />
+	                                                  </td>
+	                                                  <td style="width: 120px;">
+	                                                      <input name="fields[${st.index }].paramValue" class="form-control" title="多个参数引用下标用英文逗号分隔，如果没有请为空" placeholder="多个参数引用下标用英文逗号分隔，如果没有请为空" type="text" value="${field.paramValue }"  />
+	                                                  </td>
+	                                                  <td style="width: 120px;">
+	                                                      <input name="fields[${st.index }].searchName" class="form-control" title="填写搜索变量，如果该标题不是搜索项，请为空" placeholder="填写搜索变量，如果该标题不是搜索项，请为空" type="text" value="${field.searchName }"  />
+	                                                  </td>
+	                                                  <td>
+	                                                      <input name="fields[${st.index }].customClass" class="form-control" title="自定义实现类，需要实现ICustomCellCallback接口" placeholder="自定义实现类，需要实现ICustomCellCallback接口" type="text" value="${field.customClass }"  />
+	                                                  </td>
+	                                                  <td class="del-td" id="del${st.index+1 }" style="width: 40px" class="text-center">
+	                                                    <button type="button" title="删除" class="close text-center" style="float: none;font-size: 18px;" data-dismiss="tr1" aria-label="Close"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+	                                                  </td>
+			                                      </tr>
+			                                  </c:forEach>
+		                                  </c:if>
 		                               </tbody>
 		                            </table>
 		                        </div>

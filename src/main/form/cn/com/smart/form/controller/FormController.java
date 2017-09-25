@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.snaker.engine.helper.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
@@ -78,9 +78,18 @@ public class FormController extends BaseFormController {
 	public @ResponseBody SmartResponse<String> processor(HttpSession session,TForm form,String parseForm) throws Exception {
 		SmartResponse<String> smartResp = new SmartResponse<String>();
 		if(null != form && StringUtils.isNotEmpty(parseForm)) {
-			Map<String,Object> mapData = JsonHelper.fromJson(parseForm, Map.class);
+		    smartResp.setMsg("处理失败");
+	        if(null != form && StringUtils.isNotEmpty(parseForm)) {
+	            ObjectMapper objectMapper = new ObjectMapper();
+	            if(StringUtils.isNotEmpty(parseForm) && !",".equals(parseForm.trim()) && !parseForm.trim().startsWith(",")) {
+	                Map<String,Object> mapData = objectMapper.readValue(parseForm, Map.class);
+	                form.setCreator(getUserInfoFromSession(session).getId());
+	                smartResp = formServ.parseForm(form,mapData);
+	            }
+	        }
+			/*Map<String,Object> mapData = JsonHelper.fromJson(parseForm, Map.class);
 			form.setCreator(getUserInfoFromSession(session).getId());
-			smartResp = formServ.parseForm(form,mapData);
+			smartResp = formServ.parseForm(form,mapData);*/
 		}
 		return smartResp;
 	}

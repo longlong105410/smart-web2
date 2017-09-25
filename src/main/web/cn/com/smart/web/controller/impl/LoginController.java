@@ -11,19 +11,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.web.bean.UserInfo;
-import cn.com.smart.web.bean.entity.TNLoginLog;
-import cn.com.smart.web.constant.IActionConstant;
-import cn.com.smart.web.controller.base.BaseController;
-import cn.com.smart.web.helper.HttpRequestHelper;
-import cn.com.smart.web.service.LoginLogService;
-import cn.com.smart.web.service.UserService;
-
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
 
+import cn.com.smart.bean.SmartResponse;
+import cn.com.smart.web.bean.UserInfo;
+import cn.com.smart.web.bean.entity.TNLoginLog;
+import cn.com.smart.web.controller.base.BaseController;
+import cn.com.smart.web.helper.HttpRequestHelper;
+import cn.com.smart.web.service.LoginLogService;
+import cn.com.smart.web.service.UserService;
 import eu.bitwalker.useragentutils.UserAgent;
 
 /**
@@ -104,14 +102,7 @@ public class LoginController extends BaseController {
 			}
 		}
 		if(is) {
-			String beforeUri = StringUtils.handNull(session.getAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI));
-			LoggerUtils.debug(log, "登录前的URL--["+beforeUri+"]--");
-			if(StringUtils.isEmpty(beforeUri)) {
-				beforeUri = "/index";
-			} else {
-				beforeUri = beforeUri.startsWith("/") ? beforeUri : ("/"+beforeUri);
-			}
-			RedirectView view =  new RedirectView(beforeUri, true, true, false);
+			RedirectView view =  new RedirectView("/index", true, true, false);
 			model.setView(view);
 		} else {
 			ModelMap modelMap = model.getModelMap();

@@ -70,7 +70,7 @@ public class ReportController extends BaseController {
         pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
         alinks = new ArrayList<ALink>();
         ALink link = new ALink();
-        link.setUri("report/designer/show");
+        link.setUri("report/view");
         link.setDialogTitle("查看报表设计内容");
         link.setDialogWidth("");
         alinks.add(link);
@@ -97,7 +97,8 @@ public class ReportController extends BaseController {
     public ModelAndView designer(HttpServletRequest request, String id) {
         ModelAndView modelView = new ModelAndView();
         if(StringUtils.isNotEmpty(id)) {
-            
+            TReport report = reportServ.queryAssoc(id);
+            modelView.getModelMap().put("objBean", report);
         }
         modelView.setViewName(VIEW_DIR+"/designer");
         return modelView;
@@ -138,7 +139,7 @@ public class ReportController extends BaseController {
     @RequestMapping("/view")
     public ModelAndView view(String id) {
         ModelAndView modelView = new ModelAndView();
-        modelView.getModelMap().put("objBean", reportServ.queryAssoc(id));
+        modelView.getModelMap().put("objBean", reportServ.queryAssocObj(id));
         modelView.setViewName(VIEW_DIR+"/view");
         return modelView;
     }

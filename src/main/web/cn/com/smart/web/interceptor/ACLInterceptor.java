@@ -165,14 +165,8 @@ public class ACLInterceptor implements HandlerInterceptor {
 					if(StringUtils.isNotEmpty(forward)) {
 						forward = URLEncoder.encode(forward,"UTF-8");
 						session.setAttribute("forward", forward);
-						String newCurrentUriParam = currentUri +"?forward="+forward;
-						session.setAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI, newCurrentUriParam);
-					} else {
-						session.setAttribute(IActionConstant.SESSION_LOGIN_BEFORE_URI, currentUriParam);
 					}
-					if(log.isInfoEnabled()) {
-						log.info("当前服务器地址：["+ domainUrl +"] --- 单点登录服务器地址：["+ ssoServerUrl +"]");
-					}
+					LoggerUtils.info(log, "当前服务器地址：["+ domainUrl +"] --- 单点登录服务器地址：["+ ssoServerUrl +"]");
 					if(StringUtils.isNotEmpty(ssoServerUrl) && !ssoServerUrl.startsWith(domainUrl)) {
 						String ssoRequestUri = "/sso/requestView";
 						ssoRequestUri = handleRedirectUri(request, ssoRequestUri);

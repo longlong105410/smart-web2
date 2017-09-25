@@ -26,7 +26,6 @@ import com.mixsmart.utils.StringUtils;
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.flow.bean.QueryFormData;
-import cn.com.smart.flow.helper.ProcessHelper;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.bean.entity.TFormInstance;
 import cn.com.smart.form.helper.FormDataHelper;
@@ -136,7 +135,7 @@ public class FormInstanceController extends BaseFormController {
         if(StringUtils.isNotEmpty(formId) && StringUtils.isNotEmpty(formDataId)) {
             UserInfo userInfo = getUserInfoFromSession(request);
             //处理参数
-            Map<String,Object> params = ProcessHelper.handleRequestParam(getRequestParamMap(request, false));
+            Map<String,Object> params = getRequestParamMap(request, false);
             //处理附件
             CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
             if(multipartResolver.isMultipart(request)) {

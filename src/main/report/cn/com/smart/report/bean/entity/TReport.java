@@ -11,7 +11,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import cn.com.smart.bean.BaseBean;
 import cn.com.smart.bean.BaseBeanImpl;
 import cn.com.smart.bean.DateBean;
 

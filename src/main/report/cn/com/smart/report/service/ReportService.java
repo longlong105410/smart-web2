@@ -113,7 +113,23 @@ public class ReportService extends MgrServiceImpl<TReport> {
      */
     public TReport queryAssoc(String id) {
         if(StringUtils.isEmpty(id)) {
-            return null;
+            throw new NullArgumentException();
+        }
+        TReport report = super.find(id).getData();
+        Map<String, Object> param = new HashMap<String, Object>(1);
+        param.put("reportId", id);
+        assocReport(report, param);
+        return report;
+    }
+    
+    /**
+     * 关联查询报表（与数据字段关联查询报表类型）
+     * @param id 报表ID
+     * @return 返回报表实体类（包含属性实体数据，字段实体列表，自定义SQL语句实体）
+     */
+    public TReport queryAssocObj(String id) {
+        if(StringUtils.isEmpty(id)) {
+            throw new NullArgumentException();
         }
         String sql = SQLResUtil.getOpSqlMap().getSQL("query_assoc_report");
         if(StringUtils.isEmpty(sql)) {
@@ -128,6 +144,11 @@ public class ReportService extends MgrServiceImpl<TReport> {
         TReport report = reportList.get(0);
         param.clear();
         param.put("reportId", id);
+        assocReport(report, param);
+        return report;
+    }
+    
+    private void assocReport(TReport report, Map<String, Object> param) {
         List<TReportProperties> properties = reportPropServ.findByParam(param).getDatas();
         if(CollectionUtils.isNotEmpty(properties)) {
             report.setProperties(properties.get(0));
@@ -136,8 +157,7 @@ public class ReportService extends MgrServiceImpl<TReport> {
         if(CollectionUtils.isNotEmpty(sqlResList)) {
             report.setSqlResource(sqlResList.get(0));
         }
-        report.setFields(reportFieldServ.findByParam(param).getDatas());
-        return report;
+        report.setFields(reportFieldServ.findByParam(param," sortOrder asc").getDatas());
     }
     
     /**
