@@ -22,4 +22,9 @@ public class ResourceConstant {
 	 */
 	public static final String OTHER_RESOURCE = "other_resource";
 	
+	/**
+	 * 报表资源
+	 */
+	public static final String REPORT_RESOURCE = "report_resource";
+	
 }

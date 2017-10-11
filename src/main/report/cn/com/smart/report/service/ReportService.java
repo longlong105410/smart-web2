@@ -101,7 +101,7 @@ public class ReportService extends MgrServiceImpl<TReport> {
         reportSqlRes.setReportId(report.getId());
         reportSqlResServ.update(reportSqlRes);
         reportFieldServ.updateField(report.getId(), report.getFields());
-        smartResp.setResult(OP_SW);
+        smartResp.setResult(OP_SUCCESS);
         smartResp.setMsg("修改成功");
         return smartResp;
     }

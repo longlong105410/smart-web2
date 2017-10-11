@@ -6,7 +6,7 @@
               <form class="form-inline cnoj-entry-submit" id="search-form" method="post" role="form" action="report/list">
                   <div class="form-group p-r-10">
 				    <label for="search-report-name">名称：</label>
-				    <input type="text" class="form-control input-form-control" id=""search-report-name"" name="name" placeholder="请输入表单名称" value="${searchParam.name }"/>
+				    <input type="text" class="form-control input-form-control" id="search-report-name" name="name" placeholder="请输入表单名称" value="${searchParam.name }"/>
 				  </div>
 				  <div class="form-group p-r-10">
 				    <label for="search-report-type">类型：</label>

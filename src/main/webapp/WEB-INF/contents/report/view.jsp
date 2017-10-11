@@ -64,7 +64,7 @@
 		                              </tr>
 		                           </thead>
 		                       </table>
-		                       <div class="cnoj-auto-limit-height report-setting-prop" data-subtract-height="15">
+		                       <div class="cnoj-auto-limit-height report-setting-prop" data-subtract-height="50">
 		                           <table class="table table-bordered table-sm">
 		                               <tbody>
 		                                  <c:if test="${not empty objBean  }">

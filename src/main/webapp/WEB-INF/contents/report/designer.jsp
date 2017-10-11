@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script type="text/javascript" src="${pageContext.request.contextPath}/plugins/report/js/report.js"></script>
-<div class="wrap-content report-designer">
+<div class="wrap-content report-designer cnoj-auto-limit-height">
     <div class="report-designer p-5">
         <div class="panel panel-default">
             <div class="panel-heading p-r-0" style="padding-top:7px; padding-bottom: 7px;"><label>报表设置</label>
