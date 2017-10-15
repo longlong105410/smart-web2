@@ -552,10 +552,11 @@ function hrefListener($elementWrap) {
 				uri = $this.attr("href");
 			}
 			if (!utils.isEmpty(uri)) {
-				if(!utils.isEmpty(target) && target != '#main-content')
+				/*if(!utils.isEmpty(target) && target != '#main-content')
 					loadUri(target, uri, true);
-				else 
-					openTab(title, uri, true);
+				else */
+				    loadActivePanel(uri);
+					//openTab(title, uri, true);
 			}
 		}
 	}

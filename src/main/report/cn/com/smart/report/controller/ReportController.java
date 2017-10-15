@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
 import cn.com.smart.report.bean.entity.TReport;
-import cn.com.smart.report.service.ReportService;
+import cn.com.smart.report.service.impl.ReportService;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enums.BtnPropType;

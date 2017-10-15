@@ -1,4 +1,4 @@
-package cn.com.smart.report.service;
+package cn.com.smart.report.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

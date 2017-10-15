@@ -21,7 +21,7 @@ import cn.com.smart.bean.BaseBeanImpl;
  */
 @Entity
 @Table(name="t_report_sql_resource")
-public class TReportSqlResourse extends BaseBeanImpl {
+public class TReportSqlResource extends BaseBeanImpl {
 
     /**
      * 

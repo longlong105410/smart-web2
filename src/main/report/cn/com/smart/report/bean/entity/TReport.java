@@ -46,7 +46,7 @@ public class TReport extends BaseBeanImpl implements DateBean {
     
     private List<TReportField> fields;
     
-    private TReportSqlResourse sqlResource;
+    private TReportSqlResource sqlResource;
 
     @Id
     @Column(name="id", length=50)
@@ -120,11 +120,11 @@ public class TReport extends BaseBeanImpl implements DateBean {
     }
     
     @Transient
-    public TReportSqlResourse getSqlResource() {
+    public TReportSqlResource getSqlResource() {
         return sqlResource;
     }
 
-    public void setSqlResource(TReportSqlResourse sqlResource) {
+    public void setSqlResource(TReportSqlResource sqlResource) {
         this.sqlResource = sqlResource;
     }
 }

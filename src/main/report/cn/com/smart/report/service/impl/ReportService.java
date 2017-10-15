@@ -1,4 +1,4 @@
-package cn.com.smart.report.service;
+package cn.com.smart.report.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import cn.com.smart.exception.ServiceException;
 import cn.com.smart.report.bean.entity.TReport;
 import cn.com.smart.report.bean.entity.TReportField;
 import cn.com.smart.report.bean.entity.TReportProperties;
-import cn.com.smart.report.bean.entity.TReportSqlResourse;
+import cn.com.smart.report.bean.entity.TReportSqlResource;
 import cn.com.smart.res.SQLResUtil;
 import cn.com.smart.service.impl.MgrServiceImpl;
 import cn.com.smart.web.service.IOPService;
@@ -72,7 +72,7 @@ public class ReportService extends MgrServiceImpl<TReport> {
             reportProp.setReportId(report.getId());
             reportPropServ.save(reportProp);
             
-            TReportSqlResourse reportSqlRes = report.getSqlResource();
+            TReportSqlResource reportSqlRes = report.getSqlResource();
             reportSqlRes.setSql(handleSql(reportSqlRes.getSql()));
             reportSqlRes.setReportId(report.getId());
             reportSqlResServ.save(reportSqlRes);
@@ -96,7 +96,7 @@ public class ReportService extends MgrServiceImpl<TReport> {
         reportProp.setReportId(report.getId());
         reportPropServ.update(reportProp);
         
-        TReportSqlResourse reportSqlRes = report.getSqlResource();
+        TReportSqlResource reportSqlRes = report.getSqlResource();
         reportSqlRes.setSql(handleSql(reportSqlRes.getSql()));
         reportSqlRes.setReportId(report.getId());
         reportSqlResServ.update(reportSqlRes);
@@ -153,7 +153,7 @@ public class ReportService extends MgrServiceImpl<TReport> {
         if(CollectionUtils.isNotEmpty(properties)) {
             report.setProperties(properties.get(0));
         }
-        List<TReportSqlResourse> sqlResList = reportSqlResServ.findByParam(param).getDatas();
+        List<TReportSqlResource> sqlResList = reportSqlResServ.findByParam(param).getDatas();
         if(CollectionUtils.isNotEmpty(sqlResList)) {
             report.setSqlResource(sqlResList.get(0));
         }
