@@ -6,10 +6,10 @@
 	   <div class="panel-search">
 	       <form class="form-inline cnoj-entry-submit" id="report-search-form" method="post" role="form" action="${uri }">
 	              <c:if test="${not empty searchFields }">
-		              <c:forEach var="searchField" items="${searchFields }">
+		              <c:forEach var="searchField" items="${searchFields }" varStatus="st">
 		                 <div class="form-group p-r-10">
 			                 <label>${searchField.title }：</label>
-			                 <input type="text" class="form-control input-form-control" name="${searchField.searchName }" placeholder="请输入${searchField.title }" />
+			                 <input type="text" class="form-control input-form-control" name="${searchField.searchName }" placeholder="请输入${searchField.title }" value="${searchValues[st.index] }" />
 		                 </div>
 		              </c:forEach>
 		              <div class="form-group p-l-10">

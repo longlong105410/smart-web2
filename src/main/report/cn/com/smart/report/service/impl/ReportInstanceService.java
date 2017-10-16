@@ -80,8 +80,10 @@ public class ReportInstanceService extends BaseServiceImpl implements IReportIns
         params.put("orgIds", userInfo.getOrgIds().toArray());
         List<TReportField> searchFields = getSearchFields(fields);
         //设置搜索字段
-        handleSearchParam(params, fields, request, searchFields);
+        handleSearchParam(params, request, searchFields);
         SmartResponse<Object> smartResp = this.getDatas(report.getSqlResource(), params, page.getStartNum(), page.getPageSize());
+        //设置搜索值（用于在列表页面回写搜索的值）
+        modelMap.put("searchValues", getSearchParamValues(request, searchFields));
         //设置链接
         List<TReportField> alinkFields = getALinkFields(fields);
         List<ALink> alinks = null;
@@ -145,8 +147,6 @@ public class ReportInstanceService extends BaseServiceImpl implements IReportIns
     public ResponseEntity<byte[]> export(String reportId, HttpServletRequest request) {
         LoggerUtils.debug(logger, "正在导出报表列表,报表ID为["+reportId+"]...");
         UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(request);
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("orgIds", userInfo.getOrgIds().toArray());
         TReport report = reportServ.queryAssoc(reportId);
         List<TReportField> fields = report.getFields();
         if(CollectionUtils.isEmpty(fields)) {
@@ -154,8 +154,10 @@ public class ReportInstanceService extends BaseServiceImpl implements IReportIns
             throw new IllegalArgumentException("报表没有字段信息");
         }
         List<TReportField> searchFields = getSearchFields(fields);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("orgIds", userInfo.getOrgIds().toArray());
         //设置搜索字段
-        handleSearchParam(params, fields, request, searchFields);
+        handleSearchParam(params, request, searchFields);
         //导出报表
         byte[] bytes = reportExport.export(report, params);
         if(null == bytes) {
@@ -178,16 +180,34 @@ public class ReportInstanceService extends BaseServiceImpl implements IReportIns
     /**
      * 处理搜索参数
      * @param params Map参数
-     * @param fields 字段列表
+     * @param searchFields 搜索字段列表
      * @param request HttpServletRequest请求对象
      */
-    private void handleSearchParam(Map<String, Object> params, List<TReportField> fields, HttpServletRequest request, List<TReportField> searchFields) {
+    private void handleSearchParam(Map<String, Object> params, HttpServletRequest request, List<TReportField> searchFields) {
         //设置搜索字段
         if(CollectionUtils.isNotEmpty(searchFields)) {
             for (TReportField reportField : searchFields) {
                 params.put(reportField.getSearchName(), request.getParameter(reportField.getSearchName()));
             }
         }
+    }
+    
+    /**
+     * 获取搜索参数的值
+     * @param request HttpServletRequest请求对象
+     * @param searchFields 搜索字段列表
+     * @return 返回搜索参数值列表
+     */
+    private List<String> getSearchParamValues(HttpServletRequest request, List<TReportField> searchFields) {
+        List<String> values = null;
+        //设置搜索字段
+        if(CollectionUtils.isNotEmpty(searchFields)) {
+            values = new ArrayList<String>(searchFields.size());
+            for (TReportField reportField : searchFields) {
+                values.add(request.getParameter(reportField.getSearchName()));
+            }
+        }
+        return values;
     }
     
     /**
