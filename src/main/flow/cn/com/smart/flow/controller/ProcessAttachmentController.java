@@ -115,7 +115,7 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 					Object[] objArray = (Object[]) obj;
 					long size = 0;
 					try {
-					  size = Long.parseLong(StringUtils.handNull(objArray[3]));
+					  size = Long.parseLong(StringUtils.handleNull(objArray[3]));
 					  objArray[3] = new String(StringUtils.fileSize(size));
 					} catch (Exception e) {
 						objArray[3] = new String("");
@@ -131,8 +131,8 @@ public class ProcessAttachmentController extends AttachmentUploadController {
 		isView = StringUtils.isEmpty(isView)?"0":isView;
 		if("0".equals(isView)) {
 			modelMap.put("attrUploadPromptMsg", InitSysConfig.getInstance().getValue("att.upload.prompt.msg"));
-			String uploadFileType = StringUtils.handNull(InitSysConfig.getInstance().getValue("upload.image.type"))+","+
-			StringUtils.handNull(InitSysConfig.getInstance().getValue("upload.doc.type"));
+			String uploadFileType = StringUtils.handleNull(InitSysConfig.getInstance().getValue("upload.image.type"))+","+
+			StringUtils.handleNull(InitSysConfig.getInstance().getValue("upload.doc.type"));
 			if(uploadFileType.startsWith(",")) {
 				uploadFileType = uploadFileType.substring(1,uploadFileType.length());
 			}

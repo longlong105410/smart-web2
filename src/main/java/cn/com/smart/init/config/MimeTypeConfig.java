@@ -106,7 +106,7 @@ public class MimeTypeConfig implements Init {
 		String value = null;
 		if(null != prop && StringUtils.isNotEmpty(key)){
 			try {
-				value = StringUtils.handNull(prop.get(key));
+				value = StringUtils.handleNull(prop.get(key));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

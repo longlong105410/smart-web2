@@ -38,7 +38,7 @@ public abstract class ConfigImpl extends Smart implements IConfig {
 					if(StringUtils.isEmpty(val)) {
 						log.info("变量【"+val+"】没定义");
 					}
-					value = value.replace("${"+varName+"}", StringUtils.handNull(val));
+					value = value.replace("${"+varName+"}", StringUtils.handleNull(val));
 				}
 			}
 			matcher = pattern.matcher(value);
@@ -68,7 +68,7 @@ public abstract class ConfigImpl extends Smart implements IConfig {
 					e.printStackTrace();
 					val = null;
 				}
-				value = value.replace("#{"+varName+"}", StringUtils.handNull(val));
+				value = value.replace("#{"+varName+"}", StringUtils.handleNull(val));
 			}
 		}
 		matcher = pattern.matcher(value);

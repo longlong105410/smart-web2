@@ -54,10 +54,10 @@ public class DelBtnTag extends BtnTag {
    			OPAuthService authServ = (OPAuthService)getService("opAuthServ");
    			if(!delBtn.getIsAuth() || authServ.isAuth(currentUri, delBtn, userInfo.getRoleIds())) {
    				out.println("<button type='button' class='btn "+delBtn.getBtnStyle()+" del param' "+
-   			            "data-selected-type='"+StringUtils.handNull(delBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(delBtn.getUri())+"' "+
-   						"data-busi='"+StringUtils.handNull(delBtn.getBusi())+"' data-msg='"+StringUtils.handNull(delBtn.getMsg())+"' "+
-   			            "data-value='' data-refresh-uri='"+StringUtils.handNull(delBtn.getRefreshUri())+"' data-target='"+StringUtils.handNull(delBtn.getTarget())+"' "+
-   						"data-delAfter='"+StringUtils.handNull(delBtn.getCallback())+"' ><i class='glyphicon glyphicon-trash'></i> "+delBtn.getName()+"</button>");
+   			            "data-selected-type='"+StringUtils.handleNull(delBtn.getSelectedType())+"' data-uri='"+StringUtils.handleNull(delBtn.getUri())+"' "+
+   						"data-busi='"+StringUtils.handleNull(delBtn.getBusi())+"' data-msg='"+StringUtils.handleNull(delBtn.getMsg())+"' "+
+   			            "data-value='' data-refresh-uri='"+StringUtils.handleNull(delBtn.getRefreshUri())+"' data-target='"+StringUtils.handleNull(delBtn.getTarget())+"' "+
+   						"data-delAfter='"+StringUtils.handleNull(delBtn.getCallback())+"' ><i class='glyphicon glyphicon-trash'></i> "+delBtn.getName()+"</button>");
    			}
    			userInfo = null;
    		} catch (Exception e) {

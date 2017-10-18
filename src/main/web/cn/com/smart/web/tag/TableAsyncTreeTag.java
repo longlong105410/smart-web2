@@ -27,7 +27,7 @@ public class TableAsyncTreeTag extends AbstractTableTreeTag {
 		if(StringUtils.isNotEmpty(this.asyncUrl) && this.asyncUrl.indexOf("?") == -1) {
 			this.asyncUrl += "?1=1";
 		}
-		strBuff.append("<tr data-col-num='"+colNum+"' data-layer='"+layer+"'  data-async-url='"+this.asyncUrl+"&parentId="+StringUtils.handNull(objArray[0])+"' id='t-"+StringUtils.handNull(objArray[0])+"' class='tr-tree tr-async-tree "+classOpTree+" t-tree-layer"+layer+" t-"+StringUtils.handNull(objArray[1])+"' parentid='t-"+StringUtils.handNull(objArray[1])+"'>");
+		strBuff.append("<tr data-col-num='"+colNum+"' data-layer='"+layer+"'  data-async-url='"+this.asyncUrl+"&parentId="+StringUtils.handleNull(objArray[0])+"' id='t-"+StringUtils.handleNull(objArray[0])+"' class='tr-tree tr-async-tree "+classOpTree+" t-tree-layer"+layer+" t-"+StringUtils.handleNull(objArray[1])+"' parentid='t-"+StringUtils.handleNull(objArray[1])+"'>");
 		int count = 0;
 		String tdOpData = "shrink-data";
 		String uiIconOpData = "ui-icon-triangle-1-e";
@@ -39,7 +39,7 @@ public class TableAsyncTreeTag extends AbstractTableTreeTag {
 			if(count > cols) {
 				break;
 			}
-			a = getTdContent(objArray, row,StringUtils.handNull(objArray[i]), count, i);
+			a = getTdContent(objArray, row,StringUtils.handleNull(objArray[i]), count, i);
 			strBuff.append("<td "+(StringUtils.isEmpty(getTdClass(count))?"":"class='"+getTdClass(count)+"'")+" "+super.getTdWidthStyle(thWidth,count)+">"+a+"</td>");
 			
 		}

@@ -20,7 +20,7 @@ public class TableTreeTag extends AbstractTableTreeTag {
 		} else {
 			classOpTree = "tr-shrink-tree";
 		}
-		strBuff.append("<tr id='t-"+StringUtils.handNull(objArray[0])+"' class='tr-tree "+classOpTree+" t-tree-layer"+layer+" t-"+StringUtils.handNull(objArray[1])+"' parentid='t-"+StringUtils.handNull(objArray[1])+"'>");
+		strBuff.append("<tr id='t-"+StringUtils.handleNull(objArray[0])+"' class='tr-tree "+classOpTree+" t-tree-layer"+layer+" t-"+StringUtils.handleNull(objArray[1])+"' parentid='t-"+StringUtils.handleNull(objArray[1])+"'>");
 		int count = 0;
 		String a = getTdContent(objArray, row, defaultValue, count, startIndex);
 		String tdOpData =  "";
@@ -43,7 +43,7 @@ public class TableTreeTag extends AbstractTableTreeTag {
 			if(count > cols) {
 				break;
 			}
-			a = getTdContent(objArray, row, StringUtils.handNull(objArray[i]), count, i);
+			a = getTdContent(objArray, row, StringUtils.handleNull(objArray[i]), count, i);
 			strBuff.append("<td "+(StringUtils.isEmpty(getTdClass(count))?"":"class='"+getTdClass(count)+"'")+" "+super.getTdWidthStyle(thWidth,count)+">"+a+"</td>");
 		}
 		strBuff.append(super.handleLastCustomCell(objArray, row, count, tdStyles, thWidth));

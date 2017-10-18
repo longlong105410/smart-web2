@@ -56,8 +56,8 @@ public class AddBtnTag extends BtnTag {
    			OPAuthService opAuthServ = (OPAuthService)getService("opAuthServ");
    			if(!addBtn.getIsAuth() || opAuthServ.isAuth(currentUri, addBtn, userInfo.getRoleIds())) {
    			   out.println("<button type='button' class='btn "+addBtn.getBtnStyle()+" add param' "+
-   			           "data-selected-type='"+StringUtils.handNull(addBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(addBtn.getUri())+"' "+
-   					   "data-title='"+StringUtils.handNull(addBtn.getTitle())+"' data-busi='"+StringUtils.handNull(addBtn.getBusi())+"' data-value='' "+
+   			           "data-selected-type='"+StringUtils.handleNull(addBtn.getSelectedType())+"' data-uri='"+StringUtils.handleNull(addBtn.getUri())+"' "+
+   					   "data-title='"+StringUtils.handleNull(addBtn.getTitle())+"' data-busi='"+StringUtils.handleNull(addBtn.getBusi())+"' data-value='' "+
    			           "dialog-width='"+addBtn.getWidth()+"' ><i class='glyphicon glyphicon-plus'></i> "+addBtn.getName()+"</button>");
    			}
    			userInfo = null;

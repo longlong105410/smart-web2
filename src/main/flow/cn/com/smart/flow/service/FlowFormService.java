@@ -225,8 +225,8 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 		processName = StringUtils.isEmpty(processName)?"":(processName+"-");
 		List<Object> lists = getDao().queryObjSql(sql, params);
 		if(null != lists && lists.size()>0) {
-			String insTitleFieldId = StringUtils.handNull(lists.get(0));
-			title = StringUtils.handNull(datas.get(insTitleFieldId));
+			String insTitleFieldId = StringUtils.handleNull(lists.get(0));
+			title = StringUtils.handleNull(datas.get(insTitleFieldId));
 			if(StringUtils.isNotEmpty(title)) {
 				title = processName + title;
 			} else {
@@ -294,7 +294,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 			flowForm.setProcessName(formData.getProcessName());
 			flowForm.setFormDataId(formData.getFormDataId());
 			flowForm.setUserId(userId);
-			flowForm.setTitle(StringUtils.handNull(title));
+			flowForm.setTitle(StringUtils.handleNull(title));
 			flowForm.setOrgId(orgId);
 			
 			SmartResponse<String> chRes = super.save(flowForm);
@@ -383,7 +383,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 				lists = getDao().queryObjSql(sql, params);
 				if(CollectionUtils.isNotEmpty(lists)) {
 					String insTitleFieldId = lists.get(0).toString();
-					String insTitle = StringUtils.handNull(submitFormData.getParams().get(insTitleFieldId));
+					String insTitle = StringUtils.handleNull(submitFormData.getParams().get(insTitleFieldId));
 					smartResp.setData(insTitleFieldId);
 					if(StringUtils.isNotEmpty(insTitle)) {
 						sql = SQLResUtil.getOpSqlMap().getSQL("check_instance_title");
@@ -451,7 +451,7 @@ public class FlowFormService extends MgrServiceImpl<TFlowForm> {
 				param.put("formDataId", formDataId);
 				List<Object> objList = getDao().queryObjSql(sql, param);
 				if(CollectionUtils.isNotEmpty(objList)) {
-					displayName = StringUtils.handNull(objList.get(0));
+					displayName = StringUtils.handleNull(objList.get(0));
 				}
 			}
 			title = displayName+"-"+title;

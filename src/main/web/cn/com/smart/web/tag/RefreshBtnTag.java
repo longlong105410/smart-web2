@@ -43,7 +43,7 @@ public class RefreshBtnTag extends BtnTag {
    			UserInfo userInfo = getUserInfo();
    			OPAuthService authServ = (OPAuthService)getService("opAuthServ");
    			if(authServ.isAuth(currentUri, refreshBtn, userInfo.getRoleIds())) {
-   				out.println("<button type='button'  class='btn "+refreshBtn.getBtnStyle()+" refresh' data-uri='"+StringUtils.handNull(refreshBtn.getUri())+"' data-busi='"+StringUtils.handNull(refreshBtn.getBusi())+"' data-target='"+StringUtils.handNull(refreshBtn.getTarget())+"' ><i class='glyphicon glyphicon-refresh'></i> "+refreshBtn.getName()+"</button>");
+   				out.println("<button type='button'  class='btn "+refreshBtn.getBtnStyle()+" refresh' data-uri='"+StringUtils.handleNull(refreshBtn.getUri())+"' data-busi='"+StringUtils.handleNull(refreshBtn.getBusi())+"' data-target='"+StringUtils.handleNull(refreshBtn.getTarget())+"' ><i class='glyphicon glyphicon-refresh'></i> "+refreshBtn.getName()+"</button>");
    			}
    			userInfo = null;
    			authServ = null;

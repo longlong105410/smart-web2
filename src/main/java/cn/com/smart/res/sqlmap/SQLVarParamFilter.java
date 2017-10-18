@@ -96,7 +96,7 @@ public class SQLVarParamFilter {
 			Set<String> sets = params.keySet();
 			for (String key : sets) {
 				Object value = this.params.get(key);
-				if(null != value && StringUtils.isNotEmpty(StringUtils.handNull(value))) {
+				if(null != value && StringUtils.isNotEmpty(StringUtils.handleNull(value))) {
 					varParams.add(key);
 				}
 			}

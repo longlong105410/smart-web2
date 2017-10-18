@@ -253,7 +253,7 @@ public class ProcessFacade {
 			
 			submitFormData.setFormDataId(smartResp.getData());
 			//获取处理意见
-			String handleSuggest = StringUtils.handNull(params.get(IFlowConstant.FLOW_HANDLE_SUGGEST));
+			String handleSuggest = StringUtils.handleNull(params.get(IFlowConstant.FLOW_HANDLE_SUGGEST));
 			//过滤变量(获取流程变量)
 			Map<String,Object> flowVar = flowFormServ.filterFlowVar(submitFormData.getFormId(), params);
 			params = flowVar;
@@ -392,7 +392,7 @@ public class ProcessFacade {
 			//处理流程意见
 			for (HistoryTask histTask : histTasks) {
 				if(null != histTask.getVariableMap() && histTask.getVariableMap().size()>0) {
-					String handleSuggest = StringUtils.handNull(histTask.getVariableMap().get(IFlowConstant.FLOW_HANDLE_SUGGEST));
+					String handleSuggest = StringUtils.handleNull(histTask.getVariableMap().get(IFlowConstant.FLOW_HANDLE_SUGGEST));
 					if(StringUtils.isNotEmpty(handleSuggest)) {
 						handleSuggest = StringUtil.unescapeHtml(handleSuggest);
 					}
@@ -441,8 +441,8 @@ public class ProcessFacade {
 					taskModels = facets.getProcess(processId).getModel().getTaskModels();
 				} 
 				try {
-				   String value = StringUtils.handNull(workItem.getTaskVariableMap().get("S-ACTOR"));
-				   if(StringUtils.handNull(value).equals(userId) || 
+				   String value = StringUtils.handleNull(workItem.getTaskVariableMap().get("S-ACTOR"));
+				   if(StringUtils.handleNull(value).equals(userId) || 
 						   StringUtils.isNotEmpty(workItem.getTaskTakeTime())){
 					   isTake = true;
 				   }
@@ -504,7 +504,7 @@ public class ProcessFacade {
 					submitFormData.setOrderId(orderId);
 					submitFormData.setProcessId(processId);
 					submitFormData.setTaskKey(nodeName);
-					//submitFormData.setIsBack(StringUtils.handNull(args.get("isBack")));
+					//submitFormData.setIsBack(StringUtils.handleNull(args.get("isBack")));
 					submitFormData.setIsBack(YesNoType.NO.getStrValue());
 					
 					ExtTaskModel model = facets.getTaskModel(submitFormData.getProcessId(),submitFormData.getTaskKey());
@@ -544,8 +544,8 @@ public class ProcessFacade {
 					Object[] objArray = (Object[])obj;
 					param.clear();
 					param.put("orderId", objArray[1]);
-					List<ExtTaskModel> taskModels = getActivityTaskModel(StringUtils.handNull(objArray[0]), 
-							StringUtils.handNull(objArray[1]));
+					List<ExtTaskModel> taskModels = getActivityTaskModel(StringUtils.handleNull(objArray[0]), 
+							StringUtils.handleNull(objArray[1]));
 					boolean isDepartFilter = false;
 					List<Object> nextNodeAndHandlers = new ArrayList<Object>();
 					TFlowForm flowForm = null;
@@ -599,7 +599,7 @@ public class ProcessFacade {
 		    	for (Object obj : list) {
 					Object[] objArray = (Object[]) obj;
 					ExtTaskModel taskModel = ProcessHelper.getCurrentTaskModel(models,
-							StringUtils.handNull(objArray[1]));
+							StringUtils.handleNull(objArray[1]));
 					if(null != taskModel) {
 						taskModels.add(taskModel);
 					}

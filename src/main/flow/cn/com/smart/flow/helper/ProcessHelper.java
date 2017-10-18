@@ -53,7 +53,7 @@ public class ProcessHelper {
 				//处理流程变量
 				int index = key.indexOf("_");
 				if(index>-1) {
-		            String paramValue = StringUtils.handNull(params.get(key));
+		            String paramValue = StringUtils.handleNull(params.get(key));
 		            paramValue = StringUtils.repaceSpecialChar(paramValue);
 		            if(StringUtils.isNotEmpty(paramValue)) {
 		            	char type = key.charAt(0);
@@ -211,7 +211,7 @@ public class ProcessHelper {
 		if(null == params || params.size()<1) {
 			return nextAssignerMap;
 		}
-		String nextAssigner = StringUtils.handNull(params.get("nextAssigners"));
+		String nextAssigner = StringUtils.handleNull(params.get("nextAssigners"));
 		if(StringUtils.isEmpty(nextAssigner)) {
 			return nextAssignerMap;
 		}
@@ -365,7 +365,7 @@ public class ProcessHelper {
 			}
 			isSelectAssigner = YesNoType.getObjByStrValue(taskModel.getIsExeAssigner());
 			isSelectAssigner = (null == isSelectAssigner)?YesNoType.NO:isSelectAssigner;
-			selectStyle = StringUtils.handNull(taskModel.getSelectAssignerStyle());
+			selectStyle = StringUtils.handleNull(taskModel.getSelectAssignerStyle());
 		}
 		JumpNodeInfo jumpNodeInfo = new JumpNodeInfo(nodeModel.getDisplayName(), nodeModel.getName(), isBack.getIndex());
 		jumpNodeInfo.setIsSelectAssigner(isSelectAssigner.getIndex());

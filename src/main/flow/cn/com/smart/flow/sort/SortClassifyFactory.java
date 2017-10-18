@@ -6,8 +6,6 @@ import java.util.List;
 import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.StringUtils;
 
-import cn.com.smart.utils.ListUtil;
-
 /**
  * 分类排序实现工厂 <br /> 
  * 该分类排序为非线程安全 <br /> 

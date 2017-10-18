@@ -61,8 +61,8 @@ public class CustomBtnTag extends BtnTag {
    			OPAuthService opAuthServ = (OPAuthService)getService("opAuthServ");
    			if(!customBtn.getIsAuth() || opAuthServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
    			   out.println("<button type='button' id='"+customBtn.getId()+"' class='btn "+customBtn.getBtnStyle()+" "+customBtn.getOpenStyle()+" param' "+
-   			           "data-selected-type='"+StringUtils.handNull(customBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(customBtn.getUri())+"' "+
-   					   "data-title='"+StringUtils.handNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handNull(customBtn.getParamName())+"' "+
+   			           "data-selected-type='"+StringUtils.handleNull(customBtn.getSelectedType())+"' data-uri='"+StringUtils.handleNull(customBtn.getUri())+"' "+
+   					   "data-title='"+StringUtils.handleNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handleNull(customBtn.getParamName())+"' "+
    			           "data-width='"+customBtn.getWidth()+"' ><i class='glyphicon "+customBtn.getBtnIcon()+"'></i> "+customBtn.getName()+"</button>");
    			}
    			userInfo = null;

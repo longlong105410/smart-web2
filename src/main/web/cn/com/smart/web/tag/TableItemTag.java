@@ -90,18 +90,18 @@ public class TableItemTag extends TableTag {
 	    			List<Object> objs = smartResp.getDatas();
 	    			String selectedEventPropTag = null;
 	    			if(null != selectedEventProp) {
-	    				selectedEventPropTag = "data-selected-type='"+StringUtils.handNull(selectedEventProp.getEventType())+"' "+
-	    			                       "data-selected-uri='"+StringUtils.handNull(selectedEventProp.getUri())+"' "+
-	    						           "data-selected-target='"+StringUtils.handNull(selectedEventProp.getTarget())+"' "+
-	    			                       "data-selected-varname='"+StringUtils.handNull(selectedEventProp.getVarParamName())+"'";
+	    				selectedEventPropTag = "data-selected-type='"+StringUtils.handleNull(selectedEventProp.getEventType())+"' "+
+	    			                       "data-selected-uri='"+StringUtils.handleNull(selectedEventProp.getUri())+"' "+
+	    						           "data-selected-target='"+StringUtils.handleNull(selectedEventProp.getTarget())+"' "+
+	    			                       "data-selected-varname='"+StringUtils.handleNull(selectedEventProp.getVarParamName())+"'";
 	    			}
 	    			int row = 0;
 	    			for (Object obj : objs) {
 						Object[] objArray = (Object[])obj;
 						if(isRowSelected == 1){
-							out.println("<tr id='t-"+StringUtils.handNull(objArray[0])+"' class='tr-selected tr-one-selected' "+StringUtils.handNull(selectedEventPropTag)+" >");
+							out.println("<tr id='t-"+StringUtils.handleNull(objArray[0])+"' class='tr-selected tr-one-selected' "+StringUtils.handleNull(selectedEventPropTag)+" >");
 						} else {
-							out.println("<tr id='t-"+StringUtils.handNull(objArray[0])+"'>");
+							out.println("<tr id='t-"+StringUtils.handleNull(objArray[0])+"'>");
 						}
 						int count = 0;
 						for (int i = 0; i < objArray.length;i++) {
@@ -125,16 +125,16 @@ public class TableItemTag extends TableTag {
 										} 
 										if(null == a) {
 											a = getALinkContent(alink, objArray);
-											a = "<a "+a+">"+StringUtils.handNull(objArray[i])+"</a>";
+											a = "<a "+a+">"+StringUtils.handleNull(objArray[i])+"</a>";
 										}
 										break;
 									}
 								}
 							}
 							if(StringUtils.isEmpty(a)) {
-								a = StringUtils.handNull(objArray[i]);
+								a = StringUtils.handleNull(objArray[i]);
 							}
-							out.println("<td "+(StringUtils.isEmpty(tdStyle)?"":"class='"+tdStyle+"'")+" "+widthStyle+" title='"+StringUtils.handNull(objArray[i])+"'>"+a+"</td>");
+							out.println("<td "+(StringUtils.isEmpty(tdStyle)?"":"class='"+tdStyle+"'")+" "+widthStyle+" title='"+StringUtils.handleNull(objArray[i])+"'>"+a+"</td>");
 							count++;
 						}
 						out.println("</tr>");

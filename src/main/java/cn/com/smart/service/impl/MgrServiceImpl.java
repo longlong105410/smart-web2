@@ -156,7 +156,7 @@ public abstract class MgrServiceImpl<T extends BaseBean> extends BaseEntityServi
 		if(null != params && params.size()>0) {
 			for (String key : params.keySet()) {
 				if(!params.get(key).getClass().isArray()) {
-					String value = StringUtils.handNull(params.get(key));
+					String value = StringUtils.handleNull(params.get(key));
 					if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
 						String[] values = value.split(",");
 						params.put(key, values);

@@ -66,7 +66,7 @@ public class CustomTableCell {
 				if(null != value && StringUtils.isInteger(value.toString())) {
 					int index = Integer.parseInt(value.toString());
 					if(index < objArray.length) {
-						newContent = newContent.replace("${"+param+"}", StringUtils.handNull(objArray[index]));
+						newContent = newContent.replace("${"+param+"}", StringUtils.handleNull(objArray[index]));
 					}
 				} //if
 			}//for

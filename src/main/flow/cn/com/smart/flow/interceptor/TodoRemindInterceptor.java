@@ -65,7 +65,7 @@ public class TodoRemindInterceptor implements SnakerInterceptor {
 		
 		String title = getTitle(execution.getOrder().getId());
 		if(StringUtils.isEmpty(title)) {
-			title = StringUtils.handNull(execution.getOrder().getVariableMap().get("title"));
+			title = StringUtils.handleNull(execution.getOrder().getVariableMap().get("title"));
 		}
 		String sendContent = MSG_TMPL.replace("${title}", title);
 		for (Task task : tasks) {

@@ -128,12 +128,12 @@ public class ProjectInfo {
 		if(StringUtils.isNotEmpty(prefix)) {
 			prefix += ".";
 		}
-		this.name = StringUtils.handNull(config.getValue(prefix+"name"));
+		this.name = StringUtils.handleNull(config.getValue(prefix+"name"));
 		
-		this.devModel = StringUtils.handNull(config.getValue(prefix+"devModel"));
-		this.copyright = StringUtils.handNull(config.getValue(prefix+"copyright"));
+		this.devModel = StringUtils.handleNull(config.getValue(prefix+"devModel"));
+		this.copyright = StringUtils.handleNull(config.getValue(prefix+"copyright"));
 			
-		this.contactInfo = StringUtils.handNull(config.getValue(prefix+"contactInfo"));
-		this.version = StringUtils.handNull(config.getValue(prefix+"version"));
+		this.contactInfo = StringUtils.handleNull(config.getValue(prefix+"contactInfo"));
+		this.version = StringUtils.handleNull(config.getValue(prefix+"version"));
 	}
 }

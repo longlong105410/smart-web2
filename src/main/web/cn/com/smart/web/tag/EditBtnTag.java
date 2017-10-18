@@ -60,8 +60,8 @@ public class EditBtnTag extends BtnTag {
    			OPAuthService authServ = (OPAuthService)getService("opAuthServ");
    			if(!editBtn.getIsAuth() || authServ.isAuth(currentUri, editBtn, userInfo.getRoleIds())) {
    				out.println("<button type='button' class='btn "+editBtn.getBtnStyle()+" add param' "+
-   						"data-selected-type='"+StringUtils.handNull(editBtn.getSelectedType())+"' data-uri='"+StringUtils.handNull(editBtn.getUri())+"' "+
-   						"data-title='"+StringUtils.handNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handNull(editBtn.getBusi())+"' "+
+   						"data-selected-type='"+StringUtils.handleNull(editBtn.getSelectedType())+"' data-uri='"+StringUtils.handleNull(editBtn.getUri())+"' "+
+   						"data-title='"+StringUtils.handleNull(editBtn.getTitle())+"' data-busi='"+StringUtils.handleNull(editBtn.getBusi())+"' "+
    						"data-value='' dialog-width='"+editBtn.getWidth()+"' ><i class='glyphicon glyphicon-pencil'></i> "+editBtn.getName()+"</button>");
    			}
    			userInfo = null;

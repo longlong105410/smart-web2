@@ -577,7 +577,7 @@ public class ProcessController extends BaseFlowControler {
 					if(YesNoType.YES.getStrValue().equals(taskModel.getIsExeAssigner())) {
 						isSelect = true;
 					}
-					style = taskModel.getName()+"_"+taskModel.getIsExeAssigner()+"_"+ StringUtils.handNull(taskModel.getSelectAssignerStyle());
+					style = taskModel.getName()+"_"+taskModel.getIsExeAssigner()+"_"+ StringUtils.handleNull(taskModel.getSelectAssignerStyle());
 					selectAssignerStyle.add(style);
 				}//for
 			}//if

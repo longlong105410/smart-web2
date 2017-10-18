@@ -100,7 +100,7 @@ public class InitSysConfig extends ConfigImpl implements Init {
 		String value = null;
 		if(null != prop && StringUtils.isNotEmpty(key)){
 			try {
-				value = StringUtils.handNull(prop.get(key));
+				value = StringUtils.handleNull(prop.get(key));
 				value = handleSysVar(value);
 				value = handleVar(value);
 			} catch (Exception e) {

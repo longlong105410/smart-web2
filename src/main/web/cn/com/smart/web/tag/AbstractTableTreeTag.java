@@ -71,17 +71,17 @@ public abstract class AbstractTableTreeTag extends TableTag {
 					String cols1Value = null;
 					int startIndex = 0;
 					if(isId==1 && isIdShow==1) {
-						cols1Value = StringUtils.handNull(objArray[3]);
+						cols1Value = StringUtils.handleNull(objArray[3]);
 						startIndex = 4;
 					} else if (isId==1 && isIdShow==0) {
-						cols1Value = StringUtils.handNull(objArray[4]);
+						cols1Value = StringUtils.handleNull(objArray[4]);
 						startIndex = 5;
 					} else {
-						cols1Value = StringUtils.handNull(objArray[3]);
+						cols1Value = StringUtils.handleNull(objArray[3]);
 						startIndex = 4;
 					}
-					out.println(getHtml(isParent(StringUtils.handNull(objArray[3]), objs), objArray, row,
-							countLayer(StringUtils.handNull(objArray[1]), objs), cols1Value, startIndex, cols));
+					out.println(getHtml(isParent(StringUtils.handleNull(objArray[3]), objs), objArray, row,
+							countLayer(StringUtils.handleNull(objArray[1]), objs), cols1Value, startIndex, cols));
 					row++;
 				}//for
     		}//else
@@ -102,7 +102,7 @@ public abstract class AbstractTableTreeTag extends TableTag {
 		boolean is = false;
 		for (Object obj : objs) {
 			Object[] objArray = (Object[]) obj;
-			if(id.equals(StringUtils.handNull(objArray[1]))){
+			if(id.equals(StringUtils.handleNull(objArray[1]))){
 				is = true;
 				break;
 			}
@@ -121,9 +121,9 @@ public abstract class AbstractTableTreeTag extends TableTag {
 		int layer = 0;
 		for (int i = 0; i < objs.size();) {
 			Object[] objArray = (Object[]) objs.get(i);
-			if(parentId.equals(StringUtils.handNull(objArray[0]))) {
+			if(parentId.equals(StringUtils.handleNull(objArray[0]))) {
 				layer++;
-				parentId = StringUtils.handNull(objArray[1]);
+				parentId = StringUtils.handleNull(objArray[1]);
 				i = 0;
 			} else {
 				i++;
