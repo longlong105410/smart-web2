@@ -106,7 +106,7 @@ public class OrgService extends MgrServiceImpl<TNOrg> {
 				bean.getParentId();
 				bean.getSeqParentIds();
 				if(null != parentOrg) {
-					bean.setSeqParentIds(StringUtils.handNull(parentOrg.getSeqParentIds())+parentOrg.getId()+".");
+					bean.setSeqParentIds(StringUtils.handleNull(parentOrg.getSeqParentIds())+parentOrg.getId()+".");
 					if(OrgType.DEPARTMENT.getValue().equals(bean.getType())) {
 						bean.setSeqNames(parentOrg.getSeqNames()+">"+bean.getName());
 					} else {
@@ -130,7 +130,7 @@ public class OrgService extends MgrServiceImpl<TNOrg> {
 						List<TNOrg> subOrgs = getSubOrg(orgs,parentOrg);
 						if(null != subOrgs && subOrgs.size()>0) {
 							for (TNOrg orgTmp : subOrgs) {
-								orgTmp.setSeqParentIds(StringUtils.handNull(parentOrg.getSeqParentIds())+parentOrg.getId()+".");
+								orgTmp.setSeqParentIds(StringUtils.handleNull(parentOrg.getSeqParentIds())+parentOrg.getId()+".");
 								orgTmp.setSeqNames(parentOrg.getSeqNames()+">"+orgTmp.getName());
 								updateOrgs.add(orgTmp);
 							}

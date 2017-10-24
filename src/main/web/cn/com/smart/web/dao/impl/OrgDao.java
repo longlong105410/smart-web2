@@ -140,7 +140,7 @@ public class OrgDao extends BaseDaoImpl<TNOrg> implements IOrgDao {
 			param.put("type", type);
 			list = queryObjSql(sql,param);
 			if (list.size() > 0&& null!=list) {
-				if(StringUtils.isNotEmpty(StringUtils.handNull(list.get(0)))) {
+				if(StringUtils.isNotEmpty(StringUtils.handleNull(list.get(0)))) {
 					sortOrder = Integer.parseInt(list.get(0).toString())+1;
 				} else {
 					sortOrder = 1;

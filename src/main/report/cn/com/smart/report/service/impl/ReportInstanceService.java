@@ -36,9 +36,11 @@ import cn.com.smart.report.service.IReportSqlResourceService;
 import cn.com.smart.service.impl.BaseServiceImpl;
 import cn.com.smart.web.bean.RequestPage;
 import cn.com.smart.web.bean.UserInfo;
+import cn.com.smart.web.constant.enums.BtnPropType;
 import cn.com.smart.web.constant.enums.PageOpenStyle;
 import cn.com.smart.web.helper.HttpRequestHelper;
 import cn.com.smart.web.tag.bean.ALink;
+import cn.com.smart.web.tag.bean.CustomBtn;
 import cn.com.smart.web.tag.bean.CustomTableCell;
 import cn.com.smart.web.tag.bean.ICustomCellCallback;
 import cn.com.smart.web.tag.bean.PageParam;
@@ -122,6 +124,11 @@ public class ReportInstanceService extends BaseServiceImpl implements IReportIns
             }
             customTableCells = customTableCells.size() > 0 ? customTableCells : null;
         }
+        CustomBtn customBtn = new CustomBtn("export", "导出", "导出", "report/instance/export?reportId="+StringUtils.handleNull(reportId));
+        customBtn.setBtnIcon("fa-file-excel-o");
+        customBtn.setBtnStyle("btn-primary btn-sm report-export");
+        customBtn.setOpenStyle(BtnPropType.OpenStyle.NONE);
+        
         PageParam pageParam = new PageParam(uri, null, page.getPage(), page.getPageSize());
         RefreshBtn refreshBtn  = new RefreshBtn(uri, null, null);
         refreshBtn.setIsAuth(YesNoType.NO.getValue());
@@ -141,6 +148,8 @@ public class ReportInstanceService extends BaseServiceImpl implements IReportIns
         modelMap.put("pageParam", pageParam);
         modelMap.put("refreshBtn", refreshBtn);
         modelMap.put("isOriginalTable", isOriginalTable);
+        modelMap.put("customBtn", customBtn);
+        modelMap.put("currentUri", uri);
     }
     
     @Override

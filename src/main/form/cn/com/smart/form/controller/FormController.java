@@ -110,7 +110,7 @@ public class FormController extends BaseFormController {
 		CustomBtn customBtn = new CustomBtn("edit_designer", "表单设计器", "修改表单设计", "form/designer");
 		customBtn.setSelectedType(BtnPropType.SelectType.ONE.getValue());
 		customBtn.setBtnIcon("glyphicon-pencil");
-		customBtn.setOpenStyle(BtnPropType.OpenStyle.OPEN_SELF.getValue());
+		customBtn.setOpenStyle(BtnPropType.OpenStyle.OPEN_SELF);
 		customBtns = new ArrayList<CustomBtn>(1);
 		customBtns.add(customBtn);
 		

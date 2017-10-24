@@ -67,8 +67,8 @@ public class PositionController extends BaseController {
 		params.put("orgIds", StringUtils.list2Array(getUserInfoFromSession(session).getOrgIds()));
 		SmartResponse<Object> smartResp = opServ.getDatas("position_mgr_list",params, page.getStartNum(), page.getPageSize());
 		params = null;
-		String uri = "position/list?orgId="+StringUtils.handNull(orgId);
-		addBtn = new EditBtn("add","showPage/base_position_add?id="+StringUtils.handNull(orgId),null, "添加职位", "600");
+		String uri = "position/list?orgId="+StringUtils.handleNull(orgId);
+		addBtn = new EditBtn("add","showPage/base_position_add?id="+StringUtils.handleNull(orgId),null, "添加职位", "600");
 		editBtn = new EditBtn("edit","showPage/base_position_edit", "position", "修改职位", "600");
 		delBtn = new DelBtn("position/delete", "确定要删除选中的职位吗？",uri,"#position-list", null);
 		refreshBtn = new RefreshBtn(uri, "position","#position-list");

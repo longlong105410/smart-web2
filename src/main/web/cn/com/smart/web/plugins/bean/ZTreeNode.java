@@ -51,7 +51,7 @@ public class ZTreeNode {
 	}
 
 	public void setOpen(Object open) {
-		String openStr = StringUtils.handNull(open);
+		String openStr = StringUtils.handleNull(open);
 		if(StringUtils.isNotEmpty(openStr)) {
 			YesNoType yesNo = YesNoType.getObjByStrValue(openStr);
 			this.open = (null != yesNo) ? yesNo.getValue():YesNoType.NO.getValue();
@@ -63,7 +63,7 @@ public class ZTreeNode {
 	}
 
 	public void setIsParent(Object isParent) {
-		String isParentStr = StringUtils.handNull(isParent);
+		String isParentStr = StringUtils.handleNull(isParent);
 		if(StringUtils.isNotEmpty(isParentStr)) {
 			YesNoType yesNo = YesNoType.getObjByStrValue(isParentStr);
 			this.isParent = (null != yesNo) ? yesNo.getValue():YesNoType.NO.getValue();

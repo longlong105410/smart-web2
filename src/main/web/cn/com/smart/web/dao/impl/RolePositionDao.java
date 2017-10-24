@@ -31,7 +31,7 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 	public boolean delete(Map<String, Object> param) throws DaoException {
 		boolean is = false;
 		if(null != param && param.size()>0) {
-			String flag = StringUtils.handNull(param.get("flag"));
+			String flag = StringUtils.handleNull(param.get("flag"));
 			String delSql = null;
 			if(StringUtils.isEmpty(flag)) {
 				delSql = sqlMap.getSQL("del_role_position");
@@ -45,7 +45,7 @@ public class RolePositionDao extends BaseDaoImpl<TNRolePosition>{
 				//判断处理是否有逗号分割的多条数据组合
 				for (String key : param.keySet()) {
 					if(!param.get(key).getClass().isArray()) {
-						String value = StringUtils.handNull(param.get(key));
+						String value = StringUtils.handleNull(param.get(key));
 						if(StringUtils.isNotEmpty(value) && value.indexOf(",")>-1) {
 							String[] values = value.split(",");
 							param.put(key, values);

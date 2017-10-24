@@ -20,7 +20,7 @@ public class CustomBtn extends BaseBtn {
 	
 	protected String paramName = "id";
 	
-	protected String openStyle = BtnPropType.OpenStyle.OPEN_POP.getValue();
+	protected BtnPropType.OpenStyle openStyle = BtnPropType.OpenStyle.OPEN_POP;
 	
 	/**
 	 * 点击按钮时，先执行的js方法名称
@@ -115,13 +115,22 @@ public class CustomBtn extends BaseBtn {
 		this.selectedType = selectedType;
 	}
 
-	public String getOpenStyle() {
+	public BtnPropType.OpenStyle getOpenStyle() {
 		return openStyle;
 	}
-
-	public void setOpenStyle(String openStyle) {
-		this.openStyle = openStyle;
+	
+	/**
+	 * 采用{@link #setOpenStyle(cn.com.smart.web.constant.enums.BtnPropType.OpenStyle)} 方法替换
+	 * @param openStyleStr
+	 */
+	@Deprecated
+	public void setOpenStyle(String openStyleStr) {
+		this.openStyle = BtnPropType.OpenStyle.getValue(openStyleStr);
 	}
+	
+    public void setOpenStyle(BtnPropType.OpenStyle openStyle) {
+        this.openStyle = openStyle;
+    }
 
 	public String getBeforeCheck() {
 		return beforeCheck;

@@ -62,7 +62,7 @@ public class ReportController extends BaseController {
         CustomBtn customBtn = new CustomBtn("edit_designer", "简单报表设计", "修改报表", "report/designer");
         customBtn.setSelectedType(BtnPropType.SelectType.ONE.getValue());
         customBtn.setBtnIcon("glyphicon-pencil");
-        customBtn.setOpenStyle(BtnPropType.OpenStyle.OPEN_SELF.getValue());
+        customBtn.setOpenStyle(BtnPropType.OpenStyle.OPEN_SELF);
         customBtns = new ArrayList<CustomBtn>(1);
         customBtns.add(customBtn);
         delBtn = new DelBtn("report/mgr/delete", "确定要删除选中的报表吗？删除后数据将无法恢复.",uri,null, null);

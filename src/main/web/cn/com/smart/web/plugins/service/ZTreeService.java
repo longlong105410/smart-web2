@@ -26,32 +26,32 @@ public class ZTreeService {
 				Object[] objTmpArray = (Object[]) objTmp;
 				if(objTmpArray.length>5) {
 					zTreeData = new ZTreeData();
-					zTreeData.setId(StringUtils.handNull(objTmpArray[3]));
-					zTreeData.setpId(StringUtils.handNull(objTmpArray[4]));
-					zTreeData.setName(StringUtils.handNull(objTmpArray[5]));
-					zTreeData.setIsParent(isParent(trees, StringUtils.handNull(objTmpArray[3]),4));
+					zTreeData.setId(StringUtils.handleNull(objTmpArray[3]));
+					zTreeData.setpId(StringUtils.handleNull(objTmpArray[4]));
+					zTreeData.setName(StringUtils.handleNull(objTmpArray[5]));
+					zTreeData.setIsParent(isParent(trees, StringUtils.handleNull(objTmpArray[3]),4));
 					
 					if(isAsync) {
 						Object parentObj = objTmpArray[objTmpArray.length-1];
-						int count = Integer.parseInt(StringUtils.handNumNull(parentObj));
+						int count = Integer.parseInt(StringUtils.handleNumNull(parentObj));
 						zTreeData.setIsParent((count>0?true:false));
 					} else {
-						zTreeData.setIsParent(isParent(trees, StringUtils.handNull(objTmpArray[3]), 4));
+						zTreeData.setIsParent(isParent(trees, StringUtils.handleNull(objTmpArray[3]), 4));
 					}
 					zTreeDatas.add(zTreeData);
 				} else {
 					zTreeData = new ZTreeData();
-					zTreeData.setId(StringUtils.handNull(objTmpArray[0]));
-					zTreeData.setpId(StringUtils.handNull(objTmpArray[1]));
-					zTreeData.setName(StringUtils.handNull(objTmpArray[3]));
-					zTreeData.setIsParent(isParent(trees, StringUtils.handNull(objTmpArray[0]),1));
+					zTreeData.setId(StringUtils.handleNull(objTmpArray[0]));
+					zTreeData.setpId(StringUtils.handleNull(objTmpArray[1]));
+					zTreeData.setName(StringUtils.handleNull(objTmpArray[3]));
+					zTreeData.setIsParent(isParent(trees, StringUtils.handleNull(objTmpArray[0]),1));
 					
 					if(isAsync) {
 						Object parentObj = objTmpArray[objTmpArray.length-1];
-						int count = Integer.parseInt(StringUtils.handNumNull(parentObj));
+						int count = Integer.parseInt(StringUtils.handleNumNull(parentObj));
 						zTreeData.setIsParent((count>0?true:false));
 					} else {
-						zTreeData.setIsParent(isParent(trees, StringUtils.handNull(objTmpArray[0]),1));
+						zTreeData.setIsParent(isParent(trees, StringUtils.handleNull(objTmpArray[0]),1));
 					}
 					zTreeDatas.add(zTreeData);
 				}
@@ -73,7 +73,7 @@ public class ZTreeService {
 		if(StringUtils.isNotEmpty(id) && trees != null && trees.size()>0 ) {
 			for (Object objTmp : trees) {
 				Object[] objTmpArray = (Object[]) objTmp;
-				if(StringUtils.handNull(objTmpArray[pos]).equals(id)) {
+				if(StringUtils.handleNull(objTmpArray[pos]).equals(id)) {
 					is = true;
 					break;
 				}

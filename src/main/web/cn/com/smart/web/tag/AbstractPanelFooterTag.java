@@ -128,7 +128,7 @@ public abstract class AbstractPanelFooterTag extends BaseTag {
 	    							icon = "<i class='glyphicon "+StringUtils.handleNull(customBtn.getBtnIcon())+"'></i>";
 	    						}
 	    					}
-	    					btnHtml = "<button type='button' id='"+customBtn.getId()+"' class='btn "+StringUtils.handleNull(customBtn.getBtnStyle())+" "+customBtn.getOpenStyle()+" param' data-selected-type='"+StringUtils.handleNull(customBtn.getSelectedType())+"' "
+	    					btnHtml = "<button type='button' id='"+customBtn.getId()+"' class='btn "+StringUtils.handleNull(customBtn.getBtnStyle())+" "+customBtn.getOpenStyle().getValue()+" param' data-selected-type='"+StringUtils.handleNull(customBtn.getSelectedType())+"' "
 	    					        + "data-uri='"+authUrl+"' data-title='"+StringUtils.handleNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handleNull(customBtn.getParamName())+"' data-width='"+StringUtils.handleNull(customBtn.getWidth())+
 	    					           "' data-before-check='"+StringUtils.handleNull(customBtn.getBeforeCheck())+"'>"+icon+" "+StringUtils.handleNull(customBtn.getName())+"</button>";
 	    					addBtnHtmlToList(btnList, customBtn, btnHtml);

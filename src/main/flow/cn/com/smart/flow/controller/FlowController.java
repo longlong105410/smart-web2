@@ -103,7 +103,7 @@ public class FlowController extends BaseFlowControler {
 		CustomBtn customBtn = new CustomBtn("edit_designer", "流程设计器", "修改流程设计", "flow/designer");
 		customBtn.setSelectedType(BtnPropType.SelectType.ONE.getValue());
 		customBtn.setBtnIcon("glyphicon-pencil");
-		customBtn.setOpenStyle(BtnPropType.OpenStyle.OPEN_SELF.getValue());
+		customBtn.setOpenStyle(BtnPropType.OpenStyle.OPEN_SELF);
 		customBtns = new ArrayList<CustomBtn>(1);
 		customBtns.add(customBtn);
 		

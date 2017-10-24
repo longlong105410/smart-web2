@@ -58,10 +58,10 @@ public class ZTreeHelper <T extends ZTreeData>{
 					if(objTmpArray.length>3) {
 						try {
 							t = this.clazz.newInstance();
-							t.setId(StringUtils.handNull(objTmpArray[3]));
-							t.setpId(StringUtils.handNull(objTmpArray[4]));
-							t.setName(StringUtils.handNull(objTmpArray[5]));
-							t.setIsParent(!isLeaf(objs, StringUtils.handNull(objTmpArray[3]),true));
+							t.setId(StringUtils.handleNull(objTmpArray[3]));
+							t.setpId(StringUtils.handleNull(objTmpArray[4]));
+							t.setName(StringUtils.handleNull(objTmpArray[5]));
+							t.setIsParent(!isLeaf(objs, StringUtils.handleNull(objTmpArray[3]),true));
 							t.setCheckFlag(checkFlag);
 							lists.add(t);
 						} catch (InstantiationException e) {
@@ -94,7 +94,7 @@ public class ZTreeHelper <T extends ZTreeData>{
 			if(isObjArray) {
 				for (Object objTmp : trees) {
 					Object[] objTmpArray = (Object[]) objTmp;
-					if(StringUtils.handNull(objTmpArray[4]).equals(id)) {
+					if(StringUtils.handleNull(objTmpArray[4]).equals(id)) {
 						is = false;
 						break;
 					}

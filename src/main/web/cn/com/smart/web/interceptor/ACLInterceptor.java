@@ -89,8 +89,12 @@ public class ACLInterceptor implements HandlerInterceptor {
 		}
 		ModelMap modelMap = modelAndView.getModelMap();
 		modelMap.put("project", InitSysConfig.getInstance().getProjectInfo());
-		modelMap.put("currentUri", HttpRequestHelper.getCurrentUri(request));
-		modelMap.put("currentUriParam", HttpRequestHelper.getCurrentUriParam(request));
+		if(!modelMap.containsKey("currentUri")) {
+		    modelMap.put("currentUri", HttpRequestHelper.getCurrentUri(request));
+		} 
+		if(!modelMap.containsKey("currentUriParam")) {
+		    modelMap.put("currentUriParam", HttpRequestHelper.getCurrentUriParam(request));
+		}
 		//请求参数添加到map里面
 		Map<String,String[]> curParamMaps = request.getParameterMap();
 		if(null != curParamMaps && curParamMaps.size()>0) {

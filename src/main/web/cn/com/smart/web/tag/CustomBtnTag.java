@@ -5,6 +5,7 @@ import javax.servlet.jsp.JspWriter;
 
 import cn.com.smart.web.bean.UserInfo;
 import cn.com.smart.web.constant.enums.BtnPropType;
+import cn.com.smart.web.constant.enums.IconType;
 import cn.com.smart.web.service.OPAuthService;
 import cn.com.smart.web.tag.bean.CustomBtn;
 
@@ -39,7 +40,7 @@ public class CustomBtnTag extends BtnTag {
    			JspWriter out = this.pageContext.getOut();
    			if(null == customBtn) {
    				customBtn = new CustomBtn(id, title, name, uri, width, btnIcon,selectedType, btnStyle, paramName);
-   				customBtn.setOpenStyle(openStyle);
+   				customBtn.setOpenStyle(BtnPropType.OpenStyle.getValue(openStyle));
    				customBtn.setBeforeCheck(beforeCheck);
    			} else {
    				if(StringUtils.isEmpty(customBtn.getBtnStyle()))
@@ -54,16 +55,24 @@ public class CustomBtnTag extends BtnTag {
    					customBtn.setParamName(paramName);
    				if(StringUtils.isEmpty(customBtn.getSelectedType()))
    					customBtn.setSelectedType(selectedType);
-   				if(StringUtils.isEmpty(customBtn.getOpenStyle()))
-   					customBtn.setOpenStyle(openStyle);
+   				if(null == customBtn.getOpenStyle())
+   				 customBtn.setOpenStyle(BtnPropType.OpenStyle.getValue(openStyle));
    			}
    			UserInfo userInfo = getUserInfo();
    			OPAuthService opAuthServ = (OPAuthService)getService("opAuthServ");
    			if(!customBtn.getIsAuth() || opAuthServ.isAuth(currentUri, customBtn, userInfo.getRoleIds())) {
-   			   out.println("<button type='button' id='"+customBtn.getId()+"' class='btn "+customBtn.getBtnStyle()+" "+customBtn.getOpenStyle()+" param' "+
+   			    String icon = "";
+   			    if(StringUtils.isNotEmpty(customBtn.getBtnIcon())) {
+   			        if(customBtn.getBtnIcon().startsWith(IconType.BOOTSTRAP.getValue())) {
+   			            icon = "<i class='glyphicon "+customBtn.getBtnIcon()+"'></i> ";
+   			        } else if(customBtn.getBtnIcon().startsWith(IconType.FONT_AWESOME.getValue())) {
+   			         icon = "<i class=\"fa "+customBtn.getBtnIcon()+"\" aria-hidden=\"true\"></i> ";
+   			        }
+   			    }
+   			   out.println("<button type='button' id='"+customBtn.getId()+"' class='btn "+customBtn.getBtnStyle()+" "+customBtn.getOpenStyle().getValue()+" param' "+
    			           "data-selected-type='"+StringUtils.handleNull(customBtn.getSelectedType())+"' data-uri='"+StringUtils.handleNull(customBtn.getUri())+"' "+
    					   "data-title='"+StringUtils.handleNull(customBtn.getTitle())+"' data-value='' data-param-name='"+StringUtils.handleNull(customBtn.getParamName())+"' "+
-   			           "data-width='"+customBtn.getWidth()+"' ><i class='glyphicon "+customBtn.getBtnIcon()+"'></i> "+customBtn.getName()+"</button>");
+   			           "data-width='"+customBtn.getWidth()+"' >"+icon+customBtn.getName()+"</button>");
    			}
    			userInfo = null;
    		} catch (Exception e) {

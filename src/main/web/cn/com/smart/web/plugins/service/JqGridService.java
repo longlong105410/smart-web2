@@ -83,7 +83,7 @@ public class JqGridService {
 				for (Object obj : objs) {
 					Object[] objArray = (Object[])obj;
 					jqGridRow = new JqGridRows();
-					jqGridRow.setId(StringUtils.handNull(objArray[0]));
+					jqGridRow.setId(StringUtils.handleNull(objArray[0]));
 					jqGridRow.setCell(obj);
 					jqGridRows.add(jqGridRow);
 				}

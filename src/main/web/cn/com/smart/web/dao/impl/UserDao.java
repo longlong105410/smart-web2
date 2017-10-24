@@ -267,7 +267,7 @@ public class UserDao extends BaseDaoImpl<TNUser> {
 				if(null != lists && lists.size()>0) {
 					roleIds = new ArrayList<String>(lists.size());
 					for (Object obj : lists) {
-						roleIds.add(StringUtils.handNull(obj));
+						roleIds.add(StringUtils.handleNull(obj));
 					}
 				}//if
 				lists = null;
@@ -294,7 +294,7 @@ public class UserDao extends BaseDaoImpl<TNUser> {
 				if(null != lists && lists.size()>0) {
 					roleIds = new ArrayList<String>(lists.size());
 					for (Object obj : lists) {
-						roleIds.add(StringUtils.handNull(obj));
+						roleIds.add(StringUtils.handleNull(obj));
 					}
 				}//if
 				lists = null;
@@ -321,7 +321,7 @@ public class UserDao extends BaseDaoImpl<TNUser> {
 				if(null != lists && lists.size()>0) {
 					orgIds = new ArrayList<String>(lists.size());
 					for (Object obj : lists) {
-						orgIds.add(StringUtils.handNull(obj));
+						orgIds.add(StringUtils.handleNull(obj));
 					}
 				}//if
 				lists = null;

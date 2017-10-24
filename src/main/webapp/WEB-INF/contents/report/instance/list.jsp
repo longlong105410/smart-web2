@@ -21,10 +21,13 @@
 				  </c:if>
 				  <c:if test="${reportProp.isImport == 1 }">
 				      <div class="form-group pull-right">
+				        <!--  
                          <button type="button" data-uri="report/instance/export?reportId=${reportId }" class="btn btn-info btn-sm report-export">
                             <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                             <span>导出</span>
                           </button>
+                          -->
+                          <cnoj:cusBtn currentUri="${currentUri}" customBtn="${customBtn }" />
                       </div>
 				  </c:if>
 	       </form>

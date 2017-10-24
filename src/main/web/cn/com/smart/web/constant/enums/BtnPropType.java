@@ -56,6 +56,12 @@ public interface BtnPropType {
 	
 	
 	enum OpenStyle {
+	    
+	    /**
+	     * 没有打开样式
+	     */
+	    NONE(0, ""),
+	    
 		/**
 		 * 弹出框
 		 */
@@ -91,6 +97,22 @@ public interface BtnPropType {
 			}
 			return valueTmp;
 		}
+		
+		/**
+		 * 根据值获取OpenStyle对象
+		 * @param value 值
+		 * @return 返回OpenStyle对象
+		 */
+		public static OpenStyle getValue(String value) {
+		    OpenStyle valueTmp = null;
+            for (OpenStyle openStyle : OpenStyle.values()) {
+                if(openStyle.getValue().equals(value)) {
+                    valueTmp = openStyle;
+                    break;
+                }
+            }
+            return valueTmp;
+        }
 		
 		public int getIndex() {
 			return index;
