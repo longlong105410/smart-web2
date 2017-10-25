@@ -13,13 +13,18 @@ public class RefreshBtn extends BaseBtn {
 		this.id = "refresh";
 	}
 	
-	
 	public RefreshBtn(String uri,String busi,String target) {
 		this.id = "refresh";
 		this.uri = uri;
 		this.busi = busi;
 		this.target = target;
 	}
+	
+	public RefreshBtn(String uri,String target) {
+        this.id = "refresh";
+        this.uri = uri;
+        this.target = target;
+    }
 	
 	public RefreshBtn(String uri,String busi,String target,String btnStyle,String name) {
 		this.id = "refresh";

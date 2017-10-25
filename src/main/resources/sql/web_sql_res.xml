@@ -31,4 +31,16 @@
 	       select rr.op_auths from t_n_resource t,t_n_role_resource rr where t.id=rr.resource_id and t.uri=:uri and rr.role_id in(:roleIds)
 	   </sql>
 	</sqlUnit>
+	
+	<!-- 获取SQL资源管理列表 -->
+	<sqlUnit name="get_sql_resource_mgr_list">
+	   <sql>
+	       select t.id, t.res_name,t.descr,
+	       (case when t.is_filter then '是' else '否' end) as isFilter,
+	       u.full_name,t.create_time,
+	       t.last_modify_time, (select full_name from t_n_user u where u.id = t.last_user_id) as lastUser 
+	        from t_n_sql_resource t, t_n_user u where t.user_id=u.id [ and t.res_name like '%:name%' ] 
+	        order by t.create_time desc
+	   </sql>
+	</sqlUnit>
 </sqlMap>
