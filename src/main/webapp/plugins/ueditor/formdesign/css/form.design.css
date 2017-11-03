@@ -36,5 +36,12 @@ select[multiple] {height: 110px;}
 .input-small {
     width: 100px;
 }
+.input-m-small {
+	width: 80px;
+}
 .input-default-value label{display: inline-block;margin:0 2px;}
 .input-default-value label input {margin:0;}
+
+.input-m-mini {
+	width: 40px;
+}

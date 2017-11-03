@@ -23,15 +23,11 @@ public class InitSpringComplete implements ApplicationListener<ContextRefreshedE
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		ApplicationContext context = event.getApplicationContext();
-		if(null == context.getParent()) {
-			if(null != context) {
-				ISmartContext smartContext = new SpringSmartContext(context);
-				SmartContextService.setContext(smartContext);
-				
-				ISmartWeb smartWeb = new SmartWeb();
-				//SmartContextService.put("smartWeb", smartWeb.getClass());
-				smartWeb.initSystem();
-			}
+		if(null != context && null == context.getParent()) {
+			ISmartContext smartContext = new SpringSmartContext(context);
+			SmartContextService.setContext(smartContext);
+			ISmartWeb smartWeb = new SmartWeb();
+			smartWeb.initSystem();
 		}
 	}
 

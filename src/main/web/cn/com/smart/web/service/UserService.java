@@ -202,40 +202,10 @@ public class UserService extends MgrServiceImpl<TNUser> {
 				String md5Pwd = SecurityUtils.md5(password);
 				TNUser user = userDao.queryLogin(username, md5Pwd);
 				if(null != user) {
-					UserInfo userInfo = new UserInfo();
-					userInfo.setId(user.getId());
-					userInfo.setUsername(user.getUsername());
-					userInfo.setFullName(user.getFullName());
-					TNOrg org =  orgDao.find(user.getOrgId());
-					String deptName = null;
-					String seqDeptName = null;
-					if(null != org) {
-						deptName = org.getName();
-						seqDeptName = org.getSeqNames();
-						userInfo.setOrgId(org.getId());
-						if(OrgType.DEPARTMENT.getValue().equals(org.getType())) {
-							userInfo.setDepartmentId(org.getId());
-						}
-					} else {
-						userInfo.setOrgId(user.getOrgId());
-					}
-					userInfo.setPositionId(user.getPositionId());
-					if(StringUtils.isNotEmpty(user.getPositionId())){
-						TNPosition position = posDao.find(user.getPositionId());
-						if(null != position) {
-							userInfo.setPositionName(position.getName());
-						}
-						position = null;
-					}
-					userInfo.setDeptName(deptName);
-					userInfo.setSeqDeptNames(seqDeptName);
-					userInfo.setMenuRoleIds(userDao.queryMenuRoleIds(user.getId()));
-					userInfo.setRoleIds(userDao.queryRoleIds(user.getId()));
-					userInfo.setOrgIds(userDao.queryOrgIds(user.getId()));
+					UserInfo userInfo = getUserInfo(user);
 					smartResp.setResult(OP_SUCCESS);
 					smartResp.setMsg(OP_SUCCESS_MSG);
 					smartResp.setData(userInfo);
-					userInfo = null;
 				} else {
 					LoggerUtils.info(logger, "用户名或密码错误--输入用户名["+username+"]---");
 				}
@@ -250,6 +220,44 @@ public class UserService extends MgrServiceImpl<TNUser> {
 		return smartResp;
 	}
 	
+	/**
+	 * 获取用户信息 
+	 * @param user 用户实体对象
+	 * @return 返回用户信息
+	 */
+	public UserInfo getUserInfo(TNUser user) {
+	    UserInfo userInfo = new UserInfo();
+        userInfo.setId(user.getId());
+        userInfo.setUsername(user.getUsername());
+        userInfo.setFullName(user.getFullName());
+        TNOrg org =  orgDao.find(user.getOrgId());
+        String deptName = null;
+        String seqDeptName = null;
+        if(null != org) {
+            deptName = org.getName();
+            seqDeptName = org.getSeqNames();
+            userInfo.setOrgId(org.getId());
+            if(OrgType.DEPARTMENT.getValue().equals(org.getType())) {
+                userInfo.setDepartmentId(org.getId());
+            }
+        } else {
+            userInfo.setOrgId(user.getOrgId());
+        }
+        userInfo.setPositionId(user.getPositionId());
+        if(StringUtils.isNotEmpty(user.getPositionId())){
+            TNPosition position = posDao.find(user.getPositionId());
+            if(null != position) {
+                userInfo.setPositionName(position.getName());
+            }
+            position = null;
+        }
+        userInfo.setDeptName(deptName);
+        userInfo.setSeqDeptNames(seqDeptName);
+        userInfo.setMenuRoleIds(userDao.queryMenuRoleIds(user.getId()));
+        userInfo.setRoleIds(userDao.queryRoleIds(user.getId()));
+        userInfo.setOrgIds(userDao.queryOrgIds(user.getId()));
+        return userInfo;
+	}
 	
 	/**
 	 * 批量修改密码
