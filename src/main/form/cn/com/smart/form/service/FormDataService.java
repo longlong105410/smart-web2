@@ -21,7 +21,7 @@ import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.constant.IConstant;
 import cn.com.smart.dao.impl.OPDao;
 import cn.com.smart.exception.DaoException;
-import cn.com.smart.flow.bean.QueryFormData;
+import cn.com.smart.form.bean.QueryFormData;
 import cn.com.smart.form.bean.TableFieldMap;
 import cn.com.smart.form.enums.FormPluginType;
 import cn.com.smart.form.helper.FormDataHelper;

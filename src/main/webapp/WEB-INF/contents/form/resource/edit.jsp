@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="wrap-content-dialog">
     <form class="form-horizontal" role="form" id="form-edit" action="form/resource/edit.json" target="#main-content">
 		<input type="hidden" name="id" value="${objBean.id}" />
@@ -11,7 +12,7 @@
 			<div class="form-group m-b-10">
 			    <label for="form-res-input02" class="col-sm-2 control-label">选择表单</label>
 			    <div class="col-sm-9 p-l-0">
-			      <input type="text" class="form-control cnoj-input-select" data-uri="op/query/select_form_list.json" data-is-show-all="no" data-default-value="${objBean.uri}" data-param-name="name" name="uri" id="form-res-input03" />
+			      <input type="text" class="form-control cnoj-input-select" data-uri="op/query/select_form_list.json" data-is-show-all="no" data-default-value="${fn:replace(objBean.uri,'form/instance/create?formId=','')}" data-param-name="name" name="uri" id="form-res-input03" />
 			    </div>
 			</div>
 			

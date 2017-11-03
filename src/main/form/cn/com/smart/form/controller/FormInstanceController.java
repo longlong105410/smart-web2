@@ -25,7 +25,7 @@ import com.mixsmart.utils.StringUtils;
 
 import cn.com.smart.bean.SmartResponse;
 import cn.com.smart.filter.bean.FilterParam;
-import cn.com.smart.flow.bean.QueryFormData;
+import cn.com.smart.form.bean.QueryFormData;
 import cn.com.smart.form.bean.entity.TForm;
 import cn.com.smart.form.bean.entity.TFormInstance;
 import cn.com.smart.form.helper.FormDataHelper;

@@ -2,6 +2,8 @@ package cn.com.smart.flow.bean;
 
 import java.util.List;
 
+import cn.com.smart.form.bean.NameValueMap;
+
 /**
  * 流程出口线分类，分为两种:驳回线和正常直走线
  * @author lmq

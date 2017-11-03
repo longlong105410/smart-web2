@@ -3,7 +3,7 @@ package cn.com.smart.form.service;
 import java.util.Map;
 
 import cn.com.smart.bean.SmartResponse;
-import cn.com.smart.flow.bean.QueryFormData;
+import cn.com.smart.form.bean.QueryFormData;
 
 /**
  * 处理表单数据接口
