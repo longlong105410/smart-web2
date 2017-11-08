@@ -664,6 +664,7 @@ utils.selectItem = function(id,uri,defaultValue,callback) {
 				}
 			} else {
 				$select.val("");
+				$select.find(".cnoj-dyn-opt").remove();
 				//showMsg(output.msg);
 			}
 		});
@@ -853,8 +854,8 @@ utils.selectCascadeItem = function(id,cascadeId,uri,paramName,defaultValue,chang
 				value = $(changeId).val();
 			else 
 				value = $(this).val();
-			if(null != value && typeof(value) != undefined) 
-				utils.selectItem(id, uri+value, defaultValue);
+			//if(null != value && typeof(value) != undefined) 
+			utils.selectItem(id, uri+value, defaultValue);
 		});
 	}
 }

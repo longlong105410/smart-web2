@@ -158,6 +158,7 @@ var zTreeInstance = new Array();
 						$input.val("无");
 						$hiddenInput.val("0");
 						$(this).parents(".input-select-tree").hide();
+						$input.trigger("change");
 						return false;
 					});
 				}
