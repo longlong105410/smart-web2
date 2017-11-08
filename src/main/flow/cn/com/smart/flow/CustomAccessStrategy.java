@@ -17,15 +17,14 @@ package cn.com.smart.flow;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.snaker.engine.impl.GeneralAccessStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cn.com.smart.web.bean.UserInfo;
-import cn.com.smart.web.helper.HttpRequestHelper;
-
 import com.mixsmart.utils.StringUtils;
+
+import cn.com.smart.web.bean.UserInfo;
+import cn.com.smart.web.bean.entity.TNUser;
+import cn.com.smart.web.service.UserService;
 
 /**
  * 自定义访问策略，根据操作人获取其所有组集合（部门、角色、权限）
@@ -34,24 +33,31 @@ import com.mixsmart.utils.StringUtils;
  */
 public class CustomAccessStrategy extends GeneralAccessStrategy {
 	
-	@Autowired
-	private HttpSession session;
-	
-	protected List<String> ensureGroup(String operator) {
-		UserInfo userInfo = HttpRequestHelper.getUserInfoFromSession(session);
-		List<String> groups = null;
-		if(null != userInfo) {
-			groups = new ArrayList<String>();
-			if(StringUtils.isNotEmpty(userInfo.getDepartmentId())) {
-				groups.add(userInfo.getDepartmentId());
-			} else if(StringUtils.isNotEmpty(userInfo.getOrgId())) {
-				groups.add(userInfo.getOrgId());
-			}
-			if(StringUtils.isNotEmpty(userInfo.getPositionId())) {
-				groups.add(userInfo.getPositionId());
-			}
-			groups.add(userInfo.getId());
-		}
-		return groups;
-	}
+    @Autowired
+    private UserService userServ;
+    
+    protected List<String> ensureGroup(String operator) {
+        if(StringUtils.isEmpty(operator)) {
+            return null;
+        }
+        TNUser user = userServ.find(operator).getData();
+        if(null == user) {
+            return null;
+        }
+        UserInfo userInfo =  userServ.getUserInfo(user);
+        List<String> groups = null;
+        if(null != userInfo) {
+            groups = new ArrayList<String>();
+            if(StringUtils.isNotEmpty(userInfo.getDepartmentId())) {
+                groups.add(userInfo.getDepartmentId());
+            } else if(StringUtils.isNotEmpty(userInfo.getOrgId())) {
+                groups.add(userInfo.getOrgId());
+            }
+            if(StringUtils.isNotEmpty(userInfo.getPositionId())) {
+                groups.add(userInfo.getPositionId());
+            }
+            groups.add(userInfo.getId());
+        }
+        return groups;
+    }
 }
