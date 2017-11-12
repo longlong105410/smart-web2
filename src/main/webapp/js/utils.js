@@ -850,10 +850,16 @@ utils.selectCascadeItem = function(id,cascadeId,uri,paramName,defaultValue,chang
 			this.selectItem(id, uri+value, defaultValue);
 		}
 		$(cascadeId).change(function(){
-			if(!utils.isEmpty(changeId))
-				value = $(changeId).val();
-			else 
-				value = $(this).val();
+			if(utils.isNotEmpty(changeId)) {
+			    var $elementTag = $(changeId);
+	            if($elementTag.length == 0) {
+	                value = $(this).next().val();
+	            } else {
+	                value = $elementTag.val();
+	            }
+			} else {
+			    value = $(this).val();
+			}
 			//if(null != value && typeof(value) != undefined) 
 			utils.selectItem(id, uri+value, defaultValue);
 		});

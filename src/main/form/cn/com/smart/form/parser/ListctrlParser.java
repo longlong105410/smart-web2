@@ -31,8 +31,12 @@ public class ListctrlParser implements IFormParser {
 		
 		String title = StringUtils.handleNull(dataMap.get("orgtitle"));
 		String colType = StringUtils.handleNull(dataMap.get("orgcoltype"));
-		/*String unit = StringUtil.handNull(dataMap.get("orgunit"));
-		String sum = StringUtil.handNull(dataMap.get("orgsum"));*/
+		
+		String unit = StringUtils.handleNull(dataMap.get("orgunit"));
+		String sum = StringUtils.handleNull(dataMap.get("orgsum"));
+		String sumBindTable = StringUtils.handleNull(dataMap.get("csum_bind_table"));
+		String sumBindTableField = StringUtils.handleNull(dataMap.get("csum_bind_table_field"));
+		
 		String pluginType = StringUtils.handleNull(dataMap.get("plugintype"));
 		String pluginUri = StringUtils.handleNull(dataMap.get("pluginuri"));
 		String fieldRequire = StringUtils.handleNull(dataMap.get("fieldrequire"));
@@ -56,6 +60,11 @@ public class ListctrlParser implements IFormParser {
 		String[] fieldRequires = fieldRequire.split("`");
 		String[] fieldHides = fieldHide.split("`");
 		String[] remarksArray = remarks.split("`");
+		
+		String[] units = unit.split("`");
+		String[] sums = sum.split("`");
+		String[] sumBindTables = sumBindTable.split("`");
+		String[] sumBindTableFields = sumBindTableField.split("`");
 		
 		if(pluginTypes.length<titles.length) {
 			String[] tmps = pluginTypes;
@@ -115,12 +124,13 @@ public class ListctrlParser implements IFormParser {
 		//strBuild.append("$addTr.find(\"input[type=hidden]\").remove();");
 		strBuild.append("   $addTr.find(\"input,textarea\").each(function(){\r\n");
 		strBuild.append(" var id = $(this).attr(\"id\");id = id.replace('row-','row'+addRows+'-');$(this).attr(\"id\",id);$(this).val('');\r\n");
+		strBuild.append(" $(this).attr(\"name\", $(this).attr(\"original-name\")); \r\n");
 		strBuild.append(" $(this).removeClass('cnoj-auto-complete-relate-listener cnoj-input-tree-listener cnoj-input-select-relate-listener cnoj-input-org-tree-listener");
 		strBuild.append(" cnoj-auto-complete-listener cnoj-input-select-listener cnoj-datetime-listener cnoj-date-listener cnoj-time-listener');");
 		strBuild.append(" $(this).parent().find('.glyphicon-calendar').remove();");
 		strBuild.append(" \r\n});\r\n");
-        strBuild.append("   //插入表格  \r\n  ");
-        strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));inputPluginEvent();if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows);}}\r\n ");
+        strBuild.append("   //插入表格  \r\n");
+        strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));inputPluginEvent();if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows,$addTr);}}\r\n ");
         
         strBuild.append("//统计\r\n ");
         strBuild.append("function sum_total(dname,e) {\r\n ");
@@ -183,23 +193,23 @@ public class ListctrlParser implements IFormParser {
 			if("text".equals(colTypes[i])) {
 				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
 					if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
-						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 					} else {
-						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 					}
 				} else {
 					if(tbBuild.toString().endsWith(tdEndTag)) {
 						tbBuild.delete(tbBuild.length() - tdEndTag.length(), tbBuild.length());
-						tbBuild.append("<input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
+						tbBuild.append("<input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
 					}
 				}
 			} else if("textarea".equals(colTypes[i])) {
 				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
-					tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+					tbBuild.append("<td><textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
 				} else {
 					if(tbBuild.toString().endsWith(tdEndTag)) {
 						tbBuild.delete(tbBuild.length() - tdEndTag.length(), tbBuild.length());
-						tbBuild.append("<textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
+						tbBuild.append("<textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
 					}
 				}
 			}
