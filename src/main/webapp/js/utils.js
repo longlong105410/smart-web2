@@ -1380,3 +1380,21 @@ utils.isIE = function() {
 	else
 		return false;
 }
+
+/**
+ * 处理URL；判断URL是否有参数，如果有，则URL后面会跟“&”符号；
+ * 如果没有，则URL后加“?”符号
+ * @param url URL地址
+ */
+utils.handleUrl = function(url) {
+    if(utils.isEmpty(url)) {
+        return url;
+    } else {
+        if(url.indexOf("?") > -1) {
+            url += "&";
+        } else {
+            url += "?";
+        }
+        return url;
+    }
+}
