@@ -4,9 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.entity.Task;
@@ -17,16 +15,17 @@ import org.snaker.engine.model.TransitionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.com.smart.flow.IFlowConstant;
-import cn.com.smart.flow.SnakerEngineFacets;
-import cn.com.smart.flow.ext.ExtTaskModel;
-import cn.com.smart.flow.service.FlowFormService;
-import cn.com.smart.init.config.InitSysConfig;
-
 import com.mixsmart.enums.YesNoType;
 import com.mixsmart.utils.CollectionUtils;
 import com.mixsmart.utils.LoggerUtils;
 import com.mixsmart.utils.StringUtils;
+
+import cn.com.smart.flow.IFlowConstant;
+import cn.com.smart.flow.SnakerEngineFacets;
+import cn.com.smart.flow.bean.entity.TFlowForm;
+import cn.com.smart.flow.ext.ExtTaskModel;
+import cn.com.smart.flow.service.ProcessFacade;
+import cn.com.smart.init.config.InitSysConfig;
 
 /**
  * 自动执行任务监听者；扫描到的任务；如果符合自动执行的条件；
@@ -42,14 +41,14 @@ public class AutoExecuteTaskListener extends AbstractScanTaskListener {
 	@Autowired
 	private SnakerEngineFacets facets;
 	@Autowired
-	private FlowFormService flowFormServ;
+    private ProcessFacade processFacade;
 
 	public AutoExecuteTaskListener() {
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
 
 	@Override
-	protected void execute(Task task) {
+	protected void execute(Task task, TFlowForm flowForm) {
 		TaskModel taskModel = task.getModel();
 		String autoAllTask = InitSysConfig.getInstance().getValue("flow.task.expire.all.auto");
 		YesNoType yesNo = YesNoType.getObjByStrValue(autoAllTask);
@@ -59,12 +58,12 @@ public class AutoExecuteTaskListener extends AbstractScanTaskListener {
 					&& !"0".equals(taskModel.getExpireTime()) && 
 					StringUtils.isNum(taskModel.getExpireTime()) 
 					&& YesNoType.YES.getStrValue().equals(taskModel.getAutoExecute())) {
-				autoExeTask(task);
+				autoExeTask(task, flowForm);
 			}
 		} else {
 			if(null != taskModel && StringUtils.isNotEmpty(task.getExpireTime()) 
 					&& YesNoType.YES.getStrValue().equals(taskModel.getAutoExecute())) {
-				autoExeTask(task);
+				autoExeTask(task, flowForm);
 			}
 		}
 	}
@@ -72,8 +71,9 @@ public class AutoExecuteTaskListener extends AbstractScanTaskListener {
 	/**
 	 * 自动执行任务
 	 * @param task
+	 * @param flowForm
 	 */
-	private void autoExeTask(Task task) {
+	private void autoExeTask(Task task, TFlowForm flowForm) {
 		if(null == task) {
 			throw new IllegalArgumentException("task为空");
 		}
@@ -114,14 +114,8 @@ public class AutoExecuteTaskListener extends AbstractScanTaskListener {
 			ExtTaskModel nextTaskModel = (ExtTaskModel)nodeModel;
 			//判断当前节点是否选人。如果要选人，则无法自动执行
 			if(YesNoType.NO.getStrValue().equals(nextTaskModel.getIsExeAssigner())) {
-				if(YesNoType.YES.getStrValue().equals(nextTaskModel.getIsDepartFilter())) {
-					List<String> users = getNextNodeAssigners(task, nextTaskModel);
-					Map<String, Object> nextAssigners = new HashMap<String, Object>();
-					nextAssigners.put(nextTaskModel.getName(), users);
-					facets.executeAndJump(task.getId(), SnakerEngine.ADMIN, nextAssigners, null, nextTaskModel.getName());
-				} else {
-					facets.executeAndJump(task.getId(), SnakerEngine.ADMIN, null, nextTaskModel.getName());
-				}
+			  //TODO 修复不会按部门过滤的问题
+                processFacade.executeAndJump(flowForm.getProcessId(),flowForm.getOrderId(), SnakerEngine.ADMIN, null, null, nextTaskModel.getName());
 			}//if
 		}//if
 		LoggerUtils.debug(logger, "["+task.getDisplayName()+"]任务的自动完成任务触发器执行结束.");
@@ -145,17 +139,6 @@ public class AutoExecuteTaskListener extends AbstractScanTaskListener {
 			}
 		}
 		return nodeModel;
-	}
-	
-	/**
-	 * 获取下一节点处理者
-	 * @param task
-	 * @param extTaskModel
-	 * @return
-	 */
-	private List<String> getNextNodeAssigners(Task task, ExtTaskModel extTaskModel) {
-		String[] actorIds = facets.getEngine().query().getTaskActorsByTaskId(task.getId());
-		return flowFormServ.getNextNodeAssigners(extTaskModel.getAssignee(), task.getOrderId(), actorIds[0], true);
 	}
 	
 	/**

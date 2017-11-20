@@ -52,8 +52,9 @@ public class TaskScanner extends AbstractFlowScanner<AbstractScanTaskListener> {
 			LoggerUtils.debug(logger, "执行第"+intPage+"次");
 			for (Task task : tasks) {
 				TaskModel taskModel = task.getModel();
+				TFlowForm flowForm = null;
 				if(null == taskModel) {
-					TFlowForm flowForm = flowFormServ.getFlowFormByOrderId(task.getOrderId());
+					flowForm = flowFormServ.getFlowFormByOrderId(task.getOrderId());
 					if(null != flowForm) {
 						//缓存任务模型，从缓存中获取任务模型，如果没有，则从数据库中查询(流程ID和任务KEY能唯一任务模型)
 						//不同的任务，对应的任务模型可能是同一个的，为了避免重复查询，采用了临时缓存
@@ -66,7 +67,7 @@ public class TaskScanner extends AbstractFlowScanner<AbstractScanTaskListener> {
 						task.setModel(taskModel);
 					}
 				}//if
-				notifyListener(task);
+				notifyListener(task, flowForm);
 			}//for
 			intPage++;
 			page.setPage(intPage);
