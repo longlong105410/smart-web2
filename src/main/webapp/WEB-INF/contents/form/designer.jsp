@@ -235,6 +235,7 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 		                    arr['institle'] = attr_arr_all['institle'];
 		                    arr['orghide'] = attr_arr_all['orghide'];
                             arr['islog'] = attr_arr_all['is_log'];
+                            
 	                        add_fields[option['name']] = arr;
 	                        isParse = true;
 		                    //add_fields[name] = arr;
@@ -309,6 +310,10 @@ window.UEDITOR_HOME_URL = "${pageContext.request.contextPath}/plugins/ueditor/";
 	                    arr['institle'] = attr_arr_all['institle'];
 	                    arr['orghide'] = attr_arr_all['orghide'];
                         arr['islog'] = attr_arr_all['is_log'];
+                        
+                        //统计字段
+                        arr['sumBindTable'] = attr_arr_all['csum_bind_table'];
+                        arr['sumBindTableField'] = attr_arr_all['csum_bind_table_field'];
 	                    //alert(JSON.stringify(attr_arr_all));
 	                    add_fields[arr['name']] = arr;
 	                }

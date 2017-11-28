@@ -210,11 +210,11 @@
                          }//end for
                         //判断是否可以操作listctrl
                         //当能填写或修改列表中的值时，则拥有添加行的权限
-                        if(isListCtrlAdd) {
+                        if(isListCtrlAdd && !this.setting.isView) {
                             $tableTag.find(".listctrl-add-row").show();
                         }
                         //当所有字段都有修改权限时，则拥有删除行的权限
-                        if(isListCtrlDel) {
+                        if(isListCtrlDel && !this.setting.isView) {
                             $tableTag.find(".delrow:gt(0)").removeClass("hide");
                          }
                      } else {

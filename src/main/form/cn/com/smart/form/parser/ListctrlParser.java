@@ -118,7 +118,7 @@ public class ListctrlParser implements IFormParser {
 		strBuild.append("   //连同事件一起复制   \r\n ");
 		strBuild.append("   .clone();\r\n");  
 		strBuild.append("   //去除模板标记 \r\n   "); 
-		strBuild.append("   $addTr.removeClass(\"template\");$addTr.attr(\"id\",\"row\"+addRows);\r\n ");
+		strBuild.append("   $addTr.removeClass(\"template\");$addTr.attr(\"id\",\"row\"+addRows);\r\n var $sum = $addTr.find('.sum');if($sum.length>0){$sum.removeClass('sum')} ");
 		strBuild.append("   //修改内部元素 \r\n ");
 		strBuild.append("   $addTr.find(\".delrow\").removeClass(\"hide\");\r\n");
 		//strBuild.append("$addTr.find(\"input[type=hidden]\").remove();");
@@ -133,15 +133,15 @@ public class ListctrlParser implements IFormParser {
         strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));inputPluginEvent();if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows,$addTr);}}\r\n ");
         
         strBuild.append("//统计\r\n ");
-        strBuild.append("function sum_total(dname,e) {\r\n ");
+        strBuild.append("function sumTotal(dname,e) {\r\n ");
 		strBuild.append(" var tsum = 0; \r\n ");
-		strBuild.append(" $(\'input[name=\"\'+dname+\'\"]\').each(function(){\r\n");
+		strBuild.append(" $('input[name=\"\'+dname+\'\"]').each(function(){\r\n");
 		strBuild.append("          var t = parseFloat($(this).val()); \r\n");  
 		strBuild.append("          if(!t) t=0;\r\n"); 
 		strBuild.append("          if(t) tsum +=t;\r\n");
 		strBuild.append("          $(this).val(t);\r\n");
 		strBuild.append("      }); \r\n");
-        strBuild.append("  $(\'input[name=\"\'+dname+\'[total]\"]\').val(tsum);\r\n}\r\n");
+        strBuild.append("  $('#\'+dname+\'_total').val(tsum);$('#\'+dname+\'_total').trigger('change'); \r\n}\r\n");
         
         strBuild.append(" /*删除tr*/\r\n");
         strBuild.append("function fnDeleteRow(obj,dname) { \r\n");
@@ -153,7 +153,8 @@ public class ListctrlParser implements IFormParser {
         strBuild.append(" if(utils.isNotEmpty(id)){ var delValue = $(oTable).find('.del-value').val();\r\n");
         strBuild.append(" if(utils.isNotEmpty(delValue)){delValue = delValue+','+id;} else {delValue=id;}\r\n");
         strBuild.append(" $(oTable).find('.del-value').val(delValue);} \r\n");
-        strBuild.append("  oTable.deleteRow(obj.rowIndex);\r\n}\r\n");
+        strBuild.append("  oTable.deleteRow(obj.rowIndex);\r\n");
+        strBuild.append("//删除后重新计算合计\r\n $('.sum').each(function(){var dname = $(this).attr('name');sumTotal(dname, this)});\r\n }");
         
         strBuild.append(" /*监听修改情况tr*/\r\n");
         strBuild.append(" function changeValue(obj){");
@@ -191,6 +192,7 @@ public class ListctrlParser implements IFormParser {
 			}
 			pluginTypes[i] = pluginTypes[i]+require;
 			if("text".equals(colTypes[i])) {
+			    //判断字段是否设置为隐藏
 				if(!YesNoType.YES.getStrValue().equals(fieldHides[i])) {
 					if("cnoj-datetime".equals(pluginTypes[i]) || "cnoj-date".equals(pluginTypes[i]) || "cnoj-time".equals(pluginTypes[i])) {
 						tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" value=\""+colValues[i]+"\"></td>");
@@ -212,9 +214,21 @@ public class ListctrlParser implements IFormParser {
 						tbBuild.append("<textarea id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-textarea hidden input-medium "+fieldNames[i]+" "+pluginTypes[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" data-uri=\""+pluginUris[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" >"+colValues[i]+"</textarea></td>");
 					}
 				}
+			} else if("int".equals(colTypes[i])) {
+			    tbBuild.append("<td><input id=\"row-"+fieldNames[i]+"-"+(i+1)+"\" onchange=\"changeValue(this)\" class=\"form-control listctrl-input sum input-medium "+fieldNames[i]+"\" type=\"text\" data-label-name=\""+titles[i]+"\" name=\""+fieldNames[i]+"\" original-name=\""+fieldNames[i]+"\" onblur=\"sumTotal('"+fieldNames[i]+"', this)\" value=\""+colValues[i]+"\"> "+getUnit(units, i)+"</td>");
 			}
-			tfTdBuild.append("<td></td>");
+			//tfTdBuild.append("<td></td>");
 		}
+        if(sums.length > 0) {
+            for (int i=0;i<titles.length;i++) {
+                if(Integer.parseInt(sums[i]) == 1) {
+                    isNum = 1;
+                    tfTdBuild.append("<td>合计：<input id=\""+fieldNames[i]+"_total\" onchange=\"changeValue(this)\" type=\"text\" style=\"width:80%;\" class=\"form-control input-medium "+sumBindTableFields[i]+" \" name=\""+sumBindTableFields[i]+"\" original-name=\""+sumBindTableFields[i]+"\" onblur=\"sumTotal('"+fieldNames[i]+"', this)\" /> "+getUnit(units, i)+"</td>");
+                } else {
+                    tfTdBuild.append("<td></td>");
+                }
+            }
+        }
         strBuild.append("<table id=\""+name+"_table\" cellspacing=\"0\" class=\"list-ctrl table table-bordered table-condensed\" style=\"width:"+tableWidth+"\">");
         strBuild.append("<thead><tr style=\"background-color: #f5f5f5;\"><th colspan=\""+(tdNum+1)+"\"><div class=\"col-sm-6 p-l-5 listctrl-title\">"+dataMap.get("title")+"</div> <div class=\"col-sm-6 p-r-5 text-right\">");
         strBuild.append("<button class=\"btn btn-sm btn-success listctrl-add-row hidden-print \" type=\"button\" onclick=\"tbAddRow('"+name+"')\">添加一行</button>");
@@ -223,13 +237,24 @@ public class ListctrlParser implements IFormParser {
         strBuild.append("<tr class=\"template\" id='row-1'>"+tbBuild.toString()+"<td><a href=\"javascript:void(0);\" onclick=\"fnDeleteRow(this,'"+name+"')\" class=\"delrow hide hidden-print\">删除</a></td></tr></tbody>");
         
         if(isNum>0) {
-        	strBuild.append("<tfooter><tr id='row-1'>"+tfTdBuild.toString()+"<td></td></tr></tfooter>");
+        	strBuild.append("<tfooter><tr id='row-tfooter-1'>"+tfTdBuild.toString()+"<td></td></tr></tfooter>");
         }
         strBuild.append("</table>");
-        thBuild = null;tbBuild = null;tfTdBuild = null;
-        
 		return strBuild.toString();
 	}
 
+	/**
+	 * 获取单位
+	 * @param units
+	 * @param index
+	 * @return
+	 */
+	private String getUnit(String[] units, int index) {
+	    String unit = "";
+	    if(units.length <= (index+1)) {
+            unit = units[index];
+        }
+	    return unit;
+	}
 
 }
