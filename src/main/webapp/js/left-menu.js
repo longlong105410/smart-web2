@@ -106,7 +106,7 @@ function autoTableWidth($activeTab) {
 function initMenuHeight() {
 	var h = $(window).height();
 	var vh = $(".header-body-dividing").outerHeight(true);
-	h = h - getFooterHeight() - $(".header").outerHeight(true)-vh-3;
+	h = h - getFooterHeight() - $(".header").outerHeight(true) - vh - 6;
     var menuResizerH = h;
     if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0)){
     	menuResizerH = menuResizerH-5;
@@ -114,7 +114,7 @@ function initMenuHeight() {
 	$(".menu-resizer").css({"height" : menuResizerH + "px"});
 	$(".menu-resizer-toggler").css({"margin-top" : (h-50)/2+ "px"});
 	$("#main-content").css({"height" : h + "px"});
-	$("#main-tab").css({"height" : (h-5) + "px"});
+	$("#main-tab").css({"height" : (h - 2) + "px"});
 	$("#menu-sub-nav").css({"height" : (h-$(".menu-title").outerHeight(true)) + "px"});
 }
 

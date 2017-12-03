@@ -20,8 +20,9 @@ public class TableAsyncTreeTag extends AbstractTableTreeTag {
 	private String asyncUrl;
 
 	@Override
-	protected String getHtml(Boolean isParent,Object[] objArray, int row, int layer, String defaultValue, int startIndex, int cols) {
-		StringBuffer strBuff = new StringBuffer();
+	protected String getHtml(Boolean isParent,Object[] objArray, int row, int layer, 
+	        String defaultValue, int startIndex, int cols, int headerCount) {
+	    StringBuilder strBuff = new StringBuilder();
 		String classOpTree = "tr-shrink-tree";
 		int colNum = objArray.length - startIndex; 
 		if(StringUtils.isNotEmpty(this.asyncUrl) && this.asyncUrl.indexOf("?") == -1) {
@@ -29,12 +30,19 @@ public class TableAsyncTreeTag extends AbstractTableTreeTag {
 		}
 		strBuff.append("<tr data-col-num='"+colNum+"' data-layer='"+layer+"'  data-async-url='"+this.asyncUrl+"&parentId="+StringUtils.handleNull(objArray[0])+"' id='t-"+StringUtils.handleNull(objArray[0])+"' class='tr-tree tr-async-tree "+classOpTree+" t-tree-layer"+layer+" t-"+StringUtils.handleNull(objArray[1])+"' parentid='t-"+StringUtils.handleNull(objArray[1])+"'>");
 		int count = 0;
-		String tdOpData = "shrink-data";
-		String uiIconOpData = "ui-icon-triangle-1-e";
-		
+		String tdOpData =  "";
+        String uiIconOpData = "";
+        if(isParent) {
+            tdOpData = "shrink-data";
+             uiIconOpData = "ui-icon-triangle-1-e";
+            tdOpData = "op-tree "+tdOpData;
+        } else {
+            uiIconOpData = "ui-icon-radio-on";
+        }
+        
 		String a = getTdContent(objArray, row, defaultValue, count, startIndex);
-		strBuff.append("<td class='op-tree "+tdOpData+" td-tree "+getTdClass(count)+"' "+super.getTdWidthStyle(thWidth,count)+"><span class='ui-icon "+uiIconOpData+" left'></span> &nbsp;"+a+"</td>");
-		for (int i = startIndex; i < objArray.length-1; i++) {
+		strBuff.append("<td class='"+tdOpData+" td-tree "+getTdClass(count)+"' "+super.getTdWidthStyle(thWidth,count)+"><span class='ui-icon "+uiIconOpData+" left'></span> &nbsp;"+a+"</td>");
+		for (int i = startIndex; i < objArray.length; i++) {
 			count++;
 			if(count > cols) {
 				break;
@@ -43,7 +51,7 @@ public class TableAsyncTreeTag extends AbstractTableTreeTag {
 			strBuff.append("<td "+(StringUtils.isEmpty(getTdClass(count))?"":"class='"+getTdClass(count)+"'")+" "+super.getTdWidthStyle(thWidth,count)+">"+a+"</td>");
 			
 		}
-		strBuff.append(super.handleLastCustomCell(objArray, row, count, tdStyles, thWidth));
+		strBuff.append(super.handleLastCustomCell(objArray, row, count, headerCount, tdStyles, thWidth));
 		strBuff.append("</tr>");
 		return strBuff.toString();
 	}

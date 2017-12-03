@@ -14,7 +14,7 @@ import com.mixsmart.utils.StringUtils;
  * 2015年8月22日
  */
 public class SqlMapping {
-	protected final String LOG_TAG = "<webstart--SQL语句映射：>";
+	protected final String LOG_TAG = "<smartweb2--SQL语句映射：>";
 	protected final Logger log = Logger.getLogger(SqlMapping.class);
 	private Map<String,String> SQL_MAP;
 
@@ -32,9 +32,7 @@ public class SqlMapping {
 
 	/**
 	 * 取得xml映射文件中相应的sql语句
-	 * 
-	 * @param sqlName
-	 *            sql语句名称，通过名称对应到sql
+	 * @param sqlName sql语句名称，通过名称对应到sql
 	 * @return 返回sql语句
 	 */
 	public String getSQL(String sqlName) {
@@ -42,15 +40,25 @@ public class SqlMapping {
 		log.info(this.LOG_TAG + "sqlMap-name:" + sqlName);
 		if(null != SQL_MAP && SQL_MAP.size()>0 && StringUtils.isNotEmpty(sqlName)) {
 		  	sql = SQL_MAP.get(sqlName);
-		  	if(StringUtils.isNotEmpty(sql)) {
-		  		sql = sql.replaceAll("\n", " ");
-		  		sql = sql.replaceAll("\r", " ");
-		  		sql = sql.replaceAll("\t", " ");
-			  	sql = sql.replaceAll(" +", " ");
-		  	} else {
-		  		log.error("资源名称为["+sqlName+"]的值为空");
-		  	}
 		}
+		if(StringUtils.isEmpty(sql)) {
+		    try {
+                Map<String,String> sqlMaps = LoadingSQLMapFile.getInstance().getDbSqlMap().getSqlMaps();
+                if(null != sqlMaps && sqlMaps.size() > 0) {
+                    sql = sqlMaps.get(sqlName);
+                }
+            } catch (SQLMapException e) {
+                e.printStackTrace();
+            }
+		}
+		if(StringUtils.isNotEmpty(sql)) {
+            sql = sql.replaceAll("\n", " ");
+            sql = sql.replaceAll("\r", " ");
+            sql = sql.replaceAll("\t", " ");
+            sql = sql.replaceAll(" +", " ");
+        } else {
+            log.error("资源名称为["+sqlName+"]的值为空");
+        }
 		return sql;
 	}
 }

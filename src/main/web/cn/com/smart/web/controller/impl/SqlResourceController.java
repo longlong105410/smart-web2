@@ -152,7 +152,7 @@ public class SqlResourceController extends BaseController {
     public ModelAndView view(String id) {
         ModelAndView modelView = new ModelAndView();
         if(StringUtils.isNotEmpty(id)) {
-            modelView.getModelMap().put("objBean", sqlResServ.find(id).getData());
+            modelView.getModelMap().put("objBean", sqlResServ.findAssocUser(id));
         }
         modelView.setViewName(VIEW_DIR+"/view");
         return modelView;

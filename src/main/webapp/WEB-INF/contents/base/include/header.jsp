@@ -167,7 +167,7 @@
 	 
 	 function autoHeaderWidth() {
 		 var w = $(window).width();
-		 var infoW = $(window).width()-$(".navbar-nar-right").outerWidth(true) - $(".navbar-brand").outerWidth(true) - 30;
+		 var infoW = $(window).width()-$(".navbar-nar-right").outerWidth(true) - $(".navbar-brand").outerWidth(true) - 50;
 		 $(".header-info-row").width(infoW);
 		 if(infoW <500) {
 			 $(".show-calendar").hide();

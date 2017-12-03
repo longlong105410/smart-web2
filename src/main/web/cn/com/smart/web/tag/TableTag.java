@@ -268,7 +268,7 @@ public class TableTag extends AbstractPanelFooterTag {
 							out.println("<td "+(StringUtils.isEmpty(tdStyle)?"":"class='"+tdStyle+"'")+" "+getTdWidthStyle(thWidth, count)+">"+a+"</td>");
 							count++;
 						} 
-						out.println(handleLastCustomCell(objArray, row, colCount, tdStyles, thWidth));
+						out.println(handleLastCustomCell(objArray, row, count, colCount, tdStyles, thWidth));
 						out.println("</tr>");
 						row++;
 					}
@@ -284,17 +284,18 @@ public class TableTag extends AbstractPanelFooterTag {
 	 * 处理最后面自定义的单元格
 	 * @param objArray
 	 * @param count
+	 * @param headerCount
 	 * @param tdStyles
 	 * @param tdWidths
 	 * @return
 	 */
-	protected String handleLastCustomCell(Object[] objArray, int row, int count, String[] tdStyles, String[] tdWidths) {
+	protected String handleLastCustomCell(Object[] objArray, int row, int count, int headerCount, String[] tdStyles, String[] tdWidths) {
 		StringBuilder cellBuilder = null;
 		//如果有自定义单元格，则进行处理 
 		if(CollectionUtils.isNotEmpty(customCells)) {
 			cellBuilder = new StringBuilder();
 			for (CustomTableCell customCell : customCells) {
-				if(customCell.getPosition() > (objArray.length-1) && customCell.getPosition() <= count) {
+			    if(customCell.getPosition() <= headerCount && customCell.getPosition() >= count) {
 					String tdContent = null;
 					if(null != customCell.getCellCallback()) {
 						tdContent = customCell.getCellCallback().callback(objArray, row, count, null);

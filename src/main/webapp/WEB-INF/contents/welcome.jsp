@@ -64,11 +64,10 @@
 		   setTimeout(function() {
 			   autoIndexHeight();
 		   }, 200);
-		   
 	   });
 	   function autoIndexHeight(){
 		   var h = getMainHeight();
-		   var panelBodyH = h-$(".tabs-header:eq(0)").outerHeight(true)-($(".panel-heading:eq(0)").outerHeight(true)*2)-26;
+		   var panelBodyH = h-$(".tabs-header:eq(0)").outerHeight(true)-($(".panel-heading:eq(0)").outerHeight(true)*2) - 20;
 		   panelBodyH = panelBodyH/2;
 		   $(".default-page-body").height(panelBodyH);
 	   }

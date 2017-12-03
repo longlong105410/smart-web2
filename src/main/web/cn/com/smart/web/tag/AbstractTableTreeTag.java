@@ -60,6 +60,11 @@ public abstract class AbstractTableTreeTag extends TableTag {
 		try {
 			out.println("<tbody>");
 			int cols = headers.split(",").length;
+			int headerCount = cols;
+			tdStyles = handleStylesClass(cols);
+			if(isId == 0) {
+                headerCount --;
+            }
     		if(!OP_SUCCESS.equals(smartResp.getResult())) {
     			out.println("<tr><td colspan='"+cols+"' class='text-center'>"+smartResp.getMsg()+"</td></tr>");
     		} else {
@@ -81,7 +86,7 @@ public abstract class AbstractTableTreeTag extends TableTag {
 						startIndex = 4;
 					}
 					out.println(getHtml(isParent(StringUtils.handleNull(objArray[3]), objs), objArray, row,
-							countLayer(StringUtils.handleNull(objArray[1]), objs), cols1Value, startIndex, cols));
+							countLayer(StringUtils.handleNull(objArray[1]), objs), cols1Value, startIndex, cols, headerCount));
 					row++;
 				}//for
     		}//else
@@ -160,9 +165,10 @@ public abstract class AbstractTableTreeTag extends TableTag {
 	 * @param defaultValue
 	 * @param startIndex
 	 * @param cols
+	 * @param headerCount
 	 * @return 返回生成的HTML代码
 	 */
-	protected abstract String getHtml(Boolean isParent,Object[] objArray,int row,int layer, String defaultValue, int startIndex, int cols);
+	protected abstract String getHtml(Boolean isParent,Object[] objArray,int row,int layer, String defaultValue, int startIndex, int cols, int headerCount);
 	
 	/**
 	 * 获取表格DIV标记

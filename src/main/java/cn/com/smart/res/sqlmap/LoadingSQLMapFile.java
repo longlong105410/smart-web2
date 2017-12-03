@@ -25,6 +25,11 @@ public class LoadingSQLMapFile {
 
 	private static final Logger log = Logger.getLogger(LoadingSQLMapFile.class);
 	
+	/**
+	 * 数据库中定义的SQL资源
+	 */
+	private static final String DB_SQL_MAP = "db_sql_map";
+	
 	private static Map<String,SQLMapFile> SQL_MAP_FILES;
 	
 	private static LoadingSQLMapFile _instance;
@@ -34,6 +39,7 @@ public class LoadingSQLMapFile {
 	
 	private LoadingSQLMapFile(){
 		SQL_MAP_FILES = new HashMap<String, SQLMapFile>();
+		SQL_MAP_FILES.put(DB_SQL_MAP, new SQLMapFile());
 	}
 	
 	/**
@@ -46,6 +52,14 @@ public class LoadingSQLMapFile {
 			_instance = new LoadingSQLMapFile();
 		} 
 		return _instance;
+	}
+	
+	/**
+	 * 获取数据库中定义的SQL资源
+	 * @return
+	 */
+	public SQLMapFile getDbSqlMap() {
+	    return SQL_MAP_FILES.get(DB_SQL_MAP);
 	}
 	
 	/**

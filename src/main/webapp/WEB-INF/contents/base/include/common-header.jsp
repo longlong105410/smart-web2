@@ -45,8 +45,3 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <!-- Font-Awesome -->
 	<link href="${pageContext.request.contextPath}/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" /> 
-<script type="text/javascript">
-	$.ajaxSetup ({
-		cache: false //关闭AJAX相应的缓存 
-	});
-</script>
