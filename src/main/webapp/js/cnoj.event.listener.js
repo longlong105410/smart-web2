@@ -2542,7 +2542,7 @@ function loadUrlListener($elementWrap) {
 				$element.load(uri,function() {
 					$element.find(".cnoj-loading").remove();
 					initEvent($element);
-					loadUrlListener($element);
+					//loadUrlListener($element);
 				});
 			}
 		}

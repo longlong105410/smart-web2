@@ -129,7 +129,6 @@
 
 <script type="text/javascript">
     utils.isIframe = true;
-    loadUrlListener();
     var initForm = $("#create-form").initForm({
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
@@ -141,6 +140,7 @@
             inputPluginEvent();
             hrefListener();
             limitHeightListener();
+            loadUrlListener();
         },
         callback:function(element){
             var self = this;

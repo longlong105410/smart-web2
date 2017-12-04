@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
 <div class="wrap-content-dialog">
-   <div class="form-prop view-form-prop">
+   <div class="form-prop view-form-prop" style="overflow: auto">
 	   <c:if test="${smartResp.result == 1}">
 	       ${smartResp.data.parseHtml }
 	   </c:if>

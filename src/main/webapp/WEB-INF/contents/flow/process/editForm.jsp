@@ -24,7 +24,7 @@
 				</div>
 			</div>
 			<div class="panel-body p-0">
-				<div id="edit-flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white">
+				<div id="edit-flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white" style="overflow: auto;">
 					<div role="tabpanel" class="tab-pane active" id="edit-process-form-tab">
 						<div class="form-prop">
 						   <div class="update-btn-top text-right pull-right">
@@ -62,9 +62,12 @@
 <script type="text/javascript">
   $(function(){
 	  $("#edit-process-handle-form").flowForm({
-	    	formData:'${output}'
+	    	formData:'${output}',
+	    	callback: function(){
+	            inputPluginEvent();
+	        }
 	    });
-	  var mainContentH = $(window).height() - 70;
+	  var mainContentH = $(window).height() - 75;
 	  var flowFormContentH = mainContentH - 40 - 35;
 	  $("#edit-flow-form-panel-contents").height(flowFormContentH);
 	  richtextListener();

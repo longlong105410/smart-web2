@@ -20,9 +20,9 @@ var END_NODE_KEY = "end";
 		$this.addClass("v-hidden");
 		$parent.prepend('<div class="cnoj-loading"><i class="fa fa-spinner fa-spin fa-lg"></i> 正在加载，请稍候...</div>');
 		//}
+		controlFormField();
+		initFormData(setting.formData);
 		setTimeout(function() {
-			controlFormField();
-			initFormData(setting.formData);
 			listenerProcessBtns();
 			if(!utils.isEmpty(setting.callback) && typeof(setting.callback) === 'function') {
 				setting.callback();
@@ -46,7 +46,7 @@ var END_NODE_KEY = "end";
 			if(setting.isToLabel) {
 				formValueToLabel($this);
 			}
-		}, 100);
+		}, 200);
 		
 		/**
 		 * 控制表单字段
@@ -265,7 +265,7 @@ var END_NODE_KEY = "end";
 						   var datas2 = datas[i].nameMoreValues;
 						   var rows = datas2[0].valueSize;
 						   for(var j = 1;j<rows;j++) {
-							   tbAddRow(datas[i].name);
+							   tbAddRow(datas[i].name, false);
 						   }
 						   //处理控件列表
 						   $tableTag.find(".delrow").addClass("hide");

@@ -34,7 +34,7 @@ public class ListctrlParser implements IFormParser {
 		
 		String unit = StringUtils.handleNull(dataMap.get("orgunit"));
 		String sum = StringUtils.handleNull(dataMap.get("orgsum"));
-		String sumBindTable = StringUtils.handleNull(dataMap.get("csum_bind_table"));
+		//String sumBindTable = StringUtils.handleNull(dataMap.get("csum_bind_table"));
 		String sumBindTableField = StringUtils.handleNull(dataMap.get("csum_bind_table_field"));
 		
 		String pluginType = StringUtils.handleNull(dataMap.get("plugintype"));
@@ -63,7 +63,7 @@ public class ListctrlParser implements IFormParser {
 		
 		String[] units = unit.split("`");
 		String[] sums = sum.split("`");
-		String[] sumBindTables = sumBindTable.split("`");
+		//String[] sumBindTables = sumBindTable.split("`");
 		String[] sumBindTableFields = sumBindTableField.split("`");
 		
 		if(pluginTypes.length<titles.length) {
@@ -112,8 +112,8 @@ public class ListctrlParser implements IFormParser {
 		
 		StringBuilder strBuild = new StringBuilder();
 		
-		strBuild.append("<script type=\"text/javascript\">\r\n var addRows=1;\r\n function tbAddRow(dname) {addRows++;\r\n");
-		strBuild.append("   var sTbid = dname+\"_table\";\r\n");
+		strBuild.append("<script type=\"text/javascript\">\r\n var addRows=1;\r\n function tbAddRow(dname, isInputEvent) {addRows++;\r\n");
+		strBuild.append("   var sTbid = dname+\"_table\";\r\n if(typeof(isInputEvent) == 'undefined') isInputEvent = true;\r\n");
 		strBuild.append("  var $addTr = $(\"#\"+sTbid+\" .template\") \r\n ");
 		strBuild.append("   //连同事件一起复制   \r\n ");
 		strBuild.append("   .clone();\r\n");  
@@ -130,7 +130,7 @@ public class ListctrlParser implements IFormParser {
 		strBuild.append(" $(this).parent().find('.glyphicon-calendar').remove();");
 		strBuild.append(" \r\n});\r\n");
         strBuild.append("   //插入表格  \r\n");
-        strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));inputPluginEvent();if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows,$addTr);}}\r\n ");
+        strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));if(isInputEvent){inputPluginEvent()};if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows,$addTr);}}\r\n ");
         
         strBuild.append("//统计\r\n ");
         strBuild.append("function sumTotal(dname,e) {\r\n ");

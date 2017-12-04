@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <link href="${ctx}/plugins/form/css/form.css" rel="stylesheet" />
 <link href="${ctx}/plugins/flow/css/flow.css" rel="stylesheet" />
-<script src="${ctx}/plugins/flow/js/flow.form.js" type="text/javascript"></script>
+
 <div class="wrap-content m-n5">
    <div class="flow-form-contents">
        <div class="panel-tabs-wrap">
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="panel-body p-0">
-				<div id="view-flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white">
+				<div id="view-flow-form-panel-contents" class="tab-content panel-tab-content bg-color-white" style="overflow: auto;">
 					<div role="tabpanel" class="tab-pane active" id="view-process-form-tab">
 					    <c:if test="${isPrint==1 }">
 					        <div class="pull-right">
@@ -42,14 +42,15 @@
 	  </div><!-- panel-tabs-wrap -->
    </div>
 </div>
+<script src="${ctx}/plugins/flow/js/flow.form.js" type="text/javascript"></script>
 <script type="text/javascript">
   $(function(){
 	  $("#view-process-handle-form").flowForm({
 	    	formFieldNames:'${taskModel.formPropIds}',
 	    	formData:'${output}'
 	    });
-	   var mainContentH = $(window).height() - 70;
-	   var flowFormContentH = mainContentH - 40 - 35 - 25;
+	   var mainContentH = $(window).height() - 75;
+	   var flowFormContentH = mainContentH - 40 - 35;
 	   $("#view-flow-form-panel-contents").height(flowFormContentH);
   });
 </script>

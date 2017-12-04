@@ -21,7 +21,7 @@
   color: #2779aa;
 }
 
-#flow-form-panel-contents,#edit-flow-form-panel-contents {
+#flow-form-panel-contents,#edit-flow-form-panel-contents.#view-flow-form-panel-contents {
 	overflow: auto;
 	padding-top: 5px;
 }

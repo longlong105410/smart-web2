@@ -262,18 +262,18 @@
 <script src="${ctx}/js/flow.form.js" type="text/javascript"></script>
 <script type="text/javascript">
 	utils.isIframe = true;
-	loadUrlListener();
     $("#process-handle-form").flowForm({
     	formFieldNames:'${taskModel.formPropIds}',
     	username:'${userInfo.fullName}',
     	deptName: '${userInfo.deptName}',
     	formData:'${output}',
     	callback: function(){
-    		formRequireListener();
+    	    formRequireListener();
     		printListener();
     		inputPluginEvent();
     		hrefListener();
     		limitHeightListener();
+    	    loadUrlListener();
     	}
     });
     $(".flow-process").resize(function(){

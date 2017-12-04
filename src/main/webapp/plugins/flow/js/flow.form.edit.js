@@ -88,12 +88,13 @@ var END_NODE_KEY = "end";
 						   var datas2 = datas[i].nameMoreValues;
 						   var rows = datas2[0].valueSize;
 						   for(var j = 1;j<rows;j++) {
-							   tbAddRow(datas[i].name);
+							   tbAddRow(datas[i].name, false);
 						   }
 						   //处理控件列表
 						   for (var j = 0; j < datas2.length; j++) {
 							   var index = 0;
-							   $tableTag.find("input[name='"+datas2[j].name+"'],select[name='"+datas2[j].name+"'],textarea[name='"+datas2[j].name+"'],#"+datas2[j].name).each(function(){
+							   $tableTag.find("input[name='"+datas2[j].name+"'],select[name='"+datas2[j].name+"']," +
+							   		"textarea[name='"+datas2[j].name+"'],#"+datas2[j].name).each(function(){
 									if(datas2[j].valueSize>1) {
 										if(datas2[j].value[index] != 'null')
 											setFormValue($(this),datas2[j].value[index]);

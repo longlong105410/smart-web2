@@ -47,7 +47,6 @@
 </div>
 
 <script type="text/javascript">
-    loadUrlListener();
     var initForm = $("#create-form").initForm({
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
@@ -59,6 +58,7 @@
             inputPluginEvent();
             hrefListener();
             limitHeightListener();
+            loadUrlListener();
         },
         callback:function(element){
             var self = this;

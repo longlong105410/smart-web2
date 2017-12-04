@@ -36,18 +36,18 @@
 </div>
 
 <script type="text/javascript">
-    loadUrlListener();
+    
     var initForm = $("#create-form").initForm({
         username:'${userInfo.fullName}',
         deptName: '${userInfo.deptName}',
         formData:'${output}',
         isView:true,
         initDataAfter: function(){
-            formRequireListener();
             printListener();
-            inputPluginEvent();
-            hrefListener();
+            //inputPluginEvent();
+            //hrefListener();
             limitHeightListener();
+            //loadUrlListener();
         }
     });
     initForm.init();

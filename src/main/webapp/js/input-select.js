@@ -32,6 +32,9 @@
 		}
 		var $this = $(this);
 		var thisId = $(this).attr("id");
+		if(utils.isEmpty(setting.defaultValue)) {
+		    setting.defaultValue = $this.val();
+		}
 		if(utils.isEmpty(thisId)) {
 			var generateId = "input-select"+utils.randomNum(5);
 			$(this).attr("id",generateId);

@@ -158,6 +158,7 @@
                 var datas = output.datas;
                 const self = this;
                 for(var i=0;i<datas.length;i++) {
+                    //list-ctrl初始化
                     if(null != datas[i].nameMoreValues && datas[i].nameMoreValues.length>0) {
                         var tableTag = datas[i].name+"_table";
                         var $tableTag = this.$this.find("#"+tableTag);
@@ -166,7 +167,7 @@
                         var rows = nameMoreValues[0].valueSize;
                         for(var j = 1;j<rows;j++) {
                             //调用表单中的添加行的方法，注：该方法在表单中
-                            tbAddRow(datas[i].name);
+                            tbAddRow(datas[i].name, false);
                         }
                         //处理控件列表
                         $tableTag.find(".delrow").addClass("hide");
@@ -177,7 +178,7 @@
                         for (var j = 0; j < nameMoreValues.length; j++) {
                             var index = 0;
                             $tableTag.find("input[name='"+nameMoreValues[j].name+"'],select[name='"+nameMoreValues[j].name+"']," +
-                            		"textarea[name='"+nameMoreValues[j].name+"'],#"+nameMoreValues[j].name).each(function(){
+                            		"textarea[name='"+nameMoreValues[j].name+"'],#"+nameMoreValues[j].name+",."+nameMoreValues[j].name).each(function(){
                             	if(nameMoreValues[j].valueSize > 1) {
                             	    if(nameMoreValues[j].value[index] != 'null')
                             	        self.setFormValue($(this),nameMoreValues[j].value[index]);

@@ -516,7 +516,7 @@ window.onload = function() {
             }
             $G(gBindField).value = aBindField[i];
             if(null != gRemarks && typeof(gRemarks[i]) !== 'undefined') {
-             $G(sRemark).value = gRemarks[i];
+                $G(sRemark).value = gRemarks[i];
             }
         }
     }
@@ -547,7 +547,7 @@ function clickCSum(obj) {
             $("#coltype_"+ i).val('int');
             $("#field_hide_"+i).prop('checked', false);
             //加载合计字段要绑定的表的列表
-            loadCSumTable('','', i)
+            loadCSumTable('','', i);
         } else {
            $("#csum_bind_table_"+i+" .cnoj-dyn-opt").remove();
            $("#csum_bind_table_field_"+i+" .cnoj-dyn-opt").remove();
