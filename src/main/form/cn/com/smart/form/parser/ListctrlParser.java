@@ -123,14 +123,16 @@ public class ListctrlParser implements IFormParser {
 		strBuild.append("   $addTr.find(\".delrow\").removeClass(\"hide\");\r\n");
 		//strBuild.append("$addTr.find(\"input[type=hidden]\").remove();");
 		strBuild.append("   $addTr.find(\"input,textarea\").each(function(){\r\n");
-		strBuild.append(" var id = $(this).attr(\"id\");id = id.replace('row-','row'+addRows+'-');$(this).attr(\"id\",id);$(this).val('');\r\n");
-		strBuild.append(" $(this).attr(\"name\", $(this).attr(\"original-name\")); \r\n");
-		strBuild.append(" $(this).removeClass('cnoj-auto-complete-relate-listener cnoj-input-tree-listener cnoj-input-select-relate-listener cnoj-input-org-tree-listener");
-		strBuild.append(" cnoj-auto-complete-listener cnoj-input-select-listener cnoj-datetime-listener cnoj-date-listener cnoj-time-listener');");
-		strBuild.append(" $(this).parent().find('.glyphicon-calendar').remove();");
-		strBuild.append(" \r\n});\r\n");
-        strBuild.append("   //插入表格  \r\n");
-        strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));if(isInputEvent){inputPluginEvent()};if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows,$addTr);}}\r\n ");
+		strBuild.append(" var id = $(this).attr(\"id\");if(utils.isNotEmpty(id)) { \r\n");
+        strBuild.append(" id = id.replace('row-','row'+addRows+'-');$(this).attr(\"id\",id);$(this).val('');\r\n");
+        strBuild.append(" $(this).attr(\"name\", $(this).attr(\"original-name\")); \r\n");
+        strBuild.append(" $(this).removeClass('cnoj-auto-complete-relate-listener cnoj-input-tree-listener cnoj-input-select-relate-listener cnoj-input-org-tree-listener");
+        strBuild.append(" cnoj-auto-complete-listener cnoj-input-select-listener cnoj-datetime-listener cnoj-date-listener cnoj-time-listener');");
+        strBuild.append(" $(this).parent().find('.glyphicon-calendar').remove();");
+        strBuild.append(" \r\n}});\r\n");
+        strBuild.append("   //插入表格  \r\n  ");
+        strBuild.append("   $addTr.appendTo($(\"#\"+sTbid));if(isInputEvent){inputPluginEvent()};");
+        strBuild.append("  if(typeof(formAddRow) !== 'undefined' && !utils.isEmpty(formAddRow) && typeof(formAddRow)==='function'){formAddRow(addRows);}}\r\n ");
         
         strBuild.append("//统计\r\n ");
         strBuild.append("function sumTotal(dname,e) {\r\n ");
@@ -220,12 +222,15 @@ public class ListctrlParser implements IFormParser {
 			//tfTdBuild.append("<td></td>");
 		}
         if(sums.length > 0) {
+            int len = sums.length;
             for (int i=0;i<titles.length;i++) {
-                if(Integer.parseInt(sums[i]) == 1) {
-                    isNum = 1;
-                    tfTdBuild.append("<td>合计：<input id=\""+fieldNames[i]+"_total\" onchange=\"changeValue(this)\" type=\"text\" style=\"width:80%;\" class=\"form-control input-medium "+sumBindTableFields[i]+" \" name=\""+sumBindTableFields[i]+"\" original-name=\""+sumBindTableFields[i]+"\" onblur=\"sumTotal('"+fieldNames[i]+"', this)\" /> "+getUnit(units, i)+"</td>");
-                } else {
-                    tfTdBuild.append("<td></td>");
+                if(i < len && StringUtils.isNotEmpty(sums[i])) {
+                    if(Integer.parseInt(sums[i]) == 1) {
+                        isNum = 1;
+                        tfTdBuild.append("<td>合计：<input id=\""+fieldNames[i]+"_total\" onchange=\"changeValue(this)\" type=\"text\" style=\"width:80%;\" class=\"form-control input-medium "+sumBindTableFields[i]+" \" name=\""+sumBindTableFields[i]+"\" original-name=\""+sumBindTableFields[i]+"\" onblur=\"sumTotal('"+fieldNames[i]+"', this)\" /> "+getUnit(units, i)+"</td>");
+                    } else {
+                        tfTdBuild.append("<td></td>");
+                    }
                 }
             }
         }

@@ -56,9 +56,6 @@ public class DynamicFormManager {
             	if(StringUtils.isNotEmpty(title) && StringUtils.isNotEmpty(fieldName)) {
             		String[] titles = title.split("`");
             		String[] fieldNames = fieldName.split("`");
-            		String[] sumBindTables = sumBindTable.split("`");
-            		String[] sumBindTableFields = sumBindTableField.split("`");
-            		
             		for (int i = 0; i < fieldNames.length; i++) {
             			TFormField field = new TFormField();
             			field.setTitle(titles[i]);
@@ -68,17 +65,21 @@ public class DynamicFormManager {
                         field.setFormId(entity.getId());
                         fields.add(field);
 					}
-            		for(int i = 0; i < sumBindTables.length; i++) {
-            		    if(StringUtils.isNotEmpty(sumBindTables[i])) {
-                		    TFormField field = new TFormField();
-                            field.setTitle("合计");
-                            field.setPlugins("sum");
-                            field.setTableId(sumBindTables[i]);
-                            field.setTableFieldId(sumBindTableFields[i]);
-                            field.setFormId(entity.getId());
-                            fields.add(field);
-            		    }
-            		}
+            		if(StringUtils.isNotEmpty(sumBindTable) && StringUtils.isNotEmpty(sumBindTableField)) {
+                        String[] sumBindTables = sumBindTable.split("`");
+                        String[] sumBindTableFields = sumBindTableField.split("`");
+                        for(int i = 0; i < sumBindTables.length; i++) {
+                            if(StringUtils.isNotEmpty(sumBindTables[i])) {
+                                TFormField field = new TFormField();
+                                field.setTitle("合计");
+                                field.setPlugins("sum");
+                                field.setTableId(sumBindTables[i]);
+                                field.setTableFieldId(sumBindTableFields[i]);
+                                field.setFormId(entity.getId());
+                                fields.add(field);
+                            }
+                        }
+                    }
             	}
             } else {
             	String tableFieldId = fieldInfo.get("bindField");

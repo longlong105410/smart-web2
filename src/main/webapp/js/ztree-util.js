@@ -249,6 +249,9 @@ var zTreeInstance = new Array();
 					}
 				}
 			}
+			if(null != setting.getTreeObj && typeof(setting.getTreeObj) === 'function') {
+                setting.getTreeObj(getTree());
+            }
 		}
 		//关闭弹出下拉框
 		if(setting.isInput) {
