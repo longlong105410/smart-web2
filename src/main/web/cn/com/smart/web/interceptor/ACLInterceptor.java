@@ -50,6 +50,7 @@ public class ACLInterceptor implements HandlerInterceptor {
 	private List<String> excludeMaps;
 	private List<String> authUriList;
 	private String resSuffix;
+	private List<String> excludeAccessLogUrls;
 	
 	private final static Logger log = LoggerFactory.getLogger(ACLInterceptor.class);
 	
@@ -193,6 +194,10 @@ public class ACLInterceptor implements HandlerInterceptor {
 		if(null == yesNo) {
 			yesNo = YesNoType.YES;
 		}
+		//判断当前地址是否为不记录访问日志的URL
+        if(yesNo.getValue() && isUriContains(excludeAccessLogUrls, currentUri)) {
+            yesNo = YesNoType.NO;
+        }
 		//如果不是资源URL，并且记录访问日志
 		if(!isRes && yesNo.getValue()) {
 			String userAgentStr = request.getHeader("User-Agent");
@@ -393,5 +398,12 @@ public class ACLInterceptor implements HandlerInterceptor {
     public void setAuthUriList(List<String> authUriList) {
         this.authUriList = authUriList;
     }
-	
+
+    public List<String> getExcludeAccessLogUrls() {
+        return excludeAccessLogUrls;
+    }
+
+    public void setExcludeAccessLogUrls(List<String> excludeAccessLogUrls) {
+        this.excludeAccessLogUrls = excludeAccessLogUrls;
+    }
 }

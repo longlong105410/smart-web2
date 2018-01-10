@@ -28,7 +28,7 @@ public class HttpRequestHelper {
 		String currentUri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		if(StringUtils.isNotEmpty(contextPath)) {
-			currentUri = currentUri.replace(contextPath+"/", "");
+			currentUri = currentUri.replaceFirst(contextPath+"/", "");
 		} else {
 			currentUri = currentUri.substring(1, currentUri.length());
 		}
