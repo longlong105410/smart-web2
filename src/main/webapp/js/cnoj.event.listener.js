@@ -1689,7 +1689,7 @@ function tableWrapListener($elementWrap, isResize) {
 		 * @param $table
 		 */
 		function __autoTableWidth($tableWrap, $tableTheader, $table) {
-			var panelW =  $tableWrap.parent().width();
+			/*var panelW =  $tableWrap.parent().width();
 			var tableWidth = panelW - utils.getScrollWidth();			
 			if(tableWidth > 0) {
 				$tableTheader.width(tableWidth);
@@ -1699,7 +1699,25 @@ function tableWrapListener($elementWrap, isResize) {
 				setTimeout(function() {
 					__autoScrollTableWidth($tableWrap, panelW);
 				}, 10);
-			}
+			}*/
+		    setTimeout(function() {
+                var $panel = $tableWrap.parent();
+                var panelW = $panel.width();
+                var scrollWidth = utils.getScrollWidth();
+                if(scrollWidth < 20) {
+                    scrollWidth = 20;
+                }
+                var tableWidth = panelW - scrollWidth;
+                if(tableWidth > 0) {
+                    $tableTheader.width(tableWidth);
+                    $tableWrap.width(tableWidth);
+                }
+                if(!__autoScrollTableWidth($tableWrap, panelW)) {
+                    setTimeout(function() {
+                        __autoScrollTableWidth($tableWrap, panelW);
+                    }, 10);
+                }
+            }, 10);
 		}
 		
 		/**
@@ -1711,7 +1729,8 @@ function tableWrapListener($elementWrap, isResize) {
 			var w = $tableWrap.width();
 			var tableW = $tableWrap.find("table").width();
 			if(w - tableW > 2) {
-				$tableWrap.width(panelW - 2);
+			    var tw = w + (w - tableW - 3);
+				$tableWrap.width(tw);
 				return true;
 			}
 			return false;
